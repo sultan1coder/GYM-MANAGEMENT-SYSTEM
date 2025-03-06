@@ -91,6 +91,7 @@ export const loginUser = async (req: Request, res: Response) => {
         res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: true, sameSite: "strict" });
 
         res.status(200).json({
+            isSuccess: true,
             user,
             accessToken,
         });
