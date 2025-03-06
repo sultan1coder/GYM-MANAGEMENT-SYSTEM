@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import yup from "yup";
+import * as yup from "yup";
 
 
 const Login = () => {
@@ -12,10 +12,10 @@ const Login = () => {
         onSubmit(values) {
             console.log(values);
         },
-        validationSchema: {
+        validationSchema: yup.object({
             email: yup.string().email("please enter valid email").required("please enter email"),
-            parseFloat: yup.string().min(8, "password must be at least 8 characters").required("password is required")
-        }
+            password: yup.string().min(8, "password must be at least 8 characters long").required("password is required")
+        })
     });
 
     return (
@@ -32,18 +32,27 @@ const Login = () => {
                 <div className="inputContainer grid my-3">
                     <label htmlFor="email">Email Address</label>
                     <input
+                        onBlur={formik.handleBlur}
                         name="email"
                         onChange={formik.handleChange}
                         value={formik.values.email}
                         type="email" className="border p-3 rounded-md" placeholder="Enter your email" />
+                    {/* Error message */}
+                    <p className="text-sm text-red-500 font-semibold">
+                        {formik.touched.email && formik.errors.email}
+                    </p>
                 </div>
                 <div className="inputContainer grid my-3">
                     <label htmlFor="password">Password</label>
                     <input
+                        onBlur={formik.handleBlur}
                         name="password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
                         type="password" className="border p-3 rounded-md" placeholder="Enter your password" />
+                    <p className="text-sm text-red-500 font-semibold">
+                        {formik.touched.password && formik.errors.password}
+                    </p>
                 </div>
                 <div className="grid items-center px-40">
                     <button className="p-3 rounded-md my-3 bg-gray-800 hover:bg-gray-700 text-white">
