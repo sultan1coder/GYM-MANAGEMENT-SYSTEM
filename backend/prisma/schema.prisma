@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  name          String
+  email         String    @unique
+  password      String
+  role          String    @default("staff") // "admin" or "staff"
+  refreshToken  String? // For refresh token authentication
+  resetToken    String?
+  resetTokenExp DateTime?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+}
+
+model Member {
+  id             String         @id @default(uuid())
+  name           String
+  email          String         @unique
+  age            Int
+  membershiptype MemberShipType
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  payments       Payment[]
+  invoices       Invoice[]
+  Subscription   Subscription[]
+}
+
+enum MemberShipType {
+  MONTHLY
+  DAILY
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  amount    Float
+  memberId  String
+  method    String
+  createdAt DateTime @default(now())
+  Member    Member   @relation(fields: [memberId], references: [id])
+}
+
+model Invoice {
+  id        String   @id @default(uuid())
+  memberId  String
+  amount    Float
+  details   String
+  createdAt DateTime @default(now())
+  Member    Member   @relation(fields: [memberId], references: [id])
+}
+
+model MembershipPlan {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  price         Float
+  duration      Int // Duration in months
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id        String         @id @default(uuid())
+  memberId  String
+  planId    String
+  startDate DateTime       @default(now())
+  endDate   DateTime
+  member    Member         @relation(fields: [memberId], references: [id])
+  plan      MembershipPlan @relation(fields: [planId], references: [id])
+}
+
+model Equipment {
+  id        String   @id @default(uuid())
+  name      String
+  type      String
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
