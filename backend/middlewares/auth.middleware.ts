@@ -9,6 +9,7 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "accesssecretkey"
 
 interface DecodedToken {
     userId: number;
+    role: string;
 }
 
 export const protect = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -51,5 +52,16 @@ export const protect = (req: AuthRequest, res: Response, next: NextFunction) => 
             isSuccess: false,
             message: "Server error!"
         });
+    }
+}
+
+
+export const adminRoute = (req: AuthRequest, res: Response, next: NextFunction) => {
+    if (req.user && req.user.role === "admin") {
+        next();
+    } else {
+        res.status(403).json({
+            message: "Access denied- Admin only"
+        })
     }
 }
