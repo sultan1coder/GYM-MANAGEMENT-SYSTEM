@@ -19,12 +19,12 @@ const Login = () => {
     });
 
     return (
-        <div className="w-[80%] border p-3 rounded-md shadow-sm md:w-[60%] lg:w-[40%] mx-auto">
+        <div className="w-[80%] border p-3 rounded-md shadow-sm md:w-[60%] lg:w-[40%] mx-auto mb-10 bg-gray-300">
             <div className="header">
-                <h1 className="text-xl font-bold">
+                <h1 className="text-xl font-bold text-center">
                     Sing in
                 </h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 text-center">
                     please enter your credentials to access your account
                 </p>
             </div>
