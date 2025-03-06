@@ -1,5 +1,22 @@
+import { useFormik } from "formik";
+import yup from "yup";
+
 
 const Login = () => {
+
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        onSubmit(values) {
+            console.log(values);
+        },
+        validationSchema: {
+            email: yup.string().email("please enter valid email").required("please enter email"),
+        }
+    });
+
     return (
         <div className="w-[80%] border p-3 rounded-md shadow-sm md:w-[60%] lg:w-[40%] mx-auto">
             <div className="header">
@@ -10,14 +27,22 @@ const Login = () => {
                     please enter your credentials to access your account
                 </p>
             </div>
-            <form>
+            <form onSubmit={formik.handleSubmit}>
                 <div className="inputContainer grid my-3">
                     <label htmlFor="email">Email Address</label>
-                    <input type="email" className="border p-3 rounded-md" placeholder="Enter your email" />
+                    <input
+                        name="email"
+                        onChange={formik.handleChange}
+                        value={formik.values.email}
+                        type="email" className="border p-3 rounded-md" placeholder="Enter your email" />
                 </div>
                 <div className="inputContainer grid my-3">
                     <label htmlFor="password">Password</label>
-                    <input type="password" className="border p-3 rounded-md" placeholder="Enter your password" />
+                    <input
+                        name="password"
+                        onChange={formik.handleChange}
+                        value={formik.values.password}
+                        type="password" className="border p-3 rounded-md" placeholder="Enter your password" />
                 </div>
                 <div className="grid items-center px-40">
                     <button className="p-3 rounded-md my-3 bg-gray-800 hover:bg-gray-700 text-white">
