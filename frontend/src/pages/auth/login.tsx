@@ -14,6 +14,7 @@ const Login = () => {
         },
         validationSchema: {
             email: yup.string().email("please enter valid email").required("please enter email"),
+            parseFloat: yup.string().min(8, "password must be at least 8 characters").required("password is required")
         }
     });
 
