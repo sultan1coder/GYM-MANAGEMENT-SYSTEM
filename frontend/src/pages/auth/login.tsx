@@ -21,41 +21,41 @@ const Login = () => {
     return (
         <div className="w-[80%] border p-3 rounded-md shadow-sm md:w-[60%] lg:w-[40%] mx-auto mb-10 bg-gray-300">
             <div className="header">
-                <h1 className="text-xl font-bold text-center">
-                    Sing in
+                <h1 className="mb-3 text-2xl font-bold text-center">
+                    Sign in
                 </h1>
-                <p className="text-sm text-gray-500 text-center">
-                    please enter your credentials to access your account
+                <p className="text-sm text-center text-gray-600">
+                    Please enter your credentials to access your account
                 </p>
             </div>
             <form onSubmit={formik.handleSubmit}>
-                <div className="inputContainer grid my-3">
+                <div className="grid my-3 inputContainer">
                     <label htmlFor="email">Email Address</label>
                     <input
                         onBlur={formik.handleBlur}
                         name="email"
                         onChange={formik.handleChange}
                         value={formik.values.email}
-                        type="email" className="border p-3 rounded-md" placeholder="Enter your email" />
+                        type="email" className="p-3 border rounded-md" placeholder="Enter your email" />
                     {/* Error message */}
-                    <p className="text-sm text-red-500 font-semibold">
+                    <p className="text-sm font-semibold text-red-500">
                         {formik.touched.email && formik.errors.email}
                     </p>
                 </div>
-                <div className="inputContainer grid my-3">
+                <div className="grid my-3 inputContainer">
                     <label htmlFor="password">Password</label>
                     <input
                         onBlur={formik.handleBlur}
                         name="password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
-                        type="password" className="border p-3 rounded-md" placeholder="Enter your password" />
-                    <p className="text-sm text-red-500 font-semibold">
+                        type="password" className="p-3 border rounded-md" placeholder="Enter your password" />
+                    <p className="text-sm font-semibold text-red-500">
                         {formik.touched.password && formik.errors.password}
                     </p>
                 </div>
                 <div className="grid items-center px-40">
-                    <button className="p-3 rounded-md my-3 bg-gray-800 hover:bg-gray-700 text-white">
+                    <button className="p-3 my-3 text-white bg-gray-800 rounded-md hover:bg-gray-700">
                         Sing in
                     </button>
                 </div>
