@@ -2,11 +2,12 @@ import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
-import { RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
+import { loginFn } from "../../redux/slices/auth/loginSlice";
 
 
 const Login = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const loginState = useSelector((state: RootState) => state.loginSlice);
 
     const formik = useFormik({
@@ -15,7 +16,11 @@ const Login = () => {
             password: "",
         },
         onSubmit(values) {
-            console.log(values);
+            const data = {
+                email: values.email,
+                password: values.password,
+            }
+            dispatch(loginFn(data))
         },
         validationSchema: yup.object({
             email: yup.string().email("please enter valid email").required("Please enter email"),
