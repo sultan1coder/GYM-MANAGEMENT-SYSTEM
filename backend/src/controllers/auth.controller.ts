@@ -3,6 +3,7 @@ import jwt, { VerifyErrors } from "jsonwebtoken";
 import { AuthRequest } from "../../types/request";
 import { PrismaClient } from "@prisma/client";
 import { comparePassword, generateAccessToken, generateRefreshAccessToken, hashPassword } from "../utils/auth";
+import { IRegisterNewUser } from "../../types/user";
 
 const prisma = new PrismaClient();
 
@@ -15,7 +16,7 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "refreshsecretk
 //Register User
 export const registerUser = async (req: Request, res: Response) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role } = req.body as IRegisterNewUser;
         const existingUser = await prisma.user.findUnique({
             where: {
                 email
