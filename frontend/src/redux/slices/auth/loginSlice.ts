@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ILoginBody, IloginResponse } from "../../../types/login";
 import { data } from "react-router-dom";
+import { AxiosError } from "axios";
+import { DEFAULT_ERROR_MESSAGE } from "../../../constants";
 
 const initialState = {
     loading: false,
@@ -10,9 +12,13 @@ const initialState = {
 
 export const loginFn = createAsyncThunk("auth/login", async (data: ILoginBody, { rejectWithValue }) => {
     try {
-        
-    } catch (error) {
 
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return rejectWithValue(error.response?.data.messaga || DEFAULT_ERROR_MESSAGE);
+        }
+
+        return rejectWithValue(DEFAULT_ERROR_MESSAGE);
     }
 })
 
