@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { AppDispatch, RootState } from "../../redux/store";
 import { loginFn } from "../../redux/slices/auth/loginSlice";
+import Spinner from "../../components/Spinner";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 
 const Login = () => {
@@ -28,6 +31,16 @@ const Login = () => {
         })
     });
 
+    useEffect(() => {
+        if (loginState.error) {
+            toast.error(loginState.error);
+        }
+
+        if (loginState.data.isSuccess) {
+            toast.success("Successfully loged in")
+        }
+    }, [loginState.error, loginState.data])
+
     return (
         <div className="flex items-center justify-center min-h-screen p-4">
             <div className="w-full max-w-md p-8 bg-gray-300 shadow-lg rounded-2xl">
@@ -37,6 +50,9 @@ const Login = () => {
                 </h2>
                 <p className="mb-6 text-sm text-center text-gray-600">
                     Please enter your credentials to access your account
+                </p>
+                <p className="my-4 text-red-500">
+                    {loginState.error && "Incorrect email or password"}
                 </p>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="mb-4">
@@ -76,11 +92,10 @@ const Login = () => {
                     <div className="flex justify-end text-sm text-blue-500 hover:underline">
                         <a href="#">Forgot password?</a>
                     </div>
-                    <button
+                    <button disabled={loginState.loading || !formik.isValid}
                         type="submit"
-                        className="w-full p-2 my-3 text-white bg-gray-800 rounded-md hover:bg-gray-700"
-                    >
-                        LOGIN
+                        className="w-full p-2 my-3 text-white bg-gray-800 rounded-md disabled:bg-gray-500 hover:bg-gray-700">
+                        {loginState.loading ? <Spinner /> : "Sign in"}
                     </button>
                 </form>
                 <div className="gap-3 mt-6 text-sm text-center">
