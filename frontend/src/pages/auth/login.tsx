@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 
 
 const Login = () => {
+    let toastId = "login"
     const dispatch = useDispatch<AppDispatch>();
     const loginState = useSelector((state: RootState) => state.loginSlice);
 
@@ -23,6 +24,7 @@ const Login = () => {
                 email: values.email,
                 password: values.password,
             }
+            toast.loading("Logging in..", { id: toastId });
             dispatch(loginFn(data))
         },
         validationSchema: yup.object({
@@ -33,11 +35,11 @@ const Login = () => {
 
     useEffect(() => {
         if (loginState.error) {
-            toast.error(loginState.error);
+            toast.error(loginState.error, { id: toastId });
         }
 
         if (loginState.data.isSuccess) {
-            toast.success("Successfully loged in")
+            toast.success("Successfully loged in", { id: toastId });
         }
     }, [loginState.error, loginState.data])
 
