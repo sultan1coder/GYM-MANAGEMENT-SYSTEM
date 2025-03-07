@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 
 
@@ -68,13 +69,14 @@ const Login = () => {
                     </div>
                     <button
                         type="submit"
-                        className="w-full p-2 mt-4 font-semibold text-white rounded-md bg-gradient-to-r from-blue-400 to-purple-500 hover:opacity-90"
+                        className="w-full p-2 my-3 text-white bg-gray-800 rounded-md hover:bg-gray-700"
                     >
                         LOGIN
                     </button>
                 </form>
-                <div className="mt-6 text-sm text-center">
-                    Or Sign Up Using <a href="#" className="text-blue-500 hover:underline">SIGN UP</a>
+                <div className="gap-3 mt-6 text-sm text-center">
+                    Or Sign Up <Link className='text-lg text-blue-500 hover:underline' to={"/auth/register"}> Sign up </Link> 
+                    <button />
                 </div>
             </div>
         </div>
