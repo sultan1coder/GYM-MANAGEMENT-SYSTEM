@@ -1,9 +1,13 @@
 import { useFormik } from "formik";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
+import { RootState } from "../../redux/store";
 
 
 const Login = () => {
+    const dispatch = useDispatch();
+    const loginState = useSelector((state: RootState) => state.loginSlice);
 
     const formik = useFormik({
         initialValues: {
@@ -75,7 +79,7 @@ const Login = () => {
                     </button>
                 </form>
                 <div className="gap-3 mt-6 text-sm text-center">
-                    Or Sign Up <Link className='text-lg text-blue-500 hover:underline' to={"/auth/register"}> Sign up </Link> 
+                    Or Sign Up <Link className='text-lg text-blue-500 hover:underline' to={"/auth/register"}> Sign up </Link>
                     <button />
                 </div>
             </div>
