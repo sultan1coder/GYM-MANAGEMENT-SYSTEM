@@ -13,7 +13,7 @@ const Login = () => {
             console.log(values);
         },
         validationSchema: yup.object({
-            email: yup.string().email("please enter valid email").required("please enter email"),
+            email: yup.string().email("please enter valid email").required("Please enter email"),
             password: yup.string().min(8, "password must be at least 8 characters long").required("password is required")
         })
     });
@@ -30,28 +30,38 @@ const Login = () => {
                 </p>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-600">Username</label>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-600">Email</label>
                         <input
-                            type="text"
+                            onBlur={formik.handleBlur}
+                            type="email"
                             name="email"
                             onChange={formik.handleChange}
                             value={formik.values.email}
                             required
                             className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none"
-                            placeholder="Type your username"
+                            placeholder="Enter your email"
                         />
+                        {/* Error message */}
+                        <p className="text-sm font-semibold text-red-500">
+                            {formik.touched.email && formik.errors.email}
+                        </p>
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-600">Password</label>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-600">Password</label>
                         <input
+                            onBlur={formik.handleBlur}
                             type="password"
                             name="password"
                             onChange={formik.handleChange}
                             value={formik.values.password}
                             required
                             className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none"
-                            placeholder="Type your password"
+                            placeholder="Enter your password"
                         />
+                        {/* Error message */}
+                        <p className="text-sm font-semibold text-red-500">
+                            {formik.touched.password && formik.errors.password}
+                        </p>
                     </div>
                     <div className="flex justify-end text-sm text-blue-500 hover:underline">
                         <a href="#">Forgot password?</a>
