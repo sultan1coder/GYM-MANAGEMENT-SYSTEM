@@ -17,11 +17,11 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/users", userRoute);
-app.use("/members", memberRoute);
-app.use("/payments", paymentRoute);
-app.use("/equipments", equipmentRoute);
-app.use("/subscriptions", subscriptionRoute);
-app.use("/auth", authRoute);
+app.use("/api/users", userRoute);
+app.use("/api/members", memberRoute);
+app.use("/api/payments", paymentRoute);
+app.use("/api/equipments", equipmentRoute);
+app.use("/api/subscriptions", subscriptionRoute);
+app.use("/api/auth", authRoute);
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))

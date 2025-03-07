@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ILoginBody, IloginResponse } from "../../../types/login";
 import { data } from "react-router-dom";
-import { AxiosError } from "axios";
-import { DEFAULT_ERROR_MESSAGE } from "../../../constants";
+import axios, { AxiosError } from "axios";
+import { BASE_API_URL, DEFAULT_ERROR_MESSAGE } from "../../../constants";
 
 const initialState = {
     loading: false,
@@ -12,7 +12,7 @@ const initialState = {
 
 export const loginFn = createAsyncThunk("auth/login", async (data: ILoginBody, { rejectWithValue }) => {
     try {
-
+        const response = await axios.post(`${BASE_API_URL}/auth/login`);
     } catch (error) {
         if (error instanceof AxiosError) {
             return rejectWithValue(error.response?.data.messaga || DEFAULT_ERROR_MESSAGE);
