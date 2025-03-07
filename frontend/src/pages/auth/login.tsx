@@ -19,49 +19,101 @@ const Login = () => {
     });
 
     return (
-        <div className="w-[80%] border p-3 rounded-md shadow-sm md:w-[60%] lg:w-[40%] mx-auto mb-10 bg-gray-300">
-            <div className="header">
-                <h1 className="mb-3 text-2xl font-bold text-center">
+        <div className="flex items-center justify-center min-h-screen p-4">
+            <div className="w-full max-w-md p-8 bg-gray-300 shadow-lg rounded-2xl">
+                <h2
+                    className="mb-6 text-2xl font-bold text-center text-gray-800">
                     Sign in
-                </h1>
-                <p className="text-sm text-center text-gray-600">
+                </h2>
+                <p className="mb-6 text-sm text-center text-gray-600">
                     Please enter your credentials to access your account
                 </p>
-            </div>
-            <form onSubmit={formik.handleSubmit}>
-                <div className="grid my-3 inputContainer">
-                    <label htmlFor="email">Email Address</label>
-                    <input
-                        onBlur={formik.handleBlur}
-                        name="email"
-                        onChange={formik.handleChange}
-                        value={formik.values.email}
-                        type="email" className="p-3 border rounded-md" placeholder="Enter your email" />
-                    {/* Error message */}
-                    <p className="text-sm font-semibold text-red-500">
-                        {formik.touched.email && formik.errors.email}
-                    </p>
-                </div>
-                <div className="grid my-3 inputContainer">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        onBlur={formik.handleBlur}
-                        name="password"
-                        onChange={formik.handleChange}
-                        value={formik.values.password}
-                        type="password" className="p-3 border rounded-md" placeholder="Enter your password" />
-                    <p className="text-sm font-semibold text-red-500">
-                        {formik.touched.password && formik.errors.password}
-                    </p>
-                </div>
-                <div className="grid items-center px-40">
-                    <button className="p-3 my-3 text-white bg-gray-800 rounded-md hover:bg-gray-700">
-                        Sing in
+                <form onSubmit={formik.handleSubmit}>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-600">Username</label>
+                        <input
+                            type="text"
+                            name="email"
+                            onChange={formik.handleChange}
+                            value={formik.values.email}
+                            required
+                            className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none"
+                            placeholder="Type your username"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-600">Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            onChange={formik.handleChange}
+                            value={formik.values.password}
+                            required
+                            className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none"
+                            placeholder="Type your password"
+                        />
+                    </div>
+                    <div className="flex justify-end text-sm text-blue-500 hover:underline">
+                        <a href="#">Forgot password?</a>
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full p-2 mt-4 font-semibold text-white rounded-md bg-gradient-to-r from-blue-400 to-purple-500 hover:opacity-90"
+                    >
+                        LOGIN
                     </button>
+                </form>
+                <div className="mt-6 text-sm text-center">
+                    Or Sign Up Using <a href="#" className="text-blue-500 hover:underline">SIGN UP</a>
                 </div>
-            </form>
+            </div>
         </div>
-    )
+    );
+
+    // return (
+    //     <div className="w-[80%] border p-3 rounded-md shadow-sm md:w-[60%] lg:w-[40%] mx-auto mb-10 bg-gray-300">
+    //         <div className="header">
+    //             <h1 className="mb-3 text-2xl font-bold text-center">
+    //                 Sign in
+    //             </h1>
+    //             <p className="text-sm text-center text-gray-600">
+    //                 Please enter your credentials to access your account
+    //             </p>
+    //         </div>
+    //         <form onSubmit={formik.handleSubmit}>
+    //             <div className="grid my-3 inputContainer">
+    //                 <label htmlFor="email">Email Address</label>
+    //                 <input
+    //                     onBlur={formik.handleBlur}
+    //                     name="email"
+    //                     onChange={formik.handleChange}
+    //                     value={formik.values.email}
+    //                     type="email" className="p-3 border rounded-md" placeholder="Enter your email" />
+    //                 {/* Error message */}
+    //                 <p className="text-sm font-semibold text-red-500">
+    //                     {formik.touched.email && formik.errors.email}
+    //                 </p>
+    //             </div>
+    //             <div className="grid my-3 inputContainer">
+    //                 <label htmlFor="password">Password</label>
+    //                 <input
+    //                     onBlur={formik.handleBlur}
+    //                     name="password"
+    //                     onChange={formik.handleChange}
+    //                     value={formik.values.password}
+    //                     type="password" className="p-3 border rounded-md" placeholder="Enter your password" />
+    //                 <p className="text-sm font-semibold text-red-500">
+    //                     {formik.touched.password && formik.errors.password}
+    //                 </p>
+    //             </div>
+    //             <div className="grid items-center px-40">
+    //                 <button className="p-3 my-3 text-white bg-gray-800 rounded-md hover:bg-gray-700">
+    //                     Sing in
+    //                 </button>
+    //             </div>
+    //         </form>
+    //     </div>
+    // )
 }
 
 export default Login
