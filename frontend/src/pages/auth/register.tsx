@@ -29,7 +29,7 @@ const Register = () => {
             phone_number: yup.string().required("Please enter phone number"),
             password: yup.string().min(8, "Password must be atleast 8 characters long").required("Please enter password"),
             confirmPassword: yup.string().required("Please confirm your password").oneOf([yup.ref("password"),], "Passwords must match")
-        });
+        })
     })
 
     return (
