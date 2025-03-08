@@ -1,5 +1,37 @@
+import { useFormik } from "formik"
+import * as yup from "yup";
 
 const Register = () => {
+
+    const formik = useFormik({
+        initialValues: {
+            fullname: "",
+            username: "",
+            email: "",
+            phone_number: "",
+            password: "",
+            confirmPassword: "",
+        },
+        onSubmit(values) {
+            const data = {
+                fullname: values.fullname,
+                username: values.username,
+                email: values.email,
+                phone_number: values.phone_number,
+                password: values.password,
+                confirmPassword: values.confirmPassword,
+            }
+        },
+        validationSchema: yup.object({
+            fullname: yup.string().required("Please enter fullname"),
+            username: yup.string().required("Please enter username"),
+            email: yup.string().email("Please enter valid email").required("Please enter email"),
+            phone_number: yup.string().required("Please enter phone number"),
+            password: yup.string().min(8, "Password must be atleast 8 characters long").required("Please enter password"),
+            confirmPassword: yup.string().required("Please confirm your password").oneOf([yup.ref("password"),], "Passwords must match")
+        });
+    })
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className=" max-w-lg p-8 bg-gray-300 shadow-lg min-h-[500px] rounded-xl">
