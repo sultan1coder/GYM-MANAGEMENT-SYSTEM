@@ -15,11 +15,6 @@ export const comparePassword = async (password: string, hash: string) => {
 }
 
 
-export const generateAccessToken = (userId: number) => {
+export const generateToken = (userId: number) => {
     return jwt.sign({ userId }, ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
-}
-
-
-export const generateRefreshAccessToken = (userId: number) => {
-    return jwt.sign({ userId }, REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
 }

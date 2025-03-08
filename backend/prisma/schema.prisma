@@ -8,18 +8,15 @@ datasource db {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  fullname      String
-  username      String
-  email         String    @unique
-  phone_number  String
-  password      String
-  role          String    @default("staff") // "admin" or "staff"
-  refreshToken  String? // For refresh token authentication
-  resetToken    String?
-  resetTokenExp DateTime?
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
+  id           Int      @id @default(autoincrement())
+  name         String
+  username     String   @unique
+  email        String   @unique
+  phone_number String
+  password     String
+  role         String   @default("staff") // "admin" or "staff"
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 }
 
 model Member {
