@@ -16,7 +16,7 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "refreshsecretk
 //Register User
 export const registerUser = async (req: Request, res: Response) => {
     try {
-        const { name, email, password, role } = req.body as IRegisterNewUser;
+        const { name, username, email, phone_number, password, role } = req.body;
         const existingUser = await prisma.user.findUnique({
             where: {
                 email
@@ -34,7 +34,9 @@ export const registerUser = async (req: Request, res: Response) => {
         const newUser = await prisma.user.create({
             data: {
                 name,
+                username,
                 email,
+                phone_number,
                 password: hashedPassword,
                 role,
             }
