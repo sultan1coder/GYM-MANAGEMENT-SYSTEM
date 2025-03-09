@@ -275,16 +275,15 @@ export const logoutUser = async (req: Request, res: Response) => {
 //Get Current User
 export const whoami = async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.userId) {
-            res.status(400).json({
-                isSuccess: false,
-                message: "User ID is required!"
-            });
-            return;
-        }
+        const userId = req.body.userId;
         const user = await prisma.user.findUnique({
             where: {
-                id: req.userId
+                id: userId
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
             }
         });
 
