@@ -117,7 +117,7 @@ const Register = () => {
                                 className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none"
                                 required />
                             <p className="text-sm font-semibold text-red-500">
-                                {formik.touched.name && formik.errors.name}
+                                {formik.touched.phone_number && formik.errors.phone_number}
                             </p>
                         </div>
                         <div>
