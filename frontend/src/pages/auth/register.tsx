@@ -58,11 +58,23 @@ const Register = () => {
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className=" max-w-lg p-8 bg-gray-300 shadow-lg min-h-[500px] rounded-xl">
                 <h2 className="mb-6 text-2xl font-semibold text-center">Registration</h2>
-                <form className="space-y-4 ">
+                <form onSubmit={formik.handleSubmit} className="space-y-4 ">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label htmlFor="text">Fullname</label>
-                            <input type="text" name="fullName" placeholder="Enter your name" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
+                            <input
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.name}
+                                type="text" 
+                                name="fullName" 
+                                placeholder="Enter your name" 
+                                className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" 
+                                required />
+                            {/* Error message */}
+                            <p className="text-sm font-semibold text-red-500">
+                                {formik.touched.name && formik.errors.name}
+                            </p>
                         </div>
                         <div>
                             <label htmlFor="">Username</label>
