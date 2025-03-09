@@ -49,7 +49,7 @@ export const registerUser = async (req: Request, res: Response) => {
                 username,
                 email,
                 password: hashedPassword,
-                confirmPassword,
+                confirmPassword: hashedPassword,
                 phone_number,
                 role,
             }
@@ -70,7 +70,7 @@ export const registerUser = async (req: Request, res: Response) => {
 //Login User
 export const loginUser = async (req: Request, res: Response) => {
     try {
-        const {email, password} = req.body;
+        const { email, password } = req.body;
         const user = await prisma.user.findUnique({
             where: {
                 email: email

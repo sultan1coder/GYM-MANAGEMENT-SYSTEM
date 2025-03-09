@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { createUser, deleteUser, getAllUsers, getSigleUser, updateUser, } from "../controllers/user.controller";
+import { deleteUser, getAllUsers, updateUser, } from "../controllers/user.controller";
+import { loginUser, registerUser } from "../controllers/auth.controller";
 
 const router = Router();
 
 router.get("/list", getAllUsers);
-router.get("/single/:id", getSigleUser);
-router.post("/create", createUser);
+router.post("/register", registerUser);
+router.post("/login", loginUser);
 router.put("/update/:id", updateUser);
 router.delete("/delete/:id", deleteUser);
 
