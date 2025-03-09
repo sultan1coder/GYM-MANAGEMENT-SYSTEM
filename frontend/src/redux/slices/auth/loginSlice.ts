@@ -9,9 +9,9 @@ const initialState = {
     error: ""
 }
 
-export const loginFn = createAsyncThunk("auth/login", async (data: ILoginBody, { rejectWithValue }) => {
+export const loginFn = createAsyncThunk("users/login", async (data: ILoginBody, { rejectWithValue }) => {
     try {
-        const response = await axios.post(`${BASE_API_URL}/auth/login`, data);
+        const response = await axios.post(`${BASE_API_URL}/users/login`, data);
         return response.data;
     } catch (error) {
         if (error instanceof AxiosError) {
