@@ -1,24 +1,24 @@
+
 export interface IloginResponse {
     isSuccess: boolean;
     user: User;
-    accessToken: string;
+    token: string;
 }
 
 export interface User {
     id: number;
     name: string;
+    username: string;
     email: string;
+    phone_number: null;
     password: string;
+    confirmPassword: string;
     role: string;
-    refreshToken: string;
-    resetToken: null;
-    resetTokenExp: null;
     created_at: Date;
     updated_at: Date;
 }
 
-
 export interface ILoginBody {
     email: string;
-    password: string
+    password: string;
 }

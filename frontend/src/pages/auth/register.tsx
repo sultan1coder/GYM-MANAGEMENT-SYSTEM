@@ -1,26 +1,37 @@
 import { useFormik } from "formik"
 import * as yup from "yup";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import { registerFn } from "../../redux/slices/auth/registerSlice";
 
 const Register = () => {
+    let toastId = "register"
+    const dispatch = useDispatch<AppDispatch>();
+    const registerState = useSelector((state: RootState) => state.registerSlice)
 
     const formik = useFormik({
         initialValues: {
-            fullname: "",
+            name: "",
             username: "",
             email: "",
             phone_number: "",
             password: "",
             confirmPassword: "",
+            role: "",
         },
         onSubmit(values) {
             const data = {
-                fullname: values.fullname,
+                name: values.name,
                 username: values.username,
                 email: values.email,
                 phone_number: values.phone_number,
                 password: values.password,
                 confirmPassword: values.confirmPassword,
+                role: values.role,
             }
+            toast.loading("Registering...", { id: toastId });
+            dispatch(registerFn(data))
         },
         validationSchema: yup.object({
             fullname: yup.string().required("Please enter fullname"),
@@ -30,7 +41,17 @@ const Register = () => {
             password: yup.string().min(8, "Password must be atleast 8 characters long").required("Please enter password"),
             confirmPassword: yup.string().required("Please confirm your password").oneOf([yup.ref("password"),], "Passwords must match")
         })
-    })
+    });
+
+    useEffect(() => {
+        if (registerState.error) {
+            toast.error(registerState.error, { id: toastId });
+        }
+
+        if (registerState.data.isSuccess) {
+            toast.success("Successfully loged in", { id: toastId });
+        }
+    }, [registerState.error, registerState.data])
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
