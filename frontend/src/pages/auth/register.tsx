@@ -36,7 +36,7 @@ const Register = () => {
             dispatch(registerFn(data))
         },
         validationSchema: yup.object({
-            fullname: yup.string().required("Please enter fullname"),
+            name: yup.string().required("Please enter fullname"),
             username: yup.string().required("Please enter username"),
             email: yup.string().email("Please enter valid email").required("Please enter email"),
             phone_number: yup.string().required("Please enter phone number"),
@@ -85,22 +85,46 @@ const Register = () => {
                                 name="username"
                                 onChange={formik.handleChange}
                                 value={formik.values.username}
-                                placeholder="Enter your username" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
+                                placeholder="Enter your username"
+                                className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none"
+                                required />
                             <p className="text-sm font-semibold text-red-500">
                                 {formik.touched.username && formik.errors.username}
                             </p>
                         </div>
                         <div>
                             <label htmlFor="email">Email</label>
-                            <input type="email" name="email" placeholder="Enter your email" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
+                            <input
+                                onBlur={formik.handleBlur}
+                                type="email"
+                                name="email"
+                                onChange={formik.handleChange}
+                                value={formik.values.email}
+                                placeholder="Enter your email" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
+                            <p className="text-sm font-semibold text-red-500">
+                                {formik.touched.email && formik.errors.email}
+                            </p>
                         </div>
                         <div>
                             <label htmlFor="phone">Phone</label>
-                            <input type="tel" name="phone" placeholder="Enter your number" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
+                            <input
+                                onBlur={formik.handleBlur}
+                                type="tel"
+                                name="phone"
+                                onChange={formik.handleChange}
+                                value={formik.values.phone_number}
+                                placeholder="Enter your number"
+                                className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none"
+                                required />
+                            <p className="text-sm font-semibold text-red-500">
+                                {formik.touched.name && formik.errors.name}
+                            </p>
                         </div>
                         <div>
                             <label htmlFor="password">Password</label>
-                            <input type="password" name="password" placeholder="Enter your password" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
+                            <input 
+                            onBlur={formik.handleBlur}
+                            type="password" name="password" placeholder="Enter your password" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
                         </div>
                         <div>
                             <label htmlFor="password">Confirm Password</label>
