@@ -96,6 +96,7 @@ export const loginUser = async (req: Request, res: Response) => {
         const token = generateToken(user.id);
         res.status(200).json({
             isSuccess: true,
+            user,
             token
         })
     } catch (error) {
