@@ -3,7 +3,6 @@ import jwt, { VerifyErrors } from "jsonwebtoken";
 import { AuthRequest } from "../../types/request";
 import { PrismaClient } from "@prisma/client";
 import { comparePassword, generateToken, hashPassword } from "../utils/auth";
-import { ILoginUer, IRegisterNewUser } from "../../types/user";
 
 const prisma = new PrismaClient();
 
@@ -11,24 +10,24 @@ const prisma = new PrismaClient();
 
 
 
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "refreshsecretkey";
+// const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "refreshsecretkey";
 
 //Register User
 export const registerUser = async (req: Request, res: Response) => {
     try {
-        const data: IRegisterNewUser = req.body;
+        const { name, username, email, password, confirmPassword, phone_number, role } = req.body;
 
         // Check if password and confirm password match
-        if (data.password !== data.confirmPassword) {
+        if (password !== confirmPassword) {
             res.status(400).json({
                 isSuccess: false,
                 message: "Password must match"
             });
             return;
         }
-        const existingUser = await prisma.user.findFirst({
+        const existingUser = await prisma.user.findUnique({
             where: {
-                email: data.email
+                email: email
             }
         });
 
@@ -41,17 +40,18 @@ export const registerUser = async (req: Request, res: Response) => {
         }
 
         // HASH THE PASSWORD
-        const hashedPassword = await hashPassword(data.password);
+        const hashedPassword = await hashPassword(password);
 
         // CREATE THE USER
         const newUser = await prisma.user.create({
             data: {
-                name: data.name,
-                username: data.username,
-                email: data.email.toLowerCase(),
-                phone_number: data.phone_number,
+                name,
+                username,
+                email,
                 password: hashedPassword,
-
+                confirmPassword,
+                phone_number,
+                role,
             }
         });
 
@@ -70,10 +70,10 @@ export const registerUser = async (req: Request, res: Response) => {
 //Login User
 export const loginUser = async (req: Request, res: Response) => {
     try {
-        const data: ILoginUer = req.body;
+        const {email, password} = req.body;
         const user = await prisma.user.findUnique({
             where: {
-                email: data.email
+                email: email
             }
         });
 
@@ -84,7 +84,7 @@ export const loginUser = async (req: Request, res: Response) => {
             return;
         }
 
-        const isMatch = await comparePassword(user.password, data.password);
+        const isMatch = await comparePassword(password, user.password);
 
         if (!isMatch) {
             res.status(400).json({
