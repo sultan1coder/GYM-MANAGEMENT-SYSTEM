@@ -122,9 +122,18 @@ const Register = () => {
                         </div>
                         <div>
                             <label htmlFor="password">Password</label>
-                            <input 
-                            onBlur={formik.handleBlur}
-                            type="password" name="password" placeholder="Enter your password" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
+                            <input
+                                onBlur={formik.handleBlur}
+                                type="password"
+                                name="password"
+                                onChange={formik.handleChange}
+                                value={formik.values.password}
+                                placeholder="Enter your password"
+                                className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none"
+                                required />
+                            <p className="text-sm font-semibold text-red-500">
+                                {formik.touched.password && formik.errors.password}
+                            </p>
                         </div>
                         <div>
                             <label htmlFor="password">Confirm Password</label>
