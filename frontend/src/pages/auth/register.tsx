@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { registerFn } from "../../redux/slices/auth/registerSlice";
 import { useEffect } from "react";
+import Spinner from "../../components/Spinner";
 
 const Register = () => {
     let toastId = "register"
@@ -66,10 +67,10 @@ const Register = () => {
                                 onBlur={formik.handleBlur}
                                 onChange={formik.handleChange}
                                 value={formik.values.name}
-                                type="text" 
-                                name="fullName" 
-                                placeholder="Enter your name" 
-                                className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" 
+                                type="name"
+                                name="name"
+                                placeholder="Enter your name"
+                                className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none"
                                 required />
                             {/* Error message */}
                             <p className="text-sm font-semibold text-red-500">
@@ -78,7 +79,16 @@ const Register = () => {
                         </div>
                         <div>
                             <label htmlFor="">Username</label>
-                            <input type="text" name="username" placeholder="Enter your username" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
+                            <input
+                                onBlur={formik.handleBlur}
+                                type="text"
+                                name="username"
+                                onChange={formik.handleChange}
+                                value={formik.values.username}
+                                placeholder="Enter your username" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
+                            <p className="text-sm font-semibold text-red-500">
+                                {formik.touched.username && formik.errors.username}
+                            </p>
                         </div>
                         <div>
                             <label htmlFor="email">Email</label>
@@ -114,6 +124,7 @@ const Register = () => {
 
                     <button type="submit" className="w-full py-2 font-semibold text-white transition bg-gray-800 rounded-lg hover:opacity-90">
                         Register
+                        {registerState.loading ? <Spinner /> : "Sign Up"}
                     </button>
                 </form>
             </div>
