@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { registerFn } from "../../redux/slices/auth/registerSlice";
+import { useEffect } from "react";
 
 const Register = () => {
     let toastId = "register"

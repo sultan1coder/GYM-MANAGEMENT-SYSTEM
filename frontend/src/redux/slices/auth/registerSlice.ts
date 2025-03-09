@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IloginResponse, IRegisterUser } from "../../../types/login";
 import axios, { AxiosError } from "axios";
 import { BASE_API_URL, DEFAULT_ERROR_MESSAGE } from "../../../constants";
+import { IRegisterBody, IRegisterResponse, NewUser } from "../../../types/register";
 
 const initialState = {
     loading: false,
-    data: {} as IloginResponse,
+    data: {} as IRegisterResponse,
     error: ""
 }
 
-export const registerFn = createAsyncThunk("users/register", async (data: IRegisterUser, { rejectWithValue }) => {
+export const registerFn = createAsyncThunk("users/register", async (data: IRegisterBody, { rejectWithValue }) => {
     try {
         const response = await axios.post(`${BASE_API_URL}/users/register`, data);
         return response.data;
@@ -31,7 +31,7 @@ export const registerSlice = createSlice({
         builder.addCase(registerFn.pending, (state) => {
             state.loading = true;
             state.error = "";
-            state.data = {} as IRegisterUser;
+            state.data = {} as IRegisterResponse;
         });
 
         //Fulfilled
@@ -45,7 +45,7 @@ export const registerSlice = createSlice({
         builder.addCase(registerFn.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload as string;
-            state.data = {} as IRegisterUser;
+            state.data = {} as IRegisterResponse;
         });
     }
 });
