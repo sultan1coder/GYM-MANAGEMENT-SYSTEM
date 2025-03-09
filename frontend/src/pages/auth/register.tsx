@@ -137,7 +137,18 @@ const Register = () => {
                         </div>
                         <div>
                             <label htmlFor="password">Confirm Password</label>
-                            <input type="password" name="confirmPassword" placeholder="Confirm Password" className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none" required />
+                            <input
+                                onBlur={formik.handleBlur}
+                                type="password"
+                                name="confirmPassword"
+                                onChange={formik.handleChange}
+                                value={formik.values.confirmPassword}
+                                placeholder="Confirm Password"
+                                className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none"
+                                required />
+                            <p className="text-sm font-semibold text-red-500">
+                                {formik.touched.confirmPassword && formik.errors.confirmPassword}
+                            </p>
                         </div>
                     </div>
 
