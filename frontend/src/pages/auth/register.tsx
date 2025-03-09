@@ -51,7 +51,7 @@ const Register = () => {
         }
 
         if (registerState.data.isSuccess) {
-            toast.success("Successfully loged in", { id: toastId });
+            toast.success("Successfully Registered", { id: toastId });
         }
     }, [registerState.error, registerState.data])
 
@@ -110,7 +110,7 @@ const Register = () => {
                             <input
                                 onBlur={formik.handleBlur}
                                 type="tel"
-                                name="phone"
+                                name="phone_number"
                                 onChange={formik.handleChange}
                                 value={formik.values.phone_number}
                                 placeholder="Enter your number"
@@ -166,7 +166,8 @@ const Register = () => {
                         </div>
                     </div>
 
-                    <button type="submit" className="w-full py-2 font-semibold text-white transition bg-gray-800 rounded-lg hover:opacity-90">
+                    <button disabled={registerState.loading || !formik.isValid}
+                    type="submit" className="w-full py-2 font-semibold text-white transition bg-gray-800 rounded-lg hover:opacity-90">
                         Register
                         {registerState.loading ? <Spinner /> : "Sign Up"}
                     </button>
