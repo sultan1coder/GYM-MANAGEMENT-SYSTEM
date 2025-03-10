@@ -6,11 +6,13 @@ import toast from "react-hot-toast";
 import { registerFn } from "../../redux/slices/auth/registerSlice";
 import { useEffect } from "react";
 import Spinner from "../../components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
     let toastId = "register"
     const dispatch = useDispatch<AppDispatch>();
     const registerState = useSelector((state: RootState) => state.registerSlice)
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -54,6 +56,12 @@ const Register = () => {
             toast.success("Successfully Registered", { id: toastId });
         }
     }, [registerState.error, registerState.data])
+
+    useEffect(() => {
+        if(registerState.data.isSuccess) {
+            navigate("/")
+        }
+    }, [registerState.data.isSuccess])
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
