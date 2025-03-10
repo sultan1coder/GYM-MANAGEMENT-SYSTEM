@@ -30,7 +30,16 @@ export const loginFn = createAsyncThunk("users/login", async (data: ILoginBody, 
 export const loginSlice = createSlice({
     name: "login slice",
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            state.data = {} as IloginResponse;
+            state.error = '';
+            state.loading = false;
+
+            // Remove the data from the local storage
+            localStorage.removeItem('userData');
+        }
+    },
     extraReducers(builder) {
         //Pending..
         builder.addCase(loginFn.pending, (state) => {
@@ -54,3 +63,5 @@ export const loginSlice = createSlice({
         });
     }
 });
+
+export const { logout } = loginSlice.actions;
