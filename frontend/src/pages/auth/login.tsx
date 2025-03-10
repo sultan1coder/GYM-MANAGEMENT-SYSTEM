@@ -55,7 +55,7 @@ const Login = () => {
     }, [loginState.data.isSuccess])
 
     return (
-        <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="flex items-center justify-center min-h-screen p-4 bg-gray-100">
             <div className="w-full max-w-md p-8 bg-gray-300 shadow-lg rounded-2xl">
                 <h2
                     className="mb-6 text-2xl font-bold text-center text-gray-800">
