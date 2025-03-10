@@ -40,6 +40,8 @@ const Login = () => {
 
         if (loginState.data.isSuccess) {
             toast.success("Successfully loged in", { id: toastId });
+            localStorage.setItem("user", JSON.stringify(loginState.data.user));
+            localStorage.setItem("token", loginState.data.token);
         }
     }, [loginState.error, loginState.data])
 

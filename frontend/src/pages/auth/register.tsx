@@ -168,7 +168,6 @@ const Register = () => {
 
                     <button disabled={registerState.loading || !formik.isValid}
                     type="submit" className="w-full py-2 font-semibold text-white transition bg-gray-800 rounded-lg hover:opacity-90">
-                        Register
                         {registerState.loading ? <Spinner /> : "Sign Up"}
                     </button>
                 </form>
