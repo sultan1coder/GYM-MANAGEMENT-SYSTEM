@@ -58,7 +58,7 @@ const Register = () => {
     }, [registerState.error, registerState.data])
 
     useEffect(() => {
-        if(registerState.data.isSuccess) {
+        if (registerState.data.isSuccess) {
             navigate("/")
         }
     }, [registerState.data.isSuccess])
@@ -175,7 +175,7 @@ const Register = () => {
                     </div>
 
                     <button disabled={registerState.loading || !formik.isValid}
-                    type="submit" className="w-full py-2 font-semibold text-white transition bg-gray-800 rounded-lg hover:opacity-90">
+                        type="submit" className="w-full py-2 font-semibold text-white transition bg-gray-800 rounded-lg hover:opacity-90">
                         {registerState.loading ? <Spinner /> : "Sign Up"}
                     </button>
                 </form>
