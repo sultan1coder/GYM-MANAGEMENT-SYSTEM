@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { AppDispatch, RootState } from "../../redux/store";
 import { loginFn } from "../../redux/slices/auth/loginSlice";
@@ -9,10 +9,12 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 
+
 const Login = () => {
     let toastId = "login"
     const dispatch = useDispatch<AppDispatch>();
     const loginState = useSelector((state: RootState) => state.loginSlice);
+    const navigate = useNavigate()
 
     const formik = useFormik({
         initialValues: {
@@ -44,6 +46,14 @@ const Login = () => {
             localStorage.setItem("token", loginState.data.token);
         }
     }, [loginState.error, loginState.data])
+
+    // Automatically navigate to homepage if there is a token stored in localstorage
+
+    useEffect(() => {
+        if (loginState.data.isSuccess) {
+            navigate("/")
+        }
+    }, [loginState.data.isSuccess])
 
     return (
         <div className="flex items-center justify-center min-h-screen p-4">
