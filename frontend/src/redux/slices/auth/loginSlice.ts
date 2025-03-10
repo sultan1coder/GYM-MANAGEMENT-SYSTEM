@@ -3,9 +3,14 @@ import { ILoginBody, IloginResponse } from "../../../types/login";
 import axios, { AxiosError } from "axios";
 import { BASE_API_URL, DEFAULT_ERROR_MESSAGE } from "../../../constants";
 
+
+const DEFAULT_USER_DATA = localStorage.getItem('userData')
+    ? JSON.parse(localStorage.getItem('userData')!)
+    : {};
+
 const initialState = {
     loading: false,
-    data: {} as IloginResponse,
+    data: (DEFAULT_USER_DATA as IloginResponse) || ({} as IloginResponse),
     error: ""
 }
 
