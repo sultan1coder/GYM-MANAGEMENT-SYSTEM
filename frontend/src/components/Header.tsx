@@ -17,7 +17,10 @@ const Header = () => {
             <div className="text-xl font-bold logo ">
                 <h1>BILKHAYR GYM</h1>
             </div>
-            {loginState.data.isSuccess ? <button onClick={logoutHandler} className='p-3 text-white bg-red-500 rounded-md'>Logout</button> : <div className="flex gap-4 menus">
+            {loginState.data.isSuccess ? <div className='flex items-center gap-3'>
+                <p>{loginState.data.user.name} </p>
+                <button onClick={logoutHandler} className='p-3 text-white bg-red-500 rounded-md'>Logout</button>
+            </div> : <div className="flex gap-4 menus">
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/"}>HomePage</Link>
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/auth/login"}>Login</Link>
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/auth/register"}>Register</Link>
