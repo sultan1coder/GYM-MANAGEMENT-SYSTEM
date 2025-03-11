@@ -3,11 +3,18 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { RootState } from "@/redux/store"
-import { useSelector } from "react-redux"
+import { AppDispatch, RootState } from "@/redux/store"
+import { useDispatch, useSelector } from "react-redux"
+import { Button } from "./ui/button"
+import { logout } from "@/redux/slices/auth/loginSlice"
 
 const Profile = () => {
     const loginState = useSelector((state: RootState) => state.loginSlice)
+    const dispatch = useDispatch<AppDispatch>()
+
+    const logoutHandler = () => {
+        dispatch(logout())
+    }
     return (
         <Popover>
             <PopoverTrigger>
@@ -31,16 +38,10 @@ const Profile = () => {
                         <p className="text-sm text-gray-600">
                             {loginState.data.user.email}
                         </p>
-                        <p className="text-sm text-gray-600">
-                            {loginState.data.user.phone_number}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                            {loginState.data.user.username}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                            {loginState.data.user.id}
-                        </p>
                     </div>
+                </div>
+                <div className="p-3 mt-4">
+                    <Button variant={'destructive'} className="w-full" onClick={logoutHandler}>Logout</Button>
                 </div>
             </PopoverContent>
         </Popover>

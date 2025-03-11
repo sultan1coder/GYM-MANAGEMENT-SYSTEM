@@ -21,7 +21,6 @@ const Header = () => {
             </div>
             {loginState.data.isSuccess ? <div className='flex items-center gap-3'>
                 <Profile />
-                <Button variant={"destructive"} onClick={logoutHandler}>Logout</Button>
             </div> : <div className="flex gap-4 menus">
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/"}>HomePage</Link>
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/auth/login"}>Login</Link>
