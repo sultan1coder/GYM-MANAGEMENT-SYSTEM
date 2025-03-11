@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { AppDispatch, RootState } from '../redux/store'
 import { logout } from '../redux/slices/auth/loginSlice'
+import { Button } from './ui/button'
 
 const Header = () => {
 
@@ -19,7 +20,7 @@ const Header = () => {
             </div>
             {loginState.data.isSuccess ? <div className='flex items-center gap-3'>
                 <p>{loginState.data.user.name} </p>
-                <button onClick={logoutHandler} className='p-3 text-white bg-red-500 rounded-md'>Logout</button>
+                <Button onClick={logoutHandler}>Logout</Button>
             </div> : <div className="flex gap-4 menus">
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/"}>HomePage</Link>
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/auth/login"}>Login</Link>
