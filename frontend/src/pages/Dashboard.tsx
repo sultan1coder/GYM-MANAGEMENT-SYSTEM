@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { DollarSign, Activity } from "lucide-react";
 import { ImUsers } from 'react-icons/im';
@@ -60,7 +59,7 @@ const Dashboard = () => {
             </div>
 
             <div className="flex justify-end mt-6">
-                <Button className="px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">Manage Members</Button>
+                <button className="px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">Manage Members</button>
             </div>
         </div>
     )
