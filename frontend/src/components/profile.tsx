@@ -15,6 +15,7 @@ const Profile = () => {
     const logoutHandler = () => {
         dispatch(logout())
     }
+
     return (
         <Popover>
             <PopoverTrigger>
@@ -50,3 +51,6 @@ const Profile = () => {
 }
 
 export default Profile
+
+
+

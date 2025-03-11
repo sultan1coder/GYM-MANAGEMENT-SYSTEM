@@ -1,18 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { AppDispatch, RootState } from '../redux/store'
-import { logout } from '../redux/slices/auth/loginSlice'
-import { Button } from './ui/button'
+import { RootState } from '../redux/store'
 import Profile from './profile'
 
 const Header = () => {
 
     const loginState = useSelector((state: RootState) => state.loginSlice)
-    const dispatch = useDispatch<AppDispatch>()
 
-    const logoutHandler = () => {
-        dispatch(logout())
-    }
 
     return (
         <div className='flex items-center justify-around p-3'>
