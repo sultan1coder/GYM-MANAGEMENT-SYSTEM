@@ -19,10 +19,8 @@ const Header = () => {
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/"}>HomePage</Link>
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/auth/login"}>Login</Link>
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/auth/register"}>Register</Link>
-            </div>}
-            <div>
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/dashboard"}>Dashboard</Link>
-            </div>
+            </div>}
         </div>
     )
 }
