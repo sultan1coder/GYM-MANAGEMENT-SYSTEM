@@ -13,7 +13,7 @@ const data = [
 
 const Dashboard = () => {
     return (
-        <div className="min-h-screen p-6 bg-gray-100">
+        <div className="min-h-screen p-2 bg-gray-100">
             <h1 className="mb-6 text-3xl font-semibold">Gym Management Dashboard</h1>
             <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-3">
                 <Card>

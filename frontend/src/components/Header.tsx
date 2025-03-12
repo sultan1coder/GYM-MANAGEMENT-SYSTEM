@@ -21,7 +21,7 @@ const Header = () => {
                 <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/auth/register"}>Register</Link>
             </div>}
             <div>
-                <Link to={"/dashboard"}>Dashboard</Link>
+                <Link className='p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700' to={"/dashboard"}>Dashboard</Link>
             </div>
         </div>
     )
