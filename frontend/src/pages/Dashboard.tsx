@@ -1,7 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 // import { Progress } from "@/components/ui/progress";
-import { Avatar } from "@/components/ui/avatar";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Search } from "lucide-react";
 
