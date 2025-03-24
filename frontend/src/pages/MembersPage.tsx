@@ -14,6 +14,19 @@ interface Member {
     phone : string;
 }
 
+export  function MembersManagement() {
+    const [members, setMembers] = useState<Member[]>([]);
+    const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+    const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    useEffect(() => {
+        fetchMembers();
+    }, []);
+
+    useEffect
+}
 
 const MembersPage = () => {
   return <div className="p-6">
@@ -22,7 +35,7 @@ const MembersPage = () => {
     <input
      type="text" 
     placeholder="Search members"
-    // value={searchQuery}
+    value={searchQuery}
     />
     
   </div>;
