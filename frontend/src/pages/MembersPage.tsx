@@ -42,11 +42,22 @@ export function MembersManagement() {
     } catch (error) {
       toast.error("Faied to fetch members");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
-  const updateMember = 
+  const getMember = async (id: string) => {
+    try {
+      const response = await axios.get(`/api/members/single/${id}`);
+      setSelectedMember(response.data);
+    } catch (error) {}
+  };
+
+  const updateMember = async (id: string, data: Partial<Member>) => {
+    try {
+      await axios.put(`/api/members/update/${id}`);
+    } catch (error) {}
+  };
 }
 
 const MembersPage = () => {
