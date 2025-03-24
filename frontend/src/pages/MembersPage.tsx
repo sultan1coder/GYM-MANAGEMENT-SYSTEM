@@ -1,5 +1,7 @@
 const MembersPage = () => {
-  return <div>MembersPage</div>;
+  return <div className="p-6">
+    
+  </div>;
 };
 
 export default MembersPage;
