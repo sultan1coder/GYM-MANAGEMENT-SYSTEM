@@ -3,8 +3,8 @@ import axios from "axios";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// import { Table } from "@/components/ui/table";
 import toast, { Toast } from "react-hot-toast";
+import { Search, Table } from "lucide-react";
 
 interface Member {
   id: string;
@@ -50,13 +50,34 @@ export function MembersManagement() {
     try {
       const response = await axios.get(`/api/members/single/${id}`);
       setSelectedMember(response.data);
-    } catch (error) {}
+      getMember;
+    } catch (error) {
+      toast.error("Failed to fetch member");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const updateMember = async (id: string, data: Partial<Member>) => {
     try {
       await axios.put(`/api/members/update/${id}`);
-    } catch (error) {}
+      toast.success("Member updated successfully");
+      fetchMembers();
+      updateMember;
+    } catch (error) {
+      toast.error("Failed to update member");
+    }
+  };
+
+  const deleteMember = async (id: string) => {
+    try {
+      await axios.delete(`/api/members/delete/${id}`);
+      toast.success("Member deleted successfully");
+      fetchMembers();
+      deleteMember;
+    } catch (error) {
+      toast.error("Failed to delete member");
+    }
   };
 }
 
@@ -65,7 +86,17 @@ const MembersPage = () => {
     <div className="p-6">
       <h1 className="mb-4 text-2xl font-semibold">Members Management</h1>
 
-      {/* <input type="text" placeholder="Search members" value={searchQuery} /> */}
+      <input 
+      type="text" 
+      placeholder="Search members" 
+      value={searchQuery} 
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className="mb-4"
+      />
+
+      <Table>
+        
+      </Table>
     </div>
   );
 };
