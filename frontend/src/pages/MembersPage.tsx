@@ -95,7 +95,28 @@ const MembersPage = () => {
       />
 
       <Table>
-        
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {filteredMembers.map((member) => (
+                <tr>
+                    key={member.id}
+                    <td>{member.name}</td>
+                    <td>{member.email}</td>
+                    <td>{member.phone}</td>
+
+                    <td>
+                        <Button onClick={() => getMember(member.id)}>View</Button>
+                    </td>
+                </tr>
+            ))}
+        </tbody>
       </Table>
     </div>
   );
