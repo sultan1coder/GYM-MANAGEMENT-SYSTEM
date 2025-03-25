@@ -7,11 +7,11 @@ const router = Router();
 
 router.get("/list", getAllMembers);
 router.get("/single/:id", getSingleMember);
-router.post("/create", adminRoute, createMember);
-router.put("/update/:id", adminRoute, updateMember);
-router.delete("/delete/:id", adminRoute, deleteMember);
-router.post("/:id/subscribe", adminRoute, subscribeMember);
-router.post("/:id/unsubscribe", adminRoute, unsubscribeMember);
+router.post("/create",  createMember);
+router.put("/update/:id",  updateMember);
+router.delete("/delete/:id",  deleteMember);
+router.post("/:id/subscribe",  subscribeMember);
+router.post("/:id/unsubscribe",  unsubscribeMember);
 
 
 export default router;
