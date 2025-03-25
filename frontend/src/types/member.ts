@@ -68,3 +68,20 @@ export interface UpdateMember {
   createdAt: Date;
   updatedAt: Date;
 }
+
+//Delete a member
+export interface IDeleteResponse {
+  isSuccess: boolean;
+  message: string;
+  deleteMember: DeleteMember;
+}
+
+export interface DeleteMember {
+  id: string;
+  name: string;
+  email: string;
+  age: number;
+  membershiptype: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
