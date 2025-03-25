@@ -14,7 +14,7 @@ import Spinner from "../components/Spinner";
 
 const MembersManagement = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { members, loading, error } = useSelector((state: RootState) => state.me);
+  const { members, loading, error } = useSelector((state: RootState) => state.memberSlice);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const MembersManagement = () => {
   };
 
   const handleUpdate = async (id: string, updatedData: Partial<Member>) => {
-    const response = await dispatch(updateMember({ id, updatedData }));
+    const response = await dispatch(updateMember({ id, ...updatedData }));
     if (response.meta.requestStatus === "fulfilled") {
       toast.success("Member updated successfully");
     } else {
