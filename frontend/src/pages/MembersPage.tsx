@@ -30,14 +30,14 @@ const MembersManagement = () => {
     }
   };
 
-  const handleUpdate = async (id: string, updatedData: Partial<Member>) => {
-    const response = await dispatch(updateMember({ id, ...updatedData }));
-    if (response.meta.requestStatus === "fulfilled") {
-      toast.success("Member updated successfully");
-    } else {
-      toast.error("Failed to update member");
-    }
-  };
+  // const handleUpdate = async (id: string, updatedData: Partial<Member>) => {
+  //   const response = await dispatch(updateMember({ id, ...updatedData }));
+  //   if (response.meta.requestStatus === "fulfilled") {
+  //     toast.success("Member updated successfully");
+  //   } else {
+  //     toast.error("Failed to update member");
+  //   }
+  // };
 
   const handleDelete = async (id: string) => {
     const response = await dispatch(deleteMember(id));
