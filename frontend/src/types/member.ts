@@ -44,3 +44,27 @@ export interface ICreateBody {
   age: number;
   membershiptype: string;
 }
+
+//Update a member
+export interface IUpdateBody {
+  name: string;
+  email: string;
+  age: number;
+  membershiptype: string;
+}
+
+export interface IUpdateResponse {
+  isSuccess: boolean;
+  message: string;
+  updateMember: UpdateMember;
+}
+
+export interface UpdateMember {
+  id: string;
+  name: string;
+  email: string;
+  age: number;
+  membershiptype: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
