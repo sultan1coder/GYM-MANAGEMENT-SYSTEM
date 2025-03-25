@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store";
 import {
   fetchMembers,
-  fetchMemberById,
   createMember,
   updateMember,
   deleteMember,
@@ -14,7 +13,9 @@ import Spinner from "../components/Spinner";
 
 const MembersManagement = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { members, loading, error } = useSelector((state: RootState) => state.memberSlice);
+  const { members, loading, error } = useSelector(
+    (state: RootState) => state.memberSlice
+  );
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
 
   useEffect(() => {
@@ -23,25 +24,16 @@ const MembersManagement = () => {
 
   const handleCreate = async (memberData: Member) => {
     const response = await dispatch(createMember(memberData));
-    if (response.meta.requestStatus === "fulfilled") {
+    if (createMember.fulfilled.match(response)) {
       toast.success("Member added successfully");
     } else {
       toast.error("Failed to add member");
     }
   };
 
-  // const handleUpdate = async (id: string, updatedData: Partial<Member>) => {
-  //   const response = await dispatch(updateMember({ id, ...updatedData }));
-  //   if (response.meta.requestStatus === "fulfilled") {
-  //     toast.success("Member updated successfully");
-  //   } else {
-  //     toast.error("Failed to update member");
-  //   }
-  // };
-
   const handleDelete = async (id: string) => {
     const response = await dispatch(deleteMember(id));
-    if (response.meta.requestStatus === "fulfilled") {
+    if (deleteMember.fulfilled.match(response)) {
       toast.success("Member deleted successfully");
     } else {
       toast.error("Failed to delete member");
@@ -67,27 +59,35 @@ const MembersManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {members.map((member: Member) => (
-                <tr key={member.id} className="border">
-                  <td className="p-2 border">{member.id}</td>
-                  <td className="p-2 border">{member.name}</td>
-                  <td className="p-2 border">{member.email}</td>
-                  <td className="p-2 border">
-                    <button
-                      onClick={() => setSelectedMember(member)}
-                      className="mr-2 text-blue-500"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(member.id)}
-                      className="text-red-500"
-                    >
-                      Delete
-                    </button>
+              {Array.isArray(members) && members.length > 0 ? (
+                members.map((member: Member) => (
+                  <tr key={member.id} className="border">
+                    <td className="p-2 border">{member.id}</td>
+                    <td className="p-2 border">{member.name}</td>
+                    <td className="p-2 border">{member.email}</td>
+                    <td className="p-2 border">
+                      <button
+                        onClick={() => setSelectedMember(member)}
+                        className="mr-2 text-blue-500"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(member.id)}
+                        className="text-red-500"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="p-4 text-center text-gray-500">
+                    No members found
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

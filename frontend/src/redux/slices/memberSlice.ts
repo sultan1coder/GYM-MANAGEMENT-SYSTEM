@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { BASE_API_URL, DEFAULT_ERROR_MESSAGE } from "../../constants";
 import { NewMember, ICreateBody } from "../../types/member";
-import { data } from "react-router-dom";
 
 interface MemberState {
   loading: boolean;
@@ -24,7 +23,8 @@ export const fetchMembers = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${BASE_API_URL}/members/list`);
-      return response.data;
+      return Array.isArray(response.data) ? response.data : [];
+    
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(
@@ -38,10 +38,10 @@ export const fetchMembers = createAsyncThunk(
 
 // Fetch single member by ID
 export const fetchMemberById = createAsyncThunk(
-  "members/fetchById",
+  "members/single",
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${BASE_API_URL}/members/${id}`);
+      const response = await axios.get(`${BASE_API_URL}/members/single/${id}`);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -59,7 +59,7 @@ export const createMember = createAsyncThunk(
   "members/create",
   async (data: ICreateBody, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${BASE_API_URL}/members`, data);
+      const response = await axios.post(`${BASE_API_URL}/members/create`, data);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
