@@ -14,7 +14,7 @@ import Spinner from "../components/Spinner";
 
 const MembersManagement = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { members, loading, error } = useSelector((state: RootState) => state.memberr);
+  const { members, loading, error } = useSelector((state: RootState) => state.me);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
 
   useEffect(() => {
