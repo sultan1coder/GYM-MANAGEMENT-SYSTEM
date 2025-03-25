@@ -1,8 +1,10 @@
+//Fetch all members
 export interface IFetchMembers {
   message: string;
   members: any[];
 }
 
+//Get single member
 export interface IGetSingleMember {
   isSuccess: boolean;
   message: string;
@@ -19,6 +21,7 @@ export interface Member {
   updatedAt: Date;
 }
 
+//Create a member
 export interface ICreateResponse {
   isSuccess: boolean;
   message: string;
