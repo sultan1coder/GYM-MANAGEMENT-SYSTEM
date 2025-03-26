@@ -24,7 +24,6 @@ export const fetchMembers = createAsyncThunk(
     try {
       const response = await axios.get(`${BASE_API_URL}/members/list`);
       return Array.isArray(response.data) ? response.data : [];
-    
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(
@@ -80,7 +79,10 @@ export const updateMember = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await axios.put(`${BASE_API_URL}/members/${id}`, data);
+      const response = await axios.put(
+        `${BASE_API_URL}/members/update/${id}`,
+        data
+      );
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -98,7 +100,7 @@ export const deleteMember = createAsyncThunk(
   "members/delete",
   async (id: string, { rejectWithValue }) => {
     try {
-      await axios.delete(`${BASE_API_URL}/members/${id}`);
+      await axios.delete(`${BASE_API_URL}/members/delete/${id}`);
       return id;
     } catch (error) {
       if (error instanceof AxiosError) {
