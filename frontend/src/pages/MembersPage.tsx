@@ -3,9 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store";
 import {
   fetchMembers,
-  createMember,
-  updateMember,
-  deleteMember,
+  createMember, deleteMember
 } from "../redux/slices/memberSlice";
 import { Member } from "../types/member";
 import toast from "react-hot-toast";
