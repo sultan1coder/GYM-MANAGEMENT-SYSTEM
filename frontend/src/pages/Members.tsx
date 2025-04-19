@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom"
+import Register from "./members/Register"
 
 const Members = () => {
   return (
-    <div>
-        <div>
-            <Link to={"/loginMember"}>LoginMember</Link>
-        </div>
+    <div className="">
+        <Link to={"/LoginMember"}>Login</Link>
+        <Register />
     </div>
   )
 }
