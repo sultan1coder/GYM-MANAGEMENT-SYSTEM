@@ -6,6 +6,7 @@ import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import Dashboard from "./pages/Dashboard";
 import LoginMember from"./pages/members/Login";
+import Members from "./pages/Members";
 
 
 export const router = createBrowserRouter([
@@ -30,18 +31,22 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: "members",
-        children: [
-          {
-            path: "login",
-            element: <LoginMember />
-          }
-        ],
-      },
+      // {
+      //   path: "members",
+      //   children: [
+      //     {
+      //       path: "login",
+      //       element: <LoginMember />
+      //     }
+      //   ],
+      // },
       {
         path: "/dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "/members",
+        element: <Members />,
       },
       {
         path: "*",
