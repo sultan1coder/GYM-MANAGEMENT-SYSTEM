@@ -1,8 +1,8 @@
 
-const Register = () => {
+const RegisterMember = () => {
   return (
     <div>Register</div>
   )
 }
 
-export default Register
+export default RegisterMember

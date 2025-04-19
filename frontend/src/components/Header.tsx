@@ -43,9 +43,15 @@ const Header = () => {
           </Link>
           <Link
             className="p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700"
-            to={"/Members"}
+            to={"/members/login"}
           >
-            members
+          LoginMember
+          </Link>
+          <Link
+            className="p-3 text-white transition-all bg-gray-800 rounded-md hover:bg-gray-700"
+            to={"/members/register"}
+          >
+          RegisterMember
           </Link>
         </div>
       )}
