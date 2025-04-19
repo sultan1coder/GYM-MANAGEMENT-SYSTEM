@@ -5,7 +5,8 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import Dashboard from "./pages/Dashboard";
-import MembersManagement from "./pages/MembersPage";
+import LoginMember from"./pages/members/Login";
+
 
 export const router = createBrowserRouter([
   {
@@ -30,12 +31,17 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "/dashboard",
-        element: <Dashboard />,
+        path: "members",
+        children: [
+          {
+            path: "login",
+            element: <LoginMember />
+          }
+        ],
       },
       {
-        path: "/members",
-        element: <MembersManagement />,
+        path: "/dashboard",
+        element: <Dashboard />,
       },
       {
         path: "*",
