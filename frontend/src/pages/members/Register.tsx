@@ -1,8 +1,5 @@
-
 const RegisterMember = () => {
-  return (
-    <div>Register</div>
-  )
-}
+  return <div>Register</div>;
+};
 
-export default RegisterMember
+export default RegisterMember;
