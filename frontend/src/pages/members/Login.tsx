@@ -1,8 +1,5 @@
-
 const LoginMember = () => {
-  return (
-    <div>Login</div>
-  )
-}
+  return <div>Login</div>;
+};
 
-export default LoginMember
+export default LoginMember;
