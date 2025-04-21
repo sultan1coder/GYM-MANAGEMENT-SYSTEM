@@ -8,6 +8,9 @@ const prisma = new PrismaClient();
 interface ICreateMembersPayload {
     name: string,
     email: string,
+    phone_number: string,
+    password: string,
+    confirmPasword: string,
     age: number,
     membershiptype: MemberShipType,
 }
@@ -72,9 +75,9 @@ export const getSingleMember = async (req: Request, res: Response) => {
 
 export const createMember = async (req: Request, res: Response) => {
     try {
-        const { name, email, age, membershiptype } = req.body as ICreateMembersPayload;
+        const { name, email, age, phone_number, password, confirmPasword, membershiptype } = req.body as ICreateMembersPayload;
 
-        if (!name || !email || !age || !membershiptype) {
+        if (!name || !email || !age || phone_number||password||confirmPasword ||!membershiptype) {
             res.status(400).json({
                 isSuccess: false,
                 message: "Validation error"
@@ -86,6 +89,9 @@ export const createMember = async (req: Request, res: Response) => {
                 name,
                 email,
                 age,
+                phone_number,
+                password,
+                confirmPasword,
                 membershiptype,
             }
         });
