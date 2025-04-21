@@ -24,6 +24,9 @@ model Member {
   id             String         @id @default(uuid())
   name           String
   email          String         @unique
+  phone_number    String?
+  password        String
+  confirmPassword String?
   age            Int
   membershiptype MemberShipType
   createdAt      DateTime       @default(now())
