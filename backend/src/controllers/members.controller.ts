@@ -10,7 +10,7 @@ interface ICreateMembersPayload {
     email: string,
     phone_number: string,
     password: string,
-    confirmPasword: string,
+    confirmPassword: string,
     age: number,
     membershiptype: MemberShipType,
 }
@@ -75,9 +75,9 @@ export const getSingleMember = async (req: Request, res: Response) => {
 
 export const createMember = async (req: Request, res: Response) => {
     try {
-        const { name, email, age, phone_number, password, confirmPasword, membershiptype } = req.body as ICreateMembersPayload;
+        const { name, email, age, phone_number, password, confirmPassword, membershiptype } = req.body as ICreateMembersPayload;
 
-        if (!name || !email || !age || phone_number||password||confirmPasword ||!membershiptype) {
+        if (!name || !email || !age || phone_number||password||confirmPassword ||!membershiptype) {
             res.status(400).json({
                 isSuccess: false,
                 message: "Validation error"
@@ -91,7 +91,7 @@ export const createMember = async (req: Request, res: Response) => {
                 age,
                 phone_number,
                 password,
-                confirmPasword,
+                confirmPassword,
                 membershiptype,
             }
         });
