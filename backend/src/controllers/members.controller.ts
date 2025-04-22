@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { defaultErrorMessage } from "../constants";
 import { MemberShipType, PrismaClient } from "@prisma/client";
+import { hashPassword } from "../utils/auth";
 
 const prisma = new PrismaClient();
 
@@ -70,60 +71,59 @@ export const getSingleMember = async (req: Request, res: Response) => {
   return;
 };
 
-export const createMember = async (req: Request, res: Response) => {
-  try {
-    const {
-      name,
-      email,
-      age,
-      phone_number,
-      password,
-      confirmPassword,
-      membershiptype,
-    } = req.body as ICreateMembersPayload;
 
-    if (
-      !name ||
-      !email ||
-      !age ||
-      !phone_number ||
-      !password ||
-      !confirmPassword ||
-      !membershiptype
-    ) {
-      res.status(400).json({
-        isSuccess: false,
-        message: "Validation error",
-      });
-      return;
+//Register Member
+export const registerMember = async (req: Request, res: Response) => {
+    try {
+        const { name, email, password, confirmPassword, phone_number} = req.body;
+
+        // Check if password and confirm password match
+        if (password !== confirmPassword) {
+            res.status(400).json({
+                isSuccess: false,
+                message: "Password must match"
+            });
+            return;
+        }
+        const existingMember = await prisma.user.findUnique({
+            where: {
+                email: email
+            }
+        });
+
+        // CHECK IF THE USER IS EXISTING
+        if (existingMember) {
+            res.status(400).json({
+                message: "User already exists!",
+            });
+            return;
+        }
+
+        // HASH THE PASSWORD
+        const hashedPassword = await hashPassword(password);
+
+        // CREATE THE USER
+        const newUser = await prisma.user.create({
+            data: {
+                name,
+                email,
+                phone_number,
+                password: hashedPassword,
+                confirmPassword: hashedPassword,
+            }
+        });
+
+        res.status(201).json({
+            isSuccess: true,
+            message: "User registered successfully",
+            newUser
+        });
+    } catch (error) {
+        res.status(500).json({
+            messaga: "Something went wrong"
+        });
     }
-    const newMember = await prisma.member.create({
-      data: {
-        name,
-        email,
-        age,
-        phone_number,
-        password,
-        confirmPassword,
-        membershiptype,
-      },
-    });
-
-    res.status(200).json({
-      isSuccess: true,
-      message: "Member successfully created",
-      newMember,
-    });
-    return;
-  } catch (error) {
-    console.log("Error: " + error);
-    res.status(500).json({
-      isSuccess: false,
-      message: "Server error!",
-    });
-  }
-};
-
+}
 export const updateMember = async (req: Request, res: Response) => {
   try {
     const { member_id, name, email, age, membershiptype } =
