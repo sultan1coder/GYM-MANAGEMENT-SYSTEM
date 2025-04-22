@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { defaultErrorMessage } from "../constants";
 import { MemberShipType, PrismaClient } from "@prisma/client";
-import { hashPassword } from "../utils/auth";
+import { comparePassword, generateToken, hashPassword } from "../utils/auth";
 
 const prisma = new PrismaClient();
 
@@ -75,7 +75,7 @@ export const getSingleMember = async (req: Request, res: Response) => {
 //Register Member
 export const registerMember = async (req: Request, res: Response) => {
     try {
-        const { name, email, password, confirmPassword, phone_number} = req.body;
+        const { name, email, password, confirmPassword, phone_number, age, MemberShipType} = req.body;
 
         // Check if password and confirm password match
         if (password !== confirmPassword) {
@@ -85,7 +85,7 @@ export const registerMember = async (req: Request, res: Response) => {
             });
             return;
         }
-        const existingMember = await prisma.user.findUnique({
+        const existingMember = await prisma.member.findUnique({
             where: {
                 email: email
             }
@@ -103,11 +103,13 @@ export const registerMember = async (req: Request, res: Response) => {
         const hashedPassword = await hashPassword(password);
 
         // CREATE THE USER
-        const newUser = await prisma.user.create({
+        const newMember = await prisma.member.create({
             data: {
                 name,
                 email,
                 phone_number,
+                age,
+                MemberShipType,
                 password: hashedPassword,
                 confirmPassword: hashedPassword,
             }
@@ -116,7 +118,7 @@ export const registerMember = async (req: Request, res: Response) => {
         res.status(201).json({
             isSuccess: true,
             message: "User registered successfully",
-            newUser
+            newMember
         });
     } catch (error) {
         res.status(500).json({
@@ -124,6 +126,46 @@ export const registerMember = async (req: Request, res: Response) => {
         });
     }
 }
+
+//Login Member
+export const loginMember = async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
+        const member = await prisma.member.findUnique({
+            where: {
+                email: email
+            }
+        });
+
+        if (!member) {
+            res.status(401).json({
+                message: "incorrect email or password"
+            });
+            return;
+        }
+
+        const isMatch = await comparePassword(password, member.password);
+
+        if (!isMatch) {
+            res.status(400).json({
+                message: "Incorrect email or password"
+            });
+            return;
+        }
+        // Generate token
+        const token = generateToken(member.id);
+        res.status(200).json({
+            isSuccess: true,
+            member,
+            token
+        })
+    } catch (error) {
+        res.status(500).json({
+            messaga: "Something went wrong"
+        });
+    }
+}
+
 export const updateMember = async (req: Request, res: Response) => {
   try {
     const { member_id, name, email, age, membershiptype } =
