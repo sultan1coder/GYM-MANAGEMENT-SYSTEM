@@ -75,7 +75,7 @@ export const getSingleMember = async (req: Request, res: Response) => {
 //Register Member
 export const registerMember = async (req: Request, res: Response) => {
     try {
-        const { name, email, password, confirmPassword, phone_number, age, MemberShipType} = req.body;
+        const { name, email, password, confirmPassword, phone_number, age, membershiptype} = req.body;
 
         // Check if password and confirm password match
         if (password !== confirmPassword) {
@@ -94,7 +94,7 @@ export const registerMember = async (req: Request, res: Response) => {
         // CHECK IF THE USER IS EXISTING
         if (existingMember) {
             res.status(400).json({
-                message: "User already exists!",
+                message: "Member already exists!",
             });
             return;
         }
@@ -109,7 +109,7 @@ export const registerMember = async (req: Request, res: Response) => {
                 email,
                 phone_number,
                 age,
-                MemberShipType,
+                membershiptype,
                 password: hashedPassword,
                 confirmPassword: hashedPassword,
             }
