@@ -153,7 +153,7 @@ export const loginMember = async (req: Request, res: Response) => {
             return;
         }
         // Generate token
-        const token = generateToken(member.id);
+        const token = generateToken(member.age);
         res.status(200).json({
             isSuccess: true,
             member,
