@@ -17,3 +17,12 @@ export interface NewMember {
   updatedAt:       Date;
 }
 
+export interface IRegisterMemberBody {
+  name:            string;
+  email:           string;
+  age:             number;
+  phone_number:    string;
+  password:        string;
+  confirmPassword: string;
+  membershiptype:  string;
+}
