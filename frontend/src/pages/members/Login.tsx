@@ -112,7 +112,7 @@ const Login = () => {
                     </button>
                 </form>
                 <div className="gap-3 mt-6 text-sm text-center">
-                    Or Sign Up <Link className='text-lg text-blue-500 hover:underline' to={"/auth/register"}> Sign up </Link>
+                    Or Sign Up <Link className='text-lg text-blue-500 hover:underline' to={"/member/register"}> Sign up </Link>
                     <button />
                 </div>
             </div>
