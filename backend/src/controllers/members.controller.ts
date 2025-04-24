@@ -10,6 +10,7 @@ interface IUpdateMember {
   member_id: string;
   name: string;
   email: string;
+  phone_number: string;
   age: number;
   membershiptype: MemberShipType;
 }
@@ -166,7 +167,7 @@ export const loginMember = async (req: Request, res: Response) => {
 
 export const updateMember = async (req: Request, res: Response) => {
   try {
-    const { member_id, name, email, age, membershiptype } =
+    const { member_id, name, email, phone_number, age, membershiptype } =
       req.body as IUpdateMember;
     const member = await prisma.member.findFirst({
       where: {
@@ -189,6 +190,7 @@ export const updateMember = async (req: Request, res: Response) => {
       data: {
         name,
         email,
+        phone_number,
         age,
         membershiptype,
       },
