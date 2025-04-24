@@ -5,15 +5,6 @@ import { comparePassword, generateToken, hashPassword } from "../utils/auth";
 
 const prisma = new PrismaClient();
 
-interface ICreateMembersPayload {
-  name: string;
-  email: string;
-  phone_number: string;
-  password: string;
-  confirmPassword: string;
-  age: number;
-  membershiptype: MemberShipType;
-}
 
 interface IUpdateMember {
   member_id: string;
