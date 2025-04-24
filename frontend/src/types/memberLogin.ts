@@ -16,3 +16,8 @@ export interface Member {
     createdAt:       Date;
     updatedAt:       Date;
 }
+
+export interface ILoginMemberBody {
+    email:    string;
+    password: string;
+}
