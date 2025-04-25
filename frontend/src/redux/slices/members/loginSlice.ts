@@ -1,23 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ILoginBody, IloginResponse } from "../../../types/login";
 import axios, { AxiosError } from "axios";
 import { BASE_API_URL, DEFAULT_ERROR_MESSAGE } from "../../../constants";
+import { ILoginMemberBody, ILoginMemberResponse } from "@/types/memberLogin";
 
-const DEFAULT_USER_DATA = localStorage.getItem("userData")
-  ? JSON.parse(localStorage.getItem("userData")!)
+const DEFAULT_USER_DATA = localStorage.getItem("memberData")
+  ? JSON.parse(localStorage.getItem("memberData")!)
   : {};
 
 const initialState = {
   loading: false,
-  data: (DEFAULT_USER_DATA as IloginResponse) || ({} as IloginResponse),
+  data: (DEFAULT_USER_DATA as ILoginMemberResponse) || ({} as ILoginMemberResponse),
   error: "",
 };
 
 export const loginFn = createAsyncThunk(
-  "users/login",
-  async (data: ILoginBody, { rejectWithValue }) => {
+  "members/login",
+  async (data: ILoginMemberBody, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${BASE_API_URL}/users/login`, data);
+      const response = await axios.post(`${BASE_API_URL}/members/login`, data);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -36,7 +36,7 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      state.data = {} as IloginResponse;
+      state.data = {} as ILoginMemberResponse;
       state.error = "";
       state.loading = false;
 
@@ -50,7 +50,7 @@ export const loginSlice = createSlice({
     builder.addCase(loginFn.pending, (state) => {
       state.loading = true;
       state.error = "";
-      state.data = {} as IloginResponse;
+      state.data = {} as ILoginMemberResponse;
     });
 
     //Fulfilled
@@ -64,7 +64,7 @@ export const loginSlice = createSlice({
     builder.addCase(loginFn.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload as string;
-      state.data = {} as IloginResponse;
+      state.data = {} as ILoginMemberResponse;
     });
   },
 });
