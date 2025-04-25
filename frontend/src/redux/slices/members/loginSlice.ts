@@ -32,7 +32,7 @@ export const loginMemberFn = createAsyncThunk(
 );
 
 export const loginMemberSlice = createSlice({
-  name: "login slice",
+  name: "login member slice",
   initialState,
   reducers: {
     logout: (state) => {
