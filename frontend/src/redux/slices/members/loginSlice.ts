@@ -13,7 +13,7 @@ const initialState = {
   error: "",
 };
 
-export const loginFn = createAsyncThunk(
+export const loginMemberFn = createAsyncThunk(
   "members/login",
   async (data: ILoginMemberBody, { rejectWithValue }) => {
     try {
@@ -31,7 +31,7 @@ export const loginFn = createAsyncThunk(
   }
 );
 
-export const loginSlice = createSlice({
+export const loginMemberSlice = createSlice({
   name: "login slice",
   initialState,
   reducers: {
@@ -41,27 +41,27 @@ export const loginSlice = createSlice({
       state.loading = false;
 
       // Remove the data from the local storage
-      localStorage.removeItem("userData");
+      localStorage.removeItem("memberData");
     },
   },
 
   extraReducers(builder) {
     //Pending..
-    builder.addCase(loginFn.pending, (state) => {
+    builder.addCase(loginMemberFn.pending, (state) => {
       state.loading = true;
       state.error = "";
       state.data = {} as ILoginMemberResponse;
     });
 
     //Fulfilled
-    builder.addCase(loginFn.fulfilled, (state, action) => {
+    builder.addCase(loginMemberFn.fulfilled, (state, action) => {
       state.loading = false;
       state.error = "";
       state.data = action.payload;
     });
 
     //Rejected
-    builder.addCase(loginFn.rejected, (state, action) => {
+    builder.addCase(loginMemberFn.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload as string;
       state.data = {} as ILoginMemberResponse;
@@ -69,4 +69,4 @@ export const loginSlice = createSlice({
   },
 });
 
-export const { logout } = loginSlice.actions;
+export const { logout } = loginMemberSlice.actions;
