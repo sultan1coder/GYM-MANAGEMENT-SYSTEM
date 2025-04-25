@@ -3,17 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { AppDispatch, RootState } from "../../redux/store";
-import { loginFn } from "../../redux/slices/auth/loginSlice";
 import Spinner from "../../components/Spinner";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { loginMemberFn } from "@/redux/slices/members/loginSlice";
 
 
 
 const Login = () => {
     let toastId = "login"
     const dispatch = useDispatch<AppDispatch>();
-    const loginState = useSelector((state: RootState) => state.loginSlice);
+    const loginState = useSelector((state: RootState) => state.loginMemberSlice);
     const navigate = useNavigate()
 
     const formik = useFormik({
@@ -27,7 +27,7 @@ const Login = () => {
                 password: values.password,
             }
             toast.loading("Logging in..", { id: toastId });
-            dispatch(loginFn(data))
+            dispatch(loginMemberFn(data))
         },
         validationSchema: yup.object({
             email: yup.string().email("please enter valid email").required("Please enter email"),
