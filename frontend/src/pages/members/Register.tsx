@@ -135,7 +135,7 @@ const Register = () => {
               <input
                 onBlur={formik.handleBlur}
                 type="text"
-                name="username"
+                name="age"
                 onChange={formik.handleChange}
                 value={formik.values.age}
                 placeholder="Enter your age"
@@ -184,7 +184,7 @@ const Register = () => {
               <input
                 onBlur={formik.handleBlur}
                 type="text"
-                name="username"
+                name="membershiptype"
                 onChange={formik.handleChange}
                 value={formik.values.membershiptype}
                 placeholder="Enter your membershiptype"

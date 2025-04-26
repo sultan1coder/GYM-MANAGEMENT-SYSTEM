@@ -28,7 +28,7 @@ export const registerMemberFn = createAsyncThunk(
 );
 
 export const registerMemberSlice = createSlice({
-  name: "login slice",
+  name: "register slice",
   initialState,
   reducers: {},
   extraReducers(builder) {

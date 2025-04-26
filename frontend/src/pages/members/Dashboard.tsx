@@ -47,7 +47,7 @@ function MemberDashboard() {
       <h1>Members</h1>
       <Table className="bg-slate-400">
         <TableHeader>
-          <TableRow className="text-xl font-semibold bg-black hover:bg-black">
+          <TableRow className="text-xl bg-black font2-semibold hover:bg-black">
             <TableHead></TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
@@ -78,10 +78,10 @@ function MemberDashboard() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="flex flex-col gap-2">
                       <DropdownMenuItem asChild>
-                        <Button>Edit</Button>
+                        <Button className="bg-green-600 hover:bg-green-500">Edit</Button>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Button className="text-white bg-destructive">
+                        <Button className="text-white bg-red-600 hover:bg-red-500">
                           Delete
                         </Button>
                       </DropdownMenuItem>
