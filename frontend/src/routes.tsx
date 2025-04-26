@@ -7,6 +7,7 @@ import Register from "./pages/auth/register";
 import Dashboard from "./pages/Dashboard";
 import LoginMember from"./pages/members/Login";
 import RegisterMember from "./pages/members/Register";
+import MemberDashboard from "./pages/members/Dashboard";
 
 
 export const router = createBrowserRouter([
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
           {
             path: "register",
             element: <RegisterMember />,
+          },
+          {
+            path: "dashboard",
+            element: <MemberDashboard />,
           }
         ],
       },
