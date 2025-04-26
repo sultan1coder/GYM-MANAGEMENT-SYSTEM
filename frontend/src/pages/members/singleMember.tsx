@@ -1,8 +1,8 @@
 import { BASE_API_URL } from "@/constants";
-import { IGetMemberSingle, IGetMembersResponse } from "@/types/memberAll";
+import { IGetMemberSingle } from "@/types/memberAll";
 import { Member } from "@/types/memberLogin";
 import axios, { AxiosResponse } from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function SingleMember() {
