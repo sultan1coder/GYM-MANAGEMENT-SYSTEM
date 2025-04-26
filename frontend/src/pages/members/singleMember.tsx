@@ -5,7 +5,7 @@ import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-function singleMember() {
+function SingleMember() {
   const params = useParams();
   const [mebmer, setMember] = useState<Member>();
   useEffect(() => {
@@ -29,4 +29,4 @@ function singleMember() {
   return <div>{mebmer?.name}</div>;
 }
 
-export default singleMember;
+export default SingleMember;

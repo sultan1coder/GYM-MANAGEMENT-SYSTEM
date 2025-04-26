@@ -19,6 +19,7 @@ import {
 import axios, { AxiosResponse } from "axios";
 import { MoreVertical } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function MemberDashboard() {
   const [members, setMembers] = useState<Member[]>([]);
@@ -61,7 +62,7 @@ function MemberDashboard() {
                 <TableCell>
                   <Input type="checkbox" />
                 </TableCell>
-                <TableCell>{member.name}</TableCell>
+                <TableCell><Link to={`/members/single/${member.id}`}>{member.name}</Link></TableCell>
                 <TableCell>{member.email}</TableCell>
                 <TableCell>{member.phone_number}</TableCell>
                 <TableCell>

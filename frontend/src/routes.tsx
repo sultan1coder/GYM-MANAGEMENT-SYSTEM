@@ -5,10 +5,10 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import Dashboard from "./pages/Dashboard";
-import LoginMember from"./pages/members/Login";
+import LoginMember from "./pages/members/Login";
 import RegisterMember from "./pages/members/Register";
 import MemberDashboard from "./pages/members/Dashboard";
-
+import SingleMember from "./pages/members/singleMember";
 
 export const router = createBrowserRouter([
   {
@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "login",
-            element: <LoginMember />
+            element: <LoginMember />,
           },
           {
             path: "register",
@@ -46,7 +46,11 @@ export const router = createBrowserRouter([
           {
             path: "dashboard",
             element: <MemberDashboard />,
-          }
+          },
+          {
+            path: "single/:id",
+            element: <SingleMember />,
+          },
         ],
       },
       {
