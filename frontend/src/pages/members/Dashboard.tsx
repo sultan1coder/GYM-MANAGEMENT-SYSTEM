@@ -45,13 +45,15 @@ function MemberDashboard() {
   return (
     <>
       <h1>Members</h1>
-      <Table>
+      <Table className="bg-slate-400">
         <TableHeader>
-          <TableRow>
+          <TableRow className="text-xl font-semibold bg-black hover:bg-black">
             <TableHead></TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>PhoneNumber</TableHead>
+            <TableHead>age</TableHead>
+            <TableHead>membershiptype</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
@@ -65,6 +67,8 @@ function MemberDashboard() {
                 <TableCell><Link to={`/members/single/${member.id}`}>{member.name}</Link></TableCell>
                 <TableCell>{member.email}</TableCell>
                 <TableCell>{member.phone_number}</TableCell>
+                <TableCell>{member.age}</TableCell>
+                <TableCell>{member.membershiptype}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger>
