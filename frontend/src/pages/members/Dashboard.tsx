@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { BASE_API_URL } from "@/constants";
-import { IGetMembersResponse, Member } from "@/types/memberAll";
+import { IGetMembersResponse, Member } from "@/types/members/memberAll";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,7 +64,9 @@ function MemberDashboard() {
                 <TableCell>
                   <Input type="checkbox" />
                 </TableCell>
-                <TableCell><Link to={`/members/single/${member.id}`}>{member.name}</Link></TableCell>
+                <TableCell>
+                  <Link to={`/members/single/${member.id}`}>{member.name}</Link>
+                </TableCell>
                 <TableCell>{member.email}</TableCell>
                 <TableCell>{member.phone_number}</TableCell>
                 <TableCell>{member.age}</TableCell>
@@ -75,8 +77,14 @@ function MemberDashboard() {
                       <MoreVertical />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="flex flex-col gap-2">
-                      <DropdownMenuItem asChild><Button>Edit</Button></DropdownMenuItem>
-                      <DropdownMenuItem asChild><Button className="text-white bg-destructive">Delete</Button></DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Button>Edit</Button>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Button className="text-white bg-destructive">
+                          Delete
+                        </Button>
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

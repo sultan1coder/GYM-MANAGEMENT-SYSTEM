@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ILoginBody, IloginResponse } from "../../../types/login";
+import { ILoginBody, IloginResponse } from "../../../types/users/login";
 import axios, { AxiosError } from "axios";
 import { BASE_API_URL, DEFAULT_ERROR_MESSAGE } from "../../../constants";
 

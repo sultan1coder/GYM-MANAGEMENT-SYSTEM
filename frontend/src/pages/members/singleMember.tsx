@@ -1,6 +1,6 @@
 import { BASE_API_URL } from "@/constants";
-import { IGetMemberSingle } from "@/types/memberAll";
-import { Member } from "@/types/memberLogin";
+import { IGetMemberSingle } from "@/types/members/memberAll";
+import { Member } from "@/types/members/memberLogin";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";

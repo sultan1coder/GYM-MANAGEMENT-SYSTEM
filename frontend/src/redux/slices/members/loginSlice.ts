@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { BASE_API_URL, DEFAULT_ERROR_MESSAGE } from "../../../constants";
-import { ILoginMemberBody, ILoginMemberResponse } from "@/types/memberLogin";
+import {
+  ILoginMemberBody,
+  ILoginMemberResponse,
+} from "@/types/members/memberLogin";
 
 const DEFAULT_USER_DATA = localStorage.getItem("memberData")
   ? JSON.parse(localStorage.getItem("memberData")!)
@@ -9,7 +12,8 @@ const DEFAULT_USER_DATA = localStorage.getItem("memberData")
 
 const initialState = {
   loading: false,
-  data: (DEFAULT_USER_DATA as ILoginMemberResponse) || ({} as ILoginMemberResponse),
+  data:
+    (DEFAULT_USER_DATA as ILoginMemberResponse) || ({} as ILoginMemberResponse),
   error: "",
 };
 
