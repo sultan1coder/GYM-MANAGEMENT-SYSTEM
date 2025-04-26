@@ -2,6 +2,10 @@ export interface IGetMembersResponse {
     message: string;
     members: Member[];
 }
+export interface IGetMemberSingle {
+    message: string;
+    member: Member;
+}
 
 export interface Member {
     id:              string;
