@@ -11,7 +11,7 @@ export interface NewMember {
   phone_number:    string;
   password:        string;
   confirmPassword: string;
-  age:             number;
+  age:             string;
   membershiptype:  string;
   createdAt:       Date;
   updatedAt:       Date;
@@ -20,9 +20,9 @@ export interface NewMember {
 export interface IRegisterMemberBody {
   name:            string;
   email:           string;
-  age:             number;
   phone_number:    string;
+  age:             string;
+  membershiptype:  string;
   password:        string;
   confirmPassword: string;
-  membershiptype:  string;
 }

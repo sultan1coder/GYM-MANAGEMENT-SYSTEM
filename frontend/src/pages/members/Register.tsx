@@ -3,48 +3,49 @@ import * as yup from "yup";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
-import { registerFn } from "../../redux/slices/auth/registerSlice";
 import { useEffect } from "react";
 import Spinner from "../../components/Spinner";
 import { useNavigate } from "react-router-dom";
+import { registerMemberFn } from "@/redux/slices/members/registerSlice";
 
 const Register = () => {
   let toastId = "register";
   const dispatch = useDispatch<AppDispatch>();
-  const registerState = useSelector((state: RootState) => state.registerSlice);
+  const registerState = useSelector((state: RootState) => state.registerMemberSlice);
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       name: "",
-      username: "",
       email: "",
       phone_number: "",
+      age : "",
+      membershiptype : "",
       password: "",
       confirmPassword: "",
-      role: "",
     },
     onSubmit(values) {
       const data = {
         name: values.name,
-        username: values.username,
         email: values.email,
         phone_number: values.phone_number,
+        age: values.age,
+        membershiptype: values.membershiptype,
         password: values.password,
         confirmPassword: values.confirmPassword,
-        role: values.role,
       };
       toast.loading("Registering...", { id: toastId });
-      dispatch(registerFn(data));
+      dispatch(registerMemberFn(data));
     },
     validationSchema: yup.object({
       name: yup.string().required("Please enter fullname"),
-      username: yup.string().required("Please enter username"),
       email: yup
         .string()
         .email("Please enter valid email")
         .required("Please enter email"),
       phone_number: yup.string().required("Please enter phone number"),
+      age: yup.string().required("Please enter your age"),
+      membershiptype: yup.string().required("Please enter your membershiptype"),
       password: yup
         .string()
         .min(8, "Password must be atleast 8 characters long")
@@ -98,22 +99,6 @@ const Register = () => {
               </p>
             </div>
             <div>
-              <label htmlFor="">Username</label>
-              <input
-                onBlur={formik.handleBlur}
-                type="text"
-                name="username"
-                onChange={formik.handleChange}
-                value={formik.values.username}
-                placeholder="Enter your username"
-                className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none"
-                required
-              />
-              <p className="text-sm font-semibold text-red-500">
-                {formik.touched.username && formik.errors.username}
-              </p>
-            </div>
-            <div>
               <label htmlFor="email">Email</label>
               <input
                 onBlur={formik.handleBlur}
@@ -143,6 +128,22 @@ const Register = () => {
               />
               <p className="text-sm font-semibold text-red-500">
                 {formik.touched.phone_number && formik.errors.phone_number}
+              </p>
+            </div>
+            <div>
+              <label htmlFor="">Age</label>
+              <input
+                onBlur={formik.handleBlur}
+                type="text"
+                name="username"
+                onChange={formik.handleChange}
+                value={formik.values.age}
+                placeholder="Enter your age"
+                className="p-2 mt-1 border border-gray-300 rounded-md input focus:border-blue-500 focus:outline-none"
+                required
+              />
+              <p className="text-sm font-semibold text-red-500">
+                {formik.touched.age && formik.errors.age}
               </p>
             </div>
             <div>
@@ -176,6 +177,22 @@ const Register = () => {
               <p className="text-sm font-semibold text-red-500">
                 {formik.touched.confirmPassword &&
                   formik.errors.confirmPassword}
+              </p>
+            </div>
+            <div>
+              <label htmlFor="" className="ml-32">MembershipType</label>
+              <input
+                onBlur={formik.handleBlur}
+                type="text"
+                name="username"
+                onChange={formik.handleChange}
+                value={formik.values.membershiptype}
+                placeholder="Enter your membershiptype"
+                className="p-2 mt-1 border border-gray-300 rounded-md ml-14 w-80 input focus:border-blue-500 focus:outline-none"
+                required
+              />
+              <p className="text-sm font-semibold text-red-500">
+                {formik.touched.membershiptype && formik.errors.membershiptype}
               </p>
             </div>
           </div>
