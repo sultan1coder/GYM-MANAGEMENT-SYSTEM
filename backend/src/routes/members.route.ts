@@ -1,12 +1,11 @@
 import { Router } from "express";
 import { deleteMember, getAllMembers, getSingleMember, loginMember, registerMember, updateMember, } from "../controllers/members.controller";
 import { subscribeMember, unsubscribeMember } from "../controllers/subscription.controller";
-import { adminRoute } from "../../middlewares/auth.middleware";
 
 const router = Router();
 
 router.get("/list", getAllMembers);
-router.get("/login", loginMember);
+router.post("/login", loginMember);
 router.post("/register",  registerMember);
 router.get("/single/:id", getSingleMember);
 router.put("/update/:id",  updateMember);
