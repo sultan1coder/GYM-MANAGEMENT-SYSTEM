@@ -6,120 +6,123 @@ import { comparePassword, generateToken, hashPassword } from "../utils/auth";
 
 const prisma = new PrismaClient();
 
-
-
-
-
 // const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "refreshsecretkey";
 
 //Register User
 export const registerUser = async (req: Request, res: Response) => {
-    try {
-        const { name, username, email, password, confirmPassword, phone_number, role } = req.body;
+  try {
+    const {
+      name,
+      username,
+      email,
+      password,
+      confirmPassword,
+      phone_number,
+      role,
+    } = req.body;
 
-        // Check if password and confirm password match
-        if (password !== confirmPassword) {
-            res.status(400).json({
-                isSuccess: false,
-                message: "Password must match"
-            });
-            return;
-        }
-        const existingUser = await prisma.user.findUnique({
-            where: {
-                email: email
-            }
-        });
-
-        // CHECK IF THE USER IS EXISTING
-        if (existingUser) {
-            res.status(400).json({
-                message: "User already exists!",
-            });
-            return;
-        }
-
-        // HASH THE PASSWORD
-        const hashedPassword = await hashPassword(password);
-
-        // CREATE THE USER
-        const newUser = await prisma.user.create({
-            data: {
-                name,
-                username,
-                email,
-                password: hashedPassword,
-                confirmPassword: hashedPassword,
-                phone_number,
-                role,
-            }
-        });
-
-        res.status(201).json({
-            isSuccess: true,
-            message: "User registered successfully",
-            newUser
-        });
-    } catch (error) {
-        res.status(500).json({
-            messaga: "Something went wrong"
-        });
+    // Check if password and confirm password match
+    if (password !== confirmPassword) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Password must match",
+      });
+      return;
     }
-}
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    // CHECK IF THE USER IS EXISTING
+    if (existingUser) {
+      res.status(400).json({
+        message: "User already exists!",
+      });
+      return;
+    }
+
+    // HASH THE PASSWORD
+    const hashedPassword = await hashPassword(password);
+
+    // CREATE THE USER
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        username,
+        email,
+        password: hashedPassword,
+        confirmPassword: hashedPassword,
+        phone_number,
+        role,
+      },
+    });
+
+    res.status(201).json({
+      isSuccess: true,
+      message: "User registered successfully",
+      newUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      messaga: "Something went wrong",
+    });
+  }
+};
 
 //Login User
 export const loginUser = async (req: Request, res: Response) => {
-    try {
-        const { email, password } = req.body;
-        const user = await prisma.user.findUnique({
-            where: {
-                email: email
-            }
-        });
+  try {
+    const { email, password } = req.body;
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
 
-        if (!user) {
-            res.status(401).json({
-                message: "incorrect email or password"
-            });
-            return;
-        }
-
-        const isMatch = await comparePassword(password, user.password);
-
-        if (!isMatch) {
-            res.status(400).json({
-                message: "Incorrect email or password"
-            });
-            return;
-        }
-        // Generate token
-        const token = generateToken(user.id);
-        res.status(200).json({
-            isSuccess: true,
-            user,
-            token
-        })
-    } catch (error) {
-        res.status(500).json({
-            messaga: "Something went wrong"
-        });
+    if (!user) {
+      res.status(401).json({
+        message: "incorrect email or password",
+      });
+      return;
     }
-}
+
+    const isMatch = await comparePassword(password, user.password);
+
+    if (!isMatch) {
+      res.status(400).json({
+        message: "Incorrect email or password",
+      });
+      return;
+    }
+    // Generate token
+    const token = generateToken(user.id);
+    res.status(200).json({
+      isSuccess: true,
+      user,
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({
+      messaga: "Something went wrong",
+    });
+  }
+};
 
 //Logout User
 export const logoutUser = async (req: Request, res: Response) => {
-    try {
-        res.clearCookie("refreshToken");
-        res.status(201).json({
-            message: "Logged out successfully"
-        });
-    } catch (error) {
-        res.status(500).json({
-            messaga: "Something went wrong"
-        });
-    }
-}
-
+  try {
+    res.clearCookie("refreshToken");
+    res.status(201).json({
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      messaga: "Something went wrong",
+    });
+  }
+};
 
 //Reset Password
 // export const resetPassword = async (req: Request, res: Response) => {
@@ -165,7 +168,6 @@ export const logoutUser = async (req: Request, res: Response) => {
 //     }
 // }
 
-
 //Forgot Password
 // export const forgotPassword = async (req: Request, res: Response) => {
 //     try {
@@ -204,7 +206,6 @@ export const logoutUser = async (req: Request, res: Response) => {
 
 //     }
 // }
-
 
 //Refresh Token Handler
 
@@ -272,38 +273,37 @@ export const logoutUser = async (req: Request, res: Response) => {
 //     }
 // }
 
-
 //Get Current User
 export const whoami = async (req: AuthRequest, res: Response) => {
-    try {
-        const userId = req.body.userId;
-        const user = await prisma.user.findUnique({
-            where: {
-                id: userId
-            },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-            }
-        });
+  try {
+    const userId = req.body.userId;
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
 
-        if (!user) {
-            res.status(404).json({
-                isSuccess: false,
-                message: "User not found!"
-            });
-            return;
-        }
-        res.status(200).json({
-            isSuccess: true,
-            user
-        })
-    } catch (error) {
-        console.log("Error: " + error)
-        res.status(500).json({
-            isSuccess: false,
-            message: "Server error!"
-        });
+    if (!user) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "User not found!",
+      });
+      return;
     }
-}
+    res.status(200).json({
+      isSuccess: true,
+      user,
+    });
+  } catch (error) {
+    console.log("Error: " + error);
+    res.status(500).json({
+      isSuccess: false,
+      message: "Server error!",
+    });
+  }
+};
