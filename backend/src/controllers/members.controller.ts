@@ -122,6 +122,7 @@ export const registerMember = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({
       messaga: "Something went wrong",
+      console: {error}
     });
   }
 };
