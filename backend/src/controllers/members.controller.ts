@@ -116,7 +116,7 @@ export const registerMember = async (req: Request, res: Response) => {
 
     res.status(201).json({
       isSuccess: true,
-      message: "User registered successfully",
+      message: "Member registered successfully",
       newMember,
     });
   } catch (error) {
