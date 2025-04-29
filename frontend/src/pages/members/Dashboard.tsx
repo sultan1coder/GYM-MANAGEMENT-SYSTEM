@@ -56,9 +56,15 @@ function MemberDashboard() {
     }
   };
   
-  const handleEdit = (id: string) => {
-    // Redirect to edit page (make sure the route exists)
-    window.location.href = `/members/update/${id}`;
+  const handleEdit = async (id: string) => {
+    try {
+      const response = await axios.put(`${BASE_API_URL}/members/update/${id}`)
+      if(response.status === 200) {
+        window.location.href = `/members/update/${id}`;
+      }
+    } catch (error) {
+      console.error("Failed to update member", error);
+    }
   };
   
 
@@ -80,7 +86,7 @@ function MemberDashboard() {
         <TableBody>
           {members.map((member) => {
             return (
-              <TableRow>
+              <TableRow key={member.id}>
                 <TableCell>
                   <Input type="checkbox" />
                 </TableCell>
@@ -98,9 +104,11 @@ function MemberDashboard() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="flex flex-col gap-2">
                       <DropdownMenuItem asChild>
-                        <Button className="bg-green-600 hover:bg-green-500"
+                      <Link to={`/members/update/${member.id}`}>
+                      <Button className="bg-green-600 hover:bg-green-500"
                         onClick={() => handleEdit(member.id)}
                         >Edit</Button>
+                      </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Button className="text-white bg-red-600 hover:bg-red-500"
