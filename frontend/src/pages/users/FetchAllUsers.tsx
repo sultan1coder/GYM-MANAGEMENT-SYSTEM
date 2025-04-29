@@ -60,28 +60,26 @@ function FetchAllUsers() {
 
   return (
     <>
-      <h1>Members</h1>
+      <h1>Users</h1>
       <Table className="bg-slate-400">
         <TableHeader>
           <TableRow className="text-xl bg-black font2-semibold hover:bg-black">
             <TableHead></TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
+            <TableHead>Username</TableHead>
             <TableHead>PhoneNumber</TableHead>
-            <TableHead>age</TableHead>
-            <TableHead>membershiptype</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((user) => {
+          {users?.map((user) => {
             return (
               <TableRow key={user.id}>
                 <TableCell>
                   <Input type="checkbox" />
                 </TableCell>
                 <TableCell>
-                  <Link to={`/members/single/${user.id}`}>{user.name}</Link>
+                  <Link to={`/users/single/${user.id}`}>{user.name}</Link>
                 </TableCell>
                 <TableCell>{user.username}</TableCell>
                 <TableCell>{user.phone_number}</TableCell>
