@@ -98,10 +98,14 @@ function MemberDashboard() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="flex flex-col gap-2">
                       <DropdownMenuItem asChild>
-                        <Button className="bg-green-600 hover:bg-green-500">Edit</Button>
+                        <Button className="bg-green-600 hover:bg-green-500"
+                        onClick={() => handleEdit(member.id)}
+                        >Edit</Button>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Button className="text-white bg-red-600 hover:bg-red-500">
+                        <Button className="text-white bg-red-600 hover:bg-red-500"
+                        onClick={() => handleDelete(member.id)}
+                        >
                           Delete
                         </Button>
                       </DropdownMenuItem>
