@@ -9,7 +9,6 @@ import LoginMember from "./pages/members/Login";
 import RegisterMember from "./pages/members/Register";
 import MemberDashboard from "./pages/members/Dashboard";
 import SingleMember from "./pages/members/singleMember";
-import EditMember from "./pages/members/EditMember";
 
 export const router = createBrowserRouter([
   {
@@ -51,10 +50,6 @@ export const router = createBrowserRouter([
           {
             path: "single/:id",
             element: <SingleMember />,
-          },
-          {
-            path: "update",
-            element: <EditMember />,
           },
         ],
       },

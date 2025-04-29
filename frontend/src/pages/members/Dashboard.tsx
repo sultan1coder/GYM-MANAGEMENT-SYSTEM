@@ -56,17 +56,7 @@ function MemberDashboard() {
     }
   };
   
-  const handleEdit = async (id: string) => {
-    try {
-      const response = await axios.put(`${BASE_API_URL}/members/update/${id}`)
-      if(response.status === 200) {
-        window.location.href = `/members/update/${id}`;
-      }
-    } catch (error) {
-      console.error("Failed to update member", error);
-    }
-  };
-  
+
 
   return (
     <>
@@ -106,7 +96,6 @@ function MemberDashboard() {
                       <DropdownMenuItem asChild>
                       <Link to={`/members/update/${member.id}`}>
                       <Button className="bg-green-600 hover:bg-green-500"
-                        onClick={() => handleEdit(member.id)}
                         >Edit</Button>
                       </Link>
                       </DropdownMenuItem>
