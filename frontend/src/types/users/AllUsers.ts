@@ -1,5 +1,4 @@
 export interface IGetUserResponse {
-    isSuccess: boolean;
     message:   string;
     users:      User[];
 }
