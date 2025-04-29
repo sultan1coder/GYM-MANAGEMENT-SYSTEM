@@ -42,6 +42,26 @@ function MemberDashboard() {
     fetchMembers();
   }, []);
 
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this member?")) return;
+  
+    try {
+      const response = await axios.delete(`${BASE_API_URL}/members/delete/${id}`);
+      if (response.status === 200) {
+        setMembers((prev) => prev.filter((member) => member.id !== id));
+      }
+    } catch (error) {
+      console.error("Failed to delete member", error);
+    }
+  };
+  
+  const handleEdit = (id: string) => {
+    // Redirect to edit page (make sure the route exists)
+    window.location.href = `/members/update/${id}`;
+  };
+  
+
   return (
     <>
       <h1>Members</h1>
