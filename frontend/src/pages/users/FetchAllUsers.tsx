@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { BASE_API_URL } from "@/constants";
-import { IGetMembersResponse, Member } from "@/types/members/memberAll";
+import { IGetUserResponse, User } from "@/types/users/AllUsers";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,17 +21,17 @@ import { MoreVertical } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function MemberDashboard() {
-  const [members, setMembers] = useState<Member[]>([]);
+function FetchAllUsers() {
+  const [users, setUsers] = useState<User[]>([]);
   useEffect(() => {
-    const fetchMembers = async () => {
+    const fetchUsers = async () => {
       try {
         const response: AxiosResponse = await axios.get(
           `${BASE_API_URL}/users/list`
         );
         if (response.status === 200) {
-          const data: IGetMembersResponse = response.data;
-          setMembers(data.members);
+          const data: IGetUserResponse = response.data;
+          setUsers(data.users);
         } else {
           throw Error(response.statusText);
         }
@@ -39,20 +39,20 @@ function MemberDashboard() {
         console.error(e);
       }
     };
-    fetchMembers();
+    fetchUsers();
   }, []);
 
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this member?")) return;
+  const handleDelete = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this user?")) return;
   
     try {
-      const response = await axios.delete(`${BASE_API_URL}/members/delete/${id}`);
+      const response = await axios.delete(`${BASE_API_URL}/users/delete/${id}`);
       if (response.status === 200) {
-        setMembers((prev) => prev.filter((member) => member.id !== id));
+        setUsers((prev) => prev.filter((users) => users.id !== id));
       }
     } catch (error) {
-      console.error("Failed to delete member", error);
+      console.error("Failed to delete user", error);
     }
   };
   
@@ -74,19 +74,17 @@ function MemberDashboard() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {members.map((member) => {
+          {users.map((user) => {
             return (
-              <TableRow key={member.id}>
+              <TableRow key={user.id}>
                 <TableCell>
                   <Input type="checkbox" />
                 </TableCell>
                 <TableCell>
-                  <Link to={`/members/single/${member.id}`}>{member.name}</Link>
+                  <Link to={`/members/single/${user.id}`}>{user.name}</Link>
                 </TableCell>
-                <TableCell>{member.email}</TableCell>
-                <TableCell>{member.phone_number}</TableCell>
-                <TableCell>{member.age}</TableCell>
-                <TableCell>{member.membershiptype}</TableCell>
+                <TableCell>{user.username}</TableCell>
+                <TableCell>{user.phone_number}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger>
@@ -94,14 +92,12 @@ function MemberDashboard() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="flex flex-col gap-2">
                       <DropdownMenuItem asChild>
-                      <Link to={`/members/update/${member.id}`}>
                       <Button className="bg-green-600 hover:bg-green-500"
                         >Edit</Button>
-                      </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Button className="text-white bg-red-600 hover:bg-red-500"
-                        onClick={() => handleDelete(member.id)}
+                        onClick={() => handleDelete(user.id)}
                         >
                           Delete
                         </Button>
@@ -118,4 +114,4 @@ function MemberDashboard() {
   );
 }
 
-export default MemberDashboard;
+export default FetchAllUsers;

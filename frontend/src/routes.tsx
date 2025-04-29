@@ -9,6 +9,7 @@ import LoginMember from "./pages/members/Login";
 import RegisterMember from "./pages/members/Register";
 import MemberDashboard from "./pages/members/Dashboard";
 import SingleMember from "./pages/members/singleMember";
+import FetchAllUsers from "./pages/users/FetchAllUsers";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
             path: "register",
             element: <Register />,
           },
+          {
+            path: "allusers",
+            element: <FetchAllUsers/>
+          }
         ],
       },
       {
