@@ -72,7 +72,7 @@ function FetchAllUsers() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users?.map((user) => {
+          {users.map((user) => {
             return (
               <TableRow key={user.id}>
                 <TableCell>
