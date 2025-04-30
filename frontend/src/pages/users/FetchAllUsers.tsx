@@ -56,8 +56,6 @@ function FetchAllUsers() {
     }
   };
   
-
-
   return (
     <>
       <h1>Users</h1>
