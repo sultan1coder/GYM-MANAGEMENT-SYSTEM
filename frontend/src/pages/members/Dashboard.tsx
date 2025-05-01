@@ -42,12 +42,13 @@ function MemberDashboard() {
     fetchMembers();
   }, []);
 
-
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this member?")) return;
-  
+
     try {
-      const response = await axios.delete(`${BASE_API_URL}/members/delete/${id}`);
+      const response = await axios.delete(
+        `${BASE_API_URL}/members/delete/${id}`
+      );
       if (response.status === 200) {
         setMembers((prev) => prev.filter((member) => member.id !== id));
       }
@@ -55,8 +56,6 @@ function MemberDashboard() {
       console.error("Failed to delete member", error);
     }
   };
-  
-
 
   return (
     <>
@@ -94,14 +93,16 @@ function MemberDashboard() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="flex flex-col gap-2">
                       <DropdownMenuItem asChild>
-                      <Link to={`/members/update/${member.id}`}>
-                      <Button className="bg-green-600 hover:bg-green-500"
-                        >Edit</Button>
-                      </Link>
+                        <Link to={`/members/update/${member.id}`}>
+                          <Button className="bg-green-600 hover:bg-green-500">
+                            Edit
+                          </Button>
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Button className="text-white bg-red-600 hover:bg-red-500"
-                        onClick={() => handleDelete(member.id)}
+                        <Button
+                          className="text-white bg-red-600 hover:bg-red-500"
+                          onClick={() => handleDelete(member.id)}
                         >
                           Delete
                         </Button>
