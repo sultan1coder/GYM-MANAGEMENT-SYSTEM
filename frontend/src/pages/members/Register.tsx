@@ -11,7 +11,9 @@ import { registerMemberFn } from "@/redux/slices/members/registerSlice";
 const Register = () => {
   let toastId = "register";
   const dispatch = useDispatch<AppDispatch>();
-  const registerState = useSelector((state: RootState) => state.registerMemberSlice);
+  const registerState = useSelector(
+    (state: RootState) => state.registerMemberSlice
+  );
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -19,8 +21,8 @@ const Register = () => {
       name: "",
       email: "",
       phone_number: "",
-      age : "",
-      membershiptype : "",
+      age: "",
+      membershiptype: "",
       password: "",
       confirmPassword: "",
     },
@@ -180,7 +182,9 @@ const Register = () => {
               </p>
             </div>
             <div>
-              <label htmlFor="" className="ml-32">MembershipType</label>
+              <label htmlFor="" className="ml-32">
+                MembershipType
+              </label>
               <input
                 onBlur={formik.handleBlur}
                 type="text"
