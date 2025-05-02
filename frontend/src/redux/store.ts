@@ -4,7 +4,6 @@ import { registerSlice } from "./slices/auth/registerSlice";
 import { loginMemberSlice } from "./slices/members/loginSlice";
 import { registerMemberSlice } from "./slices/members/registerSlice";
 
-
 export const store = configureStore({
   reducer: {
     loginSlice: loginSlice.reducer,
