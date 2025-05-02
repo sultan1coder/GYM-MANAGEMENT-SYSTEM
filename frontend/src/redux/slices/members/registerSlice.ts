@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { BASE_API_URL, DEFAULT_ERROR_MESSAGE } from "../../../constants";
-import { IRegisterMemberBody, IRegisterMemberResponse } from "@/types/members/memberRegister";
+import {
+  IRegisterMemberBody,
+  IRegisterMemberResponse,
+} from "@/types/members/memberRegister";
 
 const initialState = {
   loading: false,
@@ -13,7 +16,10 @@ export const registerMemberFn = createAsyncThunk(
   "members/register",
   async (data: IRegisterMemberBody, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${BASE_API_URL}/members/register`, data);
+      const response = await axios.post(
+        `${BASE_API_URL}/members/register`,
+        data
+      );
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
