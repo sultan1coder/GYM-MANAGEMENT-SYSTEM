@@ -10,6 +10,7 @@ import RegisterMember from "./pages/members/Register";
 import MemberDashboard from "./pages/members/Dashboard";
 import SingleMember from "./pages/members/singleMember";
 import FetchAllUsers from "./pages/users/FetchAllUsers";
+import EquipmentManager from "./pages/equipments/ManageEquip";
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +58,15 @@ export const router = createBrowserRouter([
             element: <SingleMember />,
           },
         ],
+      },
+      {
+        path: "equipments",
+        children: [
+          {
+            path: "equipment",
+            element: <EquipmentManager />
+          }
+        ]
       },
       {
         path: "/dashboard",
