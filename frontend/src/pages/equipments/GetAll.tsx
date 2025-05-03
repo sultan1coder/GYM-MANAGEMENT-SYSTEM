@@ -60,14 +60,13 @@ const GetAll = () => {
         <TableBody>
             {equipments.map((equipment) => {
                 return (
-            
-            <TableRow>
+            <TableRow key={equipment.id}>
                 <TableCell>
                     <input type="checkbox" />
                 </TableCell>
-                <TableCell>{}</TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
+                <TableCell>{equipment.name}</TableCell>
+                <TableCell>{equipment.type}</TableCell>
+                <TableCell>{equipment.quantity}</TableCell>
                 <TableCell></TableCell>
             </TableRow>
       );
