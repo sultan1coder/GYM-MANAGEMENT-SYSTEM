@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
+import { BASE_API_URL } from "@/constants";
 
 interface Equipment {
   id: string;
@@ -30,7 +31,7 @@ const EquipmentManager: React.FC = () => {
   }, [reload]);
 
   const handleAdd = async () => {
-    await axios.post("/api/equipments/add", { name, type, quantity });
+    await axios.post(`${BASE_API_URL}/equipments/add`, { name, type, quantity });
     setName("");
     setType("");
     setQuantity(0);

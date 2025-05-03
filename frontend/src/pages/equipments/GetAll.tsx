@@ -1,7 +1,10 @@
+import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BASE_API_URL } from '@/constants';
 import { Equipment, IGetResponseEquip } from '@/types/equipments/GetAll';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import axios, { AxiosResponse } from 'axios';
+import { MoreVertical } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -56,18 +59,42 @@ const GetAll = () => {
                 <TableHead></TableHead>
             </TableRow>
         </TableHeader>
-
         <TableBody>
-            {equipments.map((equipment) => {
+            {equipments?.map((equipment) => {
                 return (
             <TableRow key={equipment.id}>
                 <TableCell>
                     <input type="checkbox" />
                 </TableCell>
-                <TableCell>{equipment.name}</TableCell>
+                <TableCell>
+                    <Link to={`equipments/single/${equipment.name}`}></Link>
+                </TableCell>
                 <TableCell>{equipment.type}</TableCell>
                 <TableCell>{equipment.quantity}</TableCell>
-                <TableCell></TableCell>
+                <TableCell>
+                <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <MoreVertical />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="flex flex-col gap-2">
+                      <DropdownMenuItem asChild>
+                        <Link to={`/equipments/update/${equipment.id}`}>
+                          <Button className="bg-green-600 hover:bg-green-500">
+                            Edit
+                          </Button>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Button
+                          className="text-white bg-red-600 hover:bg-red-500"
+                          onClick={() => handleDelete(equipment.id)}
+                        >
+                          Delete
+                        </Button>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
             </TableRow>
       );
     })}

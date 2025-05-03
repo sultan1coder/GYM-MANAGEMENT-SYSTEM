@@ -12,6 +12,7 @@ import SingleMember from "./pages/members/singleMember";
 import FetchAllUsers from "./pages/users/FetchAllUsers";
 import EquipmentManager from "./pages/equipments/ManageEquip";
 import GetSingle from "./pages/equipments/GetSingle";
+import GetAll from "./pages/equipments/GetAll";
 
 export const router = createBrowserRouter([
   {
@@ -68,7 +69,11 @@ export const router = createBrowserRouter([
             element: <EquipmentManager />
           },
           {
-            path: "single-equip",
+            path: "all",
+            element: <GetAll />
+          },
+          {
+            path: "single",
             element: <GetSingle />
           }
         ]
