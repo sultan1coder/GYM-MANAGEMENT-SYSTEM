@@ -30,7 +30,7 @@ const EquipmentManager: React.FC = () => {
   }, [reload]);
 
   const handleAdd = async () => {
-    await axios.post("/api/equipment", { name, type, quantity });
+    await axios.post("/api/equipments/add", { name, type, quantity });
     setName("");
     setType("");
     setQuantity(0);
@@ -38,7 +38,7 @@ const EquipmentManager: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    await axios.delete(`/api/equipment/${id}`);
+    await axios.delete(`/api/equipments/delete/${id}`);
     setReload(!reload);
   };
 
