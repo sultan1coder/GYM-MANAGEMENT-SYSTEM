@@ -63,7 +63,7 @@ export const router = createBrowserRouter([
         path: "equipments",
         children: [
           {
-            path: "equipment",
+            path: "manage",
             element: <EquipmentManager />
           }
         ]

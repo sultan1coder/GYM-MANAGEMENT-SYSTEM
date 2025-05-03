@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
 
 interface Equipment {
   id: string;
@@ -46,7 +46,7 @@ const EquipmentManager: React.FC = () => {
     <div className="max-w-5xl p-6 mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Gym Equipment Management</h1>
-        <dialog>
+        <Dialog>
           <DialogTrigger>
             <Button>Add Equipment</Button>
           </DialogTrigger>
@@ -73,10 +73,10 @@ const EquipmentManager: React.FC = () => {
             />
             <Button onClick={handleAdd}>Submit</Button>
           </DialogContent>
-        </dialog>
+        </Dialog>
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {equipmentList.map((equip) => (
+        {equipmentList?.map((equip) => (
           <Card key={equip.id} className="shadow-md rounded-2xl">
             <CardContent className="p-4">
               <CardTitle className="mb-2 text-xl font-bold">{equip.name}</CardTitle>
