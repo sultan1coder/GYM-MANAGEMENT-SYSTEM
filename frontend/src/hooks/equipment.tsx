@@ -1,12 +1,12 @@
 import { BASE_API_URL } from "@/constants";
 import {
-  Equipment,
-  IDeleteResponseEquip,
-  IGetResponseEquip,
-  IGetSingleEquip,
+    Equipment,
+    IDeleteResponseEquip,
+    IGetResponseEquip,
+    IGetSingleEquip,
 } from "@/types/equipments/GetAll";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { use, useEffect, useState } from "react";
+import axios, { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
 
 export const useEquipmentGetAll = () => {
   const [equipments, setequipments] = useState<Equipment[]>([]);

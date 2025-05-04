@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
 import { BASE_API_URL } from "@/constants";
-import { useEquipmentRemove } from "@/hooks/equipment";
 
 interface Equipment {
   id: string;

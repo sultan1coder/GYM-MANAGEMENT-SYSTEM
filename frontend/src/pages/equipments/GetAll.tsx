@@ -7,18 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BASE_API_URL } from "@/constants";
 import { useEquipmentGetAll, useEquipmentRemove } from "@/hooks/equipment";
-import { Equipment, IGetResponseEquip } from "@/types/equipments/GetAll";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import axios, { AxiosResponse } from "axios";
 import { MoreVertical } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const GetAll = () => {

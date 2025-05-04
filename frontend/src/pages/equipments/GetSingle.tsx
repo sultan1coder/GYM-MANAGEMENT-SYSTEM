@@ -1,8 +1,4 @@
-import { BASE_API_URL } from "@/constants";
 import { useEquipmentGetSingle } from "@/hooks/equipment";
-import { Equipment, IGetSingleEquip } from "@/types/equipments/GetAll";
-import axios, { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function GetSingle() {
