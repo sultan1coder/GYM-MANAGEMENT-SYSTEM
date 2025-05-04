@@ -1,78 +1,61 @@
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { BASE_API_URL } from '@/constants';
-import { Equipment, IGetResponseEquip } from '@/types/equipments/GetAll';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-import axios, { AxiosResponse } from 'axios';
-import { MoreVertical } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { BASE_API_URL } from "@/constants";
+import { useEquipmentGetAll, useEquipmentRemove } from "@/hooks/equipment";
+import { Equipment, IGetResponseEquip } from "@/types/equipments/GetAll";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import axios, { AxiosResponse } from "axios";
+import { MoreVertical } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const GetAll = () => {
-
-    const [equipments, setEquipments] = useState<Equipment[]>([]);
-    useEffect(() => {
-      const getAll = async () => {
-        try {
-          const response: AxiosResponse = await axios.get(
-            `${BASE_API_URL}/equipments/list`
-          );
-          if (response.status === 200) {
-            const data: IGetResponseEquip = response.data;
-            setEquipments(data.equipments);
-          } else {
-            throw Error(response.statusText);
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      };
-      getAll();
-    }, []);
-
-
-    const handleDelete = async (id: string) => {
-        if (!confirm("Are you sure you want to delete this equipment?")) return;
-    
-        try {
-          const response = await axios.delete(
-            `${BASE_API_URL}/equipments/delete/${id}`
-          );
-          if (response.status === 200) {
-            setEquipments((prev) => prev.filter((equipment) => equipment.id !== id));
-          }
-        } catch (error) {
-          console.error("Failed to delete equipment", error);
-        }
-      };
+  const { error, isLoading, equipments, refetch } = useEquipmentGetAll();
+  const { handleRemove } = useEquipmentRemove();
 
   return (
     <>
-    <h1 className='text-3xl'>Equipments</h1>
-    <Table>
+      <h1 className="text-3xl">Equipments</h1>
+      {isLoading && <div>isLoading </div>}
+      {error && <div>error: {error}</div>}
+      <Table>
         <TableHeader>
-            <TableRow>
-                <TableHead></TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Quantity</TableHead>
-                <TableHead></TableHead>
-            </TableRow>
+          <TableRow>
+            <TableHead></TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Quantity</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
         </TableHeader>
         <TableBody>
-            {equipments?.map((equipment) => {
-                return (
-            <TableRow key={equipment.id}>
+          {equipments?.map((equipment) => {
+            return (
+              <TableRow key={equipment.id}>
                 <TableCell>
-                    <input type="checkbox" />
+                  <input type="checkbox" />
                 </TableCell>
                 <TableCell>
-                    <Link to={`equipments/single/${equipment.name}`}></Link>
+                  <Link to={`/equipments/single/${equipment.id}`}>
+                    {equipment.name}
+                  </Link>
                 </TableCell>
                 <TableCell>{equipment.type}</TableCell>
                 <TableCell>{equipment.quantity}</TableCell>
                 <TableCell>
-                <DropdownMenu>
+                  <DropdownMenu>
                     <DropdownMenuTrigger>
                       <MoreVertical />
                     </DropdownMenuTrigger>
@@ -87,7 +70,10 @@ const GetAll = () => {
                       <DropdownMenuItem asChild>
                         <Button
                           className="text-white bg-red-600 hover:bg-red-500"
-                          onClick={() => handleDelete(equipment.id)}
+                          onClick={async () => {
+                            await handleRemove(equipment.id);
+                            await refetch();
+                          }}
                         >
                           Delete
                         </Button>
@@ -95,13 +81,13 @@ const GetAll = () => {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
-            </TableRow>
-      );
-    })}
+              </TableRow>
+            );
+          })}
         </TableBody>
-    </Table>
+      </Table>
     </>
-  )
-}
+  );
+};
 
-export default GetAll
+export default GetAll;

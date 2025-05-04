@@ -1,11 +1,16 @@
 export interface IGetResponseEquip {
     message:   string;
-    equipments: Equipment[];
+    equipment: Equipment[];
+}
+export interface IDeleteResponseEquip {
+    message:   string;
+    deleteEquipment: Equipment;
 }
 export interface IGetSingleEquip {
     message:   string;
     equipment: Equipment;
 }
+
 
 export interface Equipment {
     id:        string;

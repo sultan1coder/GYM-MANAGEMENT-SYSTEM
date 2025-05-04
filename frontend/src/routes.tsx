@@ -73,7 +73,7 @@ export const router = createBrowserRouter([
             element: <GetAll />
           },
           {
-            path: "single",
+            path: "single/:id",
             element: <GetSingle />
           }
         ]

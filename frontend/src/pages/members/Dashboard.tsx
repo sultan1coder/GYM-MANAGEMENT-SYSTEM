@@ -1,3 +1,4 @@
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,113 +9,84 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BASE_API_URL } from "@/constants";
-import { IGetMembersResponse, Member } from "@/types/members/memberAll";
+import { useMemberGetAll } from "@/hooks/Member";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import axios, { AxiosResponse } from "axios";
+import { spawn } from "child_process";
 import { MoreVertical } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function MemberDashboard() {
-  const [members, setMembers] = useState<Member[]>([]);
-  useEffect(() => {
-    const fetchMembers = async () => {
-      try {
-        const response: AxiosResponse = await axios.get(
-          `${BASE_API_URL}/members/list`
-        );
-        if (response.status === 200) {
-          const data: IGetMembersResponse = response.data;
-          setMembers(data.members);
-        } else {
-          throw Error(response.statusText);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    fetchMembers();
-  }, []);
-
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this member?")) return;
-
-    try {
-      const response = await axios.delete(
-        `${BASE_API_URL}/members/delete/${id}`
-      );
-      if (response.status === 200) {
-        setMembers((prev) => prev.filter((member) => member.id !== id));
-      }
-    } catch (error) {
-      console.error("Failed to delete member", error);
-    }
-  };
+  const { members, isLoading, error } = useMemberGetAll();
 
   return (
     <>
       <h1>Members</h1>
-      <Table className="bg-slate-400">
-        <TableHeader>
-          <TableRow className="text-xl bg-black font2-semibold hover:bg-black">
-            <TableHead></TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>PhoneNumber</TableHead>
-            <TableHead>age</TableHead>
-            <TableHead>membershiptype</TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {members.map((member) => {
-            return (
-              <TableRow key={member.id}>
-                <TableCell>
-                  <Input type="checkbox" />
-                </TableCell>
-                <TableCell>
-                  <Link to={`/members/single/${member.id}`}>{member.name}</Link>
-                </TableCell>
-                <TableCell>{member.email}</TableCell>
-                <TableCell>{member.phone_number}</TableCell>
-                <TableCell>{member.age}</TableCell>
-                <TableCell>{member.membershiptype}</TableCell>
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <MoreVertical />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="flex flex-col gap-2">
-                      <DropdownMenuItem asChild>
-                        <Link to={`/members/update/${member.id}`}>
-                          <Button className="bg-green-600 hover:bg-green-500">
-                            Edit
+      {isLoading && <span><Spinner/></span>}
+      {error.length > 0 && <span>{error}</span>}
+      {error.length === 0 && members.length > 0?(
+        <Table className="bg-slate-400">
+          <TableHeader>
+            <TableRow className="text-xl bg-black font2-semibold hover:bg-black">
+              <TableHead></TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>PhoneNumber</TableHead>
+              <TableHead>age</TableHead>
+              <TableHead>membershiptype</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {members.map((member) => {
+              return (
+                <TableRow key={member.id}>
+                  <TableCell>
+                    <Input type="checkbox" />
+                  </TableCell>
+                  <TableCell>
+                    <Link to={`/members/single/${member.id}`}>
+                      {member.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{member.email}</TableCell>
+                  <TableCell>{member.phone_number}</TableCell>
+                  <TableCell>{member.age}</TableCell>
+                  <TableCell>{member.membershiptype}</TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <MoreVertical />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="flex flex-col gap-2">
+                        <DropdownMenuItem asChild>
+                          <Link to={`/members/update/${member.id}`}>
+                            <Button className="bg-green-600 hover:bg-green-500">
+                              Edit
+                            </Button>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Button
+                            className="text-white bg-red-600 hover:bg-red-500"
+                            // onClick={() => handleDelete(member.id)}
+                          >
+                            Delete
                           </Button>
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Button
-                          className="text-white bg-red-600 hover:bg-red-500"
-                          onClick={() => handleDelete(member.id)}
-                        >
-                          Delete
-                        </Button>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      ):(<span>No members found</span>)}
     </>
   );
 }
