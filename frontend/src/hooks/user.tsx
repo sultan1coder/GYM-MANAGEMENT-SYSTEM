@@ -1,5 +1,5 @@
 import { BASE_API_URL } from "@/constants";
-import { IGetUserResponse } from "@/types/users/AllUsers";
+import { IDeletedUserResponse, IGetUserResponse } from "@/types/users/AllUsers";
 import { User } from "@/types/users/login";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
@@ -32,3 +32,33 @@ export const useUserGetAll = () => {
       }, []);
   return {isLoading, error, users, refetch : fetchUsers};
 }
+
+export const useUserRemove = () => {
+  const [user, setUser] = useState<User>();
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRemove = async (id: number) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const res: IDeletedUserResponse = await axios.delete(
+        `${BASE_API_URL}/users/delete/${id}`
+      );
+      if (!res.deleteUser) {
+        throw new Error("User Not Found");
+      }
+      setUser(res.deleteUser);
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e.message);
+      }
+    } finally {
+      setIsLoading(false);
+      console.log(error);
+      console.log(user)
+    }
+  };
+
+  return { handleRemove, isLoading, error, user };
+};
