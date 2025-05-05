@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useMemberGetAll } from "@/hooks/member";
+import { useMemberGetAll, useMemberRemove } from "@/hooks/member";
 import {
   DropdownMenu,
   DropdownMenuContent,

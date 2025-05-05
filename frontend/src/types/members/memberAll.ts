@@ -7,6 +7,25 @@ export interface IGetMemberSingle {
     member: Member;
 }
 
+export interface IDeletedMemberResponse {
+    isSuccess:    boolean;
+    message:      string;
+    deleteMember: DeleteMember;
+}
+
+export interface DeleteMember {
+    id:              string;
+    name:            string;
+    email:           string;
+    phone_number:    string;
+    password:        string;
+    confirmPassword: string;
+    age:             number;
+    membershiptype:  string;
+    createdAt:       Date;
+    updatedAt:       Date;
+}
+
 export interface Member {
     id:              string;
     name:            string;
