@@ -1,6 +1,10 @@
 export interface IGetUserResponse {
     message:   string;
-    users:      User[];
+    user:      User[];
+}
+export interface IGetUserSingleResponse {
+    message:   string;
+    user:      User;
 }
 
 export interface User {

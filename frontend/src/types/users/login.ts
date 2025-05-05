@@ -10,7 +10,7 @@ export interface User {
     name: string;
     username: string;
     email: string;
-    phone_number: null;
+    phone_number: string | null;
     password: string;
     confirmPassword: string;
     role: string;

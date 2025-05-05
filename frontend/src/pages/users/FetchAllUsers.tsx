@@ -31,7 +31,7 @@ function FetchAllUsers() {
         );
         if (response.status === 200) {
           const data: IGetUserResponse = response.data;
-          setUsers(data.users);
+          setUsers(data.user);
         } else {
           throw Error(response.statusText);
         }

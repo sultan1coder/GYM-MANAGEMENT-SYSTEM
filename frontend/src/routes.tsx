@@ -13,6 +13,7 @@ import FetchAllUsers from "./pages/users/FetchAllUsers";
 import EquipmentManager from "./pages/equipments/ManageEquip";
 import GetSingle from "./pages/equipments/GetSingle";
 import GetAll from "./pages/equipments/GetAll";
+import SingleUser from "./pages/users/GetSingle";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
           {
             path: "allusers",
             element: <FetchAllUsers/>
+          },
+          {
+            path: "single/:id",
+            element: <SingleUser />
           }
         ],
       },
