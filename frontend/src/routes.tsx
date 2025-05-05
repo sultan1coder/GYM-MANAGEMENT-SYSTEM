@@ -56,7 +56,7 @@ export const router = createBrowserRouter([
             element: <MemberDashboard />,
           },
           {
-            path: "single-member",
+            path: "single/:id",
             element: <SingleMember />,
           },
         ],

@@ -38,8 +38,6 @@ const EquipmentManager: React.FC = () => {
     setReload(!reload);
   };
 
-  const handleDelete = async (id: string) => {
-  };
 
   return (
     <div className="max-w-5xl p-6 mx-auto">
@@ -84,7 +82,6 @@ const EquipmentManager: React.FC = () => {
               <Button
                 variant="destructive"
                 className="mt-4"
-                onClick={() => handleDelete(equip.id)}
               >
                 Delete
               </Button>
