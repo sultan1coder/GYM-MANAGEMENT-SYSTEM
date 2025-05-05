@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useMemberGetAll } from "@/hooks/Member";
+import { useMemberGetAll } from "@/hooks/member";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 
 function MemberDashboard() {
   const { members, isLoading, error } = useMemberGetAll();
+  const { handleRemove } = useMemberRemove();
 
   return (
     <>
@@ -72,7 +73,7 @@ function MemberDashboard() {
                         <DropdownMenuItem asChild>
                           <Button
                             className="text-white bg-red-600 hover:bg-red-500"
-                            // onClick={() => handleDelete(member.id)}
+                            onClick={() => handleRemove(member.id)}
                           >
                             Delete
                           </Button>
