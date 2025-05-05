@@ -23,8 +23,6 @@ function FetchAllUsers() {
   const { users, isLoading, error ,refetch} = useUserGetAll();
   const { handleRemove } = useUserRemove();
 
-
-  
   return (
     <>
       <h1>Users</h1>

@@ -4,6 +4,7 @@ import {
     IDeleteResponseEquip,
     IGetResponseEquip,
     IGetSingleEquip,
+    IUpdateResponseEquip,
 } from "@/types/equipments/GetAll";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
@@ -96,4 +97,36 @@ export const useEquipmentRemove = () => {
   
     return { handleRemove, isLoading, error, equipment };
   };
-export const useEquipmentUpdate = () => {};
+
+
+export const useEquipmentUpdate = () => {
+  const [equipment, setEquip] = useState<Equipment>();
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleUpdate = async (id: string, data: Partial<Equipment>) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const res: IUpdateResponseEquip = await axios.put(
+        `${BASE_API_URL}/equipments/update/${id}`,
+        data
+      );
+      if (!res.updateEquipment) {
+        throw new Error("Equipment Not Found or Update Failed");
+      }
+      setEquip(res.updateEquipment);
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e.message);
+      }
+    } finally {
+      setIsLoading(false);
+      console.log(error);
+      console.log(equipment);
+    }
+  };
+
+  return { handleUpdate, isLoading, error, equipment };
+};
+

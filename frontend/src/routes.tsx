@@ -14,6 +14,7 @@ import EquipmentManager from "./pages/equipments/ManageEquip";
 import GetSingle from "./pages/equipments/GetSingle";
 import GetAll from "./pages/equipments/GetAll";
 import SingleUser from "./pages/users/GetSingle";
+import EquipmentItem from "./pages/equipments/Update";
 
 export const router = createBrowserRouter([
   {
@@ -80,7 +81,11 @@ export const router = createBrowserRouter([
           {
             path: "single/:id",
             element: <GetSingle />
-          }
+          },
+          // {
+          //   path: "update/:id",
+          //   element: <EquipmentItem />
+          // },
         ]
       },
       {
