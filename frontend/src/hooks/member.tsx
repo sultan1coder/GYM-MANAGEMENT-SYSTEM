@@ -8,7 +8,7 @@ export const useMemberGetAll = () => {
     const [members, setMembers] = useState<Member[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
-  useEffect(() => {
+ 
       const fetchMembers = async () => {
         try {
           const response: AxiosResponse = await axios.get(
@@ -27,9 +27,10 @@ export const useMemberGetAll = () => {
             setIsLoading(false);
         }
       };
-      fetchMembers();
-    }, []);
-  return {isLoading, error, members};
+      useEffect(() => {
+        fetchMembers();
+      }, []);
+  return {isLoading, error, members, refetch : fetchMembers};
 }
 
 export const useMemberRemove = () => {
@@ -59,5 +60,5 @@ export const useMemberRemove = () => {
     }
   };
 
-  return { handleRemove, isLoading, error, member };
+  return { handleRemove, isLoading, error, member};
 };

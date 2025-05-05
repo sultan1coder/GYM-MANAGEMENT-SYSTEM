@@ -20,7 +20,7 @@ import { MoreVertical } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function MemberDashboard() {
-  const { members, isLoading, error } = useMemberGetAll();
+  const { members, isLoading, error ,refetch} = useMemberGetAll();
   const { handleRemove } = useMemberRemove();
 
   return (
@@ -73,7 +73,10 @@ function MemberDashboard() {
                         <DropdownMenuItem asChild>
                           <Button
                             className="text-white bg-red-600 hover:bg-red-500"
-                            onClick={() => handleRemove(member.id)}
+                            onClick={async () => {
+                              await handleRemove(member.id);
+                              await refetch();
+                            }}
                           >
                             Delete
                           </Button>
