@@ -1,12 +1,13 @@
 import { BASE_API_URL } from "@/constants";
 import {
-    Equipment,
-    IDeleteResponseEquip,
-    IGetResponseEquip,
-    IGetSingleEquip,
-    IUpdateResponseEquip,
+  Equipment,
+  IDeleteResponseEquip,
+  IGetResponseEquip,
+  IGetSingleEquip,
+  IUpdateResponseEquip,
 } from "@/types/equipments/GetAll";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "@/lib/axios";
 import { useEffect, useState } from "react";
 
 export const useEquipmentGetAll = () => {
@@ -15,7 +16,7 @@ export const useEquipmentGetAll = () => {
   const [error, setError] = useState("");
   const fetchequipments = async () => {
     try {
-      const response: AxiosResponse = await axios.get(
+      const response: AxiosResponse = await api.get(
         `${BASE_API_URL}/equipments/list`
       );
       if (response.status === 200) {
@@ -34,7 +35,7 @@ export const useEquipmentGetAll = () => {
   useEffect(() => {
     fetchequipments();
   }, []);
-  return { isLoading, error, equipments, refetch:fetchequipments };
+  return { isLoading, error, equipments, refetch: fetchequipments };
 };
 
 export const useEquipmentGetSingle = (id: string) => {
@@ -44,7 +45,7 @@ export const useEquipmentGetSingle = (id: string) => {
   useEffect(() => {
     const fetchequipments = async () => {
       try {
-        const response: AxiosResponse = await axios.get(
+        const response: AxiosResponse = await api.get(
           `${BASE_API_URL}/equipments/single/${id}`
         );
         if (response.status === 200) {
@@ -67,37 +68,35 @@ export const useEquipmentGetSingle = (id: string) => {
 
 export const useEquipmentAdd = () => {};
 
-
 export const useEquipmentRemove = () => {
-    const [equipment, setEquip] = useState<Equipment>();
-    const [error, setError] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-  
-    const handleRemove = async (id: string) => {
-      setIsLoading(true);
-      setError("");
-      try {
-        const res: IDeleteResponseEquip = await axios.delete(
-          `${BASE_API_URL}/equipments/delete/${id}`
-        );
-        if (!res.deleteEquipment) {
-          throw new Error("Equipment Not Found");
-        }
-        setEquip(res.deleteEquipment);
-      } catch (e) {
-        if (e instanceof Error) {
-          setError(e.message);
-        }
-      } finally {
-        setIsLoading(false);
-        console.log(error);
-        console.log(equipment)
+  const [equipment, setEquip] = useState<Equipment>();
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRemove = async (id: string) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const res: IDeleteResponseEquip = await api.delete(
+        `${BASE_API_URL}/equipments/delete/${id}`
+      );
+      if (!res.deleteEquipment) {
+        throw new Error("Equipment Not Found");
       }
-    };
-  
-    return { handleRemove, isLoading, error, equipment };
+      setEquip(res.deleteEquipment);
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e.message);
+      }
+    } finally {
+      setIsLoading(false);
+      console.log(error);
+      console.log(equipment);
+    }
   };
 
+  return { handleRemove, isLoading, error, equipment };
+};
 
 export const useEquipmentUpdate = () => {
   const [equipment, setEquip] = useState<Equipment>();
@@ -108,7 +107,7 @@ export const useEquipmentUpdate = () => {
     setIsLoading(true);
     setError("");
     try {
-      const res: IUpdateResponseEquip = await axios.put(
+      const res: IUpdateResponseEquip = await api.put(
         `${BASE_API_URL}/equipments/update/${id}`,
         data
       );
@@ -129,4 +128,3 @@ export const useEquipmentUpdate = () => {
 
   return { handleUpdate, isLoading, error, equipment };
 };
-

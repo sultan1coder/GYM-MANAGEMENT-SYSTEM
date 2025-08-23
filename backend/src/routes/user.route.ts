@@ -1,15 +1,17 @@
 import { Router } from "express";
-import { deleteUser, getAllUsers, getSingleUser, updateUser, } from "../controllers/user.controller";
-import { loginUser, registerUser } from "../controllers/auth.controller";
+import {
+  deleteUser,
+  getAllUsers,
+  getSingleUser,
+  updateUser,
+} from "../controllers/user.controller";
+import { protect, adminRoute } from "../../middlewares/auth.middleware";
 
 const router = Router();
 
-router.get("/list", getAllUsers);
-router.get("/single/:id", getSingleUser);
-router.post("/register", registerUser);
-router.post("/login", loginUser);
-router.put("/update/:id", updateUser);
-router.delete("/delete/:id", deleteUser);
-
+router.get("/list", protect, getAllUsers);
+router.get("/single/:id", protect, getSingleUser);
+router.put("/update/:id", protect, updateUser);
+router.delete("/delete/:id", protect, adminRoute, deleteUser);
 
 export default router;

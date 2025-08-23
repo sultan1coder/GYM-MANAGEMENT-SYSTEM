@@ -1,11 +1,10 @@
-import { Request } from "express";  
+import { Request } from "express";
 
-interface AuthenticatedUser {
-    id: string;
-    role: string;
+export interface AuthenticatedUser {
+  id: string;
+  role: string;
 }
 
 export interface AuthRequest extends Request {
-    userId? : number;
-    user? : AuthenticatedUser;
+  user?: AuthenticatedUser;
 }

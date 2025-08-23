@@ -1,37 +1,37 @@
 import { BASE_API_URL } from "@/constants";
 import { IDeletedUserResponse, IGetUserResponse } from "@/types/users/AllUsers";
 import { User } from "@/types/users/login";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "@/lib/axios";
 import { useEffect, useState } from "react";
 
 export const useUserGetAll = () => {
-    const [users, setUsers] = useState<User[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState("");
- 
-      const fetchUsers = async () => {
-        try {
-          const response: AxiosResponse = await axios.get(
-            `${BASE_API_URL}/users/list`
-          );
-          if (response.status === 200) {
-            const data: IGetUserResponse = response.data;
-            setUsers(data.user);
-          } else {
-            throw Error(response.statusText);
-          }
-        } catch (e) {
-          setError((e as Error).message);
-        }
-        finally{
-            setIsLoading(false);
-        }
-      };
-      useEffect(() => {
-        fetchUsers();
-      }, []);
-  return {isLoading, error, users, refetch : fetchUsers};
-}
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const fetchUsers = async () => {
+    try {
+      const response: AxiosResponse = await api.get(
+        `${BASE_API_URL}/users/list`
+      );
+      if (response.status === 200) {
+        const data: IGetUserResponse = response.data;
+        setUsers(data.user);
+      } else {
+        throw Error(response.statusText);
+      }
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+  return { isLoading, error, users, refetch: fetchUsers };
+};
 
 export const useUserRemove = () => {
   const [user, setUser] = useState<User>();
@@ -42,7 +42,7 @@ export const useUserRemove = () => {
     setIsLoading(true);
     setError("");
     try {
-      const res: IDeletedUserResponse = await axios.delete(
+      const res: IDeletedUserResponse = await api.delete(
         `${BASE_API_URL}/users/delete/${id}`
       );
       if (!res.deleteUser) {
@@ -56,7 +56,7 @@ export const useUserRemove = () => {
     } finally {
       setIsLoading(false);
       console.log(error);
-      console.log(user)
+      console.log(user);
     }
   };
 

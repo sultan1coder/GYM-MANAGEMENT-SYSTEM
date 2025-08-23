@@ -17,12 +17,12 @@ export const loginFn = createAsyncThunk(
   "users/login",
   async (data: ILoginBody, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${BASE_API_URL}/users/login`, data);
+      const response = await axios.post(`${BASE_API_URL}/auth/login`, data);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(
-          error.response?.data.messaga || DEFAULT_ERROR_MESSAGE
+          error.response?.data.message || DEFAULT_ERROR_MESSAGE
         );
       }
 
@@ -42,6 +42,8 @@ export const loginSlice = createSlice({
 
       // Remove the data from the local storage
       localStorage.removeItem("userData");
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
     },
   },
 
@@ -58,6 +60,13 @@ export const loginSlice = createSlice({
       state.loading = false;
       state.error = "";
       state.data = action.payload;
+      try {
+        // Store the complete response
+        localStorage.setItem("userData", JSON.stringify(action.payload));
+        // Store user and token separately for auth utilities
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
+        localStorage.setItem("token", action.payload.accessToken);
+      } catch {}
     });
 
     //Rejected

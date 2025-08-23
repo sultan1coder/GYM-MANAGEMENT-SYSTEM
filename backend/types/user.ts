@@ -1,14 +1,13 @@
-
 export interface IRegisterNewUser {
-    name: string;
-    username: string;
-    email: string;
-    phone_number: string;
-    password: string;
-    confirmPassword: string;
+  name: string;
+  username: string;
+  email: string;
+  phone_number: string;
+  password: string;
+  confirmPassword: string;
 }
 
-export interface ILoginUer {
-    email: string;
-    password: string;
+export interface ILoginUser {
+  email: string;
+  password: string;
 }

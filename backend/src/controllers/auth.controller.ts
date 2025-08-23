@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
 import jwt, { VerifyErrors } from "jsonwebtoken";
 import { AuthRequest } from "../../types/request";
-import { PrismaClient } from "@prisma/client";
-import { comparePassword, generateToken, hashPassword } from "../utils/auth";
-
-const prisma = new PrismaClient();
+import prisma from "../lib/prisma";
+import { comparePassword, generateTokenPair, verifyRefreshToken, hashPassword } from "../utils/auth";
+import crypto from "crypto";
 
 // const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "refreshsecretkey";
 
@@ -53,9 +52,8 @@ export const registerUser = async (req: Request, res: Response) => {
         username,
         email,
         password: hashedPassword,
-        confirmPassword: hashedPassword,
         phone_number,
-        role,
+        role: "staff",
       },
     });
 
@@ -66,7 +64,7 @@ export const registerUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-      messaga: "Something went wrong",
+      message: "Something went wrong",
     });
   }
 };
@@ -96,195 +94,224 @@ export const loginUser = async (req: Request, res: Response) => {
       });
       return;
     }
-    // Generate token
-    const token = generateToken(user.id);
+
+    // Generate both access and refresh tokens
+    const { accessToken, refreshToken } = generateTokenPair(
+      String(user.id), 
+      user.role, 
+      user.tokenVersion
+    );
+
+    // Set refresh token as HTTP-only cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // HTTPS in production
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
     res.status(200).json({
       isSuccess: true,
       user,
-      token,
+      accessToken,
     });
   } catch (error) {
     res.status(500).json({
-      messaga: "Something went wrong",
+      message: "Something went wrong",
     });
   }
 };
 
 //Logout User
-export const logoutUser = async (req: Request, res: Response) => {
+export const logoutUser = async (req: AuthRequest, res: Response) => {
   try {
-    res.clearCookie("refreshToken");
+    // Clear refresh token cookie
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    // Increment token version to invalidate all existing refresh tokens
+    if (req.user) {
+      await prisma.user.update({
+        where: { id: Number(req.user.id) },
+        data: { tokenVersion: { increment: 1 } },
+      });
+    }
+
     res.status(201).json({
       message: "Logged out successfully",
     });
   } catch (error) {
     res.status(500).json({
-      messaga: "Something went wrong",
+      message: "Something went wrong",
     });
   }
 };
 
-//Reset Password
-// export const resetPassword = async (req: Request, res: Response) => {
-//     try {
-//         const { token, newPassword } = req.body;
-//         const user = await prisma.user.findFirst({
-//             where: {
-//                 resetToken: token,
-//                 resetTokenExp: {
-//                     gt: new Date()
-//                 }
-//             }
-//         });
+// Refresh Token
+export const refreshToken = async (req: Request, res: Response) => {
+  try {
+    const { refreshToken } = req.cookies;
 
-//         if (!user) {
-//             res.status(400).json({
-//                 message: "Invalid or Expired token"
-//             });
-//             return;
-//         }
+    if (!refreshToken) {
+      res.status(401).json({
+        message: "Refresh token required",
+      });
+      return;
+    }
 
-//         const hashedPassword = await hashPassword(newPassword);
-//         await prisma.user.update({
-//             where: {
-//                 id: user.id,
-//             },
-//             data: {
-//                 password: hashedPassword,
-//                 resetToken: null,
-//                 resetTokenExp: null
-//             }
-//         });
+    // Verify refresh token
+    const decoded = verifyRefreshToken(refreshToken);
+    if (!decoded) {
+      res.status(401).json({
+        message: "Invalid refresh token",
+      });
+      return;
+    }
 
-//         res.status(201).json({
-//             message: "Password reset successfully"
-//         });
-//     } catch (error) {
-//         console.log("Error: " + error)
-//         res.status(500).json({
-//             isSuccess: false,
-//             message: "Server error!"
-//         })
-//     }
-// }
+    // Get user and check token version
+    const user = await prisma.user.findUnique({
+      where: { id: Number(decoded.id) },
+    });
 
-//Forgot Password
-// export const forgotPassword = async (req: Request, res: Response) => {
-//     try {
-//         const { email } = req.body;
-//         const user = await prisma.user.findUnique({
-//             where: {
-//                 email
-//             }
-//         });
+    if (!user || user.tokenVersion !== decoded.tokenVersion) {
+      res.status(401).json({
+        message: "Invalid refresh token",
+      });
+      return;
+    }
 
-//         if (!user) {
-//             res.status(404).json({
-//                 message: "User not found!"
-//             });
-//             return;
-//         }
+    // Generate new token pair
+    const { accessToken, refreshToken: newRefreshToken } = generateTokenPair(
+      String(user.id),
+      user.role,
+      user.tokenVersion
+    );
 
-//         const resetToken = crypto.randomBytes(32).toString("hex");
-//         const resetTokenExp = new Date(Date.now() + 3600000); // 1 hour expiry
+    // Set new refresh token cookie
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
 
-//         await prisma.user.update({
-//             where: {
-//                 email,
-//             },
-//             data: {
-//                 resetToken,
-//                 resetTokenExp
-//             }
-//         });
+    res.status(200).json({
+      isSuccess: true,
+      accessToken,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+};
 
-//         res.status(200).json({
-//             message: "Reset link sent",
-//             resetToken
-//         });
-//     } catch (error) {
+//Forgot Password - generate a reset token and store short-lived
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body as { email: string };
+    if (!email) {
+      res.status(400).json({ message: "Email is required" });
+      return;
+    }
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      // Do not reveal if user exists
+      res
+        .status(200)
+        .json({ message: "If an account exists, a reset link has been sent" });
+      return;
+    }
 
-//     }
-// }
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenExp = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
-//Refresh Token Handler
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { resetToken, resetTokenExp },
+    });
 
-// export const refreshToken = async (req: Request, res: Response) => {
-//     try {
-//         const token = req.cookies.refreshToken;
-//         if (!token) {
-//             res.status(403).json({
-//                 isSuccess: false,
-//                 message: "RefreshToken required"
-//             });
-//             return;
-//         }
+    // In a real app, email the link containing this token
+    // For now, return token so frontend can show or use during dev
+    res.status(200).json({
+      isSuccess: true,
+      message: "Password reset link generated",
+      resetToken,
+      expiresAt: resetTokenExp,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
 
-//         const user = await prisma.user.findFirst({
-//             where: {
-//                 refreshToken: token
-//             }
-//         });
-//         if (!user) {
-//             res.status(403).json({
-//                 message: "Invalid refreshToken!"
-//             });
-//             return;
-//         }
+// Reset Password - verify token and update password
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { token, newPassword, confirmPassword } = req.body as {
+      token: string;
+      newPassword: string;
+      confirmPassword: string;
+    };
 
-//         jwt.verify(token, REFRESH_TOKEN_SECRET, async (err: VerifyErrors | null, decoded: any) => {
-//             if (err) {
-//                 res.status(403).json({
-//                     message: "Invalid refreshToken"
-//                 });
-//                 return;
-//             }
-//             const newAccessToken = generateAccessToken(decoded.userId);
-//             const newRefreshToken = generateRefreshAccessToken(decoded.userId);
+    if (!token || !newPassword || !confirmPassword) {
+      res.status(400).json({ message: "Token and passwords are required" });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      res.status(400).json({ message: "Password must match" });
+      return;
+    }
 
-//             // Update refresh token in DB
-//             await prisma.user.update({
-//                 where: {
-//                     id: user.id,
-//                 },
-//                 data: {
-//                     refreshToken: newRefreshToken
-//                 }
-//             });
+    const user = await prisma.user.findFirst({
+      where: {
+        resetToken: token,
+        resetTokenExp: { gt: new Date() },
+      },
+    });
 
-//             // Store new refresh token in HTTP-only cookie
-//             res.cookie("refreshToken", newRefreshToken, {
-//                 httpOnly: true,
-//                 secure: true,
-//                 sameSite: "strict"
-//             });
+    if (!user) {
+      res.status(400).json({ message: "Invalid or expired token" });
+      return;
+    }
 
-//             res.json({
-//                 accessToken: newAccessToken
-//             })
-//         });
+    const hashedPassword = await hashPassword(newPassword);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword, resetToken: null, resetTokenExp: null },
+    });
 
-//     } catch (error) {
-//         console.log("Error: " + error)
-//         res.status(500).json({
-//             isSuccess: false,
-//             message: "Server error!"
-//         })
-//     }
-// }
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
 
 //Get Current User
 export const whoami = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = req.body.userId;
+    if (!req.user) {
+      res.status(401).json({ isSuccess: false, message: "Unauthorized" });
+      return;
+    }
+    const userId = req.user.id;
     const user = await prisma.user.findUnique({
       where: {
-        id: userId,
+        id: Number(userId),
       },
       select: {
         id: true,
         name: true,
         email: true,
+        role: true,
       },
     });
 

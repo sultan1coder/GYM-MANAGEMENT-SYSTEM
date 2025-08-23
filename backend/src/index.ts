@@ -12,22 +12,23 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
-
+const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors(
-    {
-        origin: "http://localhost:5173",
-    }
-));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
+// app.use("/api/auth", authRoute);
+app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/members", memberRoute);
 app.use("/api/payments", paymentRoute);
 app.use("/api/equipments", equipmentRoute);
 app.use("/api/subscriptions", subscriptionRoute);
-app.use("/api/auth", authRoute);
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

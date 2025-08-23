@@ -3,15 +3,18 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon src/index.ts",
-    "migrate": "npx prisma migrate dev"
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon --exec ts-node --legacy-watch src/index.ts",
+    "migrate": "npx prisma migrate dev",
+    "prisma:generate": "npx prisma generate",
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@prisma/client": "^6.6.0",
+    "@prisma/client": "^6.14.0",
     "@types/express": "^5.0.0",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
@@ -30,6 +33,6 @@
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.13.9",
-    "prisma": "^6.6.0"
+    "prisma": "^6.14.0"
   }
 }

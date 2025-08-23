@@ -4,7 +4,10 @@ import Homepage from "./pages/Homepage";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/users/login";
 import Register from "./pages/users/register";
+import ForgotPassword from "./pages/users/ForgotPassword";
+import ResetPassword from "./pages/users/ResetPassword";
 import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import LoginMember from "./pages/members/Login";
 import RegisterMember from "./pages/members/Register";
 import MemberDashboard from "./pages/members/Dashboard";
@@ -14,7 +17,7 @@ import EquipmentManager from "./pages/equipments/ManageEquip";
 import GetSingle from "./pages/equipments/GetSingle";
 import GetAll from "./pages/equipments/GetAll";
 import SingleUser from "./pages/users/GetSingle";
-import EquipmentItem from "./pages/equipments/Update";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -37,13 +40,29 @@ export const router = createBrowserRouter([
             element: <Register />,
           },
           {
+            path: "forgot-password",
+            element: <ForgotPassword />,
+          },
+          {
+            path: "reset-password",
+            element: <ResetPassword />,
+          },
+          {
             path: "allusers",
-            element: <FetchAllUsers/>
+            element: (
+              <ProtectedRoute requireStaff>
+                <FetchAllUsers />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "single/:id",
-            element: <SingleUser />
-          }
+            element: (
+              <ProtectedRoute requireStaff>
+                <SingleUser />
+              </ProtectedRoute>
+            ),
+          },
         ],
       },
       {
@@ -59,11 +78,19 @@ export const router = createBrowserRouter([
           },
           {
             path: "dashboard",
-            element: <MemberDashboard />,
+            element: (
+              <ProtectedRoute>
+                <MemberDashboard />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "single/:id",
-            element: <SingleMember />,
+            element: (
+              <ProtectedRoute requireStaff>
+                <SingleMember />
+              </ProtectedRoute>
+            ),
           },
         ],
       },
@@ -72,25 +99,50 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "manage",
-            element: <EquipmentManager />
+            element: (
+              <ProtectedRoute requireAdmin>
+                <EquipmentManager />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "all",
-            element: <GetAll />
+            element: (
+              <ProtectedRoute requireStaff>
+                <GetAll />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "single/:id",
-            element: <GetSingle />
+            element: (
+              <ProtectedRoute requireStaff>
+                <GetSingle />
+              </ProtectedRoute>
+            ),
           },
-          // {
-          //   path: "update/:id",
-          //   element: <EquipmentItem />
-          // },
-        ]
+        ],
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute requireStaff>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin",
+        children: [
+          {
+            path: "dashboard",
+            element: (
+              <ProtectedRoute requireAdmin>
+                <AdminDashboard />
+              </ProtectedRoute>
+            ),
+          },
+        ],
       },
       {
         path: "*",

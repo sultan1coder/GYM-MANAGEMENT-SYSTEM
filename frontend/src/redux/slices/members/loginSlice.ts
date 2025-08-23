@@ -62,6 +62,9 @@ export const loginMemberSlice = createSlice({
       state.loading = false;
       state.error = "";
       state.data = action.payload;
+      try {
+        localStorage.setItem("memberData", JSON.stringify(action.payload));
+      } catch {}
     });
 
     //Rejected

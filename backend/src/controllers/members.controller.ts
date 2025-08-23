@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { defaultErrorMessage } from "../constants";
-import { MemberShipType, PrismaClient } from "@prisma/client";
+import { MemberShipType } from "@prisma/client";
+import prisma from "../lib/prisma";
 import { comparePassword, generateToken, hashPassword } from "../utils/auth";
-
-const prisma = new PrismaClient();
-
 
 interface IUpdateMember {
   member_id: string;
@@ -23,6 +21,7 @@ export const getAllMembers = async (req: Request, res: Response) => {
       members,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       isSuccess: false,
       message: defaultErrorMessage,
@@ -110,7 +109,6 @@ export const registerMember = async (req: Request, res: Response) => {
         age,
         membershiptype,
         password: hashedPassword,
-        confirmPassword: hashedPassword,
       },
     });
 
@@ -121,8 +119,8 @@ export const registerMember = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-      messaga: "Something went wrong",
-      console: {error}
+      message: "Something went wrong",
+      console: { error },
     });
   }
 };
@@ -153,7 +151,7 @@ export const loginMember = async (req: Request, res: Response) => {
       return;
     }
     // Generate token
-    const token = generateToken(member.age);
+    const token = generateToken({ id: member.id, role: "member" });
     res.status(200).json({
       isSuccess: true,
       member,
@@ -161,18 +159,21 @@ export const loginMember = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-      messaga: "Something went wrong",
+      message: "Something went wrong",
     });
   }
 };
 
 export const updateMember = async (req: Request, res: Response) => {
   try {
-    const { member_id, name, email, phone_number, age, membershiptype } =
-      req.body as IUpdateMember;
+    const memberId = req.params.id;
+    const { name, email, phone_number, age, membershiptype } = req.body as Omit<
+      IUpdateMember,
+      "member_id"
+    >;
     const member = await prisma.member.findFirst({
       where: {
-        id: member_id,
+        id: memberId,
       },
     });
 

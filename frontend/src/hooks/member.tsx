@@ -1,37 +1,41 @@
 import { BASE_API_URL } from "@/constants";
-import { IDeletedMemberResponse, IGetMemberSingle, IGetMembersResponse } from "@/types/members/memberAll";
+import {
+  IDeletedMemberResponse,
+  IGetMemberSingle,
+  IGetMembersResponse,
+} from "@/types/members/memberAll";
 import { Member } from "@/types/members/memberLogin";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "@/lib/axios";
 import { useEffect, useState } from "react";
 
 export const useMemberGetAll = () => {
-    const [members, setMembers] = useState<Member[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState("");
- 
-      const fetchMembers = async () => {
-        try {
-          const response: AxiosResponse = await axios.get(
-            `${BASE_API_URL}/members/list`
-          );
-          if (response.status === 200) {
-            const data: IGetMembersResponse = response.data;
-            setMembers(data.members);
-          } else {
-            throw Error(response.statusText);
-          }
-        } catch (e) {
-          setError((e as Error).message);
-        }
-        finally{
-            setIsLoading(false);
-        }
-      };
-      useEffect(() => {
-        fetchMembers();
-      }, []);
-  return {isLoading, error, members, refetch : fetchMembers};
-}
+  const [members, setMembers] = useState<Member[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const fetchMembers = async () => {
+    try {
+      const response: AxiosResponse = await api.get(
+        `${BASE_API_URL}/members/list`
+      );
+      if (response.status === 200) {
+        const data: IGetMembersResponse = response.data;
+        setMembers(data.members);
+      } else {
+        throw Error(response.statusText);
+      }
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchMembers();
+  }, []);
+  return { isLoading, error, members, refetch: fetchMembers };
+};
 
 export const useMemberRemove = () => {
   const [member, setMember] = useState<Member>();
@@ -42,7 +46,7 @@ export const useMemberRemove = () => {
     setIsLoading(true);
     setError("");
     try {
-      const res: IDeletedMemberResponse = await axios.delete(
+      const res: IDeletedMemberResponse = await api.delete(
         `${BASE_API_URL}/members/delete/${id}`
       );
       if (!res.deleteMember) {
@@ -56,11 +60,11 @@ export const useMemberRemove = () => {
     } finally {
       setIsLoading(false);
       console.log(error);
-      console.log(member)
+      console.log(member);
     }
   };
 
-  return { handleRemove, isLoading, error, member};
+  return { handleRemove, isLoading, error, member };
 };
 
 export const useMemberGetSingle = (id: string) => {
@@ -70,7 +74,7 @@ export const useMemberGetSingle = (id: string) => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const response: AxiosResponse = await axios.get(
+        const response: AxiosResponse = await api.get(
           `${BASE_API_URL}/members/single/${id}`
         );
         if (response.status === 200) {
