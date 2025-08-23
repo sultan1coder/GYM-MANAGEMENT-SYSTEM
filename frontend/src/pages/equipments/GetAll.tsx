@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,6 +35,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEquipmentGetAll, useEquipmentRemove } from "@/hooks/equipment";
+import { userAPI } from "@/services/api";
+import { Equipment } from "@/types";
 import {
   MoreVertical,
   Search,
@@ -53,6 +57,7 @@ import {
   Clock,
   Filter,
   RefreshCw,
+  X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -64,6 +69,33 @@ const GetAll = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
+    null
+  );
+  const [formData, setFormData] = useState({
+    name: "",
+    type: "",
+    category: "",
+    brand: "",
+    model: "",
+    serialNumber: "",
+    quantity: 1,
+    available: 1,
+    inUse: 0,
+    status: "OPERATIONAL" as
+      | "OPERATIONAL"
+      | "MAINTENANCE"
+      | "OUT_OF_SERVICE"
+      | "RETIRED",
+    location: "",
+    description: "",
+    imageUrl: "",
+    purchaseDate: "",
+    warrantyExpiry: "",
+    cost: 0,
+    maintenance: false,
+  });
 
   const categories = [
     "Cardio",
@@ -74,6 +106,23 @@ const GetAll = () => {
     "Resistance Training",
     "Recovery",
     "Accessories",
+  ];
+
+  const equipmentTypes = [
+    "Treadmill",
+    "Elliptical",
+    "Bike",
+    "Rower",
+    "Stepper",
+    "Bench",
+    "Rack",
+    "Machine",
+    "Free Weights",
+    "Cables",
+    "Mat",
+    "Ball",
+    "Band",
+    "Other",
   ];
 
   const getStatusColor = (status: string) => {
@@ -130,6 +179,72 @@ const GetAll = () => {
         toast.error("Failed to delete equipment");
       }
     }
+  };
+
+  const openEditDialog = (equipment: Equipment) => {
+    setSelectedEquipment(equipment);
+    setFormData({
+      name: equipment.name,
+      type: equipment.type,
+      category: equipment.category,
+      brand: equipment.brand || "",
+      model: equipment.model || "",
+      serialNumber: equipment.serialNumber || "",
+      quantity: equipment.quantity,
+      available: equipment.available,
+      inUse: equipment.inUse,
+      status: equipment.status,
+      location: equipment.location || "",
+      description: equipment.description || "",
+      imageUrl: equipment.imageUrl || "",
+      purchaseDate: equipment.purchaseDate || "",
+      warrantyExpiry: equipment.warrantyExpiry || "",
+      cost: equipment.cost || 0,
+      maintenance: equipment.maintenance,
+    });
+    setShowEditDialog(true);
+  };
+
+  const handleUpdateEquipment = async () => {
+    if (!selectedEquipment) return;
+
+    try {
+      const response = await userAPI.updateEquipment(
+        selectedEquipment.id,
+        formData
+      );
+      if (response.data.isSuccess) {
+        toast.success("Equipment updated successfully!");
+        setShowEditDialog(false);
+        refetch();
+      }
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message || "Failed to update equipment"
+      );
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      type: "",
+      category: "",
+      brand: "",
+      model: "",
+      serialNumber: "",
+      quantity: 1,
+      available: 1,
+      inUse: 0,
+      status: "OPERATIONAL",
+      location: "",
+      description: "",
+      imageUrl: "",
+      purchaseDate: "",
+      warrantyExpiry: "",
+      cost: 0,
+      maintenance: false,
+    });
   };
 
   if (isLoading) {
@@ -510,14 +625,12 @@ const GetAll = () => {
                               View Details
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem asChild>
-                            <Link
-                              to={`/equipments/update/${equipment.id}`}
-                              className="cursor-pointer"
-                            >
-                              <Edit className="w-4 h-4 mr-2 text-green-600" />
-                              Edit Equipment
-                            </Link>
+                          <DropdownMenuItem
+                            onClick={() => openEditDialog(equipment)}
+                            className="cursor-pointer"
+                          >
+                            <Edit className="w-4 h-4 mr-2 text-green-600" />
+                            Edit Equipment
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
@@ -567,6 +680,236 @@ const GetAll = () => {
                 )}
             </CardContent>
           </Card>
+        )}
+
+        {/* Edit Equipment Modal */}
+        {showEditDialog && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl max-h-[90vh] overflow-y-auto w-full mx-4">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      Edit Equipment
+                    </h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Update the equipment details.
+                    </p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setShowEditDialog(false);
+                      resetForm();
+                    }}
+                    className="h-8 w-8 p-0"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-name">Equipment Name *</Label>
+                    <Input
+                      id="edit-name"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-type">Equipment Type *</Label>
+                    <Select
+                      value={formData.type}
+                      onValueChange={(value: string) =>
+                        setFormData({ ...formData, type: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {equipmentTypes.map((type) => (
+                          <SelectItem key={type} value={type}>
+                            {type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-category">Category *</Label>
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value: string) =>
+                        setFormData({ ...formData, category: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-quantity">Quantity *</Label>
+                    <Input
+                      id="edit-quantity"
+                      type="number"
+                      min="1"
+                      value={formData.quantity}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          quantity: parseInt(e.target.value) || 1,
+                          available: parseInt(e.target.value) || 1,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-brand">Brand</Label>
+                    <Input
+                      id="edit-brand"
+                      value={formData.brand}
+                      onChange={(e) =>
+                        setFormData({ ...formData, brand: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-model">Model</Label>
+                    <Input
+                      id="edit-model"
+                      value={formData.model}
+                      onChange={(e) =>
+                        setFormData({ ...formData, model: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-serialNumber">Serial Number</Label>
+                    <Input
+                      id="edit-serialNumber"
+                      value={formData.serialNumber}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          serialNumber: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-location">Location</Label>
+                    <Input
+                      id="edit-location"
+                      value={formData.location}
+                      onChange={(e) =>
+                        setFormData({ ...formData, location: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-cost">Purchase Cost ($)</Label>
+                    <Input
+                      id="edit-cost"
+                      type="number"
+                      step="0.01"
+                      value={formData.cost}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          cost: parseFloat(e.target.value) || 0,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-purchaseDate">Purchase Date</Label>
+                    <Input
+                      id="edit-purchaseDate"
+                      type="date"
+                      value={formData.purchaseDate}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          purchaseDate: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-warrantyExpiry">Warranty Expiry</Label>
+                    <Input
+                      id="edit-warrantyExpiry"
+                      type="date"
+                      value={formData.warrantyExpiry}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          warrantyExpiry: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="col-span-2 space-y-2">
+                    <Label htmlFor="edit-description">Description</Label>
+                    <Textarea
+                      id="edit-description"
+                      value={formData.description}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
+                      rows={3}
+                    />
+                  </div>
+                  <div className="col-span-2 space-y-2">
+                    <Label htmlFor="edit-imageUrl">Image URL</Label>
+                    <Input
+                      id="edit-imageUrl"
+                      value={formData.imageUrl}
+                      onChange={(e) =>
+                        setFormData({ ...formData, imageUrl: e.target.value })
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 mt-6">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowEditDialog(false);
+                      resetForm();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleUpdateEquipment}
+                    disabled={
+                      !formData.name || !formData.type || !formData.category
+                    }
+                  >
+                    Update Equipment
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
