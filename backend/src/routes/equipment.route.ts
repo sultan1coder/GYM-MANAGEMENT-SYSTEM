@@ -8,6 +8,7 @@ import {
   updateEquipmentStatus,
   addMaintenanceLog,
   getEquipmentStats,
+  getMaintenanceLogs,
   checkOutEquipment,
   checkInEquipment,
 } from "../controllers/equipment.controller";
@@ -25,6 +26,7 @@ router.delete("/delete/:id", protect, adminRoute, deleteEquipment);
 // Equipment status and maintenance (Admin/Staff)
 router.put("/status/:id", protect, updateEquipmentStatus);
 router.post("/maintenance/:id", protect, addMaintenanceLog);
+router.get("/maintenance", protect, getMaintenanceLogs);
 
 // Equipment usage tracking (Staff)
 router.post("/checkout/:id", protect, checkOutEquipment);

@@ -31,7 +31,10 @@ import {
   Star,
   Award,
   TrendingUp,
+  Wrench,
 } from "lucide-react";
+import { userAPI } from "../services/api";
+import { Badge } from "@/components/ui/badge";
 
 // Register Chart.js components
 ChartJS.register(
@@ -772,10 +775,91 @@ const mockTopPerformers = [
 
 const AdminDashboard = () => {
   const [timeRange, setTimeRange] = useState("month");
+  const [maintenanceAlerts, setMaintenanceAlerts] = useState<any[]>([]);
+  const [isLoadingAlerts, setIsLoadingAlerts] = useState(true);
+  const [equipmentStats, setEquipmentStats] = useState<any>(null);
   const [selectedChart, setSelectedChart] = useState("revenue");
   const [chartsLoaded, setChartsLoaded] = useState(false);
 
-  // Initialize charts when component mounts
+  // Fetch maintenance alerts and equipment stats
+  const fetchMaintenanceAlerts = async () => {
+    try {
+      setIsLoadingAlerts(true);
+      const response = await userAPI.getEquipmentStats();
+      const data = response.data as any;
+      
+      setEquipmentStats(data.stats);
+      
+      // Create maintenance alerts from real data
+      const alerts = [];
+      
+      // Add maintenance due alerts
+      if (data.maintenanceDue && data.maintenanceDue.length > 0) {
+        alerts.push({
+          id: 1,
+          type: "warning",
+          title: "Equipment Maintenance Due",
+          message: `${data.maintenanceDue.length} equipment items require scheduled maintenance`,
+          time: "Recently",
+          priority: "medium",
+          icon: AlertTriangle,
+        });
+      }
+      
+      // Add equipment status alerts
+      if (data.stats) {
+        if (data.stats.maintenance > 0) {
+          alerts.push({
+            id: 2,
+            type: "warning",
+            title: "Equipment Under Maintenance",
+            message: `${data.stats.maintenance} equipment items are currently under maintenance`,
+            time: "Currently",
+            priority: "medium",
+            icon: Wrench,
+          });
+        }
+        
+        if (data.stats.outOfService > 0) {
+          alerts.push({
+            id: 3,
+            type: "error",
+            title: "Equipment Out of Service",
+            message: `${data.stats.outOfService} equipment items are out of service`,
+            time: "Currently",
+            priority: "high",
+            icon: XCircle,
+          });
+        }
+      }
+      
+      // Add default info alert if no maintenance issues
+      if (alerts.length === 0) {
+        alerts.push({
+          id: 4,
+          type: "info",
+          title: "Equipment Status",
+          message: "All equipment is operational and up to date",
+          time: "Currently",
+          priority: "low",
+          icon: CheckCircle,
+        });
+      }
+      
+      setMaintenanceAlerts(alerts);
+    } catch (error) {
+      console.error("Error fetching maintenance alerts:", error);
+      // Fallback to mock data if API fails
+      setMaintenanceAlerts(mockSystemAlerts);
+    } finally {
+      setIsLoadingAlerts(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMaintenanceAlerts();
+  }, []);
+
   useEffect(() => {
     setChartsLoaded(true);
   }, []);
@@ -895,15 +979,26 @@ const AdminDashboard = () => {
                     Equipment
                   </p>
                   <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
-                    {mockAdminStats.equipmentCount}
+                    {equipmentStats ? equipmentStats.total : mockAdminStats.equipmentCount}
                   </p>
                   <div className="flex items-center gap-2 mt-2">
                     <div className="flex items-center gap-1 text-purple-600">
                       <CheckCircle className="w-4 h-4" />
-                      <span className="text-sm font-medium">98%</span>
+                      <span className="text-sm font-medium">
+                        {equipmentStats ? Math.round((equipmentStats.operational / equipmentStats.total) * 100) : 98}%
+                      </span>
                     </div>
                     <span className="text-sm text-slate-500">operational</span>
                   </div>
+                  {equipmentStats && equipmentStats.maintenance > 0 && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="flex items-center gap-1 text-yellow-600">
+                        <Wrench className="w-4 h-4" />
+                        <span className="text-sm font-medium">{equipmentStats.maintenance}</span>
+                      </div>
+                      <span className="text-sm text-slate-500">in maintenance</span>
+                    </div>
+                  )}
                 </div>
                 <div className="p-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg">
                   <Dumbbell className="w-8 h-8 text-white" />
@@ -2130,6 +2225,92 @@ const AdminDashboard = () => {
               </div>
             </div>
 
+            {/* Maintenance Overview */}
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 dark:bg-slate-800 dark:border-slate-700 overflow-hidden">
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                    Maintenance Overview
+                  </h3>
+                  <Link
+                    to="/equipments/dashboard"
+                    className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              </div>
+              <div className="p-6">
+                {equipmentStats ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-white">Operational</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {equipmentStats.operational} equipment items
+                          </p>
+                        </div>
+                      </div>
+                      <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        {Math.round((equipmentStats.operational / equipmentStats.total) * 100)}%
+                      </Badge>
+                    </div>
+
+                    {equipmentStats.maintenance > 0 && (
+                      <div className="flex items-center justify-between p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                        <div className="flex items-center gap-3">
+                          <Wrench className="w-5 h-5 text-yellow-600" />
+                          <div>
+                            <p className="font-medium text-gray-900 dark:text-white">Under Maintenance</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              {equipmentStats.maintenance} equipment items
+                            </p>
+                          </div>
+                        </div>
+                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                          {Math.round((equipmentStats.maintenance / equipmentStats.total) * 100)}%
+                        </Badge>
+                      </div>
+                    )}
+
+                    {equipmentStats.outOfService > 0 && (
+                      <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                        <div className="flex items-center gap-3">
+                          <XCircle className="w-5 h-5 text-red-600" />
+                          <div>
+                            <p className="font-medium text-gray-900 dark:text-white">Out of Service</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              {equipmentStats.outOfService} equipment items
+                            </p>
+                          </div>
+                        </div>
+                        <Badge variant="secondary" className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                          {Math.round((equipmentStats.outOfService / equipmentStats.total) * 100)}%
+                        </Badge>
+                      </div>
+                    )}
+
+                    <div className="pt-2 text-center">
+                      <Link
+                        to="/equipments/manage"
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 dark:text-indigo-400 dark:bg-indigo-900/20 dark:hover:bg-indigo-800/30 transition-colors"
+                      >
+                        <Wrench className="w-4 h-4" />
+                        Manage Maintenance
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    <Wrench className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+                    <p>Loading maintenance data...</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* System Alerts */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 dark:bg-slate-800 dark:border-slate-700 overflow-hidden">
               <div className="p-6 border-b border-slate-100 dark:border-slate-700">
@@ -2138,13 +2319,13 @@ const AdminDashboard = () => {
                     System Alerts
                   </h3>
                   <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400 rounded-full">
-                    {mockSystemAlerts.length} Active
+                    {maintenanceAlerts.length} Active
                   </span>
                 </div>
               </div>
               <div className="p-6">
                 <div className="space-y-4">
-                  {mockSystemAlerts.map((alert) => (
+                  {maintenanceAlerts.map((alert) => (
                     <div
                       key={alert.id}
                       className={`p-4 rounded-xl border-l-4 ${

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -58,6 +58,7 @@ import {
   Filter,
   RefreshCw,
   X,
+  BarChart3,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -73,6 +74,9 @@ const GetAll = () => {
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
     null
   );
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
+  const [autoRefresh, setAutoRefresh] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     type: "",
@@ -96,6 +100,44 @@ const GetAll = () => {
     cost: 0,
     maintenance: false,
   });
+
+  // Enhanced refresh function
+  const handleRefresh = async () => {
+    try {
+      setIsRefreshing(true);
+      await refetch();
+      setLastRefreshed(new Date());
+      toast.success("Equipment data refreshed successfully!");
+    } catch (error) {
+      toast.error("Failed to refresh equipment data");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  // Auto-refresh effect
+  React.useEffect(() => {
+    if (!autoRefresh) return;
+
+    const interval = setInterval(() => {
+      handleRefresh();
+    }, 30000); // Refresh every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [autoRefresh]);
+
+  // Keyboard shortcut for refresh (Ctrl+R or F5)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey && event.key === "r") || event.key === "F5") {
+        event.preventDefault();
+        handleRefresh();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const categories = [
     "Cardio",
@@ -267,9 +309,15 @@ const GetAll = () => {
               Error Loading Equipment
             </h3>
             <p className="text-gray-600 mb-4">{error}</p>
-            <Button onClick={() => refetch()} className="w-full">
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Try Again
+            <Button
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              className="w-full"
+            >
+              <RefreshCw
+                className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+              />
+              {isRefreshing ? "Retrying..." : "Try Again"}
             </Button>
           </CardContent>
         </Card>
@@ -291,13 +339,38 @@ const GetAll = () => {
             </p>
           </div>
           <div className="flex gap-3">
+            <Link to="/equipments/dashboard">
+              <Button
+                variant="outline"
+                className="border-gray-300 hover:bg-gray-50"
+              >
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Equipment Dashboard
+              </Button>
+            </Link>
             <Button
-              onClick={() => refetch()}
+              onClick={handleRefresh}
+              disabled={isRefreshing}
               variant="outline"
               className="border-gray-300 hover:bg-gray-50"
+              title="Refresh equipment data (Ctrl+R or F5)"
             >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
+              <RefreshCw
+                className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+              />
+              {isRefreshing ? "Refreshing..." : "Refresh"}
+            </Button>
+            <Button
+              onClick={() => setAutoRefresh(!autoRefresh)}
+              variant={autoRefresh ? "default" : "outline"}
+              className={`${
+                autoRefresh
+                  ? "bg-green-600 hover:bg-green-700"
+                  : "border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              <Clock className="w-4 h-4 mr-2" />
+              {autoRefresh ? "Auto-Refresh ON" : "Auto-Refresh"}
             </Button>
             <Link to="/equipments/manage">
               <Button className="shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
@@ -305,6 +378,31 @@ const GetAll = () => {
                 Manage Equipment
               </Button>
             </Link>
+          </div>
+        </div>
+
+        {/* Last Updated Info */}
+        <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400">
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4" />
+            <span>Last updated: {lastRefreshed.toLocaleTimeString()}</span>
+            {autoRefresh && (
+              <Badge
+                variant="secondary"
+                className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+              >
+                Auto-refresh active
+              </Badge>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <span>Total items: {equipments?.length || 0}</span>
+            {isRefreshing && (
+              <div className="flex items-center gap-2 text-blue-600">
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                <span>Updating...</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -318,7 +416,14 @@ const GetAll = () => {
                     Total Equipment
                   </p>
                   <p className="text-2xl font-bold">
-                    {equipments?.length || 0}
+                    {isRefreshing ? (
+                      <div className="flex items-center gap-2">
+                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <span>Updating...</span>
+                      </div>
+                    ) : (
+                      equipments?.length || 0
+                    )}
                   </p>
                 </div>
                 <Dumbbell className="w-8 h-8 text-blue-200" />
@@ -334,8 +439,15 @@ const GetAll = () => {
                     Operational
                   </p>
                   <p className="text-2xl font-bold">
-                    {equipments?.filter((e) => e.status === "OPERATIONAL")
-                      .length || 0}
+                    {isRefreshing ? (
+                      <div className="flex items-center gap-2">
+                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <span>Updating...</span>
+                      </div>
+                    ) : (
+                      equipments?.filter((e) => e.status === "OPERATIONAL")
+                        .length || 0
+                    )}
                   </p>
                 </div>
                 <CheckCircle className="w-8 h-8 text-green-200" />
@@ -351,8 +463,15 @@ const GetAll = () => {
                     In Maintenance
                   </p>
                   <p className="text-2xl font-bold">
-                    {equipments?.filter((e) => e.status === "MAINTENANCE")
-                      .length || 0}
+                    {isRefreshing ? (
+                      <div className="flex items-center gap-2">
+                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <span>Updating...</span>
+                      </div>
+                    ) : (
+                      equipments?.filter((e) => e.status === "MAINTENANCE")
+                        .length || 0
+                    )}
                   </p>
                 </div>
                 <Wrench className="w-8 h-8 text-yellow-200" />
@@ -368,10 +487,18 @@ const GetAll = () => {
                     Total Value
                   </p>
                   <p className="text-2xl font-bold">
-                    $
-                    {equipments
-                      ?.reduce((sum, e) => sum + (e.cost || 0), 0)
-                      .toLocaleString() || 0}
+                    {isRefreshing ? (
+                      <div className="flex items-center gap-2">
+                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <span>Updating...</span>
+                      </div>
+                    ) : (
+                      `$${
+                        equipments
+                          ?.reduce((sum, e) => sum + (e.cost || 0), 0)
+                          .toLocaleString() || 0
+                      }`
+                    )}
                   </p>
                 </div>
                 <div className="flex items-center justify-center w-8 h-8 bg-purple-200 rounded-full">
@@ -428,6 +555,20 @@ const GetAll = () => {
                   <SelectItem value="RETIRED">Retired</SelectItem>
                 </SelectContent>
               </Select>
+              <Button
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                variant="outline"
+                size="sm"
+                className="border-gray-300 hover:bg-gray-50"
+              >
+                <RefreshCw
+                  className={`w-4 h-4 mr-2 ${
+                    isRefreshing ? "animate-spin" : ""
+                  }`}
+                />
+                {isRefreshing ? "Refreshing..." : "Refresh"}
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -435,12 +576,30 @@ const GetAll = () => {
         {/* Equipment Table */}
         <Card className="overflow-hidden bg-white border-0 shadow-lg dark:bg-gray-800">
           <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-700">
-            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
-              Equipment List
-            </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400">
-              {filteredEquipments.length} equipment items found
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Equipment List
+                </CardTitle>
+                <CardDescription className="text-gray-600 dark:text-gray-400">
+                  {filteredEquipments.length} equipment items found
+                </CardDescription>
+              </div>
+              <Button
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                variant="outline"
+                size="sm"
+                className="border-gray-300 hover:bg-gray-50"
+              >
+                <RefreshCw
+                  className={`w-4 h-4 mr-2 ${
+                    isRefreshing ? "animate-spin" : ""
+                  }`}
+                />
+                {isRefreshing ? "Refreshing..." : "Refresh"}
+              </Button>
+            </div>
           </CardHeader>
           <div className="overflow-x-auto">
             <Table>
@@ -668,16 +827,31 @@ const GetAll = () => {
                   ? "Try adjusting your filters or search terms to find what you're looking for."
                   : "No equipment has been added to your inventory yet."}
               </p>
-              {!searchTerm &&
-                categoryFilter === "all" &&
-                statusFilter === "all" && (
-                  <Link to="/equipments/manage">
-                    <Button className="px-6 py-3 text-lg font-semibold text-white transition-all duration-300 shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:shadow-xl">
-                      <Plus className="w-5 h-5 mr-2" />
-                      Add Equipment
-                    </Button>
-                  </Link>
-                )}
+              <div className="flex items-center justify-center gap-3">
+                <Button
+                  onClick={handleRefresh}
+                  disabled={isRefreshing}
+                  variant="outline"
+                  className="px-6 py-3 text-lg font-semibold border-gray-300 hover:bg-gray-50"
+                >
+                  <RefreshCw
+                    className={`w-5 h-5 mr-2 ${
+                      isRefreshing ? "animate-spin" : ""
+                    }`}
+                  />
+                  {isRefreshing ? "Refreshing..." : "Refresh Data"}
+                </Button>
+                {!searchTerm &&
+                  categoryFilter === "all" &&
+                  statusFilter === "all" && (
+                    <Link to="/equipments/manage">
+                      <Button className="px-6 py-3 text-lg font-semibold text-white transition-all duration-300 shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:shadow-xl">
+                        <Plus className="w-5 h-5 mr-2" />
+                        Add Equipment
+                      </Button>
+                    </Link>
+                  )}
+              </div>
             </CardContent>
           </Card>
         )}

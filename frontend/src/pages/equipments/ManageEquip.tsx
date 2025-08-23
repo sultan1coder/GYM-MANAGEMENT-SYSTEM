@@ -67,6 +67,7 @@ import {
   Package,
   Activity,
   X,
+  BarChart3,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { userAPI } from "@/services/api";
@@ -639,16 +640,25 @@ const EquipmentManager: React.FC = () => {
                 </div>
               )}
           </div>
-          <div className="flex gap-3">
-            <Link to="/equipments/all">
-              <Button
-                variant="outline"
-                className="border-gray-300 hover:bg-gray-50 shadow-md"
-              >
-                <Eye className="w-4 h-4 mr-2" />
-                View All Equipment
-              </Button>
-            </Link>
+                      <div className="flex gap-3">
+              <Link to="/equipments/dashboard">
+                <Button
+                  variant="outline"
+                  className="border-gray-300 hover:bg-gray-50 shadow-md"
+                >
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Equipment Dashboard
+                </Button>
+              </Link>
+              <Link to="/equipments/all">
+                <Button
+                  variant="outline"
+                  className="border-gray-300 hover:bg-gray-50 shadow-md"
+                >
+                  <Eye className="w-4 h-4 mr-2" />
+                  View All Equipment
+                </Button>
+              </Link>
             <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
               <DialogTrigger asChild>
                 <Button className="shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">

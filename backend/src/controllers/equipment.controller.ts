@@ -465,6 +465,43 @@ export const getEquipmentStats = async (req: Request, res: Response) => {
       _sum: { cost: true },
     });
 
+    // Get maintenance due equipment
+    const maintenanceDueEquipment = await prisma.equipment.findMany({
+      where: {
+        nextMaintenance: {
+          lte: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Next 30 days
+        },
+        status: "OPERATIONAL",
+      },
+      select: {
+        id: true,
+        name: true,
+        category: true,
+        nextMaintenance: true,
+        status: true,
+      },
+      orderBy: {
+        nextMaintenance: 'asc',
+      },
+    });
+
+    // Get recent maintenance logs
+    const recentMaintenanceLogs = await prisma.maintenanceLog.findMany({
+      take: 10,
+      orderBy: {
+        performedAt: 'desc',
+      },
+      include: {
+        equipment: {
+          select: {
+            id: true,
+            name: true,
+            category: true,
+          },
+        },
+      },
+    });
+
     res.status(200).json({
       isSuccess: true,
       message: "Equipment statistics retrieved successfully",
@@ -475,11 +512,75 @@ export const getEquipmentStats = async (req: Request, res: Response) => {
         outOfService: outOfServiceEquipment,
         categories: categoryStats,
         totalValue: totalValue._sum.cost || 0,
+        maintenanceDue: maintenanceDueEquipment.length,
+        recentMaintenance: recentMaintenanceLogs.length,
       },
+      maintenanceDue: maintenanceDueEquipment,
+      recentMaintenance: recentMaintenanceLogs,
     });
     return;
   } catch (error) {
     console.error("Error getting equipment stats:", error);
+    res.status(500).json({
+      isSuccess: false,
+      message: "Server error!",
+    });
+    return;
+  }
+};
+
+// Get all maintenance logs
+export const getMaintenanceLogs = async (req: Request, res: Response) => {
+  try {
+    const { page = 1, limit = 20, equipmentId, type } = req.query;
+    const skip = (Number(page) - 1) * Number(limit);
+
+    const whereClause: any = {};
+    
+    if (equipmentId) {
+      whereClause.equipmentId = equipmentId as string;
+    }
+    
+    if (type) {
+      whereClause.type = type;
+    }
+
+    const [maintenanceLogs, total] = await Promise.all([
+      prisma.maintenanceLog.findMany({
+        where: whereClause,
+        skip,
+        take: Number(limit),
+        orderBy: {
+          performedAt: 'desc',
+        },
+        include: {
+          equipment: {
+            select: {
+              id: true,
+              name: true,
+              category: true,
+              status: true,
+            },
+          },
+        },
+      }),
+      prisma.maintenanceLog.count({ where: whereClause }),
+    ]);
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "Maintenance logs retrieved successfully",
+      data: maintenanceLogs,
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total,
+        pages: Math.ceil(total / Number(limit)),
+      },
+    });
+    return;
+  } catch (error) {
+    console.error("Error getting maintenance logs:", error);
     res.status(500).json({
       isSuccess: false,
       message: "Server error!",

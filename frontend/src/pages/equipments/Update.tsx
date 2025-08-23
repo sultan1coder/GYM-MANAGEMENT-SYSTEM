@@ -25,6 +25,7 @@ import {
   Plus,
   Edit,
   RefreshCw,
+  BarChart3,
 } from "lucide-react";
 import {
   Card,
@@ -421,6 +422,14 @@ const UpdateEquipment = () => {
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Equipment List
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => navigate("/equipments/dashboard")}
+              className="border-blue-300 hover:bg-blue-50"
+            >
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Equipment Dashboard
             </Button>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">

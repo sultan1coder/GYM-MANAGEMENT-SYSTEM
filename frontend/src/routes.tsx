@@ -16,6 +16,7 @@ import FetchAllUsers from "./pages/users/FetchAllUsers";
 import EquipmentManager from "./pages/equipments/ManageEquip";
 import GetSingle from "./pages/equipments/GetSingle";
 import GetAll from "./pages/equipments/GetAll";
+import EquipmentDashboard from "./pages/equipments/EquipmentDashboard";
 import SingleUser from "./pages/users/GetSingle";
 import ProfileSettings from "./pages/ProfileSettings";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -98,6 +99,14 @@ export const router = createBrowserRouter([
       {
         path: "equipments",
         children: [
+          {
+            path: "dashboard",
+            element: (
+              <ProtectedRoute requireStaff>
+                <EquipmentDashboard />
+              </ProtectedRoute>
+            ),
+          },
           {
             path: "manage",
             element: (

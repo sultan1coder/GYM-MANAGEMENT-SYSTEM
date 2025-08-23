@@ -60,6 +60,7 @@ import {
   FileText,
   Activity,
   X,
+  BarChart3,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
@@ -288,6 +289,12 @@ function GetSingle() {
               <Button variant="outline" size="sm">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Equipment List
+              </Button>
+            </Link>
+            <Link to="/equipments/dashboard">
+              <Button variant="outline" size="sm">
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Equipment Dashboard
               </Button>
             </Link>
             <div>
