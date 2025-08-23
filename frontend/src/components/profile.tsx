@@ -1,55 +1,161 @@
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { AppDispatch, RootState } from "@/redux/store";
-import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import { logout } from "@/redux/slices/auth/loginSlice";
+import { logout as logoutMember } from "@/redux/slices/members/loginSlice";
+import { Settings, Camera, LogOut, User } from "lucide-react";
+import ProfileManager from "./ProfileManager";
+import { isAdmin, isStaff, isMember } from "@/utils/auth";
 
 const Profile = () => {
+  const [showProfileManager, setShowProfileManager] = useState(false);
+  const [userType, setUserType] = useState<"staff" | "member">("staff");
+  const navigate = useNavigate();
+  
   const loginState = useSelector((state: RootState) => state.loginSlice);
+  const memberLoginState = useSelector((state: RootState) => state.loginMemberSlice);
   const dispatch = useDispatch<AppDispatch>();
 
+  // Determine which user type is logged in
+  const isStaffUser = isStaff() || isAdmin();
+  const isMemberUser = isMember();
+  
+  // Get the appropriate user data
+  const user = isStaffUser ? loginState.data.user : memberLoginState.data.member;
+  const isLoggedIn = isStaffUser ? loginState.data.isSuccess : memberLoginState.data.isSuccess;
+
   const logoutHandler = () => {
-    dispatch(logout());
+    if (isStaffUser) {
+      dispatch(logout());
+    } else {
+      dispatch(logoutMember());
+    }
   };
 
+  const openProfileManager = (type: "staff" | "member") => {
+    setUserType(type);
+    setShowProfileManager(true);
+  };
+
+  const navigateToProfileSettings = () => {
+    navigate("/profile");
+  };
+
+  if (!isLoggedIn || !user) {
+    return null;
+  }
+
   return (
-    <Popover>
-      <PopoverTrigger>
-        <div className="border w-[42px] h-[42px] flex items-center justify-center rounded-full">
-          <h1 className="text-2xl font-bold">
-            {loginState.data.user.name[0].toUpperCase()}
-          </h1>
-        </div>
-      </PopoverTrigger>
-      <PopoverContent>
-        <div className="flex items-center gap-4">
-          <div className="border w-[42px] h-[42px] flex items-center justify-center rounded-full">
-            <h1 className="text-2xl font-bold">
-              {loginState.data.user.name[0].toUpperCase()}
-            </h1>
+    <>
+      <Popover>
+        <PopoverTrigger>
+          <div className="relative group cursor-pointer">
+            {user.profile_picture ? (
+              <img
+                src={user.profile_picture}
+                alt="Profile"
+                className="w-[42px] h-[42px] rounded-full object-cover border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+              />
+            ) : (
+              <div className="w-[42px] h-[42px] flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
+                {user.name?.[0]?.toUpperCase() || <User className="h-5 w-5" />}
+              </div>
+            )}
+            
+            {/* Camera icon overlay on hover */}
+            <div className="absolute inset-0 bg-black/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <Camera className="h-4 w-4 text-white" />
+            </div>
           </div>
-          <div className="gap-6">
-            <h1 className="text-xl font-bold">{loginState.data.user.name}</h1>
-            <p className="text-sm text-gray-600">
-              {loginState.data.user.email}
-            </p>
+        </PopoverTrigger>
+        
+        <PopoverContent className="w-80 p-0">
+          <div className="p-4">
+            {/* User Info */}
+            <div className="flex items-center gap-4 mb-4">
+              {user.profile_picture ? (
+                <img
+                  src={user.profile_picture}
+                  alt="Profile"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-slate-200 dark:border-slate-600"
+                />
+              ) : (
+                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xl font-bold border-2 border-slate-200 dark:border-slate-600">
+                  {user.name?.[0]?.toUpperCase() || <User className="h-6 w-6" />}
+                </div>
+              )}
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                  {user.name}
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  {user.email}
+                </p>
+                {isStaffUser && (
+                  <p className="text-xs text-slate-500 dark:text-slate-500 capitalize">
+                    {isStaffUser && 'role' in user ? user.role : ""}
+                  </p>
+                )}
+                {isMemberUser && (
+                  <p className="text-xs text-slate-500 dark:text-slate-500">
+                    Member
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="space-y-2">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => openProfileManager(userType)}
+              >
+                <Camera className="h-4 w-4 mr-2" />
+                Change Profile Picture
+              </Button>
+              
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={navigateToProfileSettings}
+              >
+                <Settings className="h-4 w-4 mr-2" />
+                Profile Settings
+              </Button>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-slate-200 dark:border-slate-700 my-4" />
+
+            {/* Logout */}
+            <Button
+              variant="destructive"
+              className="w-full justify-start"
+              onClick={logoutHandler}
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
           </div>
-        </div>
-        <div className="p-3 mt-4">
-          <Button
-            variant={"destructive"}
-            className="w-full"
-            onClick={logoutHandler}
-          >
-            Logout
-          </Button>
-        </div>
-      </PopoverContent>
-    </Popover>
+        </PopoverContent>
+      </Popover>
+
+      {/* Profile Manager Modal */}
+      {showProfileManager && (
+        <ProfileManager
+          onClose={() => setShowProfileManager(false)}
+          userType={userType}
+        />
+      )}
+    </>
   );
 };
 

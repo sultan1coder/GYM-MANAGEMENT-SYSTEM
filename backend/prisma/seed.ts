@@ -28,6 +28,8 @@ async function main() {
         password: adminPassword,
         role: "admin",
         username: "admin",
+        profile_picture:
+          "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
         tokenVersion: 0,
       },
     });
@@ -37,6 +39,7 @@ async function main() {
     console.log(`   Email: ${admin.email}`);
     console.log(`   Role: ${admin.role}`);
     console.log(`   Username: ${admin.username}`);
+    console.log("   Profile Picture: ✅ Added");
     console.log("");
     console.log("🔑 Default Login Credentials:");
     console.log(`   Email: admin@gym.com`);
@@ -52,10 +55,10 @@ async function main() {
     console.log("You can manually create the admin user using this SQL:");
     console.log("");
     console.log(
-      `INSERT INTO "User" (name, email, password, role, username, created_at, updated_at) VALUES ('System Administrator', 'admin@gym.com', '${await bcrypt.hash(
+      `INSERT INTO "User" (name, email, password, role, username, profile_picture, created_at, updated_at) VALUES ('System Administrator', 'admin@gym.com', '${await bcrypt.hash(
         "admin123",
         10
-      )}', 'admin', 'admin', NOW(), NOW());`
+      )}', 'admin', 'admin', 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face', NOW(), NOW());`
     );
   }
 }

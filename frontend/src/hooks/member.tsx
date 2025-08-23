@@ -52,7 +52,13 @@ export const useMemberRemove = () => {
       if (!res.deleteMember) {
         throw new Error("Member Not Found");
       }
-      setMember(res.deleteMember);
+      // Convert DeleteMember to Member type by ensuring membershiptype is correct
+      const memberData: Member = {
+        ...res.deleteMember,
+        membershiptype: res.deleteMember.membershiptype as "MONTHLY" | "DAILY",
+        phone_number: res.deleteMember.phone_number || null
+      };
+      setMember(memberData);
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message);

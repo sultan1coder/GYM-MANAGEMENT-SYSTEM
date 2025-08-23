@@ -21,6 +21,7 @@ model User {
   phone_number    String?
   password        String
   role            String   @default("staff") // "admin" or "staff"
+  profile_picture String?  // URL to profile picture
   tokenVersion    Int      @default(0) // For refresh token invalidation
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
@@ -35,6 +36,7 @@ model Member {
   phone_number    String?
   password        String
   age            Int
+  profile_picture String?       // URL to profile picture
   membershiptype MemberShipType
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt

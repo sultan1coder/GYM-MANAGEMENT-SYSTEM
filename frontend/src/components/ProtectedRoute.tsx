@@ -2,8 +2,6 @@ import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import {
   isAuthenticated,
-  isAdmin,
-  isStaff,
   canAccessAdminRoutes,
   canAccessStaffRoutes,
 } from "../utils/auth";

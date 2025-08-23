@@ -11,6 +11,7 @@ export interface Member {
   phone_number: string | null;
   password: string;
   age: number;
+  profile_picture?: string | null;
   membershiptype: "MONTHLY" | "DAILY";
   createdAt: Date;
   updatedAt: Date;

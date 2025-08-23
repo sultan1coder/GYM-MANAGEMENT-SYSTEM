@@ -250,3 +250,53 @@ export const deleteMember = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateMemberProfilePicture = async (req: Request, res: Response) => {
+  try {
+    const memberId = req.params.id;
+    const { profile_picture } = req.body;
+
+    if (!profile_picture) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Profile picture URL is required!",
+      });
+      return;
+    }
+
+    const member = await prisma.member.findFirst({
+      where: {
+        id: memberId,
+      },
+    });
+
+    if (!member) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "Member not found!",
+      });
+      return;
+    }
+
+    const updatedMember = await prisma.member.update({
+      where: {
+        id: member.id,
+      },
+      data: {
+        profile_picture,
+      },
+    });
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "Profile picture successfully updated",
+      member: updatedMember,
+    });
+  } catch (error) {
+    console.log("Error: " + error);
+    res.status(500).json({
+      isSuccess: false,
+      message: "Server error!",
+    });
+  }
+};

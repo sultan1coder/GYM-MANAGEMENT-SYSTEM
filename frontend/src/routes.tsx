@@ -17,6 +17,7 @@ import EquipmentManager from "./pages/equipments/ManageEquip";
 import GetSingle from "./pages/equipments/GetSingle";
 import GetAll from "./pages/equipments/GetAll";
 import SingleUser from "./pages/users/GetSingle";
+import ProfileSettings from "./pages/ProfileSettings";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export const router = createBrowserRouter([
@@ -143,6 +144,14 @@ export const router = createBrowserRouter([
             ),
           },
         ],
+      },
+      {
+        path: "/profile",
+        element: (
+          <ProtectedRoute>
+            <ProfileSettings />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "*",

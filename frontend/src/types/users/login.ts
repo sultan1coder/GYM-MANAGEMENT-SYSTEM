@@ -12,6 +12,7 @@ export interface User {
   phone_number: string | null;
   password: string;
   role: string;
+  profile_picture?: string | null;
   created_at: Date;
   updated_at: Date;
   resetToken?: string | null;

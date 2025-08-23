@@ -52,6 +52,11 @@ export const userAPI = {
   updateUser: (id: number, data: Partial<User>) =>
     api.put<ApiResponse<User>>(`${BASE_API_URL}/users/update/${id}`, data),
 
+  updateProfilePicture: (id: number, profilePictureUrl: string) =>
+    api.put<ApiResponse<User>>(`${BASE_API_URL}/users/profile-picture/${id}`, {
+      profile_picture: profilePictureUrl,
+    }),
+
   deleteUser: (id: number) =>
     api.delete<ApiResponse<User>>(`${BASE_API_URL}/users/delete/${id}`),
 };
@@ -74,6 +79,11 @@ export const memberAPI = {
 
   updateMember: (id: string, data: Partial<Member>) =>
     api.put<ApiResponse<Member>>(`${BASE_API_URL}/members/update/${id}`, data),
+
+  updateProfilePicture: (id: string, profilePictureUrl: string) =>
+    api.put<ApiResponse<Member>>(`${BASE_API_URL}/members/profile-picture/${id}`, {
+      profile_picture: profilePictureUrl,
+    }),
 
   deleteMember: (id: string) =>
     api.delete<ApiResponse<Member>>(`${BASE_API_URL}/members/delete/${id}`),

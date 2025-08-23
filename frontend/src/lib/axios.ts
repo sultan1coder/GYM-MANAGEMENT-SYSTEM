@@ -1,5 +1,6 @@
 import axios from "axios";
 import { authAPI } from "@/services/api";
+import { LoginResponse } from "@/types";
 
 const api = axios.create({
   baseURL: "http://localhost:4000/api",
@@ -33,14 +34,17 @@ api.interceptors.response.use(
       try {
         // Try to refresh the token
         const response = await authAPI.refreshToken();
-        
-        if (response.data.isSuccess) {
+        const responseData = response.data as LoginResponse;
+
+        if (responseData.isSuccess && responseData.token) {
           // Update the token in localStorage
-          localStorage.setItem("token", response.data.accessToken);
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-          
+          localStorage.setItem("token", responseData.token);
+          if (responseData.user) {
+            localStorage.setItem("user", JSON.stringify(responseData.user));
+          }
+
           // Retry the original request with new token
-          originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
+          originalRequest.headers.Authorization = `Bearer ${responseData.token}`;
           return api(originalRequest);
         }
       } catch (refreshError) {
