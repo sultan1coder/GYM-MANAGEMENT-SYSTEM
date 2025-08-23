@@ -20,7 +20,7 @@ import {
   Shield,
   Users,
 } from "lucide-react";
-// import ProfileManager from "../components/ProfileManager";
+import ProfileManager from "../components/ProfileManager";
 import { isAdmin, isStaff, isMember } from "../utils/auth";
 import { toast } from "react-hot-toast";
 
@@ -113,14 +113,14 @@ const ProfileSettings = () => {
                   )}
                 </div>
 
-                {/* <Button
+                <Button
                   onClick={() => openProfileManager(userType)}
                   variant="outline"
                   className="w-full"
                 >
                   <Camera className="w-4 h-4 mr-2" />
                   Change Picture
-                </Button> */}
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -308,12 +308,12 @@ const ProfileSettings = () => {
       </div>
 
       {/* Profile Manager Modal */}
-      {/* {showProfileManager && (
+      {showProfileManager && (
         <ProfileManager
           onClose={() => setShowProfileManager(false)}
           userType={userType}
         />
-      )} */}
+      )}
     </div>
   );
 };
