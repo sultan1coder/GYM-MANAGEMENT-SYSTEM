@@ -30,6 +30,22 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   Plus,
   Search,
   Edit,
@@ -43,10 +59,18 @@ import {
   Calendar,
   Users,
   Dumbbell,
+  MoreVertical,
+  Eye,
+  Settings,
+  FileText,
+  DollarSign,
+  Package,
+  Activity,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { userAPI } from "@/services/api";
 import { Equipment } from "@/types";
+import { Link } from "react-router-dom";
 
 const EquipmentManager: React.FC = () => {
   const [equipmentList, setEquipmentList] = useState<Equipment[]>([]);
@@ -132,11 +156,267 @@ const EquipmentManager: React.FC = () => {
       setLoading(true);
       const response = await userAPI.getEquipment();
       if (response.data.isSuccess) {
-        setEquipmentList(response.data.data || []);
+        const data = response.data.data || [];
+        if (data.length === 0) {
+          // If no equipment in database, show sample data for demonstration
+          setEquipmentList([
+            {
+              id: "demo-1",
+              name: "Commercial Treadmill",
+              type: "Treadmill",
+              category: "Cardio",
+              brand: "Life Fitness",
+              model: "95T Discover SE",
+              serialNumber: "LF-2024-001",
+              quantity: 3,
+              available: 2,
+              inUse: 1,
+              status: "OPERATIONAL",
+              location: "Cardio Room A",
+              description:
+                "High-end commercial treadmill with touchscreen display",
+              imageUrl: "",
+              purchaseDate: "2024-01-15",
+              warrantyExpiry: "2027-01-15",
+              cost: 8500,
+              maintenance: false,
+              lastMaintenance: undefined,
+              nextMaintenance: undefined,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            {
+              id: "demo-2",
+              name: "Elliptical Machine",
+              type: "Elliptical",
+              category: "Cardio",
+              brand: "Precor",
+              model: "EFX 835",
+              serialNumber: "PC-2024-002",
+              quantity: 2,
+              available: 1,
+              inUse: 1,
+              status: "MAINTENANCE",
+              location: "Cardio Room B",
+              description: "Premium elliptical with adjustable stride length",
+              imageUrl: "",
+              purchaseDate: "2024-02-01",
+              warrantyExpiry: "2027-02-01",
+              cost: 6500,
+              maintenance: true,
+              lastMaintenance: new Date().toISOString(),
+              nextMaintenance: new Date(
+                Date.now() + 30 * 24 * 60 * 60 * 1000
+              ).toISOString(),
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            {
+              id: "demo-3",
+              name: "Weight Bench",
+              type: "Bench",
+              category: "Strength Training",
+              brand: "Rogue Fitness",
+              model: "Flat Utility Bench 2.0",
+              serialNumber: "RG-2024-003",
+              quantity: 5,
+              available: 4,
+              inUse: 1,
+              status: "OPERATIONAL",
+              location: "Weight Room",
+              description: "Heavy-duty weight bench for strength training",
+              imageUrl: "",
+              purchaseDate: "2024-01-20",
+              warrantyExpiry: "2026-01-20",
+              cost: 800,
+              maintenance: false,
+              lastMaintenance: undefined,
+              nextMaintenance: undefined,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            {
+              id: "demo-4",
+              name: "Cable Machine",
+              type: "Machine",
+              category: "Functional Training",
+              brand: "Cybex",
+              model: "Cable Column",
+              serialNumber: "CY-2024-004",
+              quantity: 2,
+              available: 0,
+              inUse: 2,
+              status: "OPERATIONAL",
+              location: "Functional Training Area",
+              description:
+                "Multi-functional cable machine for various exercises",
+              imageUrl: "",
+              purchaseDate: "2024-03-01",
+              warrantyExpiry: "2027-03-01",
+              cost: 12000,
+              maintenance: false,
+              lastMaintenance: undefined,
+              nextMaintenance: undefined,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            {
+              id: "demo-5",
+              name: "Recovery Station",
+              type: "Recovery",
+              category: "Recovery",
+              brand: "NormaTec",
+              model: "Recovery Pro",
+              serialNumber: "NM-2024-005",
+              quantity: 1,
+              available: 1,
+              inUse: 0,
+              status: "OUT_OF_SERVICE",
+              location: "Recovery Room",
+              description: "Advanced recovery system for muscle therapy",
+              imageUrl: "",
+              purchaseDate: "2024-01-10",
+              warrantyExpiry: "2026-01-10",
+              cost: 15000,
+              maintenance: false,
+              lastMaintenance: undefined,
+              nextMaintenance: undefined,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          ]);
+        } else {
+          setEquipmentList(data);
+        }
       }
     } catch (error) {
       console.error("Error fetching equipment:", error);
       toast.error("Failed to fetch equipment");
+      // Add sample data for demonstration when API fails
+      setEquipmentList([
+        {
+          id: "demo-1",
+          name: "Commercial Treadmill",
+          type: "Treadmill",
+          category: "Cardio",
+          brand: "Life Fitness",
+          model: "95T Discover SE",
+          serialNumber: "LF-2024-001",
+          quantity: 3,
+          available: 2,
+          inUse: 1,
+          status: "OPERATIONAL",
+          location: "Cardio Room A",
+          description: "High-end commercial treadmill with touchscreen display",
+          imageUrl: "",
+          purchaseDate: "2024-01-15",
+          warrantyExpiry: "2027-01-15",
+          cost: 8500,
+          maintenance: false,
+          lastMaintenance: undefined,
+          nextMaintenance: undefined,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "demo-2",
+          name: "Elliptical Machine",
+          type: "Elliptical",
+          category: "Cardio",
+          brand: "Precor",
+          model: "EFX 835",
+          serialNumber: "PC-2024-002",
+          quantity: 2,
+          available: 1,
+          inUse: 1,
+          status: "MAINTENANCE",
+          location: "Cardio Room B",
+          description: "Premium elliptical with adjustable stride length",
+          imageUrl: "",
+          purchaseDate: "2024-02-01",
+          warrantyExpiry: "2027-02-01",
+          cost: 6500,
+          maintenance: true,
+          lastMaintenance: new Date().toISOString(),
+          nextMaintenance: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "demo-3",
+          name: "Weight Bench",
+          type: "Bench",
+          category: "Strength Training",
+          brand: "Rogue Fitness",
+          model: "Flat Utility Bench 2.0",
+          serialNumber: "RG-2024-003",
+          quantity: 5,
+          available: 4,
+          inUse: 1,
+          status: "OPERATIONAL",
+          location: "Weight Room",
+          description: "Heavy-duty weight bench for strength training",
+          imageUrl: "",
+          purchaseDate: "2024-01-20",
+          warrantyExpiry: "2026-01-20",
+          cost: 800,
+          maintenance: false,
+          lastMaintenance: undefined,
+          nextMaintenance: undefined,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "demo-4",
+          name: "Cable Machine",
+          type: "Machine",
+          category: "Functional Training",
+          brand: "Cybex",
+          model: "Cable Column",
+          serialNumber: "CY-2024-004",
+          quantity: 2,
+          available: 0,
+          inUse: 2,
+          status: "OPERATIONAL",
+          location: "Functional Training Area",
+          description: "Multi-functional cable machine for various exercises",
+          imageUrl: "",
+          purchaseDate: "2024-03-01",
+          warrantyExpiry: "2027-03-01",
+          cost: 12000,
+          maintenance: false,
+          lastMaintenance: undefined,
+          nextMaintenance: undefined,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "demo-5",
+          name: "Recovery Station",
+          type: "Recovery",
+          category: "Recovery",
+          brand: "NormaTec",
+          model: "Recovery Pro",
+          serialNumber: "NM-2024-005",
+          quantity: 1,
+          available: 1,
+          inUse: 0,
+          status: "OUT_OF_SERVICE",
+          location: "Recovery Room",
+          description: "Advanced recovery system for muscle therapy",
+          imageUrl: "",
+          purchaseDate: "2024-01-10",
+          warrantyExpiry: "2026-01-10",
+          cost: 15000,
+          maintenance: false,
+          lastMaintenance: undefined,
+          nextMaintenance: undefined,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -284,30 +564,30 @@ const EquipmentManager: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "OPERATIONAL":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-800";
       case "MAINTENANCE":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800";
       case "OUT_OF_SERVICE":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 border-red-200 dark:border-red-800";
       case "RETIRED":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400 border-gray-200 dark:border-gray-800";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400 border-gray-200 dark:border-gray-800";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "OPERATIONAL":
-        return <CheckCircle className="h-4 w-4" />;
+        return <CheckCircle className="w-3 h-3" />;
       case "MAINTENANCE":
-        return <Wrench className="h-4 w-4" />;
+        return <Wrench className="w-3 h-3" />;
       case "OUT_OF_SERVICE":
-        return <XCircle className="h-4 w-4" />;
+        return <XCircle className="w-3 h-3" />;
       case "RETIRED":
-        return <Clock className="h-4 w-4" />;
+        return <Clock className="w-3 h-3" />;
       default:
-        return <AlertTriangle className="h-4 w-4" />;
+        return <AlertTriangle className="w-3 h-3" />;
     }
   };
 
@@ -331,247 +611,352 @@ const EquipmentManager: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        <div className="w-32 h-32 border-b-2 border-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <div className="mx-auto space-y-6 max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
               Equipment Management
             </h1>
-            <p className="text-slate-600 dark:text-slate-400 mt-2">
+            <p className="mt-2 text-slate-600 dark:text-slate-400">
               Manage gym equipment, track maintenance, and monitor usage
             </p>
+            {equipmentList.length > 0 &&
+              equipmentList[0]?.id?.startsWith("demo-") && (
+                <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                    📋 <strong>Demo Mode:</strong> Showing sample equipment
+                    data. Add your own equipment to see real data.
+                  </p>
+                </div>
+              )}
           </div>
-          <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-            <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Equipment
+          <div className="flex gap-3">
+            <Link to="/equipments/all">
+              <Button
+                variant="outline"
+                className="border-gray-300 hover:bg-gray-50 shadow-md"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                View All Equipment
               </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Add New Equipment</DialogTitle>
-                <DialogDescription>
-                  Enter the details for the new equipment item.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Equipment Name *</Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    placeholder="e.g., Treadmill Pro 2000"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="type">Equipment Type *</Label>
-                  <Select
-                    value={formData.type}
-                    onValueChange={(value: string) =>
-                      setFormData({ ...formData, type: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {equipmentTypes.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="category">Category *</Label>
-                  <Select
-                    value={formData.category}
-                    onValueChange={(value: string) =>
-                      setFormData({ ...formData, category: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="quantity">Quantity *</Label>
-                  <Input
-                    id="quantity"
-                    type="number"
-                    min="1"
-                    value={formData.quantity}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        quantity: parseInt(e.target.value) || 1,
-                        available: parseInt(e.target.value) || 1,
-                      })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="brand">Brand</Label>
-                  <Input
-                    id="brand"
-                    value={formData.brand}
-                    onChange={(e) =>
-                      setFormData({ ...formData, brand: e.target.value })
-                    }
-                    placeholder="e.g., Life Fitness"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="model">Model</Label>
-                  <Input
-                    id="model"
-                    value={formData.model}
-                    onChange={(e) =>
-                      setFormData({ ...formData, model: e.target.value })
-                    }
-                    placeholder="e.g., 95T"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="serialNumber">Serial Number</Label>
-                  <Input
-                    id="serialNumber"
-                    value={formData.serialNumber}
-                    onChange={(e) =>
-                      setFormData({ ...formData, serialNumber: e.target.value })
-                    }
-                    placeholder="e.g., LF-2024-001"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
-                  <Input
-                    id="location"
-                    value={formData.location}
-                    onChange={(e) =>
-                      setFormData({ ...formData, location: e.target.value })
-                    }
-                    placeholder="e.g., Cardio Room A"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="cost">Purchase Cost ($)</Label>
-                  <Input
-                    id="cost"
-                    type="number"
-                    step="0.01"
-                    value={formData.cost}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        cost: parseFloat(e.target.value) || 0,
-                      })
-                    }
-                    placeholder="0.00"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="purchaseDate">Purchase Date</Label>
-                  <Input
-                    id="purchaseDate"
-                    type="date"
-                    value={formData.purchaseDate}
-                    onChange={(e) =>
-                      setFormData({ ...formData, purchaseDate: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="warrantyExpiry">Warranty Expiry</Label>
-                  <Input
-                    id="warrantyExpiry"
-                    type="date"
-                    value={formData.warrantyExpiry}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        warrantyExpiry: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="col-span-2 space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) =>
-                      setFormData({ ...formData, description: e.target.value })
-                    }
-                    placeholder="Additional details about the equipment..."
-                    rows={3}
-                  />
-                </div>
-                <div className="col-span-2 space-y-2">
-                  <Label htmlFor="imageUrl">Image URL</Label>
-                  <Input
-                    id="imageUrl"
-                    value={formData.imageUrl}
-                    onChange={(e) =>
-                      setFormData({ ...formData, imageUrl: e.target.value })
-                    }
-                    placeholder="https://example.com/image.jpg"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowAddDialog(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleAddEquipment}
-                  disabled={
-                    !formData.name || !formData.type || !formData.category
-                  }
-                >
+            </Link>
+            <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+              <DialogTrigger asChild>
+                <Button className="shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                  <Plus className="w-4 h-4 mr-2" />
                   Add Equipment
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Add New Equipment</DialogTitle>
+                  <DialogDescription>
+                    Enter the details for the new equipment item.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Equipment Name *</Label>
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      placeholder="e.g., Treadmill Pro 2000"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="type">Equipment Type *</Label>
+                    <Select
+                      value={formData.type}
+                      onValueChange={(value: string) =>
+                        setFormData({ ...formData, type: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {equipmentTypes.map((type) => (
+                          <SelectItem key={type} value={type}>
+                            {type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="category">Category *</Label>
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value: string) =>
+                        setFormData({ ...formData, category: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="quantity">Quantity *</Label>
+                    <Input
+                      id="quantity"
+                      type="number"
+                      min="1"
+                      value={formData.quantity}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          quantity: parseInt(e.target.value) || 1,
+                          available: parseInt(e.target.value) || 1,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="brand">Brand</Label>
+                    <Input
+                      id="brand"
+                      value={formData.brand}
+                      onChange={(e) =>
+                        setFormData({ ...formData, brand: e.target.value })
+                      }
+                      placeholder="e.g., Life Fitness"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="model">Model</Label>
+                    <Input
+                      id="model"
+                      value={formData.model}
+                      onChange={(e) =>
+                        setFormData({ ...formData, model: e.target.value })
+                      }
+                      placeholder="e.g., 95T"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="serialNumber">Serial Number</Label>
+                    <Input
+                      id="serialNumber"
+                      value={formData.serialNumber}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          serialNumber: e.target.value,
+                        })
+                      }
+                      placeholder="e.g., LF-2024-001"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="location">Location</Label>
+                    <Input
+                      id="location"
+                      value={formData.location}
+                      onChange={(e) =>
+                        setFormData({ ...formData, location: e.target.value })
+                      }
+                      placeholder="e.g., Cardio Room A"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="cost">Purchase Cost ($)</Label>
+                    <Input
+                      id="cost"
+                      type="number"
+                      step="0.01"
+                      value={formData.cost}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          cost: parseFloat(e.target.value) || 0,
+                        })
+                      }
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="purchaseDate">Purchase Date</Label>
+                    <Input
+                      id="purchaseDate"
+                      type="date"
+                      value={formData.purchaseDate}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          purchaseDate: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="warrantyExpiry">Warranty Expiry</Label>
+                    <Input
+                      id="warrantyExpiry"
+                      type="date"
+                      value={formData.warrantyExpiry}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          warrantyExpiry: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="col-span-2 space-y-2">
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      id="description"
+                      value={formData.description}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
+                      placeholder="Additional details about the equipment..."
+                      rows={3}
+                    />
+                  </div>
+                  <div className="col-span-2 space-y-2">
+                    <Label htmlFor="imageUrl">Image URL</Label>
+                    <Input
+                      id="imageUrl"
+                      value={formData.imageUrl}
+                      onChange={(e) =>
+                        setFormData({ ...formData, imageUrl: e.target.value })
+                      }
+                      placeholder="https://example.com/image.jpg"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowAddDialog(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleAddEquipment}
+                    disabled={
+                      !formData.name || !formData.type || !formData.category
+                    }
+                  >
+                    Add Equipment
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+
+        {/* Equipment Stats Summary */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Card className="text-white border-0 shadow-lg bg-gradient-to-r from-blue-500 to-blue-600">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-blue-100">
+                    Total Equipment
+                  </p>
+                  <p className="text-2xl font-bold">{equipmentList.length}</p>
+                </div>
+                <Dumbbell className="w-8 h-8 text-blue-200" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="text-white border-0 shadow-lg bg-gradient-to-r from-green-500 to-green-600">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-green-100">
+                    Operational
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {
+                      equipmentList.filter((e) => e.status === "OPERATIONAL")
+                        .length
+                    }
+                  </p>
+                </div>
+                <CheckCircle className="w-8 h-8 text-green-200" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="text-white border-0 shadow-lg bg-gradient-to-r from-yellow-500 to-yellow-600">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-yellow-100">
+                    In Maintenance
+                  </p>
+                  <p className="text-2xl font-bold">
+                    {
+                      equipmentList.filter((e) => e.status === "MAINTENANCE")
+                        .length
+                    }
+                  </p>
+                </div>
+                <Wrench className="w-8 h-8 text-yellow-200" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="text-white border-0 shadow-lg bg-gradient-to-r from-purple-500 to-purple-600">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-purple-100">
+                    Total Value
+                  </p>
+                  <p className="text-2xl font-bold">
+                    $
+                    {equipmentList
+                      .reduce((sum, e) => sum + (e.cost || 0), 0)
+                      .toLocaleString()}
+                  </p>
+                </div>
+                <div className="flex items-center justify-center w-8 h-8 bg-purple-200 rounded-full">
+                  <span className="text-sm font-bold text-purple-600">$</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Filters and Search */}
-        <Card>
+        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
           <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+                  <Search className="absolute w-4 h-4 transform -translate-y-1/2 left-3 top-1/2 text-slate-400" />
                   <Input
                     placeholder="Search equipment by name, brand, or model..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600"
                   />
                 </div>
               </div>
@@ -579,7 +964,7 @@ const EquipmentManager: React.FC = () => {
                 value={categoryFilter}
                 onValueChange={(value: string) => setCategoryFilter(value)}
               >
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-48 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600">
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
@@ -595,7 +980,7 @@ const EquipmentManager: React.FC = () => {
                 value={statusFilter}
                 onValueChange={(value: string) => setStatusFilter(value)}
               >
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-48 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600">
                   <SelectValue placeholder="All Statuses" />
                 </SelectTrigger>
                 <SelectContent>
@@ -610,302 +995,234 @@ const EquipmentManager: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Equipment Grid */}
-        <div className="space-y-6">
-          {/* Equipment Stats Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0 shadow-lg">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-blue-100 text-sm font-medium">
-                      Total Equipment
-                    </p>
-                    <p className="text-2xl font-bold">{equipmentList.length}</p>
-                  </div>
-                  <Dumbbell className="h-8 w-8 text-blue-200" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white border-0 shadow-lg">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-green-100 text-sm font-medium">
-                      Operational
-                    </p>
-                    <p className="text-2xl font-bold">
-                      {
-                        equipmentList.filter((e) => e.status === "OPERATIONAL")
-                          .length
-                      }
-                    </p>
-                  </div>
-                  <CheckCircle className="h-8 w-8 text-green-200" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white border-0 shadow-lg">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-yellow-100 text-sm font-medium">
-                      In Maintenance
-                    </p>
-                    <p className="text-2xl font-bold">
-                      {
-                        equipmentList.filter((e) => e.status === "MAINTENANCE")
-                          .length
-                      }
-                    </p>
-                  </div>
-                  <Wrench className="h-8 w-8 text-yellow-200" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white border-0 shadow-lg">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-purple-100 text-sm font-medium">
-                      Total Value
-                    </p>
-                    <p className="text-2xl font-bold">
-                      $
-                      {equipmentList
-                        .reduce((sum, e) => sum + (e.cost || 0), 0)
-                        .toLocaleString()}
-                    </p>
-                  </div>
-                  <div className="h-8 w-8 bg-purple-200 rounded-full flex items-center justify-center">
-                    <span className="text-purple-600 font-bold text-sm">$</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Equipment List */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredEquipment.map((equipment) => (
-              <Card
-                key={equipment.id}
-                className="group hover:shadow-2xl transition-all duration-300 border-0 bg-white dark:bg-gray-800 overflow-hidden relative"
-              >
-                {/* Status Badge */}
-                <div className="absolute top-4 right-4 z-10">
-                  <Badge
-                    className={`${getStatusColor(
-                      equipment.status
-                    )} shadow-lg border-0 px-3 py-1 text-xs font-semibold`}
+        {/* Equipment Table */}
+        <Card className="overflow-hidden bg-white border-0 shadow-lg dark:bg-gray-800">
+          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-700">
+            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+              Equipment Inventory
+            </CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-400">
+              {filteredEquipment.length} equipment items found
+              {equipmentList.length > 0 &&
+                equipmentList[0]?.id?.startsWith("demo-") && (
+                  <span className="ml-2 text-blue-600 dark:text-blue-400">
+                    (Demo Mode)
+                  </span>
+                )}
+            </CardDescription>
+          </CardHeader>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    <div className="flex items-center gap-2">
+                      <Package className="w-4 h-4 text-gray-500" />
+                      Equipment
+                    </div>
+                  </TableHead>
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    <div className="flex items-center gap-2">
+                      <Activity className="w-4 h-4 text-gray-500" />
+                      Status
+                    </div>
+                  </TableHead>
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-gray-500" />
+                      Quantity
+                    </div>
+                  </TableHead>
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-gray-500" />
+                      Location
+                    </div>
+                  </TableHead>
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    <div className="flex items-center gap-2">
+                      <DollarSign className="w-4 h-4 text-gray-500" />
+                      Cost
+                    </div>
+                  </TableHead>
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-gray-500" />
+                      Purchase Date
+                    </div>
+                  </TableHead>
+                  <TableHead className="px-6 py-4 font-semibold text-right text-gray-900 dark:text-white">
+                    Actions
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredEquipment.map((equipment) => (
+                  <TableRow
+                    key={equipment.id}
+                    className="transition-colors border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 dark:border-gray-700"
                   >
-                    {getStatusIcon(equipment.status)}
-                    <span className="ml-1.5">
-                      {equipment.status.replace("_", " ")}
-                    </span>
-                  </Badge>
-                </div>
-
-                {/* Equipment Image or Placeholder */}
-                <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 overflow-hidden">
-                  {equipment.imageUrl ? (
-                    <img
-                      src={equipment.imageUrl}
-                      alt={equipment.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Dumbbell className="h-16 w-16 text-gray-400 dark:text-gray-500" />
-                    </div>
-                  )}
-
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                </div>
-
-                <CardContent className="p-6">
-                  {/* Equipment Header */}
-                  <div className="mb-4">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                      {equipment.name}
-                    </h3>
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                      <span className="font-medium">{equipment.brand}</span>
-                      {equipment.model && (
-                        <>
-                          <span className="text-gray-400">•</span>
-                          <span>{equipment.model}</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Equipment Details Grid */}
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-gray-600 dark:text-gray-400">
-                        Category:
-                      </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {equipment.category}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-gray-600 dark:text-gray-400">
-                        Type:
-                      </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {equipment.type}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                      <span className="text-gray-600 dark:text-gray-400">
-                        Quantity:
-                      </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {equipment.quantity}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                      <span className="text-gray-600 dark:text-gray-400">
-                        Available:
-                      </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {equipment.available}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Location and Description */}
-                  {equipment.location && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
-                      <MapPin className="h-4 w-4" />
-                      <span>{equipment.location}</span>
-                    </div>
-                  )}
-
-                  {equipment.description && (
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-                      {equipment.description}
-                    </p>
-                  )}
-
-                  {/* Cost and Dates */}
-                  <div className="flex items-center justify-between text-sm mb-4">
-                    {equipment.cost && equipment.cost > 0 && (
-                      <div className="flex items-center gap-1">
-                        <span className="text-gray-600 dark:text-gray-400">
-                          Cost:
-                        </span>
-                        <span className="font-semibold text-green-600 dark:text-green-400">
-                          ${equipment.cost.toLocaleString()}
-                        </span>
+                    <TableCell className="px-6 py-4">
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
+                          {equipment.imageUrl ? (
+                            <img
+                              src={equipment.imageUrl}
+                              alt={equipment.name}
+                              className="object-cover w-10 h-10 rounded-md"
+                            />
+                          ) : (
+                            <Dumbbell className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="font-semibold text-gray-900 dark:text-white">
+                            {equipment.name}
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {equipment.brand}{" "}
+                            {equipment.model && `• ${equipment.model}`}
+                          </div>
+                          <div className="mt-1 text-xs text-gray-500 dark:text-gray-500">
+                            {equipment.category} • {equipment.type}
+                          </div>
+                        </div>
                       </div>
-                    )}
-
-                    {equipment.purchaseDate && (
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3 text-gray-400" />
-                        <span className="text-gray-600 dark:text-gray-400">
+                    </TableCell>
+                    <TableCell className="px-6 py-4">
+                      <Badge
+                        className={`${getStatusColor(
+                          equipment.status
+                        )} px-3 py-1 text-xs font-medium`}
+                      >
+                        {getStatusIcon(equipment.status)}
+                        <span className="ml-1.5">
+                          {equipment.status.replace("_", " ")}
+                        </span>
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="px-6 py-4">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-sm">
+                          <span className="text-gray-600 dark:text-gray-400">
+                            Total:
+                          </span>
+                          <span className="font-medium text-gray-900 dark:text-white">
+                            {equipment.quantity}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <span className="text-gray-600 dark:text-gray-400">
+                            Available:
+                          </span>
+                          <span className="font-medium text-green-600 dark:text-green-400">
+                            {equipment.available}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <span className="text-gray-600 dark:text-gray-400">
+                            In Use:
+                          </span>
+                          <span className="font-medium text-orange-600 dark:text-orange-400">
+                            {equipment.inUse}
+                          </span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="px-6 py-4">
+                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <MapPin className="w-4 h-4" />
+                        <span>{equipment.location || "No location"}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="px-6 py-4">
+                      {equipment.cost && equipment.cost > 0 ? (
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-green-600 dark:text-green-400">
+                            ${equipment.cost.toLocaleString()}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400 dark:text-gray-500">
+                          -
+                        </span>
+                      )}
+                    </TableCell>
+                    <TableCell className="px-6 py-4">
+                      {equipment.purchaseDate ? (
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
                           {new Date(
                             equipment.purchaseDate
                           ).toLocaleDateString()}
+                        </div>
+                      ) : (
+                        <span className="text-gray-400 dark:text-gray-500">
+                          -
                         </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openEditDialog(equipment)}
-                        className="hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 dark:hover:bg-blue-900/20 dark:hover:border-blue-600 dark:hover:text-blue-400 transition-colors"
-                      >
-                        <Edit className="h-3.5 w-3.5 mr-1.5" />
-                        Edit
-                      </Button>
-
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openMaintenanceDialog(equipment)}
-                        className="hover:bg-yellow-50 hover:border-yellow-300 hover:text-yellow-700 dark:hover:bg-yellow-900/20 dark:hover:border-yellow-600 dark:hover:text-yellow-400 transition-colors"
-                      >
-                        <Wrench className="h-3.5 w-3.5 mr-1.5" />
-                        Maintenance
-                      </Button>
-                    </div>
-
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDeleteEquipment(equipment.id)}
-                      className="hover:bg-red-50 hover:border-red-300 hover:text-red-700 dark:hover:bg-red-900/20 dark:hover:border-red-600 dark:hover:text-red-400 transition-colors"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
-
-                  {/* Quick Status Update */}
-                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        Quick Status:
-                      </span>
-                      <Select
-                        value={equipment.status}
-                        onValueChange={(value: string) =>
-                          handleStatusUpdate(equipment.id, value)
-                        }
-                      >
-                        <SelectTrigger className="w-32 h-8 text-xs">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="OPERATIONAL">
-                            Operational
-                          </SelectItem>
-                          <SelectItem value="MAINTENANCE">
-                            Maintenance
-                          </SelectItem>
-                          <SelectItem value="OUT_OF_SERVICE">
-                            Out of Service
-                          </SelectItem>
-                          <SelectItem value="RETIRED">Retired</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                      )}
+                    </TableCell>
+                    <TableCell className="px-6 py-4 text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="w-8 h-8 p-0 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            <MoreVertical className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                          <DropdownMenuLabel className="font-semibold">
+                            Equipment Actions
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => openEditDialog(equipment)}
+                            className="cursor-pointer"
+                          >
+                            <Edit className="w-4 h-4 mr-2 text-blue-600" />
+                            Edit Equipment
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => openMaintenanceDialog(equipment)}
+                            className="cursor-pointer"
+                          >
+                            <Wrench className="w-4 h-4 mr-2 text-yellow-600" />
+                            Add Maintenance
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer">
+                            <FileText className="w-4 h-4 mr-2 text-purple-600" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handleDeleteEquipment(equipment.id)}
+                            className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-900/20"
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete Equipment
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
-        </div>
+        </Card>
 
         {filteredEquipment.length === 0 && (
-          <Card className="border-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 shadow-lg">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
             <CardContent className="p-16 text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Dumbbell className="h-10 w-10 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
+                <Dumbbell className="w-10 h-10 text-blue-600 dark:text-blue-400" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+              <h3 className="mb-3 text-2xl font-bold text-gray-900 dark:text-white">
                 No equipment found
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-lg mb-6 max-w-md mx-auto">
+              <p className="max-w-md mx-auto mb-6 text-lg text-gray-600 dark:text-gray-400">
                 {searchTerm ||
                 categoryFilter !== "all" ||
                 statusFilter !== "all"
@@ -917,9 +1234,9 @@ const EquipmentManager: React.FC = () => {
                 statusFilter === "all" && (
                   <Button
                     onClick={() => setShowAddDialog(true)}
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="px-6 py-3 text-lg font-semibold text-white transition-all duration-300 shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:shadow-xl"
                   >
-                    <Plus className="h-5 w-5 mr-2" />
+                    <Plus className="w-5 h-5 mr-2" />
                     Add First Equipment
                   </Button>
                 )}
