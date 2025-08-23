@@ -59,6 +59,28 @@ export const userAPI = {
 
   deleteUser: (id: number) =>
     api.delete<ApiResponse<User>>(`${BASE_API_URL}/users/delete/${id}`),
+
+  // Equipment Management (for staff/admin users)
+  getEquipment: () =>
+    api.get<ApiResponse<Equipment[]>>(`${BASE_API_URL}/equipments/list`),
+
+  addEquipment: (data: Omit<Equipment, "id" | "createdAt" | "updatedAt">) =>
+    api.post<ApiResponse<Equipment>>(`${BASE_API_URL}/equipments/add`, data),
+
+  updateEquipment: (id: string, data: Partial<Equipment>) =>
+    api.put<ApiResponse<Equipment>>(`${BASE_API_URL}/equipments/update/${id}`, data),
+
+  deleteEquipment: (id: string) =>
+    api.delete<ApiResponse<Equipment>>(`${BASE_API_URL}/equipments/delete/${id}`),
+
+  updateEquipmentStatus: (id: string, data: { status: string; maintenance?: boolean; nextMaintenance?: string }) =>
+    api.put<ApiResponse<Equipment>>(`${BASE_API_URL}/equipments/status/${id}`, data),
+
+  addMaintenanceLog: (id: string, data: { type: string; description: string; cost?: string; performedBy?: string; nextDue?: string }) =>
+    api.post<ApiResponse<any>>(`${BASE_API_URL}/equipments/maintenance/${id}`, data),
+
+  getEquipmentStats: () =>
+    api.get<ApiResponse<any>>(`${BASE_API_URL}/equipments/stats`),
 };
 
 // Member Management API
@@ -120,6 +142,23 @@ export const equipmentAPI = {
     api.delete<ApiResponse<Equipment>>(
       `${BASE_API_URL}/equipments/delete/${id}`
     ),
+
+  // Equipment Status and Maintenance
+  updateEquipmentStatus: (id: string, data: { status: string; maintenance?: boolean; nextMaintenance?: string }) =>
+    api.put<ApiResponse<Equipment>>(`${BASE_API_URL}/equipments/status/${id}`, data),
+
+  addMaintenanceLog: (id: string, data: { type: string; description: string; cost?: string; performedBy?: string; nextDue?: string }) =>
+    api.post<ApiResponse<any>>(`${BASE_API_URL}/equipments/maintenance/${id}`, data),
+
+  getEquipmentStats: () =>
+    api.get<ApiResponse<any>>(`${BASE_API_URL}/equipments/stats`),
+
+  // Equipment Usage Tracking
+  checkOutEquipment: (id: string, data: { quantity?: number }) =>
+    api.post<ApiResponse<Equipment>>(`${BASE_API_URL}/equipments/checkout/${id}`, data),
+
+  checkInEquipment: (id: string, data: { quantity?: number }) =>
+    api.post<ApiResponse<Equipment>>(`${BASE_API_URL}/equipments/checkin/${id}`, data),
 };
 
 // Payment Management API

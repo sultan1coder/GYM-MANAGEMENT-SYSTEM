@@ -46,7 +46,7 @@ const Register = () => {
         email: values.email,
         phone_number: values.phone_number,
         age: parseInt(values.age),
-        membershiptype: values.membershiptype,
+        membershiptype: values.membershiptype as "MONTHLY" | "DAILY",
         password: values.password,
         confirmPassword: values.confirmPassword,
       };
@@ -64,7 +64,10 @@ const Register = () => {
         .number()
         .min(16, "Must be at least 16 years old")
         .required("Please enter your age"),
-      membershiptype: yup.string().required("Please select a membership type"),
+      membershiptype: yup
+        .string()
+        .oneOf(["MONTHLY", "DAILY"], "Please select a valid membership type")
+        .required("Please select a membership type"),
       password: yup
         .string()
         .min(8, "Password must be at least 8 characters long")
