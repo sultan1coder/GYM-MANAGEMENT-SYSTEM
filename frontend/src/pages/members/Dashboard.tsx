@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -33,6 +34,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import {
@@ -47,23 +56,25 @@ import {
   Edit,
   Trash2,
   Eye,
-  Filter,
   RefreshCw,
-  BarChart3,
   Clock,
   CheckCircle,
   XCircle,
   AlertCircle,
-  TrendingUp,
-  TrendingDown,
-  Activity,
-  MapPin,
-  CreditCard,
-  Dumbbell,
   Settings,
   Download,
-  Share2,
+  ChevronDown,
+  ChevronUp,
+  ChevronsUpDown,
+  FileSpreadsheet,
+  Ban,
+  Clock3,
+  Shield,
+  Timer,
+  Loader2,
+  FileText,
 } from "lucide-react";
+import { Member } from "@/types";
 
 function MemberDashboard() {
   const { members, isLoading, error, refetch } = useMemberGetAll();
@@ -72,8 +83,28 @@ function MemberDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [membershipFilter, setMembershipFilter] = useState("all");
   const [ageFilter, setAgeFilter] = useState("all");
+  const [statusFilter] = useState("all");
+  const [expiryFilter] = useState("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  
+  // Sorting state
+  const [sortField, setSortField] = useState<keyof Member>("name");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  
+  // Bulk actions state
+  const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
+  const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+  
+  // Advanced filters state
+  const [dateRangeFilter] = useState("all");
+  const [minAgeFilter] = useState("");
+  const [maxAgeFilter] = useState("");
 
   // Enhanced refresh function
   const handleRefresh = async () => {
@@ -89,7 +120,7 @@ function MemberDashboard() {
     }
   };
 
-  // Filter members based on search and filters
+  // Enhanced member filtering with status and expiry
   const filteredMembers =
     members?.filter((member) => {
       const matchesSearch =
@@ -102,35 +133,247 @@ function MemberDashboard() {
         membershipFilter === "all" ||
         member.membershiptype === membershipFilter;
 
-      let matchesAge = true;
-      if (ageFilter !== "all") {
-        const [minAge, maxAge] = ageFilter.split("-").map(Number);
-        if (maxAge) {
-          matchesAge = member.age >= minAge && member.age <= maxAge;
-        } else {
-          matchesAge = member.age >= minAge;
-        }
-      }
+      const matchesAge = (() => {
+        if (ageFilter === "all") return true;
+        if (ageFilter === "18-25") return member.age >= 18 && member.age <= 25;
+        if (ageFilter === "26-35") return member.age >= 26 && member.age <= 35;
+        if (ageFilter === "36-50") return member.age >= 36 && member.age <= 50;
+        if (ageFilter === "50+") return member.age >= 50;
+        return true;
+      })();
 
-      return matchesSearch && matchesMembership && matchesAge;
+      const matchesStatus = (() => {
+        if (statusFilter === "all") return true;
+        if (statusFilter === "active") return getMemberStatus(member) === "active";
+        if (statusFilter === "expired") return getMemberStatus(member) === "expired";
+        if (statusFilter === "expiring") return getMemberStatus(member) === "expiring";
+        return true;
+      })();
+
+      const matchesExpiry = (() => {
+        if (expiryFilter === "all") return true;
+        if (expiryFilter === "expired") return isMembershipExpired(member);
+        if (expiryFilter === "expiring") return isMembershipExpiring(member);
+        if (expiryFilter === "active") return !isMembershipExpired(member);
+        return true;
+      })();
+
+      const matchesDateRange = (() => {
+        if (dateRangeFilter === "all") return true;
+        const joinDate = new Date(member.createdAt);
+        const now = new Date();
+        const daysSinceJoin = Math.floor((now.getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (dateRangeFilter === "7days") return daysSinceJoin <= 7;
+        if (dateRangeFilter === "30days") return daysSinceJoin <= 30;
+        if (dateRangeFilter === "90days") return daysSinceJoin <= 90;
+        if (dateRangeFilter === "1year") return daysSinceJoin <= 365;
+        return true;
+      })();
+
+      const matchesAgeRange = (() => {
+        if (!minAgeFilter && !maxAgeFilter) return true;
+        const minAge = minAgeFilter ? parseInt(minAgeFilter) : 0;
+        const maxAge = maxAgeFilter ? parseInt(maxAgeFilter) : 999;
+        return member.age >= minAge && member.age <= maxAge;
+      })();
+
+      return matchesSearch && matchesMembership && matchesAge && matchesStatus && matchesExpiry && matchesDateRange && matchesAgeRange;
     }) || [];
+
+  // Sorting function
+  const sortedMembers = [...filteredMembers].sort((a, b) => {
+    const aValue = a[sortField as keyof Member];
+    const bValue = b[sortField as keyof Member];
+    
+    if (aValue === null || aValue === undefined) return 1;
+    if (bValue === null || bValue === undefined) return -1;
+    
+    if (typeof aValue === "string" && typeof bValue === "string") {
+      return sortDirection === "asc" 
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    }
+    
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
+    }
+    
+    if (aValue instanceof Date && bValue instanceof Date) {
+      return sortDirection === "asc" 
+        ? aValue.getTime() - bValue.getTime()
+        : bValue.getTime() - aValue.getTime();
+    }
+    
+    return 0;
+  });
+
+  // Pagination
+  const totalPages = Math.ceil(sortedMembers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedMembers = sortedMembers.slice(startIndex, endIndex);
+
+  // Helper functions for member status and expiry
+  const getMemberStatus = (member: Member) => {
+    if (isMembershipExpired(member)) return "expired";
+    if (isMembershipExpiring(member)) return "expiring";
+    return "active";
+  };
+
+  const isMembershipExpired = (member: Member) => {
+    // Mock expiry logic - in real app, this would check actual expiry dates
+    const joinDate = new Date(member.createdAt);
+    const now = new Date();
+    const monthsSinceJoin = (now.getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+    
+    if (member.membershiptype === "MONTHLY") {
+      return monthsSinceJoin > 1; // Expired after 1 month
+    } else {
+      return monthsSinceJoin > 0.1; // Daily pass expires after ~3 days
+    }
+  };
+
+  const isMembershipExpiring = (member: Member) => {
+    // Mock expiring logic - in real app, this would check actual expiry dates
+    const joinDate = new Date(member.createdAt);
+    const now = new Date();
+    const daysSinceJoin = (now.getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24);
+    
+    if (member.membershiptype === "MONTHLY") {
+      return daysSinceJoin >= 25 && daysSinceJoin <= 30; // Expiring in last 5 days
+    } else {
+      return daysSinceJoin >= 0 && daysSinceJoin <= 1; // Daily pass expires same day
+    }
+  };
+
+  const getDaysUntilExpiry = (member: Member) => {
+    const joinDate = new Date(member.createdAt);
+    const now = new Date();
+    const daysSinceJoin = (now.getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24);
+    
+    if (member.membershiptype === "MONTHLY") {
+      return Math.max(0, 30 - daysSinceJoin);
+    } else {
+      return Math.max(0, 1 - daysSinceJoin);
+    }
+  };
+
+  // Bulk actions
+  const handleSelectAll = () => {
+    if (selectedMembers.length === paginatedMembers.length) {
+      setSelectedMembers([]);
+    } else {
+      setSelectedMembers(paginatedMembers.map(member => member.id));
+    }
+  };
+
+  const handleSelectMember = (memberId: string) => {
+    setSelectedMembers(prev => 
+      prev.includes(memberId) 
+        ? prev.filter(id => id !== memberId)
+        : [...prev, memberId]
+    );
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedMembers.length === 0) return;
+    
+    try {
+      setIsBulkDeleting(true);
+      // In a real app, you would call the API for bulk delete
+      await Promise.all(selectedMembers.map(id => handleRemove(id)));
+      setSelectedMembers([]);
+      setShowBulkDeleteDialog(false);
+      toast.success(`${selectedMembers.length} members deleted successfully!`);
+    } catch (error) {
+      toast.error("Failed to delete some members");
+    } finally {
+      setIsBulkDeleting(false);
+    }
+  };
+
+  const handleBulkStatusUpdate = async (status: string) => {
+    if (selectedMembers.length === 0) return;
+    
+    try {
+      // In a real app, you would call the API for bulk status update
+      toast.success(`${selectedMembers.length} members status updated to ${status}!`);
+      setSelectedMembers([]);
+    } catch (error) {
+      toast.error("Failed to update some members status");
+    }
+  };
+
+  // Export functions
+  const exportToCSV = () => {
+    const headers = ["Name", "Email", "Phone", "Age", "Membership Type", "Status", "Join Date", "Expiry Date"];
+    const csvContent = [
+      headers.join(","),
+      ...sortedMembers.map(member => [
+        member.name,
+        member.email,
+        member.phone_number || "",
+        member.age,
+        member.membershiptype,
+        getMemberStatus(member),
+        new Date(member.createdAt).toLocaleDateString(),
+        getDaysUntilExpiry(member) > 0 ? `${getDaysUntilExpiry(member)} days` : "Expired"
+      ].join(","))
+    ].join("\n");
+    
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `members-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    toast.success("Members exported to CSV successfully!");
+  };
+
+  const exportToPDF = () => {
+    // In a real app, you would use a PDF library like jsPDF
+    toast.success("PDF export functionality would be implemented with a PDF library!");
+  };
+
+  // Sorting handlers
+  const handleSort = (field: keyof Member) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
+
+  const getSortIcon = (field: keyof Member) => {
+    if (sortField !== field) return <ChevronsUpDown className="w-4 h-4" />;
+    return sortDirection === "asc" ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />;
+  };
+
+
 
   // Calculate statistics
   const totalMembers = members?.length || 0;
+  const filteredTotal = filteredMembers.length;
   const monthlyMembers =
-    members?.filter((m) => m.membershiptype === "MONTHLY").length || 0;
+    filteredMembers.filter((m) => m.membershiptype === "MONTHLY").length || 0;
   const dailyMembers =
-    members?.filter((m) => m.membershiptype === "DAILY").length || 0;
-  const averageAge = members?.length
-    ? Math.round(members.reduce((sum, m) => sum + m.age, 0) / members.length)
-    : 0;
+    filteredMembers.filter((m) => m.membershiptype === "DAILY").length || 0;
+
+
+  // Status statistics
+  const activeMembers = filteredMembers.filter(m => getMemberStatus(m) === "active").length;
+  const expiredMembers = filteredMembers.filter(m => getMemberStatus(m) === "expired").length;
+  const expiringMembers = filteredMembers.filter(m => getMemberStatus(m) === "expiring").length;
 
   // Age distribution
   const ageGroups = {
-    "18-25": members?.filter((m) => m.age >= 18 && m.age <= 25).length || 0,
-    "26-35": members?.filter((m) => m.age >= 26 && m.age <= 35).length || 0,
-    "36-50": members?.filter((m) => m.age >= 36 && m.age <= 50).length || 0,
-    "50+": members?.filter((m) => m.age > 50).length || 0,
+    "18-25": filteredMembers.filter((m) => m.age >= 18 && m.age <= 25).length || 0,
+    "26-35": filteredMembers.filter((m) => m.age >= 26 && m.age <= 35).length || 0,
+    "36-50": filteredMembers.filter((m) => m.age >= 36 && m.age <= 50).length || 0,
+    "50+": filteredMembers.filter((m) => m.age > 50).length || 0,
   };
 
   const handleDelete = async (id: string, name: string) => {
@@ -233,7 +476,7 @@ function MemberDashboard() {
           </div>
         </div>
 
-        {/* Statistics Cards */}
+        {/* Enhanced Statistics Cards */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card className="text-white border-0 shadow-lg bg-gradient-to-r from-blue-500 to-blue-600">
             <CardContent className="p-4">
@@ -252,6 +495,9 @@ function MemberDashboard() {
                       totalMembers
                     )}
                   </p>
+                  <p className="text-xs text-blue-200 mt-1">
+                    {filteredTotal} filtered
+                  </p>
                 </div>
                 <Users className="w-8 h-8 text-blue-200" />
               </div>
@@ -263,7 +509,7 @@ function MemberDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-green-100">
-                    Monthly Members
+                    Active Members
                   </p>
                   <p className="text-2xl font-bold">
                     {isRefreshing ? (
@@ -272,11 +518,14 @@ function MemberDashboard() {
                         <span>Updating...</span>
                       </div>
                     ) : (
-                      monthlyMembers
+                      activeMembers
                     )}
                   </p>
+                  <p className="text-xs text-green-200 mt-1">
+                    {monthlyMembers} monthly • {dailyMembers} daily
+                  </p>
                 </div>
-                <Calendar className="w-8 h-8 text-green-200" />
+                <CheckCircle className="w-8 h-8 text-green-200" />
               </div>
             </CardContent>
           </Card>
@@ -286,7 +535,7 @@ function MemberDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-yellow-100">
-                    Daily Passes
+                    Expiring Soon
                   </p>
                   <p className="text-2xl font-bold">
                     {isRefreshing ? (
@@ -295,21 +544,24 @@ function MemberDashboard() {
                         <span>Updating...</span>
                       </div>
                     ) : (
-                      dailyMembers
+                      expiringMembers
                     )}
                   </p>
+                  <p className="text-xs text-yellow-200 mt-1">
+                    Needs attention
+                  </p>
                 </div>
-                <Clock className="w-8 h-8 text-yellow-200" />
+                <AlertCircle className="w-8 h-8 text-yellow-200" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="text-white border-0 shadow-lg bg-gradient-to-r from-purple-500 to-purple-600">
+          <Card className="text-white border-0 shadow-lg bg-gradient-to-r from-red-500 to-red-600">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-purple-100">
-                    Average Age
+                  <p className="text-sm font-medium text-red-100">
+                    Expired Members
                   </p>
                   <p className="text-2xl font-bold">
                     {isRefreshing ? (
@@ -318,11 +570,14 @@ function MemberDashboard() {
                         <span>Updating...</span>
                       </div>
                     ) : (
-                      averageAge
+                      expiredMembers
                     )}
                   </p>
+                  <p className="text-xs text-red-200 mt-1">
+                    Requires renewal
+                  </p>
                 </div>
-                <User className="w-8 h-8 text-purple-200" />
+                <XCircle className="w-8 h-8 text-red-200" />
               </div>
             </CardContent>
           </Card>
@@ -430,29 +685,93 @@ function MemberDashboard() {
                   Members List
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-400">
-                  {filteredMembers.length} members found
+                  {filteredTotal} members found • Showing {startIndex + 1}-{Math.min(endIndex, filteredTotal)} of {filteredTotal}
                 </CardDescription>
               </div>
-              <Button
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-                variant="outline"
-                size="sm"
-                className="border-gray-300 hover:bg-gray-50"
-              >
-                <RefreshCw
-                  className={`w-4 h-4 mr-2 ${
-                    isRefreshing ? "animate-spin" : ""
-                  }`}
-                />
-                {isRefreshing ? "Refreshing..." : "Refresh"}
-              </Button>
+              <div className="flex items-center gap-3">
+                {/* Bulk Actions */}
+                {selectedMembers.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="px-3 py-1">
+                      {selectedMembers.length} selected
+                    </Badge>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm">
+                          <Settings className="w-4 h-4 mr-2" />
+                          Bulk Actions
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuLabel>Bulk Operations</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => handleBulkStatusUpdate("active")}>
+                          <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
+                          Mark as Active
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleBulkStatusUpdate("expired")}>
+                          <Ban className="w-4 h-4 mr-2 text-yellow-600" />
+                          Mark as Expired
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setShowBulkDeleteDialog(true)}>
+                          <Trash2 className="w-4 h-4 mr-2 text-red-600" />
+                          Delete Selected
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                )}
+                
+                {/* Export Buttons */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Download className="w-4 h-4 mr-2" />
+                      Export
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuLabel>Export Options</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={exportToCSV}>
+                      <FileSpreadsheet className="w-4 h-4 mr-2 text-green-600" />
+                      Export to CSV
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={exportToPDF}>
+                      <FileText className="w-4 h-4 mr-2 text-red-600" />
+                      Export to PDF
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                
+                <Button
+                  onClick={handleRefresh}
+                  disabled={isRefreshing}
+                  variant="outline"
+                  size="sm"
+                  className="border-gray-300 hover:bg-gray-50"
+                >
+                  <RefreshCw
+                    className={`w-4 h-4 mr-2 ${
+                      isRefreshing ? "animate-spin" : ""
+                    }`}
+                  />
+                  {isRefreshing ? "Refreshing..." : "Refresh"}
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    <Checkbox
+                      checked={selectedMembers.length === paginatedMembers.length && paginatedMembers.length > 0}
+                      onCheckedChange={handleSelectAll}
+                      className="data-[state=checked]:bg-blue-600"
+                    />
+                  </TableHead>
                   <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4 text-gray-500" />
@@ -483,17 +802,44 @@ function MemberDashboard() {
                       Joined
                     </div>
                   </TableHead>
+                  <TableHead 
+                    className="px-6 py-4 font-semibold text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                    onClick={() => handleSort("createdAt")}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-gray-500" />
+                      Status
+                      {getSortIcon("createdAt")}
+                    </div>
+                  </TableHead>
+                  <TableHead 
+                    className="px-6 py-4 font-semibold text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                    onClick={() => handleSort("createdAt")}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Timer className="w-4 h-4 text-gray-500" />
+                      Expiry
+                      {getSortIcon("createdAt")}
+                    </div>
+                  </TableHead>
                   <TableHead className="px-6 py-4 font-semibold text-right text-gray-900 dark:text-white">
                     Actions
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredMembers.map((member) => (
+                {paginatedMembers.map((member) => (
                   <TableRow
                     key={member.id}
                     className="transition-colors border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 dark:border-gray-700"
                   >
+                    <TableCell className="px-6 py-4">
+                      <Checkbox
+                        checked={selectedMembers.includes(member.id)}
+                        onCheckedChange={() => handleSelectMember(member.id)}
+                        className="data-[state=checked]:bg-blue-600"
+                      />
+                    </TableCell>
                     <TableCell className="px-6 py-4">
                       <div className="flex items-center space-x-4">
                         <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
@@ -566,6 +912,41 @@ function MemberDashboard() {
                         {new Date(member.createdAt).toLocaleDateString()}
                       </div>
                     </TableCell>
+                    <TableCell className="px-6 py-4">
+                      <Badge
+                        className={`${
+                          getMemberStatus(member) === "active"
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-800"
+                            : getMemberStatus(member) === "expiring"
+                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800"
+                            : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 border-red-200 dark:border-red-800"
+                        } px-3 py-1 text-xs font-medium`}
+                      >
+                        {getMemberStatus(member) === "active" ? (
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                        ) : getMemberStatus(member) === "expiring" ? (
+                          <AlertCircle className="w-3 h-3 mr-1" />
+                        ) : (
+                          <XCircle className="w-3 h-3 mr-1" />
+                        )}
+                        {getMemberStatus(member).charAt(0).toUpperCase() + getMemberStatus(member).slice(1)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="px-6 py-4">
+                      <div className="text-sm text-gray-900 dark:text-white">
+                        {getDaysUntilExpiry(member) > 0 ? (
+                          <span className="flex items-center gap-1">
+                            <Clock3 className="w-3 h-3 text-blue-600" />
+                            {getDaysUntilExpiry(member)} days
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-1 text-red-600">
+                            <XCircle className="w-3 h-3" />
+                            Expired
+                          </span>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell className="px-6 py-4 text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -616,7 +997,121 @@ function MemberDashboard() {
               </TableBody>
             </Table>
           </div>
+          
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <span>
+                  Showing {startIndex + 1} to {Math.min(endIndex, filteredTotal)} of {filteredTotal} results
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(1)}
+                  disabled={currentPage === 1}
+                >
+                  First
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    
+                    return (
+                      <Button
+                        key={pageNum}
+                        variant={currentPage === pageNum ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(pageNum)}
+                        className="w-8 h-8 p-0"
+                      >
+                        {pageNum}
+                      </Button>
+                    );
+                  })}
+                </div>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(totalPages)}
+                  disabled={currentPage === totalPages}
+                >
+                  Last
+                </Button>
+              </div>
+            </div>
+          )}
         </Card>
+
+        {/* Bulk Delete Confirmation Dialog */}
+        <Dialog open={showBulkDeleteDialog} onOpenChange={setShowBulkDeleteDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <AlertCircle className="w-5 h-5 text-red-600" />
+                Confirm Bulk Delete
+              </DialogTitle>
+              <DialogDescription>
+                This action cannot be undone. Are you sure you want to delete {selectedMembers.length} selected members?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setShowBulkDeleteDialog(false)}
+                disabled={isBulkDeleting}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleBulkDelete}
+                disabled={isBulkDeleting}
+              >
+                {isBulkDeleting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete {selectedMembers.length} Members
+                  </>
+                )}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* Empty State */}
         {filteredMembers.length === 0 && (

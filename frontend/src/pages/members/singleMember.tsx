@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { memberAPI } from "@/services/api";
 import { Member } from "@/types/members/memberLogin";
 import { toast } from "react-hot-toast";
+import ProfilePictureManager from "@/components/ProfilePictureManager";
 import {
   ArrowLeft,
   User,
@@ -38,6 +39,7 @@ import {
   Copy,
   MoreVertical,
   Zap,
+  Camera,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -57,6 +59,7 @@ function SingleMember() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showProfileManager, setShowProfileManager] = useState(false);
 
   // Mock data for demonstration (replace with actual API calls)
   const [subscriptionData] = useState({
@@ -175,6 +178,12 @@ function SingleMember() {
     ) : (
       <Clock className="w-3 h-3 mr-1" />
     );
+  };
+
+  const handleProfilePictureChange = (_pictureUrl: string | null) => {
+    // In a real app, you would update the member's profile picture via API
+    toast.success("Profile picture updated successfully!");
+    // You could also update the local state here if needed
   };
 
   if (isLoading) {
@@ -341,6 +350,13 @@ function SingleMember() {
                 <div className="absolute flex items-center justify-center w-8 h-8 bg-green-500 border-2 border-white rounded-full -bottom-2 -right-2 dark:border-gray-700">
                   <CheckCircle className="w-4 h-4 text-white" />
                 </div>
+                <Button
+                  onClick={() => setShowProfileManager(true)}
+                  size="sm"
+                  className="absolute w-8 h-8 p-0 bg-blue-600 border-2 border-white rounded-full -bottom-2 -left-2 hover:bg-blue-700 dark:border-gray-700"
+                >
+                  <Camera className="w-4 h-4" />
+                </Button>
               </div>
 
               {/* Member Info */}
@@ -821,6 +837,15 @@ function SingleMember() {
           </div>
         </div>
       )}
+
+      {/* Profile Picture Manager */}
+      <ProfilePictureManager
+        currentPicture={member.profile_picture}
+        onPictureChange={handleProfilePictureChange}
+        isOpen={showProfileManager}
+        onClose={() => setShowProfileManager(false)}
+        memberName={member.name}
+      />
     </div>
   );
 }

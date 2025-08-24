@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -23,28 +22,20 @@ import { Separator } from "@/components/ui/separator";
 import { memberAPI } from "@/services/api";
 import { Member } from "@/types/members/memberLogin";
 import { toast } from "react-hot-toast";
+import ProfilePictureManager from "@/components/ProfilePictureManager";
 import {
   ArrowLeft,
   User,
-  Mail,
-  Phone,
-  Calendar,
   CreditCard,
   Camera,
   Save,
-  X,
   Trash2,
-  Edit,
   Eye,
   EyeOff,
   AlertCircle,
-  CheckCircle,
   Clock,
-  Users,
-  MapPin,
-  DollarSign,
-  Activity,
   BarChart3,
+  Calendar,
 } from "lucide-react";
 
 const MemberUpdate = () => {
@@ -58,6 +49,7 @@ const MemberUpdate = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showProfileManager, setShowProfileManager] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -249,6 +241,10 @@ const MemberUpdate = () => {
       });
     }
     setValidationErrors({});
+  };
+
+  const handleProfilePictureChange = (pictureUrl: string | null) => {
+    setFormData((prev) => ({ ...prev, profile_picture: pictureUrl || "" }));
   };
 
   if (isLoading) {
@@ -625,15 +621,25 @@ const MemberUpdate = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="profile_picture">Profile Picture URL</Label>
-                  <Input
-                    id="profile_picture"
-                    value={formData.profile_picture}
-                    onChange={(e) =>
-                      handleInputChange("profile_picture", e.target.value)
-                    }
-                    placeholder="Enter profile picture URL"
-                  />
+                  <Label htmlFor="profile_picture">Profile Picture</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="profile_picture"
+                      value={formData.profile_picture}
+                      onChange={(e) =>
+                        handleInputChange("profile_picture", e.target.value)
+                      }
+                      placeholder="Enter profile picture URL"
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => setShowProfileManager(true)}
+                      variant="outline"
+                      size="sm"
+                    >
+                      <Camera className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -726,6 +732,15 @@ const MemberUpdate = () => {
           </div>
         </div>
       )}
+
+      {/* Profile Picture Manager */}
+      <ProfilePictureManager
+        currentPicture={formData.profile_picture}
+        onPictureChange={handleProfilePictureChange}
+        isOpen={showProfileManager}
+        onClose={() => setShowProfileManager(false)}
+        memberName={member?.name}
+      />
     </div>
   );
 };

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -23,10 +22,9 @@ import { Separator } from "@/components/ui/separator";
 import { memberAPI } from "@/services/api";
 import { Member } from "@/types/members/memberLogin";
 import { toast } from "react-hot-toast";
+import ProfilePictureManager from "@/components/ProfilePictureManager";
 import {
   User,
-  Mail,
-  Phone,
   Calendar,
   CreditCard,
   Camera,
@@ -34,21 +32,12 @@ import {
   Eye,
   EyeOff,
   AlertCircle,
-  CheckCircle,
   Clock,
-  Shield,
-  Settings,
   LogOut,
   ArrowLeft,
   Edit,
-  X,
   Camera as CameraIcon,
-  Download,
-  Share2,
-  Bell,
-  Key,
   Activity,
-  BarChart3,
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout as logoutMember } from "@/redux/slices/members/loginSlice";
@@ -67,6 +56,7 @@ const MemberProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showProfileManager, setShowProfileManager] = useState(false);
+  const [profilePicture, setProfilePicture] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -96,6 +86,13 @@ const MemberProfile = () => {
 
   // Determine if current user is a member or staff
   const currentUser = member || user;
+
+  // Set profile picture when currentUser changes
+  useEffect(() => {
+    if (currentUser?.profile_picture) {
+      setProfilePicture(currentUser.profile_picture);
+    }
+  }, [currentUser]);
   const isMember = !!member;
   const isStaff = !!user;
 
@@ -224,6 +221,11 @@ const MemberProfile = () => {
     navigate("/");
   };
 
+  const handleProfilePictureChange = (pictureUrl: string | null) => {
+    setProfilePicture(pictureUrl || "");
+    setFormData((prev) => ({ ...prev, profile_picture: pictureUrl || "" }));
+  };
+
   const resetForm = () => {
     if (currentUser) {
       setFormData({
@@ -309,9 +311,9 @@ const MemberProfile = () => {
             <div className="flex items-center gap-4">
               <div className="relative">
                 <div className="flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
-                  {currentUser.profile_picture ? (
+                  {profilePicture ? (
                     <img
-                      src={currentUser.profile_picture}
+                      src={profilePicture}
                       alt={currentUser.name}
                       className="object-cover w-20 h-20 rounded-full"
                     />
@@ -686,7 +688,7 @@ const MemberProfile = () => {
                 variant="outline"
                 className="h-20 flex-col gap-2"
               >
-                <BarChart3 className="w-6 h-6" />
+                <Activity className="w-6 h-6" />
                 <span>Members Dashboard</span>
               </Button>
 
@@ -712,71 +714,14 @@ const MemberProfile = () => {
         </Card>
       </div>
 
-      {/* Profile Picture Manager Modal */}
-      {showProfileManager && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Change Profile Picture
-                </h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowProfileManager(false)}
-                  className="h-8 w-8 p-0"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="profile-picture-url">
-                    Profile Picture URL
-                  </Label>
-                  <Input
-                    id="profile-picture-url"
-                    value={formData.profile_picture}
-                    onChange={(e) =>
-                      handleInputChange("profile_picture", e.target.value)
-                    }
-                    placeholder="Enter image URL"
-                  />
-                </div>
-
-                <div className="text-center">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    Or upload a new image
-                  </p>
-                  <Button variant="outline" className="w-full">
-                    <Camera className="w-4 h-4 mr-2" />
-                    Upload Image
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-3 mt-6">
-                <Button
-                  onClick={() => setShowProfileManager(false)}
-                  variant="outline"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    setShowProfileManager(false);
-                    // Here you would typically save the profile picture
-                  }}
-                >
-                  Save Changes
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Profile Picture Manager */}
+      <ProfilePictureManager
+        currentPicture={profilePicture}
+        onPictureChange={handleProfilePictureChange}
+        isOpen={showProfileManager}
+        onClose={() => setShowProfileManager(false)}
+        memberName={currentUser?.name}
+      />
     </div>
   );
 };
