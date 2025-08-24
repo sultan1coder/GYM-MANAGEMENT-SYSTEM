@@ -43,6 +43,11 @@ import {
   CheckCircle,
   AlertCircle,
   X,
+  Search,
+  Filter,
+  Calendar,
+  Building,
+  UserCheck,
 } from "lucide-react";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -67,6 +72,21 @@ interface BulkImportResult {
   errors: any[];
 }
 
+interface SearchFilters {
+  searchTerm: string;
+  role: string;
+  status: string;
+  department: string;
+  dateRange: {
+    start: string;
+    end: string;
+  };
+  lastLoginRange: {
+    start: string;
+    end: string;
+  };
+}
+
 const UserManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [showCreateUser, setShowCreateUser] = useState(false);
@@ -83,7 +103,86 @@ const UserManagement: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showUserDetails, setShowUserDetails] = useState(false);
 
+  // Search and filtering state
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+    searchTerm: "",
+    role: "",
+    status: "",
+    department: "",
+    dateRange: { start: "", end: "" },
+    lastLoginRange: { start: "", end: "" },
+  });
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
+  const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
+  const [showSearchSuggestions, setShowSearchSuggestions] = useState(false);
+
   const { users, isLoading, error, refetch } = useUserGetAll();
+
+  // Apply filters whenever users or filters change
+  useEffect(() => {
+    if (users) {
+      const filtered = users.filter((user) => {
+        // Search term filter (name, email, username)
+        if (searchFilters.searchTerm) {
+          const searchLower = searchFilters.searchTerm.toLowerCase();
+          const matchesSearch =
+            user.name?.toLowerCase().includes(searchLower) ||
+            user.email?.toLowerCase().includes(searchLower) ||
+            user.username?.toLowerCase().includes(searchLower);
+          if (!matchesSearch) return false;
+        }
+
+        // Role filter
+        if (searchFilters.role && user.role !== searchFilters.role) {
+          return false;
+        }
+
+        // Status filter (using created_at as a proxy for active status)
+        if (searchFilters.status) {
+          const userStatus = user.created_at ? "active" : "inactive";
+          if (userStatus !== searchFilters.status) {
+            return false;
+          }
+        }
+
+        // Department filter (using role as a proxy for department)
+        if (
+          searchFilters.department &&
+          user.role !== searchFilters.department
+        ) {
+          return false;
+        }
+
+        // Date range filter (creation date)
+        if (searchFilters.dateRange.start && user.created_at) {
+          const userDate = new Date(user.created_at);
+          const startDate = new Date(searchFilters.dateRange.start);
+          if (userDate < startDate) return false;
+        }
+        if (searchFilters.dateRange.end && user.created_at) {
+          const userDate = new Date(user.created_at);
+          const endDate = new Date(searchFilters.dateRange.end);
+          if (userDate > endDate) return false;
+        }
+
+        // Last login range filter (using updated_at as a proxy for last activity)
+        if (searchFilters.lastLoginRange.start && user.updated_at) {
+          const userDate = new Date(user.updated_at);
+          const startDate = new Date(searchFilters.lastLoginRange.start);
+          if (userDate < startDate) return false;
+        }
+        if (searchFilters.lastLoginRange.end && user.updated_at) {
+          const userDate = new Date(user.updated_at);
+          const endDate = new Date(searchFilters.lastLoginRange.end);
+          if (userDate > endDate) return false;
+        }
+
+        return true;
+      });
+      setFilteredUsers(filtered);
+    }
+  }, [users, searchFilters]);
 
   const userTemplates: UserTemplate[] = [
     {
@@ -226,11 +325,73 @@ const UserManagement: React.FC = () => {
     }
   };
 
+  const clearFilters = () => {
+    setSearchFilters({
+      searchTerm: "",
+      role: "",
+      status: "",
+      department: "",
+      dateRange: { start: "", end: "" },
+      lastLoginRange: { start: "", end: "" },
+    });
+  };
+
+  const getActiveFiltersCount = () => {
+    let count = 0;
+    if (searchFilters.searchTerm) count++;
+    if (searchFilters.role) count++;
+    if (searchFilters.status) count++;
+    if (searchFilters.department) count++;
+    if (searchFilters.dateRange.start || searchFilters.dateRange.end) count++;
+    if (searchFilters.lastLoginRange.start || searchFilters.lastLoginRange.end)
+      count++;
+    return count;
+  };
+
+  const generateSearchSuggestions = (searchTerm: string) => {
+    if (!searchTerm || !users) return [];
+
+    const suggestions: string[] = [];
+    const searchLower = searchTerm.toLowerCase();
+
+    users.forEach((user) => {
+      if (
+        user.name?.toLowerCase().includes(searchLower) &&
+        !suggestions.includes(user.name)
+      ) {
+        suggestions.push(user.name);
+      }
+      if (
+        user.email?.toLowerCase().includes(searchLower) &&
+        !suggestions.includes(user.email)
+      ) {
+        suggestions.push(user.email);
+      }
+      if (
+        user.username?.toLowerCase().includes(searchLower) &&
+        !suggestions.includes(user.username)
+      ) {
+        suggestions.push(user.username);
+      }
+    });
+
+    return suggestions.slice(0, 5); // Limit to 5 suggestions
+  };
+
   const stats = {
-    totalUsers: users?.length || 0,
-    admins: users?.filter((u) => u.role === "admin").length || 0,
-    staff: users?.filter((u) => u.role === "staff").length || 0,
-    activeUsers: users?.filter((u) => u.created_at).length || 0,
+    totalUsers: filteredUsers.length || users?.length || 0,
+    admins:
+      filteredUsers.filter((u) => u.role === "admin").length ||
+      users?.filter((u) => u.role === "admin").length ||
+      0,
+    staff:
+      filteredUsers.filter((u) => u.role === "staff").length ||
+      users?.filter((u) => u.role === "staff").length ||
+      0,
+    activeUsers:
+      filteredUsers.filter((u) => u.created_at).length ||
+      users?.filter((u) => u.created_at).length ||
+      0,
   };
 
   return (
@@ -316,6 +477,393 @@ const UserManagement: React.FC = () => {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
+          {/* Search and Filter Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Search className="w-5 h-5" />
+                Search & Filter Users
+              </CardTitle>
+              <CardDescription>
+                Find users by name, email, username, role, status, and more
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Basic Search */}
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <Label htmlFor="search">Search Users</Label>
+                  <div className="relative mt-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Input
+                      id="search"
+                      placeholder="Search by name, email, or username..."
+                      value={searchFilters.searchTerm}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setSearchFilters((prev) => ({
+                          ...prev,
+                          searchTerm: value,
+                        }));
+                        if (value.length > 1) {
+                          const suggestions = generateSearchSuggestions(value);
+                          setSearchSuggestions(suggestions);
+                          setShowSearchSuggestions(suggestions.length > 0);
+                        } else {
+                          setShowSearchSuggestions(false);
+                        }
+                      }}
+                      onFocus={() => {
+                        if (searchFilters.searchTerm.length > 1) {
+                          const suggestions = generateSearchSuggestions(
+                            searchFilters.searchTerm
+                          );
+                          setSearchSuggestions(suggestions);
+                          setShowSearchSuggestions(suggestions.length > 0);
+                        }
+                      }}
+                      onBlur={() => {
+                        // Delay hiding suggestions to allow clicking on them
+                        setTimeout(() => setShowSearchSuggestions(false), 200);
+                      }}
+                      className="pl-10"
+                    />
+
+                    {/* Search Suggestions */}
+                    {showSearchSuggestions && searchSuggestions.length > 0 && (
+                      <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg z-10 mt-1">
+                        {searchSuggestions.map((suggestion, index) => (
+                          <div
+                            key={index}
+                            className="px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm"
+                            onClick={() => {
+                              setSearchFilters((prev) => ({
+                                ...prev,
+                                searchTerm: suggestion,
+                              }));
+                              setShowSearchSuggestions(false);
+                            }}
+                          >
+                            {suggestion}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    💡 Tip: Use quotes for exact matches, e.g., "john@email.com"
+                  </p>
+                </div>
+                <div className="flex items-end">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                    className="flex items-center gap-2"
+                  >
+                    <Filter className="w-4 h-4" />
+                    Advanced Filters
+                    {getActiveFiltersCount() > 0 && (
+                      <Badge variant="secondary" className="ml-1">
+                        {getActiveFiltersCount()}
+                      </Badge>
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Advanced Filters */}
+              {showAdvancedFilters && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4 border-t">
+                  <div>
+                    <Label htmlFor="role-filter">Role</Label>
+                    <Select
+                      value={searchFilters.role}
+                      onValueChange={(value) =>
+                        setSearchFilters((prev) => ({ ...prev, role: value }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="All roles" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">All roles</SelectItem>
+                        <SelectItem value="admin">Administrator</SelectItem>
+                        <SelectItem value="staff">Staff</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="status-filter">Status</Label>
+                    <Select
+                      value={searchFilters.status}
+                      onValueChange={(value) =>
+                        setSearchFilters((prev) => ({ ...prev, status: value }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="All statuses" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">All statuses</SelectItem>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="inactive">Inactive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="department-filter">Department/Team</Label>
+                    <Select
+                      value={searchFilters.department}
+                      onValueChange={(value) =>
+                        setSearchFilters((prev) => ({
+                          ...prev,
+                          department: value,
+                        }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="All departments" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">All departments</SelectItem>
+                        <SelectItem value="admin">Administration</SelectItem>
+                        <SelectItem value="staff">Staff</SelectItem>
+                        <SelectItem value="management">Management</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="date-start">Created From</Label>
+                    <Input
+                      id="date-start"
+                      type="date"
+                      value={searchFilters.dateRange.start}
+                      onChange={(e) =>
+                        setSearchFilters((prev) => ({
+                          ...prev,
+                          dateRange: {
+                            ...prev.dateRange,
+                            start: e.target.value,
+                          },
+                        }))
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="date-end">Created To</Label>
+                    <Input
+                      id="date-end"
+                      type="date"
+                      value={searchFilters.dateRange.end}
+                      onChange={(e) =>
+                        setSearchFilters((prev) => ({
+                          ...prev,
+                          dateRange: { ...prev.dateRange, end: e.target.value },
+                        }))
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="last-activity-start">
+                      Last Activity From
+                    </Label>
+                    <Input
+                      id="last-activity-start"
+                      type="date"
+                      value={searchFilters.lastLoginRange.start}
+                      onChange={(e) =>
+                        setSearchFilters((prev) => ({
+                          ...prev,
+                          lastLoginRange: {
+                            ...prev.lastLoginRange,
+                            start: e.target.value,
+                          },
+                        }))
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="last-activity-end">Last Activity To</Label>
+                    <Input
+                      id="last-activity-end"
+                      type="date"
+                      value={searchFilters.lastLoginRange.end}
+                      onChange={(e) =>
+                        setSearchFilters((prev) => ({
+                          ...prev,
+                          lastLoginRange: {
+                            ...prev.lastLoginRange,
+                            end: e.target.value,
+                          },
+                        }))
+                      }
+                    />
+                  </div>
+
+                  <div className="flex items-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={clearFilters}
+                      className="flex items-center gap-2"
+                    >
+                      <X className="w-4 h-4" />
+                      Clear Filters
+                    </Button>
+                    <Button
+                      onClick={() => setShowAdvancedFilters(false)}
+                      variant="ghost"
+                    >
+                      Hide Filters
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Active Filter Chips */}
+              {getActiveFiltersCount() > 0 && (
+                <div className="pt-2 border-t">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-sm font-medium text-gray-700">
+                      Active Filters:
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {searchFilters.searchTerm && (
+                      <Badge
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        Search: "{searchFilters.searchTerm}"
+                        <X
+                          className="w-3 h-3 cursor-pointer hover:text-red-600"
+                          onClick={() =>
+                            setSearchFilters((prev) => ({
+                              ...prev,
+                              searchTerm: "",
+                            }))
+                          }
+                        />
+                      </Badge>
+                    )}
+                    {searchFilters.role && (
+                      <Badge
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        Role: {searchFilters.role}
+                        <X
+                          className="w-3 h-3 cursor-pointer hover:text-red-600"
+                          onClick={() =>
+                            setSearchFilters((prev) => ({ ...prev, role: "" }))
+                          }
+                        />
+                      </Badge>
+                    )}
+                    {searchFilters.status && (
+                      <Badge
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        Status: {searchFilters.status}
+                        <X
+                          className="w-3 h-3 cursor-pointer hover:text-red-600"
+                          onClick={() =>
+                            setSearchFilters((prev) => ({
+                              ...prev,
+                              status: "",
+                            }))
+                          }
+                        />
+                      </Badge>
+                    )}
+                    {searchFilters.department && (
+                      <Badge
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        Department: {searchFilters.department}
+                        <X
+                          className="w-3 h-3 cursor-pointer hover:text-red-600"
+                          onClick={() =>
+                            setSearchFilters((prev) => ({
+                              ...prev,
+                              department: "",
+                            }))
+                          }
+                        />
+                      </Badge>
+                    )}
+                    {(searchFilters.dateRange.start ||
+                      searchFilters.dateRange.end) && (
+                      <Badge
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        Created: {searchFilters.dateRange.start || "any"} -{" "}
+                        {searchFilters.dateRange.end || "any"}
+                        <X
+                          className="w-3 h-3 cursor-pointer hover:text-red-600"
+                          onClick={() =>
+                            setSearchFilters((prev) => ({
+                              ...prev,
+                              dateRange: { start: "", end: "" },
+                            }))
+                          }
+                        />
+                      </Badge>
+                    )}
+                    {(searchFilters.lastLoginRange.start ||
+                      searchFilters.lastLoginRange.end) && (
+                      <Badge
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        Last Activity:{" "}
+                        {searchFilters.lastLoginRange.start || "any"} -{" "}
+                        {searchFilters.lastLoginRange.end || "any"}
+                        <X
+                          className="w-3 h-3 cursor-pointer hover:text-red-600"
+                          onClick={() =>
+                            setSearchFilters((prev) => ({
+                              ...prev,
+                              lastLoginRange: { start: "", end: "" },
+                            }))
+                          }
+                        />
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Results Summary */}
+              <div className="flex items-center justify-between pt-2 border-t">
+                <div className="text-sm text-gray-600">
+                  Showing {filteredUsers.length} of {users?.length || 0} users
+                  {getActiveFiltersCount() > 0 && (
+                    <span className="ml-2 text-blue-600">(filtered)</span>
+                  )}
+                </div>
+                {getActiveFiltersCount() > 0 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearFilters}
+                    className="text-blue-600 hover:text-blue-700"
+                  >
+                    Clear all filters
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle>All Users</CardTitle>
@@ -330,9 +878,26 @@ const UserManagement: React.FC = () => {
                 </div>
               ) : error ? (
                 <div className="text-center py-8 text-red-600">{error}</div>
-              ) : users && users.length > 0 ? (
+              ) : users && users.length > 0 && filteredUsers.length === 0 ? (
+                <div className="text-center py-8 text-gray-600">
+                  <div>
+                    <p>No users match your current filters</p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Try adjusting your search criteria or clearing some
+                      filters
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={clearFilters}
+                      className="mt-3"
+                    >
+                      Clear all filters
+                    </Button>
+                  </div>
+                </div>
+              ) : filteredUsers && filteredUsers.length > 0 ? (
                 <div className="space-y-4">
-                  {users.map((user) => (
+                  {filteredUsers.map((user) => (
                     <div
                       key={user.id}
                       className="flex items-center justify-between p-4 border rounded-lg"
@@ -380,7 +945,20 @@ const UserManagement: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center py-8 text-gray-600">
-                  No users found
+                  {getActiveFiltersCount() > 0 ? (
+                    <div>
+                      <p>No users match your current filters</p>
+                      <Button
+                        variant="link"
+                        onClick={clearFilters}
+                        className="text-blue-600 hover:text-blue-700 mt-2"
+                      >
+                        Clear all filters
+                      </Button>
+                    </div>
+                  ) : (
+                    "No users found"
+                  )}
                 </div>
               )}
             </CardContent>
