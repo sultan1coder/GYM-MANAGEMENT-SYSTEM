@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Settings, User, Lock, Shield, Bell, Download, AlertTriangle } from 'lucide-react';
-import EnhancedProfileManager from './EnhancedProfileManager';
+import React, { useState } from "react";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import {
+  Settings,
+  User,
+  Lock,
+  Shield,
+  Bell,
+  Download,
+  AlertTriangle,
+  CreditCard,
+  Search,
+  ShieldCheck,
+} from "lucide-react";
+import EnhancedProfileManager from "./EnhancedProfileManager";
 
 const EnhancedProfileManagerDemo: React.FC = () => {
   const [showProfileManager, setShowProfileManager] = useState(false);
-  const [userType, setUserType] = useState<'staff' | 'member'>('member');
+  const [userType, setUserType] = useState<"staff" | "member">("member");
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -16,8 +27,8 @@ const EnhancedProfileManagerDemo: React.FC = () => {
           Enhanced Profile Manager Demo
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-          A comprehensive profile management system with advanced security features, 
-          privacy controls, and data management capabilities.
+          A comprehensive profile management system with advanced security
+          features, privacy controls, and data management capabilities.
         </p>
       </div>
 
@@ -114,6 +125,53 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <li>• Data portability</li>
               </ul>
             </div>
+
+            {/* Membership & Subscription */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <CreditCard className="h-5 w-5 text-indigo-600" />
+                <h3 className="font-semibold">Membership & Subscription</h3>
+              </div>
+              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                <li>• Membership renewal reminders</li>
+                <li>• Payment history tracking</li>
+                <li>• Subscription plan selection</li>
+                <li>• Digital membership cards</li>
+                <li>• Billing information management</li>
+              </ul>
+            </div>
+
+            {/* User Experience Improvements */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Search className="h-5 w-5 text-purple-600" />
+                <h3 className="font-semibold">User Experience Improvements</h3>
+              </div>
+              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                <li>• Smart search with autocomplete</li>
+                <li>• Keyboard shortcuts & navigation</li>
+                <li>• Dark mode toggle</li>
+                <li>• Enhanced accessibility</li>
+                <li>• Mobile optimization</li>
+                <li>• Offline support</li>
+              </ul>
+            </div>
+
+            {/* Data Validation & Security */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-red-600" />
+                <h3 className="font-semibold">Data Validation & Security</h3>
+              </div>
+              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                <li>• Input sanitization & validation</li>
+                <li>• Rate limiting & account lockout</li>
+                <li>• Session management & security</li>
+                <li>• Data encryption & protection</li>
+                <li>• Comprehensive audit logging</li>
+                <li>• Security score monitoring</li>
+              </ul>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -129,14 +187,16 @@ const EnhancedProfileManagerDemo: React.FC = () => {
               <label className="text-sm font-medium">User Type</label>
               <select
                 value={userType}
-                onChange={(e) => setUserType(e.target.value as 'staff' | 'member')}
+                onChange={(e) =>
+                  setUserType(e.target.value as "staff" | "member")
+                }
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="member">Member</option>
                 <option value="staff">Staff</option>
               </select>
             </div>
-            
+
             <Button
               onClick={() => setShowProfileManager(true)}
               size="lg"
@@ -146,16 +206,17 @@ const EnhancedProfileManagerDemo: React.FC = () => {
               Open Enhanced Profile Manager
             </Button>
           </div>
-          
+
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
             <div className="flex items-center gap-2 text-blue-800 dark:text-blue-200">
               <AlertTriangle className="h-5 w-5" />
               <span className="font-medium">Demo Mode</span>
             </div>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-              This is a demonstration of the Enhanced Profile Manager. All features are fully functional 
-              but use mock data and simulated API calls. In production, this would integrate with your 
-              backend services.
+              This is a demonstration of the Enhanced Profile Manager. All
+              features are fully functional but use mock data and simulated API
+              calls. In production, this would integrate with your backend
+              services.
             </p>
           </div>
         </CardContent>
@@ -178,7 +239,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <li>• Lucide React icons</li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-2">Key Features</h3>
               <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
@@ -190,12 +251,13 @@ const EnhancedProfileManagerDemo: React.FC = () => {
               </ul>
             </div>
           </div>
-          
+
           <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
             <h3 className="font-semibold mb-2">State Management</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              The component uses React hooks for local state management, with Redux integration for user data. 
-              All form states, UI states, and user preferences are managed locally for optimal performance.
+              The component uses React hooks for local state management, with
+              Redux integration for user data. All form states, UI states, and
+              user preferences are managed locally for optimal performance.
             </p>
           </div>
         </CardContent>
