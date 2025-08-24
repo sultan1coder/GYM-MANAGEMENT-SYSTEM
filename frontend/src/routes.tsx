@@ -14,6 +14,7 @@ import MemberDashboard from "./pages/members/Dashboard";
 import SingleMember from "./pages/members/singleMember";
 import MemberUpdate from "./pages/members/Update";
 import MemberProfile from "./pages/members/Profile";
+import MemberManagement from "./pages/members/MemberManagement";
 import FetchAllUsers from "./pages/users/FetchAllUsers";
 import EquipmentManager from "./pages/equipments/ManageEquip";
 import GetSingle from "./pages/equipments/GetSingle";
@@ -109,6 +110,14 @@ export const router = createBrowserRouter([
             element: (
               <ProtectedRoute>
                 <MemberProfile />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "manage",
+            element: (
+              <ProtectedRoute requireStaff>
+                <MemberManagement />
               </ProtectedRoute>
             ),
           },
