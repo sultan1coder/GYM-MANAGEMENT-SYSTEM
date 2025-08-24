@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useEquipmentGetSingle } from "@/hooks/equipment";
 import { Button } from "@/components/ui/button";
@@ -59,7 +59,7 @@ import {
   Settings,
   FileText,
   Activity,
-  X,
+
   BarChart3,
 } from "lucide-react";
 import { toast } from "react-hot-toast";

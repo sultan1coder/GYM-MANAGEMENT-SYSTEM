@@ -119,7 +119,7 @@ const MemberUpdate = () => {
       setError("");
       const response = await memberAPI.getSingleMember(id!);
 
-      if (response.data.isSuccess) {
+      if (response.data.isSuccess && response.data.data) {
         const memberData = response.data.data;
         setMember(memberData);
         setFormData({
@@ -130,25 +130,25 @@ const MemberUpdate = () => {
           membershiptype: memberData.membershiptype,
           password: "",
           confirmPassword: "",
-          profile_picture: memberData.profile_picture || "",
-          address: memberData.address || {
+          profile_picture: "",
+          address: {
             street: "",
             city: "",
             state: "",
             zipCode: "",
             country: "",
           },
-          emergency_contact: memberData.emergency_contact || {
+          emergency_contact: {
             name: "",
             relationship: "",
             phone: "",
             email: "",
           },
-          medical_info: memberData.medical_info || {
-            fitness_goals: [],
-            health_conditions: [],
-            allergies: [],
-            medications: [],
+          medical_info: {
+            fitness_goals: [] as string[],
+            health_conditions: [] as string[],
+            allergies: [] as string[],
+            medications: [] as string[],
             emergency_notes: "",
           },
         });
@@ -320,13 +320,13 @@ const MemberUpdate = () => {
           zipCode: "",
           country: "",
         },
-        emergency_contact: member.emergency_contact || {
+        emergency_contact: {
           name: "",
           relationship: "",
           phone: "",
           email: "",
         },
-        medical_info: member.medical_info || {
+        medical_info: {
           fitness_goals: [] as string[],
           health_conditions: [] as string[],
           allergies: [] as string[],

@@ -2,6 +2,13 @@
 export type MembershipType = "MONTHLY" | "DAILY";
 export type UserRole = "admin" | "staff";
 
+// Member Response Types
+export interface ILoginMemberResponse {
+  isSuccess: boolean;
+  member: Member;
+  token: string;
+}
+
 // User Types
 export interface User {
   id: number;
@@ -26,6 +33,42 @@ export interface Member {
   password: string;
   age: number;
   membershiptype: MembershipType;
+
+  // Address Information
+  address?: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+  } | null;
+
+  // Emergency Contact
+  emergency_contact?: {
+    name: string;
+    relationship: string;
+    phone: string;
+    email?: string;
+  } | null;
+
+  // Medical Information
+  medical_info?: {
+    fitness_goals: string[];
+    health_conditions: string[];
+    allergies: string[];
+    medications: string[];
+    emergency_notes?: string;
+  } | null;
+
+  // Terms & Conditions
+  terms_accepted: boolean;
+  terms_accepted_at?: Date;
+
+  // Email Verification
+  email_verified: boolean;
+  email_verification_token?: string;
+  email_verification_expires?: Date;
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -42,7 +85,7 @@ export interface Equipment {
   quantity: number;
   available: number;
   inUse: number;
-  status: 'OPERATIONAL' | 'MAINTENANCE' | 'OUT_OF_SERVICE' | 'RETIRED';
+  status: "OPERATIONAL" | "MAINTENANCE" | "OUT_OF_SERVICE" | "RETIRED";
   location?: string;
   description?: string;
   imageUrl?: string;
@@ -59,7 +102,7 @@ export interface Equipment {
 export interface MaintenanceLog {
   id: string;
   equipmentId: string;
-  type: 'PREVENTIVE' | 'CORRECTIVE' | 'INSPECTION' | 'REPAIR';
+  type: "PREVENTIVE" | "CORRECTIVE" | "INSPECTION" | "REPAIR";
   description: string;
   cost?: number;
   performedBy?: string;

@@ -67,10 +67,10 @@ const Register = () => {
 
       // Medical Information
       medical_info: {
-        fitness_goals: [],
-        health_conditions: [],
-        allergies: [],
-        medications: [],
+        fitness_goals: [] as string[],
+        health_conditions: [] as string[],
+        allergies: [] as string[],
+        medications: [] as string[],
         emergency_notes: "",
       },
 
@@ -583,7 +583,7 @@ const Register = () => {
                             formik.setFieldValue(
                               "medical_info.fitness_goals",
                               formik.values.medical_info.fitness_goals.filter(
-                                (g) => g !== goal
+                                (g: string) => g !== goal
                               )
                             );
                           }

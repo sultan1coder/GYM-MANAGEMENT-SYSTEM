@@ -117,7 +117,11 @@ function SingleMember() {
       const response = await memberAPI.getSingleMember(id!);
 
       if (response.data.isSuccess) {
-        setMember(response.data.data || null);
+        setMember(response.data.data ? {
+          ...response.data.data,
+          terms_accepted: false,
+          email_verified: false
+        } as Member : null);
       } else {
         setError("Failed to fetch member data");
       }

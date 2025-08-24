@@ -345,21 +345,6 @@ const lineChartOptions = {
   maintainAspectRatio: false,
   animation: {
     duration: 1000,
-    easing: "easeInOutQuart",
-    onProgress: function (animation: any) {
-      const chart = animation.chart;
-      const ctx = chart.ctx;
-      const chartArea = chart.chartArea;
-      if (!chartArea) return;
-
-      // Add subtle glow effect
-      ctx.save();
-      ctx.shadowColor = "rgba(99, 102, 241, 0.3)";
-      ctx.shadowBlur = 10;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-      ctx.restore();
-    },
   },
   plugins: {
     legend: {
@@ -369,7 +354,7 @@ const lineChartOptions = {
         padding: 20,
         font: {
           size: 12,
-          weight: "600",
+          weight: "bold" as const,
         },
         color: "#64748b",
       },
@@ -386,7 +371,7 @@ const lineChartOptions = {
       intersect: false,
       titleFont: {
         size: 14,
-        weight: "600",
+        weight: "bold" as const,
       },
       bodyFont: {
         size: 13,
@@ -461,23 +446,7 @@ const lineChartOptions = {
     }
   },
   // Performance optimizations
-  parsing: false,
-  normalized: true,
   spanGaps: true,
-  // Accessibility features
-  accessibility: {
-    enabled: true,
-    announceNewData: {
-      announcementFormatter: function (announcement: any) {
-        return `Chart updated: ${announcement.data.datasets.length} datasets with ${announcement.data.labels.length} data points`;
-      },
-    },
-  },
-  // Mobile responsiveness
-  responsiveAnimationDuration: 300,
-  hover: {
-    animationDuration: 150,
-  },
 };
 
 const barChartOptions = {
@@ -485,7 +454,6 @@ const barChartOptions = {
   maintainAspectRatio: false,
   animation: {
     duration: 1000,
-    easing: "easeInOutQuart",
   },
   plugins: {
     legend: {
@@ -495,7 +463,7 @@ const barChartOptions = {
         padding: 20,
         font: {
           size: 12,
-          weight: "600",
+          weight: "bold" as const,
         },
         color: "#64748b",
       },
@@ -510,7 +478,7 @@ const barChartOptions = {
       displayColors: true,
       titleFont: {
         size: 14,
-        weight: "600",
+        weight: "bold" as const,
       },
       bodyFont: {
         size: 13,
@@ -558,9 +526,7 @@ const barChartOptions = {
       borderRadius: 8,
     },
   },
-  // Performance optimizations
-  parsing: false,
-  normalized: true,
+
 };
 
 const doughnutChartOptions = {
@@ -568,7 +534,6 @@ const doughnutChartOptions = {
   maintainAspectRatio: false,
   animation: {
     duration: 1000,
-    easing: "easeInOutQuart",
   },
   plugins: {
     legend: {
@@ -578,7 +543,7 @@ const doughnutChartOptions = {
         padding: 20,
         font: {
           size: 12,
-          weight: "600",
+          weight: "bold" as const,
         },
         color: "#64748b",
       },
@@ -593,7 +558,7 @@ const doughnutChartOptions = {
       displayColors: true,
       titleFont: {
         size: 14,
-        weight: "600",
+        weight: "bold" as const,
       },
       bodyFont: {
         size: 13,
@@ -627,9 +592,7 @@ const doughnutChartOptions = {
       hoverOffset: 8,
     },
   },
-  // Performance optimizations
-  parsing: false,
-  normalized: true,
+
 };
 
 // Mock revenue breakdown data - commented out for now
@@ -776,7 +739,7 @@ const mockTopPerformers = [
 const AdminDashboard = () => {
   const [timeRange, setTimeRange] = useState("month");
   const [maintenanceAlerts, setMaintenanceAlerts] = useState<any[]>([]);
-  const [isLoadingAlerts, setIsLoadingAlerts] = useState(true);
+
   const [equipmentStats, setEquipmentStats] = useState<any>(null);
   const [selectedChart, setSelectedChart] = useState("revenue");
   const [chartsLoaded, setChartsLoaded] = useState(false);
@@ -784,7 +747,7 @@ const AdminDashboard = () => {
   // Fetch maintenance alerts and equipment stats
   const fetchMaintenanceAlerts = async () => {
     try {
-      setIsLoadingAlerts(true);
+
       const response = await userAPI.getEquipmentStats();
       const data = response.data as any;
       
@@ -852,7 +815,7 @@ const AdminDashboard = () => {
       // Fallback to mock data if API fails
       setMaintenanceAlerts(mockSystemAlerts);
     } finally {
-      setIsLoadingAlerts(false);
+      
     }
   };
 

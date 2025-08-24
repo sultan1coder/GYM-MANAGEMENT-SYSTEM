@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { Equipment } from "@/types";
@@ -9,9 +9,9 @@ import {
   X,
   Package,
   Settings,
-  FileText,
+
   DollarSign,
-  Calendar,
+
   MapPin,
   Users,
   Wrench,
@@ -20,7 +20,7 @@ import {
   XCircle,
   Clock,
   Activity,
-  Eye,
+
   Trash2,
   Plus,
   Edit,
@@ -69,7 +69,7 @@ const UpdateEquipment = () => {
     quantity: 1,
     available: 1,
     inUse: 0,
-    status: "OPERATIONAL" as const,
+    status: "OPERATIONAL" as "OPERATIONAL" | "MAINTENANCE" | "OUT_OF_SERVICE" | "RETIRED",
     location: "",
     description: "",
     imageUrl: "",
@@ -134,40 +134,49 @@ const UpdateEquipment = () => {
     try {
       setIsLoading(true);
       setError(null);
-      const response = await userAPI.getSingleEquipment(id!);
+      const response = await userAPI.getEquipment();
 
-      if (response.data.success) {
-        const equip = response.data.data;
-        setEquipment(equip);
-        setFormData({
-          name: equip.name || "",
-          type: equip.type || "",
-          category: equip.category || "",
-          brand: equip.brand || "",
-          model: equip.model || "",
-          serialNumber: equip.serialNumber || "",
-          quantity: equip.quantity || 1,
-          available: equip.available || 1,
-          inUse: equip.inUse || 0,
-          status: equip.status || "OPERATIONAL",
-          location: equip.location || "",
-          description: equip.description || "",
-          imageUrl: equip.imageUrl || "",
-          purchaseDate: equip.purchaseDate
-            ? new Date(equip.purchaseDate).toISOString().split("T")[0]
-            : "",
-          warrantyExpiry: equip.warrantyExpiry
-            ? new Date(equip.warrantyExpiry).toISOString().split("T")[0]
-            : "",
-          cost: equip.cost || 0,
-          maintenance: equip.maintenance || false,
-          lastMaintenance: equip.lastMaintenance
-            ? new Date(equip.lastMaintenance).toISOString().split("T")[0]
-            : "",
-          nextMaintenance: equip.nextMaintenance
-            ? new Date(equip.nextMaintenance).toISOString().split("T")[0]
-            : "",
-        });
+      if (response.data.isSuccess) {
+        const equipmentData = response.data.data;
+        if (equipmentData && Array.isArray(equipmentData)) {
+          const foundEquipment = equipmentData.find((e: Equipment) => e.id === id);
+          if (foundEquipment) {
+            setEquipment(foundEquipment);
+            setFormData({
+              name: foundEquipment.name || "",
+              type: foundEquipment.type || "",
+              category: foundEquipment.category || "",
+              brand: foundEquipment.brand || "",
+              model: foundEquipment.model || "",
+              serialNumber: foundEquipment.serialNumber || "",
+              quantity: foundEquipment.quantity || 1,
+              available: foundEquipment.available || 1,
+              inUse: foundEquipment.inUse || 0,
+              status: foundEquipment.status || "OPERATIONAL",
+              location: foundEquipment.location || "",
+              description: foundEquipment.description || "",
+              imageUrl: foundEquipment.imageUrl || "",
+              purchaseDate: foundEquipment.purchaseDate
+                ? new Date(foundEquipment.purchaseDate).toISOString().split("T")[0]
+                : "",
+              warrantyExpiry: foundEquipment.warrantyExpiry
+                ? new Date(foundEquipment.warrantyExpiry).toISOString().split("T")[0]
+                : "",
+              cost: foundEquipment.cost || 0,
+              maintenance: foundEquipment.maintenance || false,
+              lastMaintenance: foundEquipment.lastMaintenance
+                ? new Date(foundEquipment.lastMaintenance).toISOString().split("T")[0]
+                : "",
+              nextMaintenance: foundEquipment.nextMaintenance
+                ? new Date(foundEquipment.nextMaintenance).toISOString().split("T")[0]
+                : "",
+            });
+          } else {
+            setError("Equipment not found");
+          }
+        } else {
+          setError("Invalid equipment data format");
+        }
       } else {
         setError("Failed to fetch equipment data");
       }
@@ -232,7 +241,7 @@ const UpdateEquipment = () => {
 
       const response = await userAPI.updateEquipment(id!, updateData);
 
-      if (response.data.success) {
+      if (response.data.isSuccess) {
         toast.success("Equipment updated successfully!");
         // Refresh equipment data
         await fetchEquipment();
@@ -259,7 +268,7 @@ const UpdateEquipment = () => {
 
       const response = await userAPI.deleteEquipment(id!);
 
-      if (response.data.success) {
+      if (response.data.isSuccess) {
         toast.success("Equipment deleted successfully!");
         navigate("/equipments/all");
       } else {
@@ -278,18 +287,17 @@ const UpdateEquipment = () => {
         return;
       }
 
-      const response = await userAPI.addMaintenanceLog({
-        equipmentId: id!,
+      const response = await userAPI.addMaintenanceLog(id!, {
         type: maintenanceData.type,
         description: maintenanceData.description,
-        cost: parseFloat(maintenanceData.cost.toString()) || 0,
+        cost: (parseFloat(maintenanceData.cost.toString()) || 0).toString(),
         performedBy: maintenanceData.performedBy,
         nextDue: maintenanceData.nextDue
           ? new Date(maintenanceData.nextDue).toISOString()
           : undefined,
       });
 
-      if (response.data.success) {
+      if (response.data.isSuccess) {
         toast.success("Maintenance log added successfully!");
         setShowMaintenanceDialog(false);
         setMaintenanceData({
@@ -982,7 +990,7 @@ const UpdateEquipment = () => {
                       onChange={(e) =>
                         setMaintenanceData((prev) => ({
                           ...prev,
-                          cost: e.target.value,
+                          cost: parseFloat(e.target.value) || 0,
                         }))
                       }
                       placeholder="Enter maintenance cost"

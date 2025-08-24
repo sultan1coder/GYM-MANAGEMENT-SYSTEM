@@ -4,16 +4,12 @@ import {
   Dumbbell,
   CheckCircle,
   Wrench,
-  XCircle,
   TrendingUp,
   TrendingDown,
   Calendar,
-  Clock,
   DollarSign,
   Package,
   Activity,
-  Users,
-  MapPin,
   BarChart3,
   PieChart,
   LineChart,
@@ -22,13 +18,8 @@ import {
   Eye,
   Settings,
   AlertTriangle,
-  Info,
-  ArrowUp,
-  ArrowDown,
-  Filter,
   Download,
   Share2,
-  MoreVertical,
 } from "lucide-react";
 import {
   Card,
@@ -46,15 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { userAPI } from "@/services/api";
 import { Equipment, EquipmentStats } from "@/types";
 import { toast } from "react-hot-toast";
@@ -72,7 +55,7 @@ import {
   ArcElement,
   BarElement,
 } from "chart.js";
-import { Line, Bar, Doughnut } from "react-chartjs-2";
+import { Line, Doughnut } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -104,8 +87,6 @@ const EquipmentDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState("month");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch dashboard data
   const fetchDashboardData = async () => {

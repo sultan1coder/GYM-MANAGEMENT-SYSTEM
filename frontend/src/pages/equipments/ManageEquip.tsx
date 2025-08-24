@@ -61,7 +61,7 @@ import {
   Dumbbell,
   MoreVertical,
   Eye,
-  Settings,
+
   FileText,
   DollarSign,
   Package,
@@ -500,17 +500,7 @@ const EquipmentManager: React.FC = () => {
     }
   };
 
-  const handleStatusUpdate = async (id: string, status: string) => {
-    try {
-      const response = await userAPI.updateEquipmentStatus(id, { status });
-      if (response.data.isSuccess) {
-        toast.success("Equipment status updated!");
-        fetchEquipment();
-      }
-    } catch (error: any) {
-      toast.error("Failed to update status");
-    }
-  };
+
 
   const resetForm = () => {
     setFormData({
