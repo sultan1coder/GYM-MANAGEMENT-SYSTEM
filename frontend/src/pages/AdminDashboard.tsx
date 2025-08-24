@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import { userAPI } from "../services/api";
 import { Badge } from "@/components/ui/badge";
+import AdministrativeFeatures from "@/components/AdministrativeFeatures";
 
 // Register Chart.js components
 ChartJS.register(
@@ -2497,6 +2498,11 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Administrative Features Section */}
+      <div className="mt-8">
+        <AdministrativeFeatures />
       </div>
     </div>
   );
