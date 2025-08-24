@@ -15,6 +15,7 @@ import {
   ResetPasswordBody,
   LoginResponse,
   ApiResponse,
+  ILoginMemberResponse,
 } from "@/types";
 
 // Auth API
@@ -120,7 +121,7 @@ export const userAPI = {
 export const memberAPI = {
   // Member Authentication
   loginMember: (data: LoginBody) =>
-    api.post<LoginResponse>(`${BASE_API_URL}/members/login`, data),
+    api.post<ILoginMemberResponse>(`${BASE_API_URL}/members/login`, data),
 
   registerMember: (data: RegisterMemberBody) =>
     api.post<ApiResponse<Member>>(`${BASE_API_URL}/members/register`, data),

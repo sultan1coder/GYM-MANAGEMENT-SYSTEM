@@ -17,8 +17,9 @@ export const getAllMembers = async (req: Request, res: Response) => {
   try {
     const members = await prisma.member.findMany();
     res.status(200).json({
+      isSuccess: true,
       message: "Successfully fetched all members",
-      members,
+      data: members,
     });
   } catch (error) {
     console.log(error);
@@ -49,17 +50,15 @@ export const getSingleMember = async (req: Request, res: Response) => {
     res.status(200).json({
       isSuccess: true,
       message: "Successfully fetched a member",
-      member,
+      data: member,
     });
-    return;
   } catch (error) {
+    console.error("Get single member error:", error);
     res.status(500).json({
       isSuccess: false,
       message: defaultErrorMessage,
-      error: JSON.stringify(error),
     });
   }
-  return;
 };
 
 //Register Member
@@ -129,6 +128,16 @@ export const registerMember = async (req: Request, res: Response) => {
 export const loginMember = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    
+    // Validate required fields
+    if (!email || !password) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Email and password are required",
+      });
+      return;
+    }
+
     const member = await prisma.member.findUnique({
       where: {
         email: email,
@@ -137,7 +146,8 @@ export const loginMember = async (req: Request, res: Response) => {
 
     if (!member) {
       res.status(401).json({
-        message: "incorrect email or password",
+        isSuccess: false,
+        message: "Incorrect email or password",
       });
       return;
     }
@@ -145,21 +155,27 @@ export const loginMember = async (req: Request, res: Response) => {
     const isMatch = await comparePassword(password, member.password);
 
     if (!isMatch) {
-      res.status(400).json({
+      res.status(401).json({
+        isSuccess: false,
         message: "Incorrect email or password",
       });
       return;
     }
+
     // Generate token
     const token = generateToken({ id: member.id, role: "member" });
+    
     res.status(200).json({
       isSuccess: true,
+      message: "Login successful",
       member,
       token,
     });
   } catch (error) {
+    console.error("Login error:", error);
     res.status(500).json({
-      message: "Something went wrong",
+      isSuccess: false,
+      message: "Something went wrong during login",
     });
   }
 };

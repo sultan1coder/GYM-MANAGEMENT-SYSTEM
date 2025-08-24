@@ -26,7 +26,7 @@ export const loginMemberFn = createAsyncThunk(
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(
-          error.response?.data.messaga || DEFAULT_ERROR_MESSAGE
+          error.response?.data.message || DEFAULT_ERROR_MESSAGE
         );
       }
 
@@ -46,6 +46,10 @@ export const loginMemberSlice = createSlice({
 
       // Remove the data from the local storage
       localStorage.removeItem("memberData");
+      localStorage.removeItem("memberToken");
+    },
+    clearError: (state) => {
+      state.error = "";
     },
   },
 
@@ -63,8 +67,15 @@ export const loginMemberSlice = createSlice({
       state.error = "";
       state.data = action.payload;
       try {
+        // Store member data
         localStorage.setItem("memberData", JSON.stringify(action.payload));
-      } catch {}
+        // Store token for authentication
+        if (action.payload.token) {
+          localStorage.setItem("memberToken", action.payload.token);
+        }
+      } catch (error) {
+        console.error("Failed to store member data in localStorage:", error);
+      }
     });
 
     //Rejected
@@ -76,4 +87,4 @@ export const loginMemberSlice = createSlice({
   },
 });
 
-export const { logout } = loginMemberSlice.actions;
+export const { logout, clearError } = loginMemberSlice.actions;

@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { loginMemberFn } from "@/redux/slices/members/loginSlice";
+import { loginMemberFn, clearError } from "@/redux/slices/members/loginSlice";
 import {
   Users,
   Mail,
@@ -14,6 +14,7 @@ import {
   EyeOff,
   ArrowRight,
   Dumbbell,
+  AlertCircle,
 } from "lucide-react";
 
 const Login = () => {
@@ -29,6 +30,9 @@ const Login = () => {
       password: "",
     },
     onSubmit(values) {
+      // Clear any previous errors
+      dispatch(clearError());
+      
       const data = {
         email: values.email,
         password: values.password,
@@ -48,6 +52,13 @@ const Login = () => {
     }),
   });
 
+  // Clear errors when form values change
+  useEffect(() => {
+    if (loginState.error) {
+      dispatch(clearError());
+    }
+  }, [formik.values.email, formik.values.password]);
+
   useEffect(() => {
     if (loginState.error) {
       toast.error(loginState.error, { id: toastId });
@@ -62,7 +73,7 @@ const Login = () => {
     if (loginState.data.isSuccess) {
       navigate("/members/dashboard");
     }
-  }, [loginState.data.isSuccess]);
+  }, [loginState.data.isSuccess, navigate]);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
@@ -81,6 +92,16 @@ const Login = () => {
               Welcome back! Access your gym member portal
             </p>
           </div>
+
+          {/* Error Display */}
+          {loginState.error && (
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <div className="flex items-center gap-2 text-red-800 dark:text-red-200">
+                <AlertCircle className="h-5 w-5" />
+                <span className="text-sm font-medium">{loginState.error}</span>
+              </div>
+            </div>
+          )}
 
           {/* Form */}
           <form onSubmit={formik.handleSubmit} className="space-y-6">
@@ -103,6 +124,7 @@ const Login = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.email}
+                  disabled={loginState.loading}
                 />
               </div>
               {formik.touched.email && formik.errors.email && (
@@ -123,7 +145,7 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Enter your password"
-                  className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                  className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
                     formik.touched.password && formik.errors.password
                       ? "border-red-300 dark:border-red-600"
                       : "border-slate-300 dark:border-slate-600"
@@ -131,11 +153,13 @@ const Login = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.password}
+                  disabled={loginState.loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                  disabled={loginState.loading}
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />

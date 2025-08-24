@@ -12,6 +12,8 @@ import LoginMember from "./pages/members/Login";
 import RegisterMember from "./pages/members/Register";
 import MemberDashboard from "./pages/members/Dashboard";
 import SingleMember from "./pages/members/singleMember";
+import MemberUpdate from "./pages/members/Update";
+import MemberProfile from "./pages/members/Profile";
 import FetchAllUsers from "./pages/users/FetchAllUsers";
 import EquipmentManager from "./pages/equipments/ManageEquip";
 import GetSingle from "./pages/equipments/GetSingle";
@@ -91,6 +93,22 @@ export const router = createBrowserRouter([
             element: (
               <ProtectedRoute requireStaff>
                 <SingleMember />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "update/:id",
+            element: (
+              <ProtectedRoute requireStaff>
+                <MemberUpdate />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "profile",
+            element: (
+              <ProtectedRoute>
+                <MemberProfile />
               </ProtectedRoute>
             ),
           },

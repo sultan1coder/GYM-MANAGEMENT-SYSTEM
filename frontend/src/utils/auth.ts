@@ -6,10 +6,21 @@ export const getToken = (): string | null => {
   const token = localStorage.getItem("token");
   if (token) return token;
 
+  // Check for member token
+  const memberToken = localStorage.getItem("memberToken");
+  if (memberToken) return memberToken;
+
   // Fallback to userData if token not found
   const userData = localStorage.getItem("userData");
   if (userData) {
     const parsed = JSON.parse(userData);
+    return parsed.token || null;
+  }
+
+  // Fallback to memberData if token not found
+  const memberData = localStorage.getItem("memberData");
+  if (memberData) {
+    const parsed = JSON.parse(memberData);
     return parsed.token || null;
   }
 
@@ -24,6 +35,9 @@ export const removeToken = (): void => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
   localStorage.removeItem("member");
+  localStorage.removeItem("memberToken");
+  localStorage.removeItem("memberData");
+  localStorage.removeItem("userData");
 };
 
 // User management
