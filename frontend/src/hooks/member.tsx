@@ -56,7 +56,9 @@ export const useMemberRemove = () => {
       const memberData: Member = {
         ...res.deleteMember,
         membershiptype: res.deleteMember.membershiptype as "MONTHLY" | "DAILY",
-        phone_number: res.deleteMember.phone_number || null
+        phone_number: res.deleteMember.phone_number || null,
+        terms_accepted: false,
+        email_verified: false,
       };
       setMember(memberData);
     } catch (e) {

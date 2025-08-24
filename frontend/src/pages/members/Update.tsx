@@ -36,6 +36,9 @@ import {
   Clock,
   BarChart3,
   Calendar,
+  MapPin,
+  Heart,
+  AlertTriangle,
 } from "lucide-react";
 
 const MemberUpdate = () => {
@@ -60,6 +63,32 @@ const MemberUpdate = () => {
     password: "",
     confirmPassword: "",
     profile_picture: "",
+
+    // Address Information
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "",
+    },
+
+    // Emergency Contact
+    emergency_contact: {
+      name: "",
+      relationship: "",
+      phone: "",
+      email: "",
+    },
+
+    // Medical Information
+    medical_info: {
+      fitness_goals: [] as string[],
+      health_conditions: [] as string[],
+      allergies: [] as string[],
+      medications: [] as string[],
+      emergency_notes: "",
+    },
   });
 
   const [validationErrors, setValidationErrors] = useState<
@@ -102,6 +131,26 @@ const MemberUpdate = () => {
           password: "",
           confirmPassword: "",
           profile_picture: memberData.profile_picture || "",
+          address: memberData.address || {
+            street: "",
+            city: "",
+            state: "",
+            zipCode: "",
+            country: "",
+          },
+          emergency_contact: memberData.emergency_contact || {
+            name: "",
+            relationship: "",
+            phone: "",
+            email: "",
+          },
+          medical_info: memberData.medical_info || {
+            fitness_goals: [],
+            health_conditions: [],
+            allergies: [],
+            medications: [],
+            emergency_notes: "",
+          },
         });
       } else {
         setError("Failed to fetch member data");
@@ -151,8 +200,31 @@ const MemberUpdate = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleInputChange = (field: string, value: string | number) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleInputChange = (
+    field: string,
+    value: string | number | string[]
+  ) => {
+    setFormData((prev) => {
+      // Handle nested object updates (e.g., "address.street")
+      if (field.includes(".")) {
+        const [parent, child] = field.split(".");
+        const parentKey = parent as keyof typeof prev;
+        const parentObj = prev[parentKey] as Record<string, any>;
+        return {
+          ...prev,
+          [parentKey]: {
+            ...parentObj,
+            [child]: value,
+          },
+        };
+      }
+
+      // Handle regular field updates
+      return {
+        ...prev,
+        [field]: value,
+      };
+    });
 
     // Clear validation error when user starts typing
     if (validationErrors[field]) {
@@ -176,6 +248,9 @@ const MemberUpdate = () => {
         phone_number: formData.phone_number || null,
         age: formData.age,
         membershiptype: formData.membershiptype,
+        address: formData.address,
+        emergency_contact: formData.emergency_contact,
+        medical_info: formData.medical_info,
       };
 
       // Only include password if it was changed
@@ -238,6 +313,26 @@ const MemberUpdate = () => {
         password: "",
         confirmPassword: "",
         profile_picture: member.profile_picture || "",
+        address: member.address || {
+          street: "",
+          city: "",
+          state: "",
+          zipCode: "",
+          country: "",
+        },
+        emergency_contact: member.emergency_contact || {
+          name: "",
+          relationship: "",
+          phone: "",
+          email: "",
+        },
+        medical_info: member.medical_info || {
+          fitness_goals: [] as string[],
+          health_conditions: [] as string[],
+          allergies: [] as string[],
+          medications: [] as string[],
+          emergency_notes: "",
+        },
       });
     }
     setValidationErrors({});
@@ -641,6 +736,282 @@ const MemberUpdate = () => {
                     </Button>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <Separator className="my-6" />
+
+            {/* Address Information */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <MapPin className="w-5 h-5" />
+                Address Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="address.street">Street Address</Label>
+                  <Input
+                    id="address.street"
+                    value={formData.address.street}
+                    onChange={(e) =>
+                      handleInputChange("address.street", e.target.value)
+                    }
+                    placeholder="Enter street address"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address.city">City</Label>
+                  <Input
+                    id="address.city"
+                    value={formData.address.city}
+                    onChange={(e) =>
+                      handleInputChange("address.city", e.target.value)
+                    }
+                    placeholder="Enter city"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address.state">State/Province</Label>
+                  <Input
+                    id="address.state"
+                    value={formData.address.state}
+                    onChange={(e) =>
+                      handleInputChange("address.state", e.target.value)
+                    }
+                    placeholder="Enter state/province"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address.zipCode">ZIP/Postal Code</Label>
+                  <Input
+                    id="address.zipCode"
+                    value={formData.address.zipCode}
+                    onChange={(e) =>
+                      handleInputChange("address.zipCode", e.target.value)
+                    }
+                    placeholder="Enter ZIP/postal code"
+                  />
+                </div>
+
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="address.country">Country</Label>
+                  <Input
+                    id="address.country"
+                    value={formData.address.country}
+                    onChange={(e) =>
+                      handleInputChange("address.country", e.target.value)
+                    }
+                    placeholder="Enter country"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <Separator className="my-6" />
+
+            {/* Emergency Contact */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5" />
+                Emergency Contact
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="emergency_contact.name">Full Name</Label>
+                  <Input
+                    id="emergency_contact.name"
+                    value={formData.emergency_contact.name}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "emergency_contact.name",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Enter emergency contact name"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="emergency_contact.relationship">
+                    Relationship
+                  </Label>
+                  <Input
+                    id="emergency_contact.relationship"
+                    value={formData.emergency_contact.relationship}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "emergency_contact.relationship",
+                        e.target.value
+                      )
+                    }
+                    placeholder="e.g., Spouse, Parent, Friend"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="emergency_contact.phone">Phone Number</Label>
+                  <Input
+                    id="emergency_contact.phone"
+                    value={formData.emergency_contact.phone}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "emergency_contact.phone",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Enter emergency contact phone"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="emergency_contact.email">
+                    Email (Optional)
+                  </Label>
+                  <Input
+                    id="emergency_contact.email"
+                    type="email"
+                    value={formData.emergency_contact.email}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "emergency_contact.email",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Enter emergency contact email"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <Separator className="my-6" />
+
+            {/* Medical Information */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <Heart className="w-5 h-5" />
+                Health & Fitness Information
+              </h3>
+
+              {/* Fitness Goals */}
+              <div className="space-y-2">
+                <Label>Fitness Goals (Select all that apply)</Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {[
+                    "Weight Loss",
+                    "Muscle Gain",
+                    "Cardiovascular Health",
+                    "Flexibility & Mobility",
+                    "Strength Training",
+                    "Sports Performance",
+                    "General Fitness",
+                    "Rehabilitation",
+                  ].map((goal) => (
+                    <label
+                      key={goal}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.medical_info.fitness_goals.includes(
+                          goal
+                        )}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            const newGoals = [
+                              ...formData.medical_info.fitness_goals,
+                              goal,
+                            ];
+                            handleInputChange(
+                              "medical_info.fitness_goals",
+                              newGoals
+                            );
+                          } else {
+                            const newGoals =
+                              formData.medical_info.fitness_goals.filter(
+                                (g) => g !== goal
+                              );
+                            handleInputChange(
+                              "medical_info.fitness_goals",
+                              newGoals
+                            );
+                          }
+                        }}
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                        {goal}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Health Conditions */}
+              <div className="space-y-2">
+                <Label htmlFor="medical_info.health_conditions">
+                  Health Conditions (Optional)
+                </Label>
+                <textarea
+                  id="medical_info.health_conditions"
+                  value={formData.medical_info.health_conditions.join(", ")}
+                  onChange={(e) => {
+                    const conditions = e.target.value
+                      .split(",")
+                      .map((c) => c.trim())
+                      .filter((c) => c);
+                    handleInputChange(
+                      "medical_info.health_conditions",
+                      conditions
+                    );
+                  }}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                  placeholder="List any health conditions, injuries, or limitations..."
+                />
+              </div>
+
+              {/* Allergies */}
+              <div className="space-y-2">
+                <Label htmlFor="medical_info.allergies">
+                  Allergies (Optional)
+                </Label>
+                <textarea
+                  id="medical_info.allergies"
+                  value={formData.medical_info.allergies.join(", ")}
+                  onChange={(e) => {
+                    const allergies = e.target.value
+                      .split(",")
+                      .map((a) => a.trim())
+                      .filter((a) => a);
+                    handleInputChange("medical_info.allergies", allergies);
+                  }}
+                  rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                  placeholder="List any allergies..."
+                />
+              </div>
+
+              {/* Emergency Notes */}
+              <div className="space-y-2">
+                <Label htmlFor="medical_info.emergency_notes">
+                  Emergency Notes (Optional)
+                </Label>
+                <textarea
+                  id="medical_info.emergency_notes"
+                  value={formData.medical_info.emergency_notes}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "medical_info.emergency_notes",
+                      e.target.value
+                    )
+                  }
+                  rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                  placeholder="Any additional information for emergency situations..."
+                />
               </div>
             </div>
 

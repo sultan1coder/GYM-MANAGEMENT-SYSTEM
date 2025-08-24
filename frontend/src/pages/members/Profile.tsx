@@ -23,6 +23,7 @@ import { memberAPI } from "@/services/api";
 import { Member } from "@/types/members/memberLogin";
 import { toast } from "react-hot-toast";
 import ProfilePictureManager from "@/components/ProfilePictureManager";
+import EmailVerification from "@/components/EmailVerification";
 import {
   User,
   Calendar,
@@ -710,6 +711,28 @@ const MemberProfile = () => {
                 <span>Logout</span>
               </Button>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Email Verification */}
+        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+              Email Verification
+            </CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-400">
+              Verify your email address to access all features
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <EmailVerification
+              email={currentUser?.email || ""}
+              isVerified={currentUser?.email_verified || false}
+              onVerificationComplete={() => {
+                // In a real app, this would update the user state
+                toast.success("Email verification status updated!");
+              }}
+            />
           </CardContent>
         </Card>
       </div>
