@@ -459,6 +459,32 @@ function MemberDashboard() {
           </div>
         </div>
 
+        {/* Member Navigation */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <Link
+                to="/members/dashboard"
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border-b-2 border-blue-600"
+              >
+                <Users className="h-4 w-4" />
+                Dashboard
+              </Link>
+              <Link
+                to="/members/profile"
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-green-600 dark:hover:text-green-400 transition-colors border-b-2 border-transparent hover:border-green-600"
+              >
+                <User className="h-4 w-4" />
+                My Profile
+              </Link>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <Clock className="h-4 w-4" />
+              <span>Welcome back! You're logged in as a member.</span>
+            </div>
+          </div>
+        </div>
+
         {/* Last Updated Info */}
         <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400">
           <div className="flex items-center gap-2">

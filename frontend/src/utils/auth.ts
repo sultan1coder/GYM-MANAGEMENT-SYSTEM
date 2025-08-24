@@ -86,7 +86,17 @@ export const isStaff = (): boolean => {
 };
 
 export const isMember = (): boolean => {
-  return getMember() !== null;
+  // Check for member data in localStorage
+  const memberData = localStorage.getItem("memberData");
+  if (memberData) {
+    try {
+      const parsed = JSON.parse(memberData);
+      return parsed.member && parsed.token;
+    } catch {
+      return false;
+    }
+  }
+  return false;
 };
 
 export const isAuthenticated = (): boolean => {

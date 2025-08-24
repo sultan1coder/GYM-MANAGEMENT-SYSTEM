@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,6 +39,7 @@ import {
   Edit,
   Camera as CameraIcon,
   Activity,
+  Users,
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout as logoutMember } from "@/redux/slices/members/loginSlice";
@@ -49,8 +50,10 @@ const MemberProfile = () => {
   const dispatch = useDispatch();
 
   // Get user data from Redux (either member or staff)
-  const member = useSelector((state: any) => state.memberLogin.member);
-  const user = useSelector((state: any) => state.login.user);
+  const member = useSelector((state: any) => state.loginMemberSlice?.data?.member);
+  const user = useSelector((state: any) => state.loginSlice?.data?.user);
+  const memberLoading = useSelector((state: any) => state.loginMemberSlice?.loading);
+  const userLoading = useSelector((state: any) => state.loginSlice?.loading);
 
   const [isEditing, setIsEditing] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -87,6 +90,7 @@ const MemberProfile = () => {
 
   // Determine if current user is a member or staff
   const currentUser = member || user;
+  const isLoading = memberLoading || userLoading;
 
   // Set profile picture when currentUser changes
   useEffect(() => {
@@ -244,6 +248,15 @@ const MemberProfile = () => {
     setIsEditing(false);
   };
 
+  // Show loading state while Redux state is initializing
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-32 h-32 border-b-2 border-blue-600 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   if (!currentUser) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -303,6 +316,32 @@ const MemberProfile = () => {
               <LogOut className="w-4 h-4 mr-2" />
               Logout
             </Button>
+          </div>
+        </div>
+
+        {/* Member Navigation */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <Link
+                to="/members/dashboard"
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border-b-2 border-transparent hover:border-blue-600"
+              >
+                <Users className="h-4 w-4" />
+                Dashboard
+              </Link>
+              <Link
+                to="/members/profile"
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-green-600 dark:hover:text-green-400 transition-colors border-b-2 border-green-600"
+              >
+                <User className="h-4 w-4" />
+                My Profile
+              </Link>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <Clock className="h-4 w-4" />
+              <span>Welcome back! You're logged in as a member.</span>
+            </div>
           </div>
         </div>
 

@@ -873,7 +873,7 @@ const AdminDashboard = () => {
 
       <div className="p-6 mx-auto space-y-8 max-w-7xl">
         {/* Quick Stats Cards */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
           {/* Total Revenue */}
           <div className="group relative overflow-hidden bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:bg-slate-800 dark:border-slate-700">
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -991,6 +991,42 @@ const AdminDashboard = () => {
                 </div>
                 <div className="p-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 shadow-lg">
                   <Server className="w-8 h-8 text-white" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Members Management */}
+          <div className="group relative overflow-hidden bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:bg-slate-800 dark:border-slate-700">
+            <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="relative p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                    Total Members
+                  </p>
+                  <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
+                    {mockAdminStats.totalMembers}
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="flex items-center gap-1 text-green-600">
+                      <ArrowUp className="w-4 h-4" />
+                      <span className="text-sm font-medium">+15.3%</span>
+                    </div>
+                    <span className="text-sm text-slate-500">
+                      vs last month
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="flex items-center gap-1 text-blue-600">
+                      <UserCheck className="w-4 h-4" />
+                      <span className="text-sm font-medium">{mockAdminStats.activeMembers}</span>
+                    </div>
+                    <span className="text-sm text-slate-500">active</span>
+                  </div>
+                </div>
+                <div className="p-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 shadow-lg">
+                  <UserCheck className="w-8 h-8 text-white" />
                 </div>
               </div>
             </div>
@@ -2136,7 +2172,7 @@ const AdminDashboard = () => {
                 </h3>
               </div>
               <div className="p-6">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-3 gap-3">
                   <Link
                     to="/equipments/manage"
                     className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-800/30 dark:hover:to-indigo-800/30 transition-all group"
@@ -2158,6 +2194,18 @@ const AdminDashboard = () => {
                     </div>
                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300 text-center">
                       Manage Users
+                    </span>
+                  </Link>
+
+                  <Link
+                    to="/members/manage"
+                    className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-800/30 dark:hover:to-emerald-800/30 transition-all group"
+                  >
+                    <div className="p-3 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 mb-3 group-hover:scale-110 transition-transform">
+                      <UserCheck className="w-6 h-6 text-white" />
+                    </div>
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300 text-center">
+                      Manage Members
                     </span>
                   </Link>
 

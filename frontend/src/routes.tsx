@@ -10,7 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import LoginMember from "./pages/members/Login";
 import RegisterMember from "./pages/members/Register";
-import MemberDashboard from "./pages/members/Dashboard";
+import MemberDashboard from "./pages/members/MemberDashboard";
 import SingleMember from "./pages/members/singleMember";
 import MemberUpdate from "./pages/members/Update";
 import MemberProfile from "./pages/members/Profile";
