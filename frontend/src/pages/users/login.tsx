@@ -72,13 +72,13 @@ const Login = () => {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8">
+        <div className="p-8 bg-white shadow-xl dark:bg-slate-800 rounded-2xl">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-xl w-fit mx-auto mb-4">
-              <UserCircle className="h-8 w-8" />
+          <div className="mb-8 text-center">
+            <div className="p-3 mx-auto mb-4 text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl w-fit">
+              <UserCircle className="w-8 h-8" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+            <h1 className="mb-2 text-2xl font-bold text-slate-900 dark:text-white">
               Staff Login
             </h1>
             <p className="text-slate-600 dark:text-slate-300">
@@ -90,11 +90,11 @@ const Login = () => {
           <form onSubmit={formik.handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <Mail className="absolute w-5 h-5 transform -translate-y-1/2 left-3 top-1/2 text-slate-400" />
                 <input
                   type="email"
                   name="email"
@@ -118,11 +118,11 @@ const Login = () => {
 
             {/* Password Field */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <Lock className="absolute w-5 h-5 transform -translate-y-1/2 left-3 top-1/2 text-slate-400" />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
@@ -139,12 +139,12 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                  className="absolute transform -translate-y-1/2 right-3 top-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
+                    <EyeOff className="w-5 h-5" />
                   ) : (
-                    <Eye className="h-5 w-5" />
+                    <Eye className="w-5 h-5" />
                   )}
                 </button>
               </div>
@@ -169,17 +169,17 @@ const Login = () => {
             <button
               type="submit"
               disabled={loginState.loading || !formik.isValid}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center justify-center gap-2"
+              className="flex items-center justify-center w-full gap-2 py-3 font-medium text-white transition-all rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loginState.loading ? (
                 <div className="flex items-center gap-2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                  <div className="w-4 h-4 border-2 border-white rounded-full animate-spin border-t-transparent"></div>
                   Signing in...
                 </div>
               ) : (
                 <>
                   Sign In
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
@@ -201,7 +201,7 @@ const Login = () => {
           <div className="text-center">
             <Link
               to="/auth/register"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 transition-all border rounded-lg border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
             >
               Create Staff Account
             </Link>
@@ -209,12 +209,12 @@ const Login = () => {
 
           {/* Member Login Link */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+            <p className="mb-2 text-sm text-slate-600 dark:text-slate-400">
               Are you a gym member?
             </p>
             <Link
               to="/members/login"
-              className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+              className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
             >
               Member Login
             </Link>

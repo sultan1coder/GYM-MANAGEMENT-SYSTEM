@@ -15,12 +15,11 @@ import SingleMember from "./pages/members/singleMember";
 import MemberUpdate from "./pages/members/Update";
 import MemberProfile from "./pages/members/Profile";
 import MemberManagement from "./pages/members/MemberManagement";
-import FetchAllUsers from "./pages/users/FetchAllUsers";
+import UserManagement from "./pages/users/UserManagement";
 import EquipmentManager from "./pages/equipments/ManageEquip";
 import GetSingle from "./pages/equipments/GetSingle";
 import GetAll from "./pages/equipments/GetAll";
 import EquipmentDashboard from "./pages/equipments/EquipmentDashboard";
-import SingleUser from "./pages/users/GetSingle";
 import ProfileSettings from "./pages/ProfileSettings";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -52,19 +51,12 @@ export const router = createBrowserRouter([
             path: "reset-password",
             element: <ResetPassword />,
           },
+
           {
-            path: "allusers",
+            path: "management",
             element: (
-              <ProtectedRoute requireStaff>
-                <FetchAllUsers />
-              </ProtectedRoute>
-            ),
-          },
-          {
-            path: "single/:id",
-            element: (
-              <ProtectedRoute requireStaff>
-                <SingleUser />
+              <ProtectedRoute requireAdmin>
+                <UserManagement />
               </ProtectedRoute>
             ),
           },

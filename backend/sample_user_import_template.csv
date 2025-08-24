@@ -1,0 +1,6 @@
+name,email,username,phone_number,password,role
+John Doe,john.doe@gym.com,johndoe,+1234567890,password123,staff
+Jane Smith,jane.smith@gym.com,janesmith,+1234567891,password123,staff
+Mike Johnson,mike.johnson@gym.com,mikejohnson,+1234567892,password123,staff
+Sarah Wilson,sarah.wilson@gym.com,sarahwilson,+1234567893,password123,staff
+David Brown,david.brown@gym.com,davidbrown,+1234567894,password123,staff

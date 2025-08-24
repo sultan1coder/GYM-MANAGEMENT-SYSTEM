@@ -117,6 +117,55 @@ export const userAPI = {
     api.get<ApiResponse<any>>(`${BASE_API_URL}/equipments/stats`),
 };
 
+// User Management API functions
+export const createUserByAdmin = async (userData: {
+  name: string;
+  email: string;
+  username: string;
+  phone_number: string;
+  password: string;
+  role: string;
+}) => {
+  const response = await api.post<ApiResponse<User>>(`/users/create`, userData);
+  return response.data;
+};
+
+export const bulkImportUsers = async (formData: FormData) => {
+  const response = await api.post<ApiResponse<User[]>>(
+    `/users/bulk-import`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const getUserTemplates = async () => {
+  const response = await api.get<ApiResponse<User[]>>(`/users/templates`);
+  return response.data;
+};
+
+export const inviteUser = async (userData: {
+  name: string;
+  email: string;
+  username: string;
+  phone_number: string;
+  role: string;
+}) => {
+  const response = await api.post<ApiResponse<User>>(`/users/invite`, userData);
+  return response.data;
+};
+
+export const resendInvitation = async (userId: number) => {
+  const response = await api.post<ApiResponse<User>>(
+    `/users/resend-invitation/${userId}`
+  );
+  return response.data;
+};
+
 // Member Management API
 export const memberAPI = {
   // Member Authentication

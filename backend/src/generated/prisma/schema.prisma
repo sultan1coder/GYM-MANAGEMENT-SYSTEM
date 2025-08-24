@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  name          String
+  username      String?
+  email         String    @unique
+  phone_number  String?
+  password      String
+  role          String    @default("staff") // "admin" or "staff"
+  tokenVersion  Int       @default(0) // For refresh token invalidation
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  resetToken    String?
+  resetTokenExp DateTime?
+}
+
+model Member {
+  id             String         @id @default(uuid())
+  name           String
+  email          String         @unique
+  phone_number   String?
+  password       String
+  age            Int
+  membershiptype MemberShipType
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  payments       Payment[]
+  invoices       Invoice[]
+  Subscription   Subscription[]
+}
+
+enum MemberShipType {
+  MONTHLY
+  DAILY
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  amount    Float
+  memberId  String
+  method    String
+  createdAt DateTime @default(now())
+  Member    Member   @relation(fields: [memberId], references: [id])
+}
+
+model Invoice {
+  id        String   @id @default(uuid())
+  memberId  String
+  amount    Float
+  details   String
+  createdAt DateTime @default(now())
+  Member    Member   @relation(fields: [memberId], references: [id])
+}
+
+model MembershipPlan {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  price         Float
+  duration      Int // Duration in months
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id        String         @id @default(uuid())
+  memberId  String
+  planId    String
+  startDate DateTime       @default(now())
+  endDate   DateTime
+  member    Member         @relation(fields: [memberId], references: [id])
+  plan      MembershipPlan @relation(fields: [planId], references: [id])
+}
+
+model Equipment {
+  id        String   @id @default(uuid())
+  name      String
+  type      String
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -42,9 +43,19 @@ import {
   DollarSign,
   Dumbbell,
   Clock as ClockIcon,
+  UserPlus,
+  Mail,
+  FileSpreadsheet,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { memberAPI, userAPI, subscriptionAPI } from "@/services/api";
+
+// Mock admin stats for user management tab
+const mockAdminStats = {
+  totalUsers: 12,
+  totalStaff: 8,
+  activeUsers: 10,
+};
 
 // Real data state - fetched from API
 const AdministrativeFeatures = () => {
@@ -1242,6 +1253,168 @@ const AdministrativeFeatures = () => {
                 </CardContent>
               </Card>
             </div>
+          </div>
+        )}
+
+        {/* User Management Tab */}
+        {activeTab === "users" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+                  User Management
+                </h3>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Manage staff accounts, roles, and permissions
+                </p>
+              </div>
+              <Link
+                to="/auth/management"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+              >
+                <Users className="w-4 h-4" />
+                Manage Users
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="w-5 h-5 text-blue-600" />
+                    Total Users
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold text-slate-900 dark:text-white">
+                    {mockAdminStats.totalUsers}
+                  </p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Staff and administrators
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-red-600" />
+                    Administrators
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold text-slate-900 dark:text-white">
+                    {mockAdminStats.totalStaff}
+                  </p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    System administrators
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <UserCheck className="w-5 h-5 text-green-600" />
+                    Active Users
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold text-slate-900 dark:text-white">
+                    {mockAdminStats.totalUsers}
+                  </p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Currently active
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+                <CardDescription>Common user management tasks</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Link
+                    to="/auth/management"
+                    className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
+                        <UserPlus className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-slate-900 dark:text-white">
+                          Create New User
+                        </h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                          Add staff members to the system
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
+                    to="/auth/management"
+                    className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-green-300 hover:bg-green-50 dark:hover:bg-green-900/10 transition-all group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg group-hover:bg-green-200 dark:group-hover:bg-green-800 transition-colors">
+                        <Mail className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-slate-900 dark:text-white">
+                          Invite Users
+                        </h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                          Send email invitations
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
+                    to="/auth/management"
+                    className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg group-hover:bg-purple-200 dark:group-hover:bg-purple-800 transition-colors">
+                        <FileSpreadsheet className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-slate-900 dark:text-white">
+                          Bulk Import
+                        </h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                          Import multiple users from CSV/Excel
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link
+                    to="/auth/management"
+                    className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-all group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-orange-100 dark:bg-orange-900 rounded-lg group-hover:bg-orange-200 dark:group-hover:bg-orange-800 transition-colors">
+                        <Shield className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-slate-900 dark:text-white">
+                          Role Templates
+                        </h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                          Use predefined role configurations
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         )}
 
