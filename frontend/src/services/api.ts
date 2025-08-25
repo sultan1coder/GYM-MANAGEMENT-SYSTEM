@@ -166,6 +166,222 @@ export const resendInvitation = async (userId: number) => {
   return response.data;
 };
 
+// Additional User Management API functions
+export const searchUsers = async (params: {
+  searchTerm?: string;
+  role?: string;
+  status?: string;
+  department?: string;
+  dateRangeStart?: string;
+  dateRangeEnd?: string;
+  page?: number;
+  limit?: number;
+}) => {
+  const response = await api.get<
+    ApiResponse<{
+      users: User[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        pages: number;
+      };
+    }>
+  >(`/users/search`, { params });
+  return response.data;
+};
+
+export const updateUserStatus = async (userId: number, isActive: boolean) => {
+  const response = await api.put<ApiResponse<User>>(`/users/status/${userId}`, {
+    isActive,
+  });
+  return response.data;
+};
+
+export const getUserActivity = async (userId: number) => {
+  const response = await api.get<
+    ApiResponse<{
+      userId: number;
+      userName: string;
+      userEmail: string;
+      daysSinceCreation: number;
+      daysSinceLastUpdate: number;
+      isActive: boolean;
+      activityLevel: "high" | "medium" | "low";
+      lastActivity: string;
+      accountAge: number;
+    }>
+  >(`/users/activity/${userId}`);
+  return response.data;
+};
+
+export const bulkUpdateUserRoles = async (
+  updates: Array<{
+    userId: number;
+    role: string;
+  }>
+) => {
+  const response = await api.post<
+    ApiResponse<{
+      success: Array<{
+        userId: number;
+        oldRole: string;
+        newRole: string;
+        user: User;
+      }>;
+      errors: Array<{
+        userId: number;
+        error: string;
+      }>;
+    }>
+  >(`/users/bulk-update-roles`, { updates });
+  return response.data;
+};
+
+// Profile Management API functions
+export const getUserProfile = async (userId: number) => {
+  const response = await api.get<
+    ApiResponse<{
+      userId: number;
+      basicInfo: {
+        name: string;
+        phone_number: string;
+        bio: string;
+        dateOfBirth: string | null;
+        gender: "male" | "female" | "other" | "prefer-not-to-say";
+      };
+      address: {
+        street: string;
+        city: string;
+        state: string;
+        country: string;
+        postalCode: string;
+      };
+      emergencyContact: {
+        name: string;
+        relationship: string;
+        phone: string;
+        email: string;
+      };
+      socialMedia: {
+        linkedin: string;
+        twitter: string;
+        facebook: string;
+        instagram: string;
+      };
+      preferences: {
+        theme: "light" | "dark" | "auto";
+        language: string;
+        timezone: string;
+        dateFormat: string;
+        timeFormat: "12h" | "24h";
+        currency: string;
+      };
+      notificationSettings: {
+        email: {
+          loginAlerts: boolean;
+          securityUpdates: boolean;
+          systemAnnouncements: boolean;
+          marketingEmails: boolean;
+        };
+        push: {
+          loginAlerts: boolean;
+          securityUpdates: boolean;
+          systemAnnouncements: boolean;
+          marketingNotifications: boolean;
+        };
+        sms: {
+          loginAlerts: boolean;
+          securityUpdates: boolean;
+          emergencyAlerts: boolean;
+        };
+      };
+      privacySettings: {
+        profileVisibility: "public" | "private" | "team-only";
+        showEmail: boolean;
+        showPhone: boolean;
+        showLocation: boolean;
+        allowContact: boolean;
+      };
+    }>
+  >(`/users/profile/${userId}`);
+  return response.data;
+};
+
+export const updateUserProfile = async (
+  userId: number,
+  profileData: {
+    basicInfo: {
+      name: string;
+      phone_number: string;
+      bio: string;
+      dateOfBirth: string | null;
+      gender: "male" | "female" | "other" | "prefer-not-to-say";
+    };
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      country: string;
+      postalCode: string;
+    };
+    emergencyContact: {
+      name: string;
+      relationship: string;
+      phone: string;
+      email: string;
+    };
+    socialMedia: {
+      linkedin: string;
+      twitter: string;
+      facebook: string;
+      instagram: string;
+    };
+    preferences: {
+      theme: "light" | "dark" | "auto";
+      language: string;
+      timezone: string;
+      dateFormat: string;
+      timeFormat: "12h" | "24h";
+      currency: string;
+    };
+    notificationSettings: {
+      email: {
+        loginAlerts: boolean;
+        securityUpdates: boolean;
+        systemAnnouncements: boolean;
+        marketingEmails: boolean;
+      };
+      push: {
+        loginAlerts: boolean;
+        securityUpdates: boolean;
+        systemAnnouncements: boolean;
+        marketingNotifications: boolean;
+      };
+      sms: {
+        loginAlerts: boolean;
+        securityUpdates: boolean;
+        emergencyAlerts: boolean;
+      };
+    };
+    privacySettings: {
+      profileVisibility: "public" | "private" | "team-only";
+      showEmail: boolean;
+      showPhone: boolean;
+      showLocation: boolean;
+      allowContact: boolean;
+    };
+  }
+) => {
+  const response = await api.put<
+    ApiResponse<{
+      user: User;
+      profileData: any;
+    }>
+  >(`/users/profile/${userId}`, profileData);
+  return response.data;
+};
+
 // Member Management API
 export const memberAPI = {
   // Member Authentication
