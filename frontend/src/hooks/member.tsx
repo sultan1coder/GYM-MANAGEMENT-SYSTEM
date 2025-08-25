@@ -102,3 +102,32 @@ export const useMemberGetSingle = (id: string) => {
   }, []);
   return { isLoading, error, member };
 };
+
+export const useMemberStats = () => {
+  const [stats, setStats] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const fetchStats = async () => {
+    try {
+      setIsLoading(true);
+      setError("");
+      const response = await getMemberStats();
+      if (response.isSuccess) {
+        setStats(response.data);
+      } else {
+        setError("Failed to fetch member statistics");
+      }
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  return { stats, isLoading, error, refetch: fetchStats };
+};

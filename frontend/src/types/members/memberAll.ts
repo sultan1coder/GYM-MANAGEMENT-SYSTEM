@@ -34,42 +34,7 @@ export interface Member {
   password: string;
   age: number;
   membershiptype: "MONTHLY" | "DAILY";
-
-  // Address Information
-  address?: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-  } | null;
-
-  // Emergency Contact
-  emergency_contact?: {
-    name: string;
-    relationship: string;
-    phone: string;
-    email?: string;
-  } | null;
-
-  // Medical Information
-  medical_info?: {
-    fitness_goals: string[];
-    health_conditions: string[];
-    allergies: string[];
-    medications: string[];
-    emergency_notes?: string;
-  } | null;
-
-  // Terms & Conditions
-  terms_accepted: boolean;
-  terms_accepted_at?: Date;
-
-  // Email Verification
-  email_verified: boolean;
-  email_verification_token?: string;
-  email_verification_expires?: Date;
-
+  profile_picture?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

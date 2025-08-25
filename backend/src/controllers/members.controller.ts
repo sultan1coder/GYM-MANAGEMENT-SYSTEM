@@ -30,6 +30,116 @@ export const getAllMembers = async (req: Request, res: Response) => {
   }
 };
 
+// Advanced member search with filtering
+export const searchMembers = async (req: Request, res: Response) => {
+  try {
+    const {
+      searchTerm,
+      // Remove status since email_verified doesn't exist in current schema
+      // status,
+      membershipType,
+      ageMin,
+      ageMax,
+      dateRangeStart,
+      dateRangeEnd,
+      // Remove city and state since they don't exist in current schema
+      // city,
+      // state,
+      page = 1,
+      limit = 50,
+    } = req.query;
+
+    // Build where clause for filtering
+    const whereClause: any = {};
+
+    // Search term filter (name, email, phone)
+    if (searchTerm) {
+      whereClause.OR = [
+        { name: { contains: searchTerm as string, mode: 'insensitive' } },
+        { email: { contains: searchTerm as string, mode: 'insensitive' } },
+        { phone_number: { contains: searchTerm as string, mode: 'insensitive' } },
+      ];
+    }
+
+    // Status filter - since email_verified doesn't exist, we'll use a different approach
+    // For now, we'll skip status filtering until we add this field to the schema
+    // if (status === 'active') {
+    //   whereClause.email_verified = true;
+    // } else if (status === 'inactive') {
+    //   whereClause.email_verified = false;
+    // }
+
+    // Membership type filter
+    if (membershipType && membershipType !== 'all') {
+      whereClause.membershiptype = membershipType;
+    }
+
+    // Age range filter
+    if (ageMin || ageMax) {
+      whereClause.age = {};
+      if (ageMin) whereClause.age.gte = parseInt(ageMin as string);
+      if (ageMax) whereClause.age.lte = parseInt(ageMax as string);
+    }
+
+    // Date range filter (registration date)
+    if (dateRangeStart || dateRangeEnd) {
+      whereClause.createdAt = {};
+      if (dateRangeStart) whereClause.createdAt.gte = new Date(dateRangeStart as string);
+      if (dateRangeEnd) whereClause.createdAt.lte = new Date(dateRangeEnd as string);
+    }
+
+    // Location filter - since address doesn't exist in schema, we'll skip this for now
+    // if (city || state) {
+    //   whereClause.address = {};
+    //   if (city) whereClause.address.city = { contains: city as string, mode: 'insensitive' };
+    //   if (state) whereClause.address.state = { contains: state as string, mode: 'insensitive' };
+    // }
+
+    // Pagination
+    const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
+    const take = parseInt(limit as string);
+
+    // Execute query with pagination
+    const [members, totalCount] = await Promise.all([
+      prisma.member.findMany({
+        where: whereClause,
+        skip,
+        take,
+        orderBy: { createdAt: 'desc' },
+        // Remove include since these relations don't exist in the current schema
+        // include: {
+        //   address: true,
+        //   emergency_contact: true,
+        //   medical_info: true,
+        // },
+      }),
+      prisma.member.count({ where: whereClause }),
+    ]);
+
+    const totalPages = Math.ceil(totalCount / take);
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "Members search completed successfully",
+      data: {
+        members,
+        pagination: {
+          page: parseInt(page as string),
+          limit: parseInt(limit as string),
+          total: totalCount,
+          pages: totalPages,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Member search error:", error);
+    res.status(500).json({
+      isSuccess: false,
+      message: defaultErrorMessage,
+    });
+  }
+};
+
 export const getSingleMember = async (req: Request, res: Response) => {
   try {
     const memberId = req.params.id;
@@ -313,6 +423,320 @@ export const updateMemberProfilePicture = async (req: Request, res: Response) =>
     res.status(500).json({
       isSuccess: false,
       message: "Server error!",
+    });
+  }
+};
+
+// Bulk import members from CSV/Excel
+export const bulkImportMembers = async (req: Request, res: Response) => {
+  try {
+    if (!req.file) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "No file uploaded",
+      });
+      return;
+    }
+
+    const filePath = req.file.path;
+    const fileExtension = req.file.originalname.split('.').pop()?.toLowerCase();
+
+    let membersData: any[] = [];
+
+    // Parse file based on extension
+    if (fileExtension === 'csv') {
+      const csv = require('csv-parser');
+      const fs = require('fs');
+      
+      membersData = await new Promise((resolve, reject) => {
+        const results: any[] = [];
+        fs.createReadStream(filePath)
+          .pipe(csv())
+          .on('data', (data: any) => results.push(data))
+          .on('end', () => resolve(results))
+          .on('error', reject);
+      });
+    } else if (['xlsx', 'xls'].includes(fileExtension || '')) {
+      const XLSX = require('xlsx');
+      const workbook = XLSX.readFile(filePath);
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      membersData = XLSX.utils.sheet_to_json(worksheet);
+    } else {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Unsupported file format. Please upload CSV or Excel file.",
+      });
+      return;
+    }
+
+    if (membersData.length === 0) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "No data found in the uploaded file",
+      });
+      return;
+    }
+
+    // Validate and process members data
+    const results = {
+      success: [] as any[],
+      errors: [] as any[],
+      total: membersData.length,
+    };
+
+    for (let i = 0; i < membersData.length; i++) {
+      const row = membersData[i];
+      const rowNumber = i + 2; // +2 because Excel/CSV starts from row 1 and we have headers
+
+      try {
+        // Validate required fields
+        if (!row.name || !row.email || !row.phone_number || !row.age || !row.membershiptype) {
+          results.errors.push({
+            row: rowNumber,
+            error: "Missing required fields (name, email, phone_number, age, membershiptype)",
+            data: row,
+          });
+          continue;
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(row.email)) {
+          results.errors.push({
+            row: rowNumber,
+            error: "Invalid email format",
+            data: row,
+          });
+          continue;
+        }
+
+        // Validate age
+        const age = parseInt(row.age);
+        if (isNaN(age) || age < 13 || age > 100) {
+          results.errors.push({
+            row: rowNumber,
+            error: "Invalid age (must be between 13 and 100)",
+            data: row,
+          });
+          continue;
+        }
+
+        // Validate membership type
+        if (!['MONTHLY', 'DAILY'].includes(row.membershiptype.toUpperCase())) {
+          results.errors.push({
+            row: rowNumber,
+            error: "Invalid membership type (must be MONTHLY or DAILY)",
+            data: row,
+          });
+          continue;
+        }
+
+        // Check if member already exists
+        const existingMember = await prisma.member.findUnique({
+          where: { email: row.email.toLowerCase() },
+        });
+
+        if (existingMember) {
+          results.errors.push({
+            row: rowNumber,
+            error: "Member with this email already exists",
+            data: row,
+          });
+          continue;
+        }
+
+        // Create member
+        const newMember = await prisma.member.create({
+          data: {
+            name: row.name.trim(),
+            email: row.email.toLowerCase().trim(),
+            phone_number: row.phone_number.trim(),
+            age: age,
+            membershiptype: row.membershiptype.toUpperCase() as "MONTHLY" | "DAILY",
+            password: await hashPassword('defaultPassword123'), // Default password
+            // Remove fields that don't exist in the current schema
+            // terms_accepted: true,
+            // email_verified: false,
+            // address: row.street || row.city || row.state ? {
+            //   street: row.street || '',
+            //   city: row.city || '',
+            //   state: row.state || '',
+            //   zipCode: row.zipCode || row.postalCode || '',
+            //   country: row.country || 'USA',
+            // } : undefined,
+            // emergency_contact: row.emergencyName || row.emergencyPhone ? {
+            //   name: row.emergencyName || '',
+            //   relationship: row.emergencyRelationship || 'Family',
+            //   phone: row.emergencyPhone || '',
+            //   email: row.emergencyEmail || '',
+            // } : undefined,
+          },
+        });
+
+        results.success.push({
+          row: rowNumber,
+          member: newMember,
+        });
+      } catch (error) {
+        results.errors.push({
+          row: rowNumber,
+          error: "Processing error",
+          data: row,
+        });
+      }
+    }
+
+    // Clean up uploaded file
+    const fs = require('fs');
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    res.status(200).json({
+      isSuccess: true,
+      message: `Bulk import completed. ${results.success.length} successful, ${results.errors.length} errors.`,
+      data: results,
+    });
+  } catch (error) {
+    console.error("Bulk import error:", error);
+    res.status(500).json({
+      isSuccess: false,
+      message: defaultErrorMessage,
+    });
+  }
+};
+
+// Get member statistics and analytics
+export const getMemberStats = async (req: Request, res: Response) => {
+  try {
+    // Get total members count
+    const totalMembers = await prisma.member.count();
+
+    // Since email_verified doesn't exist, we'll use a different approach for active/inactive
+    // For now, we'll consider all members as active since we don't have verification status
+    const activeMembers = totalMembers; // All members are considered active
+    const pendingVerification = 0; // No verification system in current schema
+
+    // Get membership type distribution
+    const membershipDistribution = await prisma.member.groupBy({
+      by: ['membershiptype'],
+      _count: { membershiptype: true },
+    });
+
+    // Get age distribution
+    const ageDistribution = await prisma.member.groupBy({
+      by: ['age'],
+      _count: { age: true },
+      orderBy: { age: 'asc' },
+    });
+
+    // Get monthly growth (last 6 months)
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+    const monthlyGrowth = await prisma.member.groupBy({
+      by: ['createdAt'],
+      _count: { createdAt: true },
+      where: {
+        createdAt: {
+          gte: sixMonthsAgo,
+        },
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    // Calculate growth rate
+    const currentMonth = new Date();
+    const lastMonth = new Date();
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+    const currentMonthMembers = await prisma.member.count({
+      where: {
+        createdAt: {
+          gte: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1),
+        },
+      },
+    });
+
+    const lastMonthMembers = await prisma.member.count({
+      where: {
+        createdAt: {
+          gte: new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1),
+          lt: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1),
+        },
+      },
+    });
+
+    const growthRate = lastMonthMembers > 0 
+      ? ((currentMonthMembers - lastMonthMembers) / lastMonthMembers) * 100 
+      : 0;
+
+    // Since address doesn't exist in schema, we'll skip top cities for now
+    // const topCities = await prisma.member.groupBy({
+    //   by: ['address'],
+    //   _count: { address: true },
+    //   orderBy: { _count: { address: true } : 'desc' },
+    //   take: 5,
+    // });
+
+    // Get recent registrations (last 7 days)
+    const lastWeek = new Date();
+    lastWeek.setDate(lastWeek.getDate() - 7);
+
+    const recentRegistrations = await prisma.member.count({
+      where: {
+        createdAt: {
+          gte: lastWeek,
+        },
+      },
+    });
+
+    const stats = {
+      totalMembers,
+      activeMembers,
+      pendingVerification,
+      inactiveMembers: 0, // No inactive members in current schema
+      membershipDistribution: membershipDistribution.map(item => ({
+        type: item.membershiptype,
+        count: item._count.membershiptype,
+        percentage: ((item._count.membershiptype / totalMembers) * 100).toFixed(1),
+      })),
+      ageDistribution: {
+        under18: ageDistribution.filter(item => item.age < 18).reduce((sum, item) => sum + item._count.age, 0),
+        age18to25: ageDistribution.filter(item => item.age >= 18 && item.age <= 25).reduce((sum, item) => sum + item._count.age, 0),
+        age26to35: ageDistribution.filter(item => item.age >= 26 && item.age <= 35).reduce((sum, item) => sum + item._count.age, 0),
+        age36to50: ageDistribution.filter(item => item.age >= 36 && item.age <= 50).reduce((sum, item) => sum + item._count.age, 0),
+        over50: ageDistribution.filter(item => item.age > 50).reduce((sum, item) => sum + item._count.age, 0),
+      },
+      monthlyGrowth: monthlyGrowth.map(item => ({
+        month: item.createdAt.toISOString().slice(0, 7), // YYYY-MM format
+        count: item._count.createdAt,
+      })),
+      growthRate: growthRate.toFixed(1),
+      // Remove topCities since address doesn't exist
+      // topCities: topCities.map(item => ({
+      //   city: item.address?.city || 'Unknown',
+      //   state: item.address?.state || 'Unknown',
+      //   count: item._count.address,
+      // })),
+      topCities: [], // Empty array for now
+      recentRegistrations,
+      averageAge: ageDistribution.length > 0 
+        ? (ageDistribution.reduce((sum, item) => sum + (item.age * item._count.age), 0) / totalMembers).toFixed(1)
+        : 0,
+    };
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "Member statistics retrieved successfully",
+      data: stats,
+    });
+  } catch (error) {
+    console.error("Get member stats error:", error);
+    res.status(500).json({
+      isSuccess: false,
+      message: defaultErrorMessage,
     });
   }
 };

@@ -423,6 +423,97 @@ export const memberAPI = {
     api.post<ApiResponse<null>>(`${BASE_API_URL}/members/${id}/unsubscribe`),
 };
 
+// Member Management API functions
+export const searchMembers = async (params: {
+  searchTerm?: string;
+  // Remove status since email_verified doesn't exist in current schema
+  // status?: string;
+  membershipType?: string;
+  ageMin?: number;
+  ageMax?: number;
+  dateRangeStart?: string;
+  dateRangeEnd?: string;
+  // Remove city and state since they don't exist in current schema
+  // city?: string;
+  // state?: string;
+  page?: number;
+  limit?: number;
+}) => {
+  const response = await api.get<
+    ApiResponse<{
+      members: Member[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        pages: number;
+      };
+    }>
+  >(`/members/search`, { params });
+  return response.data;
+};
+
+export const getMemberStats = async () => {
+  const response = await api.get<
+    ApiResponse<{
+      totalMembers: number;
+      activeMembers: number;
+      pendingVerification: number;
+      inactiveMembers: number;
+      membershipDistribution: Array<{
+        type: string;
+        count: number;
+        percentage: string;
+      }>;
+      ageDistribution: {
+        under18: number;
+        age18to25: number;
+        age26to35: number;
+        age36to50: number;
+        over50: number;
+      };
+      monthlyGrowth: Array<{
+        month: string;
+        count: number;
+      }>;
+      growthRate: string;
+      topCities: Array<{
+        city: string;
+        state: string;
+        count: number;
+      }>;
+      recentRegistrations: number;
+      averageAge: string;
+    }>
+  >(`/members/stats`);
+  return response.data;
+};
+
+export const bulkImportMembers = async (file: File) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post<
+    ApiResponse<{
+      success: Array<{
+        row: number;
+        member: Member;
+      }>;
+      errors: Array<{
+        row: number;
+        error: string;
+        data: any;
+      }>;
+      total: number;
+    }>
+  >(`/members/bulk-import`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
 // Equipment Management API
 export const equipmentAPI = {
   getAllEquipment: () =>

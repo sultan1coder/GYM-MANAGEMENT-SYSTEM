@@ -4721,44 +4721,7 @@ const UserManagement: React.FC = () => {
   };
 
   // Phase 4: Integration & Automation Features helper functions
-  const getIntegrationTypeIconPhase4 = (type: string) => {
-    switch (type) {
-      case "api":
-        return "🔌";
-      case "webhook":
-        return "🔗";
-      case "database":
-        return "🗄️";
-      case "file":
-        return "📁";
-      case "service":
-        return "⚙️";
-      default:
-        return "🔧";
-    }
-  };
-
-  const getIntegrationStatusColorPhase4 = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800";
-      case "inactive":
-        return "bg-gray-100 text-gray-800";
-      case "error":
-        return "bg-red-100 text-red-800";
-      case "maintenance":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getIntegrationHealthColorPhase4 = (score: number) => {
-    if (score >= 90) return "text-green-600";
-    if (score >= 70) return "text-yellow-600";
-    if (score >= 50) return "text-orange-600";
-    return "text-red-600";
-  };
+  // Removed duplicate function declarations - these are already defined above
 
   const getWorkflowStatusColorPhase4 = (status: string) => {
     switch (status) {
@@ -4849,247 +4812,28 @@ const UserManagement: React.FC = () => {
     return "bg-green-100 text-green-800";
   };
 
-  const getOverallIntegrationHealth = () => {
-    const totalIntegrations = systemIntegrations.length;
-    if (totalIntegrations === 0) return 0;
+  // Removed duplicate function declaration - this is already defined above
 
-    const healthyIntegrations = systemIntegrations.filter(
-      (i) => i.healthScore >= 80
-    ).length;
-    return Math.round((healthyIntegrations / totalIntegrations) * 100);
-  };
+  // Removed duplicate function declaration - this is already defined above
 
-  const getAutomationEfficiency = () => {
-    const totalWorkflows = automationWorkflows.length;
-    if (totalWorkflows === 0) return 0;
+  // Removed duplicate function declaration - this is already defined above
 
-    const successfulWorkflows = automationWorkflows.filter(
-      (w) => w.successCount > w.failureCount
-    ).length;
-    return Math.round((successfulWorkflows / totalWorkflows) * 100);
-  };
+  // Removed duplicate function declaration - this is already defined above
 
-  const getDataSyncSuccessRate = () => {
-    const totalJobs = dataSyncJobs.length;
-    if (totalJobs === 0) return 0;
+  // Removed duplicate getActiveFiltersCount function declaration - this is already defined above
 
-    const successfulJobs = dataSyncJobs.filter(
-      (j) => j.status === "completed"
-    ).length;
-    return Math.round((successfulJobs / totalJobs) * 100);
-  };
-
-  const clearFilters = () => {
-    setSearchFilters({
-      searchTerm: "",
-      role: "",
-      status: "",
-      department: "",
-      dateRange: { start: "", end: "" },
-      lastLoginRange: { start: "", end: "" },
-    });
-  };
-
-  const getActiveFiltersCount = () => {
-    let count = 0;
-    if (searchFilters.searchTerm) count++;
-    if (searchFilters.role) count++;
-    if (searchFilters.status) count++;
-    if (searchFilters.department) count++;
-    if (searchFilters.dateRange.start || searchFilters.dateRange.end) count++;
-    if (searchFilters.lastLoginRange.start || searchFilters.lastLoginRange.end)
-      count++;
-    return count;
-  };
-
-  const generateSearchSuggestions = (searchTerm: string) => {
-    if (!searchTerm || !users) return [];
-
-    const suggestions: string[] = [];
-    const searchLower = searchTerm.toLowerCase();
-
-    users.forEach((user) => {
-      if (
-        user.name?.toLowerCase().includes(searchLower) &&
-        !suggestions.includes(user.name)
-      ) {
-        suggestions.push(user.name);
-      }
-      if (
-        user.email?.toLowerCase().includes(searchLower) &&
-        !suggestions.includes(user.email)
-      ) {
-        suggestions.push(user.email);
-      }
-      if (
-        user.username?.toLowerCase().includes(searchLower) &&
-        !suggestions.includes(user.username)
-      ) {
-        suggestions.push(user.username);
-      }
-    });
-
-    return suggestions.slice(0, 5); // Limit to 5 suggestions
-  };
+  // Removed duplicate generateSearchSuggestions function declaration - this is already defined above
 
   // Calculate user analytics
-  const calculateUserAnalytics = () => {
-    if (!users) return;
+  // Removed duplicate function declaration - this is already defined above
 
-    const totalUsers = users.length;
-    const admins = users.filter((user) => user.role === "admin").length;
-    const staff = users.filter((user) => user.role === "staff").length;
-    const activeUsers = users.filter((user) => user.created_at).length;
-
-    const now = new Date();
-    const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-
-    const newUsersThisMonth = users.filter(
-      (user) => user.created_at && new Date(user.created_at) >= thisMonth
-    ).length;
-
-    const newUsersLastMonth = users.filter(
-      (user) =>
-        user.created_at &&
-        new Date(user.created_at) >= lastMonth &&
-        new Date(user.created_at) < thisMonth
-    ).length;
-
-    const userGrowthRate =
-      lastMonth > 0
-        ? ((newUsersThisMonth - newUsersLastMonth) / lastMonth) * 100
-        : 0;
-
-    const analytics: UserAnalytics = {
-      totalUsers,
-      activeUsers,
-      inactiveUsers: totalUsers - activeUsers,
-      newUsersThisMonth,
-      newUsersLastMonth,
-      userGrowthRate,
-      roleDistribution: { admin: admins, staff },
-      activityMetrics: {
-        highActivity: Math.floor(totalUsers * 0.3),
-        mediumActivity: Math.floor(totalUsers * 0.5),
-        lowActivity: Math.floor(totalUsers * 0.2),
-      },
-      monthlyGrowth: [
-        { month: "Jan", users: Math.floor(totalUsers * 0.8), growth: 0 },
-        { month: "Feb", users: Math.floor(totalUsers * 0.85), growth: 6.25 },
-        { month: "Mar", users: Math.floor(totalUsers * 0.9), growth: 5.88 },
-        { month: "Apr", users: Math.floor(totalUsers * 0.92), growth: 2.22 },
-        { month: "May", users: Math.floor(totalUsers * 0.95), growth: 3.26 },
-        { month: "Jun", users: totalUsers, growth: 5.26 },
-      ],
-      userEngagement: {
-        dailyActive: Math.floor(totalUsers * 0.7),
-        weeklyActive: Math.floor(totalUsers * 0.9),
-        monthlyActive: totalUsers,
-      },
-      performanceMetrics: {
-        avgLoginFrequency: 2.5,
-        avgSessionDuration: 45,
-        taskCompletionRate: 87.5,
-      },
-    };
-
-    setUserAnalytics(analytics);
-  };
-
-  const generateActivityData = () => {
-    if (!users) return;
-
-    const activityData: ActivityData[] = users
-      .slice(0, 10)
-      .map((user, index) => ({
-        userId: user.id,
-        userName: user.name,
-        lastLogin:
-          user.updated_at || user.created_at || new Date().toISOString(),
-        loginCount: Math.floor(Math.random() * 50) + 1,
-        sessionDuration: Math.floor(Math.random() * 120) + 15,
-        tasksCompleted: Math.floor(Math.random() * 100) + 10,
-        status: user.created_at ? "active" : "inactive",
-      }));
-
-    setActivityData(activityData);
-  };
+  // Removed duplicate generateActivityData function declaration - this is already defined above
 
   // Helper functions for integration health
-  const getOverallIntegrationHealth = () => {
-    if (systemIntegrations.length === 0) return 100;
-    const totalHealth = systemIntegrations.reduce(
-      (sum, int) => sum + int.healthScore,
-      0
-    );
-    return Math.round(totalHealth / systemIntegrations.length);
-  };
-
-  const getAutomationEfficiency = () => {
-    if (automationWorkflows.length === 0) return 100;
-    const totalEfficiency = automationWorkflows.reduce((sum, wf) => {
-      const successRate =
-        wf.failureCount === 0
-          ? 100
-          : (wf.successCount / (wf.successCount + wf.failureCount)) * 100;
-      return sum + successRate;
-    }, 0);
-    return Math.round(totalEfficiency / automationWorkflows.length);
-  };
-
-  const getDataSyncSuccessRate = () => {
-    if (dataSyncJobs.length === 0) return 100;
-    const totalSuccess = dataSyncJobs.reduce((sum, job) => {
-      const successRate =
-        job.failedRecords === 0
-          ? 100
-          : ((job.processedRecords - job.failedRecords) /
-              job.processedRecords) *
-            100;
-      return sum + successRate;
-    }, 0);
-    return Math.round(totalSuccess / dataSyncJobs.length);
-  };
+  // Removed duplicate function declarations - these are already defined above
 
   // Helper functions for integration icons and colors
-  const getIntegrationTypeIconPhase4 = (type: string) => {
-    switch (type) {
-      case "api":
-        return "🔌";
-      case "webhook":
-        return "🌐";
-      case "database":
-        return "🗄️";
-      case "file":
-        return "📁";
-      case "service":
-        return "⚙️";
-      default:
-        return "🔗";
-    }
-  };
-
-  const getIntegrationStatusColorPhase4 = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800";
-      case "inactive":
-        return "bg-gray-100 text-gray-800";
-      case "error":
-        return "bg-red-100 text-red-800";
-      case "maintenance":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getIntegrationHealthColorPhase4 = (healthScore: number) => {
-    if (healthScore >= 90) return "text-green-600";
-    if (healthScore >= 70) return "text-yellow-600";
-    return "text-red-600";
-  };
+  // Removed duplicate function declarations - these are already defined above
 
   // Calculate user analytics when users change
   useEffect(() => {
