@@ -35,16 +35,14 @@ export const searchMembers = async (req: Request, res: Response) => {
   try {
     const {
       searchTerm,
-      // Remove status since email_verified doesn't exist in current schema
-      // status,
+      status,
       membershipType,
       ageMin,
       ageMax,
       dateRangeStart,
       dateRangeEnd,
-      // Remove city and state since they don't exist in current schema
-      // city,
-      // state,
+      city,
+      state,
       page = 1,
       limit = 50,
     } = req.query;
@@ -61,13 +59,12 @@ export const searchMembers = async (req: Request, res: Response) => {
       ];
     }
 
-    // Status filter - since email_verified doesn't exist, we'll use a different approach
-    // For now, we'll skip status filtering until we add this field to the schema
-    // if (status === 'active') {
-    //   whereClause.email_verified = true;
-    // } else if (status === 'inactive') {
-    //   whereClause.email_verified = false;
-    // }
+    // Status filter - now using email_verified field
+    if (status === 'active') {
+      whereClause.email_verified = true;
+    } else if (status === 'inactive') {
+      whereClause.email_verified = false;
+    }
 
     // Membership type filter
     if (membershipType && membershipType !== 'all') {
@@ -88,12 +85,12 @@ export const searchMembers = async (req: Request, res: Response) => {
       if (dateRangeEnd) whereClause.createdAt.lte = new Date(dateRangeEnd as string);
     }
 
-    // Location filter - since address doesn't exist in schema, we'll skip this for now
-    // if (city || state) {
-    //   whereClause.address = {};
-    //   if (city) whereClause.address.city = { contains: city as string, mode: 'insensitive' };
-    //   if (state) whereClause.address.state = { contains: state as string, mode: 'insensitive' };
-    // }
+    // Location filter - now using address relation
+    if (city || state) {
+      whereClause.address = {};
+      if (city) whereClause.address.city = { contains: city as string, mode: 'insensitive' };
+      if (state) whereClause.address.state = { contains: state as string, mode: 'insensitive' };
+    }
 
     // Pagination
     const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
@@ -106,12 +103,11 @@ export const searchMembers = async (req: Request, res: Response) => {
         skip,
         take,
         orderBy: { createdAt: 'desc' },
-        // Remove include since these relations don't exist in the current schema
-        // include: {
-        //   address: true,
-        //   emergency_contact: true,
-        //   medical_info: true,
-        // },
+        include: {
+          address: true,
+          emergency_contact: true,
+          medical_info: true,
+        },
       }),
       prisma.member.count({ where: whereClause }),
     ]);
@@ -555,22 +551,25 @@ export const bulkImportMembers = async (req: Request, res: Response) => {
             age: age,
             membershiptype: row.membershiptype.toUpperCase() as "MONTHLY" | "DAILY",
             password: await hashPassword('defaultPassword123'), // Default password
-            // Remove fields that don't exist in the current schema
-            // terms_accepted: true,
-            // email_verified: false,
-            // address: row.street || row.city || row.state ? {
-            //   street: row.street || '',
-            //   city: row.city || '',
-            //   state: row.state || '',
-            //   zipCode: row.zipCode || row.postalCode || '',
-            //   country: row.country || 'USA',
-            // } : undefined,
-            // emergency_contact: row.emergencyName || row.emergencyPhone ? {
-            //   name: row.emergencyName || '',
-            //   relationship: row.emergencyRelationship || 'Family',
-            //   phone: row.emergencyPhone || '',
-            //   email: row.emergencyEmail || '',
-            // } : undefined,
+            terms_accepted: true,
+            email_verified: false,
+            address: row.street || row.city || row.state ? {
+              create: {
+                street: row.street || '',
+                city: row.city || '',
+                state: row.state || '',
+                zipCode: row.zipCode || row.postalCode || '',
+                country: row.country || 'USA',
+              }
+            } : undefined,
+            emergency_contact: row.emergencyName || row.emergencyPhone ? {
+              create: {
+                name: row.emergencyName || '',
+                relationship: row.emergencyRelationship || 'Family',
+                phone: row.emergencyPhone || '',
+                email: row.emergencyEmail || '',
+              }
+            } : undefined,
           },
         });
 
@@ -613,22 +612,58 @@ export const getMemberStats = async (req: Request, res: Response) => {
     // Get total members count
     const totalMembers = await prisma.member.count();
 
-    // Since email_verified doesn't exist, we'll use a different approach for active/inactive
-    // For now, we'll consider all members as active since we don't have verification status
-    const activeMembers = totalMembers; // All members are considered active
-    const pendingVerification = 0; // No verification system in current schema
+    // Get active members (email verified)
+    const activeMembers = await prisma.member.count({
+      where: {
+        email_verified: true,
+      },
+    });
+
+    // Get pending verification members
+    const pendingVerification = await prisma.member.count({
+      where: {
+        email_verified: false,
+      },
+    });
+
+    // Get inactive members (email not verified)
+    const inactiveMembers = await prisma.member.count({
+      where: {
+        email_verified: false,
+      },
+    });
+
+    // Get top cities from address data
+    const topCities = await prisma.address.groupBy({
+      by: ['city', 'state'],
+      _count: {
+        city: true,
+      },
+      orderBy: {
+        _count: {
+          city: 'desc',
+        },
+      },
+      take: 5,
+    });
 
     // Get membership type distribution
     const membershipDistribution = await prisma.member.groupBy({
       by: ['membershiptype'],
-      _count: { membershiptype: true },
+      _count: {
+        membershiptype: true,
+      },
     });
 
     // Get age distribution
     const ageDistribution = await prisma.member.groupBy({
       by: ['age'],
-      _count: { age: true },
-      orderBy: { age: 'asc' },
+      _count: {
+        age: true,
+      },
+      orderBy: {
+        age: 'asc',
+      },
     });
 
     // Get monthly growth (last 6 months)
@@ -637,13 +672,17 @@ export const getMemberStats = async (req: Request, res: Response) => {
 
     const monthlyGrowth = await prisma.member.groupBy({
       by: ['createdAt'],
-      _count: { createdAt: true },
+      _count: {
+        createdAt: true,
+      },
       where: {
         createdAt: {
           gte: sixMonthsAgo,
         },
       },
-      orderBy: { createdAt: 'asc' },
+      orderBy: {
+        createdAt: 'asc',
+      },
     });
 
     // Calculate growth rate
@@ -672,14 +711,6 @@ export const getMemberStats = async (req: Request, res: Response) => {
       ? ((currentMonthMembers - lastMonthMembers) / lastMonthMembers) * 100 
       : 0;
 
-    // Since address doesn't exist in schema, we'll skip top cities for now
-    // const topCities = await prisma.member.groupBy({
-    //   by: ['address'],
-    //   _count: { address: true },
-    //   orderBy: { _count: { address: true } : 'desc' },
-    //   take: 5,
-    // });
-
     // Get recent registrations (last 7 days)
     const lastWeek = new Date();
     lastWeek.setDate(lastWeek.getDate() - 7);
@@ -696,34 +727,32 @@ export const getMemberStats = async (req: Request, res: Response) => {
       totalMembers,
       activeMembers,
       pendingVerification,
-      inactiveMembers: 0, // No inactive members in current schema
+      inactiveMembers,
       membershipDistribution: membershipDistribution.map(item => ({
         type: item.membershiptype,
-        count: item._count.membershiptype,
-        percentage: ((item._count.membershiptype / totalMembers) * 100).toFixed(1),
+        count: item._count?.membershiptype || 0,
+        percentage: ((item._count?.membershiptype || 0) / totalMembers * 100).toFixed(1),
       })),
       ageDistribution: {
-        under18: ageDistribution.filter(item => item.age < 18).reduce((sum, item) => sum + item._count.age, 0),
-        age18to25: ageDistribution.filter(item => item.age >= 18 && item.age <= 25).reduce((sum, item) => sum + item._count.age, 0),
-        age26to35: ageDistribution.filter(item => item.age >= 26 && item.age <= 35).reduce((sum, item) => sum + item._count.age, 0),
-        age36to50: ageDistribution.filter(item => item.age >= 36 && item.age <= 50).reduce((sum, item) => sum + item._count.age, 0),
-        over50: ageDistribution.filter(item => item.age > 50).reduce((sum, item) => sum + item._count.age, 0),
+        under18: ageDistribution.filter(item => item.age < 18).reduce((sum, item) => sum + (item._count?.age || 0), 0),
+        age18to25: ageDistribution.filter(item => item.age >= 18 && item.age <= 25).reduce((sum, item) => sum + (item._count?.age || 0), 0),
+        age26to35: ageDistribution.filter(item => item.age >= 26 && item.age <= 35).reduce((sum, item) => sum + (item._count?.age || 0), 0),
+        age36to50: ageDistribution.filter(item => item.age >= 36 && item.age <= 50).reduce((sum, item) => sum + (item._count?.age || 0), 0),
+        over50: ageDistribution.filter(item => item.age > 50).reduce((sum, item) => sum + (item._count?.age || 0), 0),
       },
       monthlyGrowth: monthlyGrowth.map(item => ({
         month: item.createdAt.toISOString().slice(0, 7), // YYYY-MM format
-        count: item._count.createdAt,
+        count: item._count?.createdAt || 0,
       })),
       growthRate: growthRate.toFixed(1),
-      // Remove topCities since address doesn't exist
-      // topCities: topCities.map(item => ({
-      //   city: item.address?.city || 'Unknown',
-      //   state: item.address?.state || 'Unknown',
-      //   count: item._count.address,
-      // })),
-      topCities: [], // Empty array for now
+      topCities: topCities.map(item => ({
+        city: item.city || 'Unknown',
+        state: item.state || 'Unknown',
+        count: item._count?.city || 0,
+      })),
       recentRegistrations,
       averageAge: ageDistribution.length > 0 
-        ? (ageDistribution.reduce((sum, item) => sum + (item.age * item._count.age), 0) / totalMembers).toFixed(1)
+        ? (ageDistribution.reduce((sum, item) => sum + (item.age * (item._count?.age || 0)), 0) / totalMembers).toFixed(1)
         : 0,
     };
 

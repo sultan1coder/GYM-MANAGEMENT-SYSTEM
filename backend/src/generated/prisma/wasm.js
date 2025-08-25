@@ -129,11 +129,135 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   role: 'role',
   profile_picture: 'profile_picture',
+  isActive: 'isActive',
+  email_verified: 'email_verified',
+  lastLogin: 'lastLogin',
+  loginAttempts: 'loginAttempts',
+  lockedUntil: 'lockedUntil',
+  bio: 'bio',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  department: 'department',
+  position: 'position',
   tokenVersion: 'tokenVersion',
   created_at: 'created_at',
   updated_at: 'updated_at',
   resetToken: 'resetToken',
   resetTokenExp: 'resetTokenExp'
+};
+
+exports.Prisma.UserSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  deviceType: 'deviceType',
+  deviceInfo: 'deviceInfo',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  isActive: 'isActive',
+  lastActivity: 'lastActivity',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserAccessLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  action: 'action',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  success: 'success',
+  details: 'details',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.UserIPRestrictionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  ipAddress: 'ipAddress',
+  type: 'type',
+  reason: 'reason',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserAddressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  street: 'street',
+  city: 'city',
+  state: 'state',
+  postalCode: 'postalCode',
+  country: 'country',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserEmergencyContactScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  relationship: 'relationship',
+  phone: 'phone',
+  email: 'email',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserSocialMediaScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  linkedin: 'linkedin',
+  twitter: 'twitter',
+  facebook: 'facebook',
+  instagram: 'instagram',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserPreferencesScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  theme: 'theme',
+  language: 'language',
+  timezone: 'timezone',
+  dateFormat: 'dateFormat',
+  timeFormat: 'timeFormat',
+  currency: 'currency',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserNotificationSettingsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  email_loginAlerts: 'email_loginAlerts',
+  email_securityUpdates: 'email_securityUpdates',
+  email_systemAnnouncements: 'email_systemAnnouncements',
+  email_marketingEmails: 'email_marketingEmails',
+  push_loginAlerts: 'push_loginAlerts',
+  push_securityUpdates: 'push_securityUpdates',
+  push_systemAnnouncements: 'push_systemAnnouncements',
+  push_marketingNotifications: 'push_marketingNotifications',
+  sms_loginAlerts: 'sms_loginAlerts',
+  sms_securityUpdates: 'sms_securityUpdates',
+  sms_emergencyAlerts: 'sms_emergencyAlerts',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserPrivacySettingsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  profileVisibility: 'profileVisibility',
+  showEmail: 'showEmail',
+  showPhone: 'showPhone',
+  showLocation: 'showLocation',
+  allowContact: 'allowContact',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.MemberScalarFieldEnum = {
@@ -145,6 +269,82 @@ exports.Prisma.MemberScalarFieldEnum = {
   age: 'age',
   profile_picture: 'profile_picture',
   membershiptype: 'membershiptype',
+  terms_accepted: 'terms_accepted',
+  terms_accepted_at: 'terms_accepted_at',
+  email_verified: 'email_verified',
+  email_verification_token: 'email_verification_token',
+  email_verification_expires: 'email_verification_expires',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MemberCheckInScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  checkInTime: 'checkInTime',
+  checkOutTime: 'checkOutTime',
+  location: 'location',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MemberAttendanceScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  date: 'date',
+  timeIn: 'timeIn',
+  timeOut: 'timeOut',
+  duration: 'duration',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MemberFitnessGoalScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  goalType: 'goalType',
+  targetValue: 'targetValue',
+  currentValue: 'currentValue',
+  unit: 'unit',
+  targetDate: 'targetDate',
+  isCompleted: 'isCompleted',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AddressScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  street: 'street',
+  city: 'city',
+  state: 'state',
+  zipCode: 'zipCode',
+  country: 'country',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EmergencyContactScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  name: 'name',
+  relationship: 'relationship',
+  phone: 'phone',
+  email: 'email',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MedicalInfoScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  fitness_goals: 'fitness_goals',
+  health_conditions: 'health_conditions',
+  allergies: 'allergies',
+  medications: 'medications',
+  emergency_notes: 'emergency_notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -218,9 +418,222 @@ exports.Prisma.MaintenanceLogScalarFieldEnum = {
   nextDue: 'nextDue'
 };
 
+exports.Prisma.SystemIntegrationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  status: 'status',
+  healthScore: 'healthScore',
+  endpoint: 'endpoint',
+  apiKey: 'apiKey',
+  config: 'config',
+  lastSync: 'lastSync',
+  errorCount: 'errorCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AutomationWorkflowScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  status: 'status',
+  priority: 'priority',
+  trigger: 'trigger',
+  schedule: 'schedule',
+  config: 'config',
+  successCount: 'successCount',
+  failureCount: 'failureCount',
+  lastRun: 'lastRun',
+  nextRun: 'nextRun',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DataSyncJobScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  source: 'source',
+  destination: 'destination',
+  status: 'status',
+  processedRecords: 'processedRecords',
+  failedRecords: 'failedRecords',
+  totalRecords: 'totalRecords',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  errorMessage: 'errorMessage',
+  config: 'config',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WebhookEndpointScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  url: 'url',
+  method: 'method',
+  headers: 'headers',
+  events: 'events',
+  isActive: 'isActive',
+  secret: 'secret',
+  lastTriggered: 'lastTriggered',
+  successCount: 'successCount',
+  failureCount: 'failureCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.APIManagementScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  apiKey: 'apiKey',
+  permissions: 'permissions',
+  rateLimit: 'rateLimit',
+  isActive: 'isActive',
+  lastUsed: 'lastUsed',
+  usageCount: 'usageCount',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ThreatDetectionScalarFieldEnum = {
+  id: 'id',
+  threatType: 'threatType',
+  severity: 'severity',
+  status: 'status',
+  description: 'description',
+  source: 'source',
+  evidence: 'evidence',
+  assignedTo: 'assignedTo',
+  resolvedAt: 'resolvedAt',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AnomalyDetectionScalarFieldEnum = {
+  id: 'id',
+  anomalyType: 'anomalyType',
+  confidence: 'confidence',
+  status: 'status',
+  description: 'description',
+  data: 'data',
+  severity: 'severity',
+  resolvedAt: 'resolvedAt',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ComplianceReportScalarFieldEnum = {
+  id: 'id',
+  reportType: 'reportType',
+  status: 'status',
+  period: 'period',
+  findings: 'findings',
+  recommendations: 'recommendations',
+  submittedBy: 'submittedBy',
+  submittedAt: 'submittedAt',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SecurityWorkflowScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  status: 'status',
+  priority: 'priority',
+  assignedTo: 'assignedTo',
+  dueDate: 'dueDate',
+  steps: 'steps',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SecurityIntegrationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  status: 'status',
+  endpoint: 'endpoint',
+  apiKey: 'apiKey',
+  config: 'config',
+  lastSync: 'lastSync',
+  healthScore: 'healthScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdministrativeProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  adminLevel: 'adminLevel',
+  departments: 'departments',
+  responsibilities: 'responsibilities',
+  criticalPermissions: 'criticalPermissions',
+  emergencyContact: 'emergencyContact',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CustomRoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  permissions: 'permissions',
+  parentRole: 'parentRole',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PermissionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  action: 'action',
+  resource: 'resource',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RoleHierarchyScalarFieldEnum = {
+  id: 'id',
+  roleId: 'roleId',
+  parentId: 'parentId',
+  level: 'level',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PermissionAuditScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  action: 'action',
+  permissionId: 'permissionId',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  reason: 'reason',
+  performedBy: 'performedBy',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -231,6 +644,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.MemberShipType = exports.$Enums.MemberShipType = {
   MONTHLY: 'MONTHLY',
@@ -253,13 +672,43 @@ exports.MaintenanceType = exports.$Enums.MaintenanceType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  UserSession: 'UserSession',
+  UserAccessLog: 'UserAccessLog',
+  UserIPRestriction: 'UserIPRestriction',
+  UserAddress: 'UserAddress',
+  UserEmergencyContact: 'UserEmergencyContact',
+  UserSocialMedia: 'UserSocialMedia',
+  UserPreferences: 'UserPreferences',
+  UserNotificationSettings: 'UserNotificationSettings',
+  UserPrivacySettings: 'UserPrivacySettings',
   Member: 'Member',
+  MemberCheckIn: 'MemberCheckIn',
+  MemberAttendance: 'MemberAttendance',
+  MemberFitnessGoal: 'MemberFitnessGoal',
+  Address: 'Address',
+  EmergencyContact: 'EmergencyContact',
+  MedicalInfo: 'MedicalInfo',
   Payment: 'Payment',
   Invoice: 'Invoice',
   MembershipPlan: 'MembershipPlan',
   Subscription: 'Subscription',
   Equipment: 'Equipment',
-  MaintenanceLog: 'MaintenanceLog'
+  MaintenanceLog: 'MaintenanceLog',
+  SystemIntegration: 'SystemIntegration',
+  AutomationWorkflow: 'AutomationWorkflow',
+  DataSyncJob: 'DataSyncJob',
+  WebhookEndpoint: 'WebhookEndpoint',
+  APIManagement: 'APIManagement',
+  ThreatDetection: 'ThreatDetection',
+  AnomalyDetection: 'AnomalyDetection',
+  ComplianceReport: 'ComplianceReport',
+  SecurityWorkflow: 'SecurityWorkflow',
+  SecurityIntegration: 'SecurityIntegration',
+  AdministrativeProfile: 'AdministrativeProfile',
+  CustomRole: 'CustomRole',
+  Permission: 'Permission',
+  RoleHierarchy: 'RoleHierarchy',
+  PermissionAudit: 'PermissionAudit'
 };
 
 /**

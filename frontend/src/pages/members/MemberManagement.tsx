@@ -39,6 +39,7 @@ import {
   TrendingUp,
   MapPin,
   Calendar,
+  User,
 } from "lucide-react";
 import MemberList from "../../components/MemberList";
 import SimpleMemberDisplay from "../../components/SimpleMemberDisplay";
@@ -64,12 +65,15 @@ const MemberManagement: React.FC = () => {
 
   // Advanced search state
   const [searchFilters, setSearchFilters] = useState({
-    searchTerm: '',
-    membershipType: 'all',
-    ageMin: '',
-    ageMax: '',
-    dateRangeStart: '',
-    dateRangeEnd: '',
+    searchTerm: "",
+    status: "all" as "all" | "active" | "inactive",
+    membershipType: "all",
+    ageMin: "",
+    ageMax: "",
+    dateRangeStart: "",
+    dateRangeEnd: "",
+    city: "",
+    state: "",
   });
 
   // Handle member selection (view details)
@@ -135,16 +139,27 @@ const MemberManagement: React.FC = () => {
     try {
       const params = {
         searchTerm: searchFilters.searchTerm || undefined,
-        membershipType: searchFilters.membershipType !== 'all' ? searchFilters.membershipType : undefined,
-        ageMin: searchFilters.ageMin ? parseInt(searchFilters.ageMin) : undefined,
-        ageMax: searchFilters.ageMax ? parseInt(searchFilters.ageMax) : undefined,
+        status:
+          searchFilters.status !== "all" ? searchFilters.status : undefined,
+        membershipType:
+          searchFilters.membershipType !== "all"
+            ? searchFilters.membershipType
+            : undefined,
+        ageMin: searchFilters.ageMin
+          ? parseInt(searchFilters.ageMin)
+          : undefined,
+        ageMax: searchFilters.ageMax
+          ? parseInt(searchFilters.ageMax)
+          : undefined,
         dateRangeStart: searchFilters.dateRangeStart || undefined,
         dateRangeEnd: searchFilters.dateRangeEnd || undefined,
+        city: searchFilters.city || undefined,
+        state: searchFilters.state || undefined,
       };
 
       // Remove undefined values
-      Object.keys(params).forEach(key => 
-        params[key] === undefined && delete params[key]
+      Object.keys(params).forEach(
+        (key) => params[key] === undefined && delete params[key]
       );
 
       const response = await searchMembers(params);
@@ -153,35 +168,62 @@ const MemberManagement: React.FC = () => {
         // TODO: Update member list with search results
       }
     } catch (error) {
-      toast.error('Search failed');
-      console.error('Search error:', error);
+      toast.error("Search failed");
+      console.error("Search error:", error);
     }
   };
 
   // Clear search filters
   const clearFilters = () => {
     setSearchFilters({
-      searchTerm: '',
-      membershipType: 'all',
-      ageMin: '',
-      ageMax: '',
-      dateRangeStart: '',
-      dateRangeEnd: '',
+      searchTerm: "",
+      status: "all",
+      membershipType: "all",
+      ageMin: "",
+      ageMax: "",
+      dateRangeStart: "",
+      dateRangeEnd: "",
+      city: "",
+      state: "",
     });
   };
 
   // Download CSV template
   const downloadTemplate = () => {
-    // Only include fields that exist in the current Prisma schema
-    const headers = ['name', 'email', 'phone_number', 'age', 'membershiptype'];
-    const sampleData = ['John Doe', 'john@example.com', '+1234567890', '25', 'MONTHLY'];
-    
-    const csvContent = [headers.join(','), sampleData.join(',')].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const headers = [
+      "name",
+      "email",
+      "phone_number",
+      "age",
+      "membershiptype",
+      "street",
+      "city",
+      "state",
+      "zipCode",
+      "emergencyName",
+      "emergencyPhone",
+    ];
+
+    const sampleData = [
+      "John Doe",
+      "john@example.com",
+      "123-456-7890",
+      "25",
+      "MONTHLY",
+      "123 Main St",
+      "New York",
+      "NY",
+      "10001",
+      "Jane Doe",
+      "098-765-4321",
+    ];
+
+    const csvContent = [headers.join(","), sampleData.join(",")].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'member-import-template.csv';
+    a.download = "member_import_template.csv";
     a.click();
     window.URL.revokeObjectURL(url);
   };
@@ -237,35 +279,55 @@ const MemberManagement: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <Label htmlFor="searchTerm">Search Term</Label>
+                <Label htmlFor="searchTerm">Search</Label>
                 <Input
                   id="searchTerm"
-                  placeholder="Name, email, phone..."
+                  placeholder="Name, email, or phone..."
                   value={searchFilters.searchTerm}
-                  onChange={(e) => setSearchFilters({...searchFilters, searchTerm: e.target.value})}
+                  onChange={(e) =>
+                    setSearchFilters({
+                      ...searchFilters,
+                      searchTerm: e.target.value,
+                    })
+                  }
                 />
               </div>
-              {/* Remove status filter since email_verified doesn't exist in current schema */}
-              {/* <div>
+              <div>
                 <Label htmlFor="status">Status</Label>
-                <Select value={searchFilters.status} onValueChange={(value) => setSearchFilters({...searchFilters, status: value})}>
+                <Select
+                  value={searchFilters.status}
+                  onValueChange={(value) =>
+                    setSearchFilters({
+                      ...searchFilters,
+                      status: value as "all" | "active" | "inactive",
+                    })
+                  }
+                >
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="all">All Statuses</SelectItem>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="inactive">Inactive</SelectItem>
                   </SelectContent>
                 </Select>
-              </div> */}
+              </div>
               <div>
                 <Label htmlFor="membershipType">Membership Type</Label>
-                <Select value={searchFilters.membershipType} onValueChange={(value) => setSearchFilters({...searchFilters, membershipType: value})}>
+                <Select
+                  value={searchFilters.membershipType}
+                  onValueChange={(value) =>
+                    setSearchFilters({
+                      ...searchFilters,
+                      membershipType: value,
+                    })
+                  }
+                >
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Types</SelectItem>
@@ -275,59 +337,67 @@ const MemberManagement: React.FC = () => {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="ageMin">Age Range</Label>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Min"
-                    value={searchFilters.ageMin}
-                    onChange={(e) =>
-                      setSearchFilters({
-                        ...searchFilters,
-                        ageMin: e.target.value,
-                      })
-                    }
-                  />
-                  <Input
-                    placeholder="Max"
-                    value={searchFilters.ageMax}
-                    onChange={(e) =>
-                      setSearchFilters({
-                        ...searchFilters,
-                        ageMax: e.target.value,
-                      })
-                    }
-                  />
-                </div>
+                <Label htmlFor="ageMin">Min Age</Label>
+                <Input
+                  id="ageMin"
+                  type="number"
+                  placeholder="Min age"
+                  value={searchFilters.ageMin}
+                  onChange={(e) =>
+                    setSearchFilters({
+                      ...searchFilters,
+                      ageMin: e.target.value,
+                    })
+                  }
+                />
               </div>
               <div>
-                <Label htmlFor="dateRangeStart">Date Range</Label>
-                <div className="flex gap-2">
-                  <Input
-                    type="date"
-                    value={searchFilters.dateRangeStart}
-                    onChange={(e) =>
-                      setSearchFilters({
-                        ...searchFilters,
-                        dateRangeStart: e.target.value,
-                      })
-                    }
-                  />
-                  <Input
-                    type="date"
-                    value={searchFilters.dateRangeEnd}
-                    onChange={(e) =>
-                      setSearchFilters({
-                        ...searchFilters,
-                        dateRangeEnd: e.target.value,
-                      })
-                    }
-                  />
-                </div>
+                <Label htmlFor="ageMax">Max Age</Label>
+                <Input
+                  id="ageMax"
+                  type="number"
+                  placeholder="Max age"
+                  value={searchFilters.ageMax}
+                  onChange={(e) =>
+                    setSearchFilters({
+                      ...searchFilters,
+                      ageMax: e.target.value,
+                    })
+                  }
+                />
               </div>
-              {/* Remove city and state filters */}
-              {/* <div>
+              <div>
+                <Label htmlFor="dateRangeStart">Start Date</Label>
+                <Input
+                  id="dateRangeStart"
+                  type="date"
+                  value={searchFilters.dateRangeStart}
+                  onChange={(e) =>
+                    setSearchFilters({
+                      ...searchFilters,
+                      dateRangeStart: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <Label htmlFor="dateRangeEnd">End Date</Label>
+                <Input
+                  id="dateRangeEnd"
+                  type="date"
+                  value={searchFilters.dateRangeEnd}
+                  onChange={(e) =>
+                    setSearchFilters({
+                      ...searchFilters,
+                      dateRangeEnd: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div>
                 <Label htmlFor="city">City</Label>
                 <Input
+                  id="city"
                   placeholder="City"
                   value={searchFilters.city}
                   onChange={(e) =>
@@ -338,6 +408,7 @@ const MemberManagement: React.FC = () => {
               <div>
                 <Label htmlFor="state">State</Label>
                 <Input
+                  id="state"
                   placeholder="State"
                   value={searchFilters.state}
                   onChange={(e) =>
@@ -347,7 +418,7 @@ const MemberManagement: React.FC = () => {
                     })
                   }
                 />
-              </div> */}
+              </div>
             </div>
             <div className="flex gap-3 mt-4">
               <Button onClick={handleAdvancedSearch}>
@@ -397,37 +468,63 @@ const MemberManagement: React.FC = () => {
         </Card>
 
         <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center space-x-2">
-              <Clock className="h-8 w-8 text-yellow-600" />
-              <div>
-                <p className="text-sm font-medium text-gray-600">Pending Verification</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {statsLoading ? 'Loading...' : 'N/A'}
-                </p>
-                <p className="text-xs text-gray-500">Not available in current schema</p>
-              </div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Pending Verification
+            </CardTitle>
+            <User className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {statsLoading ? "Loading..." : stats?.pendingVerification || 0}
             </div>
+            <p className="text-xs text-muted-foreground">
+              Members awaiting email verification
+            </p>
           </CardContent>
         </Card>
-
         <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center space-x-2">
-              <TrendingUp className="h-8 w-8 text-purple-600" />
-              <div>
-                <p className="text-sm font-medium text-gray-600">Growth Rate</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {statsLoading ? "Loading..." : `${stats?.growthRate || 0}%`}
-                </p>
-              </div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Top Cities</CardTitle>
+            <MapPin className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {statsLoading
+                ? "Loading..."
+                : stats?.topCities && stats.topCities.length > 0
+                ? stats.topCities[0]?.count || 0
+                : 0}
             </div>
+            <p className="text-xs text-muted-foreground">
+              {statsLoading
+                ? "Loading..."
+                : stats?.topCities && stats.topCities.length > 0
+                ? `${stats.topCities[0]?.city || "Unknown"}, ${
+                    stats.topCities[0]?.state || "Unknown"
+                  }`
+                : "No city data available"}
+            </p>
           </CardContent>
         </Card>
       </div>
 
+      {/* Loading State for Stats */}
+      {statsLoading && (
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-center space-x-2">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+              <span className="text-sm text-gray-600">
+                Loading member statistics...
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Additional Statistics */}
-      {stats && (
+      {stats && !statsLoading && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
@@ -440,16 +537,23 @@ const MemberManagement: React.FC = () => {
               {stats.topCities && stats.topCities.length > 0 ? (
                 <div className="space-y-2">
                   {stats.topCities.map((city, index) => (
-                    <div key={index} className="flex justify-between items-center">
-                      <span className="text-sm">{city.city}, {city.state}</span>
-                      <span className="text-sm font-medium">{city.count} members</span>
+                    <div
+                      key={index}
+                      className="flex justify-between items-center"
+                    >
+                      <span className="text-sm">
+                        {city?.city || "Unknown"}, {city?.state || "Unknown"}
+                      </span>
+                      <span className="text-sm font-medium">
+                        {city?.count || 0} members
+                      </span>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="text-center py-4">
                   <p className="text-sm text-gray-500">
-                    City data not available in current schema
+                    No city data available yet
                   </p>
                 </div>
               )}
@@ -468,19 +572,34 @@ const MemberManagement: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Recent Registrations (7 days)</span>
                   <span className="text-sm font-medium">
-                    {stats.recentRegistrations}
+                    {stats.recentRegistrations || 0}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Average Age</span>
                   <span className="text-sm font-medium">
-                    {stats.averageAge} years
+                    {stats.averageAge || 0} years
                   </span>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
+      )}
+
+      {/* No Stats Available */}
+      {!stats && !statsLoading && (
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-center py-4">
+              <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-2" />
+              <p className="text-sm text-gray-500">
+                No member statistics available. Start by adding some members to
+                see analytics.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       )}
 
       {/* Feature Demonstration Section */}
@@ -534,12 +653,24 @@ const MemberManagement: React.FC = () => {
                   <span>Member Status Tracking</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-yellow-500" />
-                  <span className="text-gray-500">Location-based filtering (requires schema update)</span>
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <span>Location-based filtering</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-yellow-500" />
-                  <span className="text-gray-500">Email verification system (requires schema update)</span>
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <span>Email verification system</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <span>Address management</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <span>Emergency contact tracking</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <span>Medical information storage</span>
                 </div>
               </div>
             </div>
@@ -627,24 +758,28 @@ const MemberManagement: React.FC = () => {
                 Supported formats: CSV, Excel (.xlsx, .xls). Max size: 10MB
               </p>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="font-medium">Required Columns:</h4>
-                <Button variant="outline" size="sm" onClick={downloadTemplate}>
-                  <Download className="h-4 w-4 mr-2" />
-                  Download Template
-                </Button>
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-medium mb-2">Required Columns:</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• name (required)</li>
+                  <li>• email (required)</li>
+                  <li>• phone_number (required)</li>
+                  <li>• age (required)</li>
+                  <li>• membershiptype (required) - MONTHLY or DAILY</li>
+                  <li>• street, city, state, zipCode (optional)</li>
+                  <li>• emergencyName, emergencyPhone (optional)</li>
+                </ul>
               </div>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• name (required)</li>
-                <li>• email (required)</li>
-                <li>• phone_number (required)</li>
-                <li>• age (required, 13-100)</li>
-                <li>• membershiptype (required: MONTHLY or DAILY)</li>
-                {/* Remove fields that don't exist in current schema */}
-                {/* <li>• street, city, state, zipCode (optional)</li>
-                <li>• emergencyName, emergencyPhone (optional)</li> */}
-              </ul>
+              <div>
+                <h4 className="font-medium mb-2">Sample Data Format:</h4>
+                <div className="text-xs bg-gray-50 p-2 rounded">
+                  name,email,phone_number,age,membershiptype,street,city,state,zipCode,emergencyName,emergencyPhone
+                  <br />
+                  John Doe,john@example.com,123-456-7890,25,MONTHLY,123 Main
+                  St,New York,NY,10001,Jane Doe,098-765-4321
+                </div>
+              </div>
             </div>
           </div>
           <div className="flex justify-end gap-3 mt-4">

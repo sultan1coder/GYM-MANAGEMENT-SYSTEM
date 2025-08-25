@@ -426,16 +426,14 @@ export const memberAPI = {
 // Member Management API functions
 export const searchMembers = async (params: {
   searchTerm?: string;
-  // Remove status since email_verified doesn't exist in current schema
-  // status?: string;
+  status?: 'active' | 'inactive' | 'all';
   membershipType?: string;
   ageMin?: number;
   ageMax?: number;
   dateRangeStart?: string;
   dateRangeEnd?: string;
-  // Remove city and state since they don't exist in current schema
-  // city?: string;
-  // state?: string;
+  city?: string;
+  state?: string;
   page?: number;
   limit?: number;
 }) => {

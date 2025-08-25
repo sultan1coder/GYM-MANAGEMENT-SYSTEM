@@ -22,11 +22,194 @@ model User {
   password        String
   role            String   @default("staff") // "admin" or "staff"
   profile_picture String?  // URL to profile picture
+  
+  // User Status & Security
+  isActive        Boolean  @default(true)
+  email_verified  Boolean  @default(false)
+  lastLogin       DateTime?
+  loginAttempts   Int      @default(0)
+  lockedUntil     DateTime?
+  
+  // Profile Information
+  bio             String?
+  dateOfBirth     DateTime?
+  gender          String?
+  department      String?
+  position        String?
+  
+  // Address Information
+  address         UserAddress?
+  
+  // Emergency Contact
+  emergency_contact UserEmergencyContact?
+  
+  // Social Media
+  social_media    UserSocialMedia?
+  
+  // Preferences
+  preferences     UserPreferences?
+  
+  // Notification Settings
+  notification_settings UserNotificationSettings?
+  
+  // Privacy Settings
+  privacy_settings UserPrivacySettings?
+  
+  // Sessions and Activity
+  sessions        UserSession[]
+  access_logs     UserAccessLog[]
+  
+  // Security Features
+  ip_restrictions UserIPRestriction[]
+  
+  // Administrative Features
+  admin_profile  AdministrativeProfile?
+  permission_audits PermissionAudit[]
+  
   tokenVersion    Int      @default(0) // For refresh token invalidation
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
   resetToken      String?
   resetTokenExp   DateTime?
+}
+
+// User Session model for tracking active sessions
+model UserSession {
+  id        String   @id @default(uuid())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  deviceType String? // mobile, desktop, tablet
+  deviceInfo String? // browser, OS, etc.
+  ipAddress String?
+  userAgent String?
+  isActive  Boolean  @default(true)
+  lastActivity DateTime @default(now())
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// User Access Log model for security auditing
+model UserAccessLog {
+  id        String   @id @default(uuid())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String   // login, logout, password_change, etc.
+  ipAddress String?
+  userAgent String?
+  success   Boolean
+  details   String?
+  createdAt DateTime @default(now())
+}
+
+// User IP Restriction model for security
+model UserIPRestriction {
+  id        String   @id @default(uuid())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ipAddress String
+  type      String   // allowed, blocked
+  reason    String?
+  expiresAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// User Address model
+model UserAddress {
+  id        Int     @id @default(autoincrement())
+  userId    Int     @unique
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  street    String
+  city      String
+  state     String
+  postalCode String
+  country   String  @default("USA")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// User Emergency Contact model
+model UserEmergencyContact {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  relationship String
+  phone        String
+  email        String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// User Social Media model
+model UserSocialMedia {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  linkedin  String?
+  twitter   String?
+  facebook  String?
+  instagram String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// User Preferences model
+model UserPreferences {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme     String   @default("light") // light, dark, auto
+  language  String   @default("en")
+  timezone  String   @default("UTC")
+  dateFormat String  @default("MM/DD/YYYY")
+  timeFormat String  @default("12h") // 12h, 24h
+  currency  String   @default("USD")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// User Notification Settings model
+model UserNotificationSettings {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Email notifications
+  email_loginAlerts        Boolean @default(true)
+  email_securityUpdates    Boolean @default(true)
+  email_systemAnnouncements Boolean @default(true)
+  email_marketingEmails    Boolean @default(false)
+  
+  // Push notifications
+  push_loginAlerts         Boolean @default(true)
+  push_securityUpdates     Boolean @default(true)
+  push_systemAnnouncements Boolean @default(true)
+  push_marketingNotifications Boolean @default(false)
+  
+  // SMS notifications
+  sms_loginAlerts          Boolean @default(false)
+  sms_securityUpdates      Boolean @default(true)
+  sms_emergencyAlerts      Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// User Privacy Settings model
+model UserPrivacySettings {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileVisibility String @default("team-only") // public, private, team-only
+  showEmail Boolean @default(false)
+  showPhone Boolean @default(false)
+  showLocation Boolean @default(false)
+  allowContact Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Member {
@@ -38,11 +221,118 @@ model Member {
   age            Int
   profile_picture String?       // URL to profile picture
   membershiptype MemberShipType
+  
+  // Address Information
+  address        Address?
+  
+  // Emergency Contact
+  emergency_contact EmergencyContact?
+  
+  // Medical Information
+  medical_info   MedicalInfo?
+  
+  // Terms & Conditions
+  terms_accepted Boolean        @default(false)
+  terms_accepted_at DateTime?
+  
+  // Email Verification
+  email_verified Boolean        @default(false)
+  email_verification_token String?
+  email_verification_expires DateTime?
+  
+  // Additional Member Features
+  check_ins      MemberCheckIn[]
+  attendance     MemberAttendance[]
+  fitness_goals  MemberFitnessGoal[]
+  
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   payments       Payment[]
   invoices       Invoice[]
   Subscription   Subscription[]
+}
+
+// Member Check-in model for tracking gym visits
+model MemberCheckIn {
+  id        String   @id @default(uuid())
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  checkInTime DateTime @default(now())
+  checkOutTime DateTime?
+  location  String?  // gym floor, specific area
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Member Attendance model for tracking regular attendance
+model MemberAttendance {
+  id        String   @id @default(uuid())
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  date      DateTime @db.Date
+  timeIn    DateTime
+  timeOut   DateTime?
+  duration  Int?     // in minutes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Member Fitness Goal model for tracking progress
+model MemberFitnessGoal {
+  id          String   @id @default(uuid())
+  memberId    String
+  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  goalType    String   // weight_loss, muscle_gain, endurance, etc.
+  targetValue Float
+  currentValue Float
+  unit        String   // kg, lbs, minutes, etc.
+  targetDate  DateTime?
+  isCompleted Boolean  @default(false)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Address model for member location information
+model Address {
+  id        String  @id @default(uuid())
+  memberId  String  @unique
+  member    Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  street    String
+  city      String
+  state     String
+  zipCode   String
+  country   String  @default("USA")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Emergency Contact model for member safety
+model EmergencyContact {
+  id           String  @id @default(uuid())
+  memberId     String  @unique
+  member       Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  name         String
+  relationship String
+  phone        String
+  email        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Medical Information model for member health data
+model MedicalInfo {
+  id               String   @id @default(uuid())
+  memberId         String   @unique
+  member           Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  fitness_goals    String[]
+  health_conditions String[]
+  allergies        String[]
+  medications      String[]
+  emergency_notes  String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 enum MemberShipType {
@@ -138,4 +428,233 @@ enum MaintenanceType {
   CORRECTIVE
   INSPECTION
   REPAIR
+}
+
+// System Integration model for external service connections
+model SystemIntegration {
+  id          String   @id @default(uuid())
+  name        String
+  type        String   // api, webhook, database, file, service
+  status      String   @default("inactive") // active, inactive, error, maintenance
+  healthScore Int      @default(100) // 0-100 health score
+  endpoint    String?
+  apiKey      String?
+  config      Json?    // Additional configuration
+  lastSync    DateTime?
+  errorCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Automation Workflow model for automated processes
+model AutomationWorkflow {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  category    String   // user_management, security, compliance, reporting, maintenance
+  status      String   @default("inactive") // active, inactive, running, paused, error
+  priority    String   @default("medium") // low, medium, high, critical
+  trigger     String   // schedule, event, manual
+  schedule    String?  // Cron expression for scheduled workflows
+  config      Json?    // Workflow configuration
+  successCount Int     @default(0)
+  failureCount Int     @default(0)
+  lastRun     DateTime?
+  nextRun     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Data Sync Job model for data synchronization
+model DataSyncJob {
+  id              String   @id @default(uuid())
+  name            String
+  source          String   // Source system/table
+  destination     String   // Destination system/table
+  status          String   @default("pending") // pending, running, completed, failed
+  processedRecords Int     @default(0)
+  failedRecords   Int     @default(0)
+  totalRecords    Int     @default(0)
+  startedAt       DateTime?
+  completedAt     DateTime?
+  errorMessage    String?
+  config          Json?    // Sync configuration
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Webhook Endpoint model for external integrations
+model WebhookEndpoint {
+  id        String   @id @default(uuid())
+  name      String
+  url       String
+  method    String   @default("POST") // GET, POST, PUT, DELETE
+  headers   Json?    // Custom headers
+  events    String[] // Events to trigger webhook
+  isActive  Boolean  @default(true)
+  secret    String?  // Webhook secret for security
+  lastTriggered DateTime?
+  successCount Int   @default(0)
+  failureCount Int   @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// API Management model for API keys and usage
+model APIManagement {
+  id          String   @id @default(uuid())
+  name        String
+  apiKey      String   @unique
+  permissions String[] // Allowed operations
+  rateLimit   Int?     // Requests per minute
+  isActive    Boolean  @default(true)
+  lastUsed    DateTime?
+  usageCount  Int      @default(0)
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Threat Detection model for security monitoring
+model ThreatDetection {
+  id          String   @id @default(uuid())
+  threatType  String   // brute_force, suspicious_activity, data_breach, etc.
+  severity    String   @default("medium") // low, medium, high, critical
+  status      String   @default("open") // open, investigating, resolved, false_positive
+  description String
+  source      String?  // IP address, user, system
+  evidence    Json?    // Additional evidence data
+  assignedTo  String?  // Staff member assigned to investigate
+  resolvedAt  DateTime?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Anomaly Detection model for unusual behavior
+model AnomalyDetection {
+  id          String   @id @default(uuid())
+  anomalyType String   // login_pattern, data_access, system_behavior, etc.
+  confidence  Float    // 0.0 to 1.0 confidence score
+  status      String   @default("detected") // detected, investigating, resolved, false_positive
+  description String
+  data       Json?     // Anomaly data and context
+  severity   String    @default("medium") // low, medium, high, critical
+  resolvedAt DateTime?
+  notes      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// Compliance Report model for regulatory compliance
+model ComplianceReport {
+  id          String   @id @default(uuid())
+  reportType  String   // gdpr, hipaa, sox, pci, etc.
+  status      String   @default("draft") // draft, review, approved, submitted
+  period      String   // Reporting period (e.g., "Q1 2024")
+  findings    Json?    // Compliance findings and violations
+  recommendations String?
+  submittedBy String?
+  submittedAt DateTime?
+  approvedBy  String?
+  approvedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Security Workflow model for security processes
+model SecurityWorkflow {
+  id          String   @id @default(uuid())
+  name        String
+  type        String   // incident_response, access_review, security_audit, etc.
+  status      String   @default("active") // active, completed, cancelled
+  priority    String   @default("medium") // low, medium, high, critical
+  assignedTo  String?
+  dueDate    DateTime?
+  steps      Json?     // Workflow steps and progress
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Security Integration model for security tools
+model SecurityIntegration {
+  id          String   @id @default(uuid())
+  name        String
+  type        String   // siem, antivirus, firewall, mfa, etc.
+  status      String   @default("active") // active, inactive, error
+  endpoint    String?
+  apiKey      String?
+  config      Json?    // Integration configuration
+  lastSync    DateTime?
+  healthScore Int      @default(100)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Administrative Profile model for admin users
+model AdministrativeProfile {
+  id              String   @id @default(uuid())
+  userId          Int      @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  adminLevel      String   @default("standard") // standard, senior, executive
+  departments     String[] // Departments this admin manages
+  responsibilities String[] // Administrative responsibilities
+  criticalPermissions String[] // Critical permissions for this admin
+  emergencyContact String? // Emergency contact for critical situations
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Custom Role model for flexible role management
+model CustomRole {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  permissions String[] // Permission IDs
+  parentRole  String?  // Parent role for inheritance
+  isActive    Boolean  @default(true)
+  hierarchy   RoleHierarchy?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Permission model for granular access control
+model Permission {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  category    String   // user_management, security, reporting, etc.
+  action      String   // create, read, update, delete, etc.
+  resource    String   // users, members, equipment, etc.
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Role Hierarchy model for role inheritance
+model RoleHierarchy {
+  id        String   @id @default(uuid())
+  roleId    String   @unique
+  role      CustomRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  parentId  String?
+  parent    RoleHierarchy? @relation("RoleHierarchy", fields: [parentId], references: [id])
+  children  RoleHierarchy[] @relation("RoleHierarchy")
+  level     Int      @default(0) // Hierarchy level
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Permission Audit model for tracking permission changes
+model PermissionAudit {
+  id           String   @id @default(uuid())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action       String   // granted, revoked, modified
+  permissionId String
+  oldValue     String?
+  newValue     String
+  reason       String?
+  performedBy  String?  // Who made the change
+  createdAt    DateTime @default(now())
 }
