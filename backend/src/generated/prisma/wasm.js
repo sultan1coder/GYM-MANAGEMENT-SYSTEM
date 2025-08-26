@@ -129,21 +129,21 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   role: 'role',
   profile_picture: 'profile_picture',
-  isActive: 'isActive',
-  email_verified: 'email_verified',
-  lastLogin: 'lastLogin',
-  loginAttempts: 'loginAttempts',
-  lockedUntil: 'lockedUntil',
-  bio: 'bio',
-  dateOfBirth: 'dateOfBirth',
-  gender: 'gender',
-  department: 'department',
-  position: 'position',
   tokenVersion: 'tokenVersion',
   created_at: 'created_at',
   updated_at: 'updated_at',
   resetToken: 'resetToken',
-  resetTokenExp: 'resetTokenExp'
+  resetTokenExp: 'resetTokenExp',
+  bio: 'bio',
+  dateOfBirth: 'dateOfBirth',
+  department: 'department',
+  email_verified: 'email_verified',
+  gender: 'gender',
+  isActive: 'isActive',
+  lastLogin: 'lastLogin',
+  lockedUntil: 'lockedUntil',
+  loginAttempts: 'loginAttempts',
+  position: 'position'
 };
 
 exports.Prisma.UserSessionScalarFieldEnum = {
@@ -269,13 +269,13 @@ exports.Prisma.MemberScalarFieldEnum = {
   age: 'age',
   profile_picture: 'profile_picture',
   membershiptype: 'membershiptype',
-  terms_accepted: 'terms_accepted',
-  terms_accepted_at: 'terms_accepted_at',
-  email_verified: 'email_verified',
-  email_verification_token: 'email_verification_token',
-  email_verification_expires: 'email_verification_expires',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  email_verification_expires: 'email_verification_expires',
+  email_verification_token: 'email_verification_token',
+  email_verified: 'email_verified',
+  terms_accepted: 'terms_accepted',
+  terms_accepted_at: 'terms_accepted_at'
 };
 
 exports.Prisma.MemberCheckInScalarFieldEnum = {
@@ -354,7 +354,11 @@ exports.Prisma.PaymentScalarFieldEnum = {
   amount: 'amount',
   memberId: 'memberId',
   method: 'method',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  status: 'status',
+  description: 'description',
+  reference: 'reference',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.InvoiceScalarFieldEnum = {
@@ -386,25 +390,25 @@ exports.Prisma.EquipmentScalarFieldEnum = {
   id: 'id',
   name: 'name',
   type: 'type',
-  category: 'category',
-  brand: 'brand',
-  model: 'model',
-  serialNumber: 'serialNumber',
   quantity: 'quantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   available: 'available',
-  inUse: 'inUse',
-  maintenance: 'maintenance',
-  lastMaintenance: 'lastMaintenance',
-  nextMaintenance: 'nextMaintenance',
-  status: 'status',
-  location: 'location',
+  brand: 'brand',
+  category: 'category',
+  cost: 'cost',
   description: 'description',
   imageUrl: 'imageUrl',
+  inUse: 'inUse',
+  lastMaintenance: 'lastMaintenance',
+  location: 'location',
+  maintenance: 'maintenance',
+  model: 'model',
+  nextMaintenance: 'nextMaintenance',
   purchaseDate: 'purchaseDate',
-  warrantyExpiry: 'warrantyExpiry',
-  cost: 'cost',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  serialNumber: 'serialNumber',
+  status: 'status',
+  warrantyExpiry: 'warrantyExpiry'
 };
 
 exports.Prisma.MaintenanceLogScalarFieldEnum = {

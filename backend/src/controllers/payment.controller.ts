@@ -33,18 +33,20 @@ export const createPayment = async (req: Request, res: Response) => {
     });
 
     if (!member) {
-      return res.status(400).json({
+      res.status(400).json({
         isSuccess: false,
         message: "Member not found"
       });
+      return;
     }
 
     // Validate amount
     if (amount <= 0) {
-      return res.status(400).json({
+      res.status(400).json({
         isSuccess: false,
         message: "Payment amount must be greater than 0"
       });
+      return;
     }
 
     const payment = await prisma.payment.create({
@@ -84,26 +86,29 @@ export const updatePayment = async (req: Request, res: Response) => {
     });
 
     if (!existingPayment) {
-      return res.status(404).json({
+      res.status(404).json({
         isSuccess: false,
         message: "Payment not found"
       });
+      return;
     }
 
     // Validate amount if provided
     if (updateData.amount !== undefined && updateData.amount <= 0) {
-      return res.status(400).json({
+      res.status(400).json({
         isSuccess: false,
         message: "Payment amount must be greater than 0"
       });
+      return;
     }
 
     // Validate status if provided
     if (updateData.status && !["PENDING", "COMPLETED", "FAILED", "CANCELLED", "REFUNDED"].includes(updateData.status)) {
-      return res.status(400).json({
+      res.status(400).json({
         isSuccess: false,
         message: "Invalid payment status"
       });
+      return;
     }
 
     const updatedPayment = await prisma.payment.update({
@@ -136,18 +141,20 @@ export const deletePayment = async (req: Request, res: Response) => {
     });
 
     if (!existingPayment) {
-      return res.status(404).json({
+      res.status(404).json({
         isSuccess: false,
         message: "Payment not found"
       });
+      return;
     }
 
     // Only allow deletion of pending or failed payments
     if (existingPayment.status === "COMPLETED") {
-      return res.status(400).json({
+      res.status(400).json({
         isSuccess: false,
         message: "Cannot delete completed payments"
       });
+      return;
     }
 
     await prisma.payment.delete({
@@ -263,18 +270,20 @@ export const generateInvoice = async (req: Request, res: Response) => {
     });
 
     if (!member) {
-      return res.status(400).json({
+      res.status(400).json({
         isSuccess: false,
         message: "Member not found"
       });
+      return;
     }
 
     // Validate amount
     if (amount <= 0) {
-      return res.status(400).json({
+      res.status(400).json({
         isSuccess: false,
         message: "Invoice amount must be greater than 0"
       });
+      return;
     }
 
     const invoice = await prisma.invoice.create({

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -15,47 +9,283 @@ datasource db {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  name          String
-  username      String?
-  email         String    @unique
-  phone_number  String?
-  password      String
-  role          String    @default("staff") // "admin" or "staff"
-  tokenVersion  Int       @default(0) // For refresh token invalidation
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
-  resetToken    String?
-  resetTokenExp DateTime?
+  id                    Int                       @id @default(autoincrement())
+  name                  String
+  username              String?
+  email                 String                    @unique
+  phone_number          String?
+  password              String
+  role                  String                    @default("staff")
+  profile_picture       String?
+  tokenVersion          Int                       @default(0)
+  created_at            DateTime                  @default(now())
+  updated_at            DateTime                  @updatedAt
+  resetToken            String?
+  resetTokenExp         DateTime?
+  bio                   String?
+  dateOfBirth           DateTime?
+  department            String?
+  email_verified        Boolean                   @default(false)
+  gender                String?
+  isActive              Boolean                   @default(true)
+  lastLogin             DateTime?
+  lockedUntil           DateTime?
+  loginAttempts         Int                       @default(0)
+  position              String?
+  admin_profile         AdministrativeProfile?
+  permission_audits     PermissionAudit[]
+  access_logs           UserAccessLog[]
+  address               UserAddress?
+  emergency_contact     UserEmergencyContact?
+  ip_restrictions       UserIPRestriction[]
+  notification_settings UserNotificationSettings?
+  preferences           UserPreferences?
+  privacy_settings      UserPrivacySettings?
+  sessions              UserSession[]
+  social_media          UserSocialMedia?
+}
+
+model UserSession {
+  id           String   @id @default(uuid())
+  userId       Int
+  token        String   @unique
+  deviceType   String?
+  deviceInfo   String?
+  ipAddress    String?
+  userAgent    String?
+  isActive     Boolean  @default(true)
+  lastActivity DateTime @default(now())
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserAccessLog {
+  id        String   @id @default(uuid())
+  userId    Int
+  action    String
+  ipAddress String?
+  userAgent String?
+  success   Boolean
+  details   String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserIPRestriction {
+  id        String    @id @default(uuid())
+  userId    Int
+  ipAddress String
+  type      String
+  reason    String?
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserAddress {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @unique
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String   @default("USA")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserEmergencyContact {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
+  name         String
+  relationship String
+  phone        String
+  email        String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSocialMedia {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  linkedin  String?
+  twitter   String?
+  facebook  String?
+  instagram String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserPreferences {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @unique
+  theme      String   @default("light")
+  language   String   @default("en")
+  timezone   String   @default("UTC")
+  dateFormat String   @default("MM/DD/YYYY")
+  timeFormat String   @default("12h")
+  currency   String   @default("USD")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserNotificationSettings {
+  id                          Int      @id @default(autoincrement())
+  userId                      Int      @unique
+  email_loginAlerts           Boolean  @default(true)
+  email_securityUpdates       Boolean  @default(true)
+  email_systemAnnouncements   Boolean  @default(true)
+  email_marketingEmails       Boolean  @default(false)
+  push_loginAlerts            Boolean  @default(true)
+  push_securityUpdates        Boolean  @default(true)
+  push_systemAnnouncements    Boolean  @default(true)
+  push_marketingNotifications Boolean  @default(false)
+  sms_loginAlerts             Boolean  @default(false)
+  sms_securityUpdates         Boolean  @default(true)
+  sms_emergencyAlerts         Boolean  @default(true)
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+  user                        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserPrivacySettings {
+  id                Int      @id @default(autoincrement())
+  userId            Int      @unique
+  profileVisibility String   @default("team-only")
+  showEmail         Boolean  @default(false)
+  showPhone         Boolean  @default(false)
+  showLocation      Boolean  @default(false)
+  allowContact      Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Member {
-  id             String         @id @default(uuid())
-  name           String
-  email          String         @unique
-  phone_number   String?
-  password       String
-  age            Int
-  membershiptype MemberShipType
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  payments       Payment[]
-  invoices       Invoice[]
-  Subscription   Subscription[]
+  id                         String              @id @default(uuid())
+  name                       String
+  email                      String              @unique
+  phone_number               String?
+  password                   String
+  age                        Int
+  profile_picture            String?
+  membershiptype             MemberShipType
+  createdAt                  DateTime            @default(now())
+  updatedAt                  DateTime            @updatedAt
+  email_verification_expires DateTime?
+  email_verification_token   String?
+  email_verified             Boolean             @default(false)
+  terms_accepted             Boolean             @default(false)
+  terms_accepted_at          DateTime?
+  address                    Address?
+  emergency_contact          EmergencyContact?
+  invoices                   Invoice[]
+  medical_info               MedicalInfo?
+  attendance                 MemberAttendance[]
+  check_ins                  MemberCheckIn[]
+  fitness_goals              MemberFitnessGoal[]
+  payments                   Payment[]
+  Subscription               Subscription[]
 }
 
-enum MemberShipType {
-  MONTHLY
-  DAILY
+model MemberCheckIn {
+  id           String    @id @default(uuid())
+  memberId     String
+  checkInTime  DateTime  @default(now())
+  checkOutTime DateTime?
+  location     String?
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  member       Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+model MemberAttendance {
+  id        String    @id @default(uuid())
+  memberId  String
+  date      DateTime  @db.Date
+  timeIn    DateTime
+  timeOut   DateTime?
+  duration  Int?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  member    Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+model MemberFitnessGoal {
+  id           String    @id @default(uuid())
+  memberId     String
+  goalType     String
+  targetValue  Float
+  currentValue Float
+  unit         String
+  targetDate   DateTime?
+  isCompleted  Boolean   @default(false)
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  member       Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+model Address {
+  id        String   @id @default(uuid())
+  memberId  String   @unique
+  street    String
+  city      String
+  state     String
+  zipCode   String
+  country   String   @default("USA")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+model EmergencyContact {
+  id           String   @id @default(uuid())
+  memberId     String   @unique
+  name         String
+  relationship String
+  phone        String
+  email        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  member       Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+model MedicalInfo {
+  id                String   @id @default(uuid())
+  memberId          String   @unique
+  fitness_goals     String[]
+  health_conditions String[]
+  allergies         String[]
+  medications       String[]
+  emergency_notes   String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  member            Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
 }
 
 model Payment {
-  id        String   @id @default(uuid())
-  amount    Float
-  memberId  String
-  method    String
-  createdAt DateTime @default(now())
-  Member    Member   @relation(fields: [memberId], references: [id])
+  id          String   @id @default(uuid())
+  amount      Float
+  memberId    String
+  method      String
+  createdAt   DateTime @default(now())
+  status      String   @default("PENDING")
+  description String?
+  reference   String?
+  updatedAt   DateTime @default(now()) @updatedAt
+  Member      Member   @relation(fields: [memberId], references: [id])
+
+  @@index([memberId, status])
+  @@index([status])
 }
 
 model Invoice {
@@ -71,7 +301,7 @@ model MembershipPlan {
   id            String         @id @default(uuid())
   name          String         @unique
   price         Float
-  duration      Int // Duration in months
+  duration      Int
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   subscriptions Subscription[]
@@ -88,10 +318,280 @@ model Subscription {
 }
 
 model Equipment {
-  id        String   @id @default(uuid())
-  name      String
-  type      String
-  quantity  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String           @id @default(uuid())
+  name            String
+  type            String
+  quantity        Int
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  available       Int              @default(0)
+  brand           String?
+  category        String
+  cost            Float?
+  description     String?
+  imageUrl        String?
+  inUse           Int              @default(0)
+  lastMaintenance DateTime?
+  location        String?
+  maintenance     Boolean          @default(false)
+  model           String?
+  nextMaintenance DateTime?
+  purchaseDate    DateTime?
+  serialNumber    String?          @unique
+  status          EquipmentStatus  @default(OPERATIONAL)
+  warrantyExpiry  DateTime?
+  maintenanceLogs MaintenanceLog[]
+}
+
+model MaintenanceLog {
+  id          String          @id @default(uuid())
+  equipmentId String
+  type        MaintenanceType
+  description String
+  cost        Float?
+  performedBy String?
+  performedAt DateTime        @default(now())
+  nextDue     DateTime?
+  equipment   Equipment       @relation(fields: [equipmentId], references: [id])
+}
+
+model SystemIntegration {
+  id          String    @id @default(uuid())
+  name        String
+  type        String
+  status      String    @default("inactive")
+  healthScore Int       @default(100)
+  endpoint    String?
+  apiKey      String?
+  config      Json?
+  lastSync    DateTime?
+  errorCount  Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model AutomationWorkflow {
+  id           String    @id @default(uuid())
+  name         String
+  description  String?
+  category     String
+  status       String    @default("inactive")
+  priority     String    @default("medium")
+  trigger      String
+  schedule     String?
+  config       Json?
+  successCount Int       @default(0)
+  failureCount Int       @default(0)
+  lastRun      DateTime?
+  nextRun      DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model DataSyncJob {
+  id               String    @id @default(uuid())
+  name             String
+  source           String
+  destination      String
+  status           String    @default("pending")
+  processedRecords Int       @default(0)
+  failedRecords    Int       @default(0)
+  totalRecords     Int       @default(0)
+  startedAt        DateTime?
+  completedAt      DateTime?
+  errorMessage     String?
+  config           Json?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model WebhookEndpoint {
+  id            String    @id @default(uuid())
+  name          String
+  url           String
+  method        String    @default("POST")
+  headers       Json?
+  events        String[]
+  isActive      Boolean   @default(true)
+  secret        String?
+  lastTriggered DateTime?
+  successCount  Int       @default(0)
+  failureCount  Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model APIManagement {
+  id          String    @id @default(uuid())
+  name        String
+  apiKey      String    @unique
+  permissions String[]
+  rateLimit   Int?
+  isActive    Boolean   @default(true)
+  lastUsed    DateTime?
+  usageCount  Int       @default(0)
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model ThreatDetection {
+  id          String    @id @default(uuid())
+  threatType  String
+  severity    String    @default("medium")
+  status      String    @default("open")
+  description String
+  source      String?
+  evidence    Json?
+  assignedTo  String?
+  resolvedAt  DateTime?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model AnomalyDetection {
+  id          String    @id @default(uuid())
+  anomalyType String
+  confidence  Float
+  status      String    @default("detected")
+  description String
+  data        Json?
+  severity    String    @default("medium")
+  resolvedAt  DateTime?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model ComplianceReport {
+  id              String    @id @default(uuid())
+  reportType      String
+  status          String    @default("draft")
+  period          String
+  findings        Json?
+  recommendations String?
+  submittedBy     String?
+  submittedAt     DateTime?
+  approvedBy      String?
+  approvedAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model SecurityWorkflow {
+  id          String    @id @default(uuid())
+  name        String
+  type        String
+  status      String    @default("active")
+  priority    String    @default("medium")
+  assignedTo  String?
+  dueDate     DateTime?
+  steps       Json?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model SecurityIntegration {
+  id          String    @id @default(uuid())
+  name        String
+  type        String
+  status      String    @default("active")
+  endpoint    String?
+  apiKey      String?
+  config      Json?
+  lastSync    DateTime?
+  healthScore Int       @default(100)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model AdministrativeProfile {
+  id                  String   @id @default(uuid())
+  userId              Int      @unique
+  adminLevel          String   @default("standard")
+  departments         String[]
+  responsibilities    String[]
+  criticalPermissions String[]
+  emergencyContact    String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CustomRole {
+  id          String         @id @default(uuid())
+  name        String         @unique
+  description String?
+  permissions String[]
+  parentRole  String?
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  hierarchy   RoleHierarchy?
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  category    String
+  action      String
+  resource    String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model RoleHierarchy {
+  id        String          @id @default(uuid())
+  roleId    String          @unique
+  parentId  String?
+  level     Int             @default(0)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  parent    RoleHierarchy?  @relation("RoleHierarchy", fields: [parentId], references: [id])
+  children  RoleHierarchy[] @relation("RoleHierarchy")
+  role      CustomRole      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+}
+
+model PermissionAudit {
+  id           String   @id @default(uuid())
+  userId       Int
+  action       String
+  permissionId String
+  oldValue     String?
+  newValue     String
+  reason       String?
+  performedBy  String?
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum MemberShipType {
+  MONTHLY
+  DAILY
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum EquipmentStatus {
+  OPERATIONAL
+  MAINTENANCE
+  OUT_OF_SERVICE
+  RETIRED
+}
+
+enum MaintenanceType {
+  PREVENTIVE
+  CORRECTIVE
+  INSPECTION
+  REPAIR
 }

@@ -216,6 +216,17 @@ export namespace $Enums {
 export type MemberShipType = (typeof MemberShipType)[keyof typeof MemberShipType]
 
 
+export const PaymentStatus: {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+};
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
 export const EquipmentStatus: {
   OPERATIONAL: 'OPERATIONAL',
   MAINTENANCE: 'MAINTENANCE',
@@ -240,6 +251,10 @@ export type MaintenanceType = (typeof MaintenanceType)[keyof typeof MaintenanceT
 export type MemberShipType = $Enums.MemberShipType
 
 export const MemberShipType: typeof $Enums.MemberShipType
+
+export type PaymentStatus = $Enums.PaymentStatus
+
+export const PaymentStatus: typeof $Enums.PaymentStatus
 
 export type EquipmentStatus = $Enums.EquipmentStatus
 
@@ -4268,17 +4283,17 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    sessions: number
+    permission_audits: number
     access_logs: number
     ip_restrictions: number
-    permission_audits: number
+    sessions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+    permission_audits?: boolean | UserCountOutputTypeCountPermission_auditsArgs
     access_logs?: boolean | UserCountOutputTypeCountAccess_logsArgs
     ip_restrictions?: boolean | UserCountOutputTypeCountIp_restrictionsArgs
-    permission_audits?: boolean | UserCountOutputTypeCountPermission_auditsArgs
+    sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   }
 
   // Custom InputTypes
@@ -4295,8 +4310,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserSessionWhereInput
+  export type UserCountOutputTypeCountPermission_auditsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PermissionAuditWhereInput
   }
 
   /**
@@ -4316,8 +4331,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountPermission_auditsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PermissionAuditWhereInput
+  export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserSessionWhereInput
   }
 
 
@@ -4326,20 +4341,20 @@ export namespace Prisma {
    */
 
   export type MemberCountOutputType = {
-    check_ins: number
+    invoices: number
     attendance: number
+    check_ins: number
     fitness_goals: number
     payments: number
-    invoices: number
     Subscription: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    check_ins?: boolean | MemberCountOutputTypeCountCheck_insArgs
+    invoices?: boolean | MemberCountOutputTypeCountInvoicesArgs
     attendance?: boolean | MemberCountOutputTypeCountAttendanceArgs
+    check_ins?: boolean | MemberCountOutputTypeCountCheck_insArgs
     fitness_goals?: boolean | MemberCountOutputTypeCountFitness_goalsArgs
     payments?: boolean | MemberCountOutputTypeCountPaymentsArgs
-    invoices?: boolean | MemberCountOutputTypeCountInvoicesArgs
     Subscription?: boolean | MemberCountOutputTypeCountSubscriptionArgs
   }
 
@@ -4357,8 +4372,8 @@ export namespace Prisma {
   /**
    * MemberCountOutputType without action
    */
-  export type MemberCountOutputTypeCountCheck_insArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MemberCheckInWhereInput
+  export type MemberCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvoiceWhereInput
   }
 
   /**
@@ -4366,6 +4381,13 @@ export namespace Prisma {
    */
   export type MemberCountOutputTypeCountAttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MemberAttendanceWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountCheck_insArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MemberCheckInWhereInput
   }
 
   /**
@@ -4380,13 +4402,6 @@ export namespace Prisma {
    */
   export type MemberCountOutputTypeCountPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PaymentWhereInput
-  }
-
-  /**
-   * MemberCountOutputType without action
-   */
-  export type MemberCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: InvoiceWhereInput
   }
 
   /**
@@ -4508,14 +4523,14 @@ export namespace Prisma {
 
   export type UserAvgAggregateOutputType = {
     id: number | null
-    loginAttempts: number | null
     tokenVersion: number | null
+    loginAttempts: number | null
   }
 
   export type UserSumAggregateOutputType = {
     id: number | null
-    loginAttempts: number | null
     tokenVersion: number | null
+    loginAttempts: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -4527,21 +4542,21 @@ export namespace Prisma {
     password: string | null
     role: string | null
     profile_picture: string | null
-    isActive: boolean | null
-    email_verified: boolean | null
-    lastLogin: Date | null
-    loginAttempts: number | null
-    lockedUntil: Date | null
-    bio: string | null
-    dateOfBirth: Date | null
-    gender: string | null
-    department: string | null
-    position: string | null
     tokenVersion: number | null
     created_at: Date | null
     updated_at: Date | null
     resetToken: string | null
     resetTokenExp: Date | null
+    bio: string | null
+    dateOfBirth: Date | null
+    department: string | null
+    email_verified: boolean | null
+    gender: string | null
+    isActive: boolean | null
+    lastLogin: Date | null
+    lockedUntil: Date | null
+    loginAttempts: number | null
+    position: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -4553,21 +4568,21 @@ export namespace Prisma {
     password: string | null
     role: string | null
     profile_picture: string | null
-    isActive: boolean | null
-    email_verified: boolean | null
-    lastLogin: Date | null
-    loginAttempts: number | null
-    lockedUntil: Date | null
-    bio: string | null
-    dateOfBirth: Date | null
-    gender: string | null
-    department: string | null
-    position: string | null
     tokenVersion: number | null
     created_at: Date | null
     updated_at: Date | null
     resetToken: string | null
     resetTokenExp: Date | null
+    bio: string | null
+    dateOfBirth: Date | null
+    department: string | null
+    email_verified: boolean | null
+    gender: string | null
+    isActive: boolean | null
+    lastLogin: Date | null
+    lockedUntil: Date | null
+    loginAttempts: number | null
+    position: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -4579,35 +4594,35 @@ export namespace Prisma {
     password: number
     role: number
     profile_picture: number
-    isActive: number
-    email_verified: number
-    lastLogin: number
-    loginAttempts: number
-    lockedUntil: number
-    bio: number
-    dateOfBirth: number
-    gender: number
-    department: number
-    position: number
     tokenVersion: number
     created_at: number
     updated_at: number
     resetToken: number
     resetTokenExp: number
+    bio: number
+    dateOfBirth: number
+    department: number
+    email_verified: number
+    gender: number
+    isActive: number
+    lastLogin: number
+    lockedUntil: number
+    loginAttempts: number
+    position: number
     _all: number
   }
 
 
   export type UserAvgAggregateInputType = {
     id?: true
-    loginAttempts?: true
     tokenVersion?: true
+    loginAttempts?: true
   }
 
   export type UserSumAggregateInputType = {
     id?: true
-    loginAttempts?: true
     tokenVersion?: true
+    loginAttempts?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -4619,21 +4634,21 @@ export namespace Prisma {
     password?: true
     role?: true
     profile_picture?: true
-    isActive?: true
-    email_verified?: true
-    lastLogin?: true
-    loginAttempts?: true
-    lockedUntil?: true
-    bio?: true
-    dateOfBirth?: true
-    gender?: true
-    department?: true
-    position?: true
     tokenVersion?: true
     created_at?: true
     updated_at?: true
     resetToken?: true
     resetTokenExp?: true
+    bio?: true
+    dateOfBirth?: true
+    department?: true
+    email_verified?: true
+    gender?: true
+    isActive?: true
+    lastLogin?: true
+    lockedUntil?: true
+    loginAttempts?: true
+    position?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -4645,21 +4660,21 @@ export namespace Prisma {
     password?: true
     role?: true
     profile_picture?: true
-    isActive?: true
-    email_verified?: true
-    lastLogin?: true
-    loginAttempts?: true
-    lockedUntil?: true
-    bio?: true
-    dateOfBirth?: true
-    gender?: true
-    department?: true
-    position?: true
     tokenVersion?: true
     created_at?: true
     updated_at?: true
     resetToken?: true
     resetTokenExp?: true
+    bio?: true
+    dateOfBirth?: true
+    department?: true
+    email_verified?: true
+    gender?: true
+    isActive?: true
+    lastLogin?: true
+    lockedUntil?: true
+    loginAttempts?: true
+    position?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -4671,21 +4686,21 @@ export namespace Prisma {
     password?: true
     role?: true
     profile_picture?: true
-    isActive?: true
-    email_verified?: true
-    lastLogin?: true
-    loginAttempts?: true
-    lockedUntil?: true
-    bio?: true
-    dateOfBirth?: true
-    gender?: true
-    department?: true
-    position?: true
     tokenVersion?: true
     created_at?: true
     updated_at?: true
     resetToken?: true
     resetTokenExp?: true
+    bio?: true
+    dateOfBirth?: true
+    department?: true
+    email_verified?: true
+    gender?: true
+    isActive?: true
+    lastLogin?: true
+    lockedUntil?: true
+    loginAttempts?: true
+    position?: true
     _all?: true
   }
 
@@ -4784,21 +4799,21 @@ export namespace Prisma {
     password: string
     role: string
     profile_picture: string | null
-    isActive: boolean
-    email_verified: boolean
-    lastLogin: Date | null
-    loginAttempts: number
-    lockedUntil: Date | null
-    bio: string | null
-    dateOfBirth: Date | null
-    gender: string | null
-    department: string | null
-    position: string | null
     tokenVersion: number
     created_at: Date
     updated_at: Date
     resetToken: string | null
     resetTokenExp: Date | null
+    bio: string | null
+    dateOfBirth: Date | null
+    department: string | null
+    email_verified: boolean
+    gender: string | null
+    isActive: boolean
+    lastLogin: Date | null
+    lockedUntil: Date | null
+    loginAttempts: number
+    position: string | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -4829,32 +4844,32 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     profile_picture?: boolean
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: boolean
-    loginAttempts?: boolean
-    lockedUntil?: boolean
-    bio?: boolean
-    dateOfBirth?: boolean
-    gender?: boolean
-    department?: boolean
-    position?: boolean
     tokenVersion?: boolean
     created_at?: boolean
     updated_at?: boolean
     resetToken?: boolean
     resetTokenExp?: boolean
-    address?: boolean | User$addressArgs<ExtArgs>
-    emergency_contact?: boolean | User$emergency_contactArgs<ExtArgs>
-    social_media?: boolean | User$social_mediaArgs<ExtArgs>
-    preferences?: boolean | User$preferencesArgs<ExtArgs>
-    notification_settings?: boolean | User$notification_settingsArgs<ExtArgs>
-    privacy_settings?: boolean | User$privacy_settingsArgs<ExtArgs>
-    sessions?: boolean | User$sessionsArgs<ExtArgs>
-    access_logs?: boolean | User$access_logsArgs<ExtArgs>
-    ip_restrictions?: boolean | User$ip_restrictionsArgs<ExtArgs>
+    bio?: boolean
+    dateOfBirth?: boolean
+    department?: boolean
+    email_verified?: boolean
+    gender?: boolean
+    isActive?: boolean
+    lastLogin?: boolean
+    lockedUntil?: boolean
+    loginAttempts?: boolean
+    position?: boolean
     admin_profile?: boolean | User$admin_profileArgs<ExtArgs>
     permission_audits?: boolean | User$permission_auditsArgs<ExtArgs>
+    access_logs?: boolean | User$access_logsArgs<ExtArgs>
+    address?: boolean | User$addressArgs<ExtArgs>
+    emergency_contact?: boolean | User$emergency_contactArgs<ExtArgs>
+    ip_restrictions?: boolean | User$ip_restrictionsArgs<ExtArgs>
+    notification_settings?: boolean | User$notification_settingsArgs<ExtArgs>
+    preferences?: boolean | User$preferencesArgs<ExtArgs>
+    privacy_settings?: boolean | User$privacy_settingsArgs<ExtArgs>
+    sessions?: boolean | User$sessionsArgs<ExtArgs>
+    social_media?: boolean | User$social_mediaArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4867,21 +4882,21 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     profile_picture?: boolean
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: boolean
-    loginAttempts?: boolean
-    lockedUntil?: boolean
-    bio?: boolean
-    dateOfBirth?: boolean
-    gender?: boolean
-    department?: boolean
-    position?: boolean
     tokenVersion?: boolean
     created_at?: boolean
     updated_at?: boolean
     resetToken?: boolean
     resetTokenExp?: boolean
+    bio?: boolean
+    dateOfBirth?: boolean
+    department?: boolean
+    email_verified?: boolean
+    gender?: boolean
+    isActive?: boolean
+    lastLogin?: boolean
+    lockedUntil?: boolean
+    loginAttempts?: boolean
+    position?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4893,21 +4908,21 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     profile_picture?: boolean
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: boolean
-    loginAttempts?: boolean
-    lockedUntil?: boolean
-    bio?: boolean
-    dateOfBirth?: boolean
-    gender?: boolean
-    department?: boolean
-    position?: boolean
     tokenVersion?: boolean
     created_at?: boolean
     updated_at?: boolean
     resetToken?: boolean
     resetTokenExp?: boolean
+    bio?: boolean
+    dateOfBirth?: boolean
+    department?: boolean
+    email_verified?: boolean
+    gender?: boolean
+    isActive?: boolean
+    lastLogin?: boolean
+    lockedUntil?: boolean
+    loginAttempts?: boolean
+    position?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -4919,36 +4934,36 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     profile_picture?: boolean
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: boolean
-    loginAttempts?: boolean
-    lockedUntil?: boolean
-    bio?: boolean
-    dateOfBirth?: boolean
-    gender?: boolean
-    department?: boolean
-    position?: boolean
     tokenVersion?: boolean
     created_at?: boolean
     updated_at?: boolean
     resetToken?: boolean
     resetTokenExp?: boolean
+    bio?: boolean
+    dateOfBirth?: boolean
+    department?: boolean
+    email_verified?: boolean
+    gender?: boolean
+    isActive?: boolean
+    lastLogin?: boolean
+    lockedUntil?: boolean
+    loginAttempts?: boolean
+    position?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone_number" | "password" | "role" | "profile_picture" | "isActive" | "email_verified" | "lastLogin" | "loginAttempts" | "lockedUntil" | "bio" | "dateOfBirth" | "gender" | "department" | "position" | "tokenVersion" | "created_at" | "updated_at" | "resetToken" | "resetTokenExp", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "phone_number" | "password" | "role" | "profile_picture" | "tokenVersion" | "created_at" | "updated_at" | "resetToken" | "resetTokenExp" | "bio" | "dateOfBirth" | "department" | "email_verified" | "gender" | "isActive" | "lastLogin" | "lockedUntil" | "loginAttempts" | "position", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    address?: boolean | User$addressArgs<ExtArgs>
-    emergency_contact?: boolean | User$emergency_contactArgs<ExtArgs>
-    social_media?: boolean | User$social_mediaArgs<ExtArgs>
-    preferences?: boolean | User$preferencesArgs<ExtArgs>
-    notification_settings?: boolean | User$notification_settingsArgs<ExtArgs>
-    privacy_settings?: boolean | User$privacy_settingsArgs<ExtArgs>
-    sessions?: boolean | User$sessionsArgs<ExtArgs>
-    access_logs?: boolean | User$access_logsArgs<ExtArgs>
-    ip_restrictions?: boolean | User$ip_restrictionsArgs<ExtArgs>
     admin_profile?: boolean | User$admin_profileArgs<ExtArgs>
     permission_audits?: boolean | User$permission_auditsArgs<ExtArgs>
+    access_logs?: boolean | User$access_logsArgs<ExtArgs>
+    address?: boolean | User$addressArgs<ExtArgs>
+    emergency_contact?: boolean | User$emergency_contactArgs<ExtArgs>
+    ip_restrictions?: boolean | User$ip_restrictionsArgs<ExtArgs>
+    notification_settings?: boolean | User$notification_settingsArgs<ExtArgs>
+    preferences?: boolean | User$preferencesArgs<ExtArgs>
+    privacy_settings?: boolean | User$privacy_settingsArgs<ExtArgs>
+    sessions?: boolean | User$sessionsArgs<ExtArgs>
+    social_media?: boolean | User$social_mediaArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4957,17 +4972,17 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      address: Prisma.$UserAddressPayload<ExtArgs> | null
-      emergency_contact: Prisma.$UserEmergencyContactPayload<ExtArgs> | null
-      social_media: Prisma.$UserSocialMediaPayload<ExtArgs> | null
-      preferences: Prisma.$UserPreferencesPayload<ExtArgs> | null
-      notification_settings: Prisma.$UserNotificationSettingsPayload<ExtArgs> | null
-      privacy_settings: Prisma.$UserPrivacySettingsPayload<ExtArgs> | null
-      sessions: Prisma.$UserSessionPayload<ExtArgs>[]
-      access_logs: Prisma.$UserAccessLogPayload<ExtArgs>[]
-      ip_restrictions: Prisma.$UserIPRestrictionPayload<ExtArgs>[]
       admin_profile: Prisma.$AdministrativeProfilePayload<ExtArgs> | null
       permission_audits: Prisma.$PermissionAuditPayload<ExtArgs>[]
+      access_logs: Prisma.$UserAccessLogPayload<ExtArgs>[]
+      address: Prisma.$UserAddressPayload<ExtArgs> | null
+      emergency_contact: Prisma.$UserEmergencyContactPayload<ExtArgs> | null
+      ip_restrictions: Prisma.$UserIPRestrictionPayload<ExtArgs>[]
+      notification_settings: Prisma.$UserNotificationSettingsPayload<ExtArgs> | null
+      preferences: Prisma.$UserPreferencesPayload<ExtArgs> | null
+      privacy_settings: Prisma.$UserPrivacySettingsPayload<ExtArgs> | null
+      sessions: Prisma.$UserSessionPayload<ExtArgs>[]
+      social_media: Prisma.$UserSocialMediaPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4978,21 +4993,21 @@ export namespace Prisma {
       password: string
       role: string
       profile_picture: string | null
-      isActive: boolean
-      email_verified: boolean
-      lastLogin: Date | null
-      loginAttempts: number
-      lockedUntil: Date | null
-      bio: string | null
-      dateOfBirth: Date | null
-      gender: string | null
-      department: string | null
-      position: string | null
       tokenVersion: number
       created_at: Date
       updated_at: Date
       resetToken: string | null
       resetTokenExp: Date | null
+      bio: string | null
+      dateOfBirth: Date | null
+      department: string | null
+      email_verified: boolean
+      gender: string | null
+      isActive: boolean
+      lastLogin: Date | null
+      lockedUntil: Date | null
+      loginAttempts: number
+      position: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -5387,17 +5402,17 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    address<T extends User$addressArgs<ExtArgs> = {}>(args?: Subset<T, User$addressArgs<ExtArgs>>): Prisma__UserAddressClient<$Result.GetResult<Prisma.$UserAddressPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    emergency_contact<T extends User$emergency_contactArgs<ExtArgs> = {}>(args?: Subset<T, User$emergency_contactArgs<ExtArgs>>): Prisma__UserEmergencyContactClient<$Result.GetResult<Prisma.$UserEmergencyContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    social_media<T extends User$social_mediaArgs<ExtArgs> = {}>(args?: Subset<T, User$social_mediaArgs<ExtArgs>>): Prisma__UserSocialMediaClient<$Result.GetResult<Prisma.$UserSocialMediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    preferences<T extends User$preferencesArgs<ExtArgs> = {}>(args?: Subset<T, User$preferencesArgs<ExtArgs>>): Prisma__UserPreferencesClient<$Result.GetResult<Prisma.$UserPreferencesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    notification_settings<T extends User$notification_settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$notification_settingsArgs<ExtArgs>>): Prisma__UserNotificationSettingsClient<$Result.GetResult<Prisma.$UserNotificationSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    privacy_settings<T extends User$privacy_settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$privacy_settingsArgs<ExtArgs>>): Prisma__UserPrivacySettingsClient<$Result.GetResult<Prisma.$UserPrivacySettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    access_logs<T extends User$access_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$access_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserAccessLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    ip_restrictions<T extends User$ip_restrictionsArgs<ExtArgs> = {}>(args?: Subset<T, User$ip_restrictionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserIPRestrictionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     admin_profile<T extends User$admin_profileArgs<ExtArgs> = {}>(args?: Subset<T, User$admin_profileArgs<ExtArgs>>): Prisma__AdministrativeProfileClient<$Result.GetResult<Prisma.$AdministrativeProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     permission_audits<T extends User$permission_auditsArgs<ExtArgs> = {}>(args?: Subset<T, User$permission_auditsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PermissionAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    access_logs<T extends User$access_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$access_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserAccessLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    address<T extends User$addressArgs<ExtArgs> = {}>(args?: Subset<T, User$addressArgs<ExtArgs>>): Prisma__UserAddressClient<$Result.GetResult<Prisma.$UserAddressPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    emergency_contact<T extends User$emergency_contactArgs<ExtArgs> = {}>(args?: Subset<T, User$emergency_contactArgs<ExtArgs>>): Prisma__UserEmergencyContactClient<$Result.GetResult<Prisma.$UserEmergencyContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    ip_restrictions<T extends User$ip_restrictionsArgs<ExtArgs> = {}>(args?: Subset<T, User$ip_restrictionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserIPRestrictionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notification_settings<T extends User$notification_settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$notification_settingsArgs<ExtArgs>>): Prisma__UserNotificationSettingsClient<$Result.GetResult<Prisma.$UserNotificationSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    preferences<T extends User$preferencesArgs<ExtArgs> = {}>(args?: Subset<T, User$preferencesArgs<ExtArgs>>): Prisma__UserPreferencesClient<$Result.GetResult<Prisma.$UserPreferencesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    privacy_settings<T extends User$privacy_settingsArgs<ExtArgs> = {}>(args?: Subset<T, User$privacy_settingsArgs<ExtArgs>>): Prisma__UserPrivacySettingsClient<$Result.GetResult<Prisma.$UserPrivacySettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    social_media<T extends User$social_mediaArgs<ExtArgs> = {}>(args?: Subset<T, User$social_mediaArgs<ExtArgs>>): Prisma__UserSocialMediaClient<$Result.GetResult<Prisma.$UserSocialMediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5435,21 +5450,21 @@ export namespace Prisma {
     readonly password: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'String'>
     readonly profile_picture: FieldRef<"User", 'String'>
-    readonly isActive: FieldRef<"User", 'Boolean'>
-    readonly email_verified: FieldRef<"User", 'Boolean'>
-    readonly lastLogin: FieldRef<"User", 'DateTime'>
-    readonly loginAttempts: FieldRef<"User", 'Int'>
-    readonly lockedUntil: FieldRef<"User", 'DateTime'>
-    readonly bio: FieldRef<"User", 'String'>
-    readonly dateOfBirth: FieldRef<"User", 'DateTime'>
-    readonly gender: FieldRef<"User", 'String'>
-    readonly department: FieldRef<"User", 'String'>
-    readonly position: FieldRef<"User", 'String'>
     readonly tokenVersion: FieldRef<"User", 'Int'>
     readonly created_at: FieldRef<"User", 'DateTime'>
     readonly updated_at: FieldRef<"User", 'DateTime'>
     readonly resetToken: FieldRef<"User", 'String'>
     readonly resetTokenExp: FieldRef<"User", 'DateTime'>
+    readonly bio: FieldRef<"User", 'String'>
+    readonly dateOfBirth: FieldRef<"User", 'DateTime'>
+    readonly department: FieldRef<"User", 'String'>
+    readonly email_verified: FieldRef<"User", 'Boolean'>
+    readonly gender: FieldRef<"User", 'String'>
+    readonly isActive: FieldRef<"User", 'Boolean'>
+    readonly lastLogin: FieldRef<"User", 'DateTime'>
+    readonly lockedUntil: FieldRef<"User", 'DateTime'>
+    readonly loginAttempts: FieldRef<"User", 'Int'>
+    readonly position: FieldRef<"User", 'String'>
   }
     
 
@@ -5838,6 +5853,73 @@ export namespace Prisma {
   }
 
   /**
+   * User.admin_profile
+   */
+  export type User$admin_profileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdministrativeProfile
+     */
+    select?: AdministrativeProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdministrativeProfile
+     */
+    omit?: AdministrativeProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdministrativeProfileInclude<ExtArgs> | null
+    where?: AdministrativeProfileWhereInput
+  }
+
+  /**
+   * User.permission_audits
+   */
+  export type User$permission_auditsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PermissionAudit
+     */
+    select?: PermissionAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PermissionAudit
+     */
+    omit?: PermissionAuditOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissionAuditInclude<ExtArgs> | null
+    where?: PermissionAuditWhereInput
+    orderBy?: PermissionAuditOrderByWithRelationInput | PermissionAuditOrderByWithRelationInput[]
+    cursor?: PermissionAuditWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PermissionAuditScalarFieldEnum | PermissionAuditScalarFieldEnum[]
+  }
+
+  /**
+   * User.access_logs
+   */
+  export type User$access_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserAccessLog
+     */
+    select?: UserAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserAccessLog
+     */
+    omit?: UserAccessLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserAccessLogInclude<ExtArgs> | null
+    where?: UserAccessLogWhereInput
+    orderBy?: UserAccessLogOrderByWithRelationInput | UserAccessLogOrderByWithRelationInput[]
+    cursor?: UserAccessLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserAccessLogScalarFieldEnum | UserAccessLogScalarFieldEnum[]
+  }
+
+  /**
    * User.address
    */
   export type User$addressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5876,41 +5958,27 @@ export namespace Prisma {
   }
 
   /**
-   * User.social_media
+   * User.ip_restrictions
    */
-  export type User$social_mediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$ip_restrictionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserSocialMedia
+     * Select specific fields to fetch from the UserIPRestriction
      */
-    select?: UserSocialMediaSelect<ExtArgs> | null
+    select?: UserIPRestrictionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserSocialMedia
+     * Omit specific fields from the UserIPRestriction
      */
-    omit?: UserSocialMediaOmit<ExtArgs> | null
+    omit?: UserIPRestrictionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserSocialMediaInclude<ExtArgs> | null
-    where?: UserSocialMediaWhereInput
-  }
-
-  /**
-   * User.preferences
-   */
-  export type User$preferencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserPreferences
-     */
-    select?: UserPreferencesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the UserPreferences
-     */
-    omit?: UserPreferencesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserPreferencesInclude<ExtArgs> | null
-    where?: UserPreferencesWhereInput
+    include?: UserIPRestrictionInclude<ExtArgs> | null
+    where?: UserIPRestrictionWhereInput
+    orderBy?: UserIPRestrictionOrderByWithRelationInput | UserIPRestrictionOrderByWithRelationInput[]
+    cursor?: UserIPRestrictionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserIPRestrictionScalarFieldEnum | UserIPRestrictionScalarFieldEnum[]
   }
 
   /**
@@ -5930,6 +5998,25 @@ export namespace Prisma {
      */
     include?: UserNotificationSettingsInclude<ExtArgs> | null
     where?: UserNotificationSettingsWhereInput
+  }
+
+  /**
+   * User.preferences
+   */
+  export type User$preferencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPreferences
+     */
+    select?: UserPreferencesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPreferences
+     */
+    omit?: UserPreferencesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPreferencesInclude<ExtArgs> | null
+    where?: UserPreferencesWhereInput
   }
 
   /**
@@ -5976,94 +6063,22 @@ export namespace Prisma {
   }
 
   /**
-   * User.access_logs
+   * User.social_media
    */
-  export type User$access_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$social_mediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserAccessLog
+     * Select specific fields to fetch from the UserSocialMedia
      */
-    select?: UserAccessLogSelect<ExtArgs> | null
+    select?: UserSocialMediaSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserAccessLog
+     * Omit specific fields from the UserSocialMedia
      */
-    omit?: UserAccessLogOmit<ExtArgs> | null
+    omit?: UserSocialMediaOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserAccessLogInclude<ExtArgs> | null
-    where?: UserAccessLogWhereInput
-    orderBy?: UserAccessLogOrderByWithRelationInput | UserAccessLogOrderByWithRelationInput[]
-    cursor?: UserAccessLogWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserAccessLogScalarFieldEnum | UserAccessLogScalarFieldEnum[]
-  }
-
-  /**
-   * User.ip_restrictions
-   */
-  export type User$ip_restrictionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserIPRestriction
-     */
-    select?: UserIPRestrictionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the UserIPRestriction
-     */
-    omit?: UserIPRestrictionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserIPRestrictionInclude<ExtArgs> | null
-    where?: UserIPRestrictionWhereInput
-    orderBy?: UserIPRestrictionOrderByWithRelationInput | UserIPRestrictionOrderByWithRelationInput[]
-    cursor?: UserIPRestrictionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserIPRestrictionScalarFieldEnum | UserIPRestrictionScalarFieldEnum[]
-  }
-
-  /**
-   * User.admin_profile
-   */
-  export type User$admin_profileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AdministrativeProfile
-     */
-    select?: AdministrativeProfileSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AdministrativeProfile
-     */
-    omit?: AdministrativeProfileOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdministrativeProfileInclude<ExtArgs> | null
-    where?: AdministrativeProfileWhereInput
-  }
-
-  /**
-   * User.permission_audits
-   */
-  export type User$permission_auditsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PermissionAudit
-     */
-    select?: PermissionAuditSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PermissionAudit
-     */
-    omit?: PermissionAuditOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PermissionAuditInclude<ExtArgs> | null
-    where?: PermissionAuditWhereInput
-    orderBy?: PermissionAuditOrderByWithRelationInput | PermissionAuditOrderByWithRelationInput[]
-    cursor?: PermissionAuditWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PermissionAuditScalarFieldEnum | PermissionAuditScalarFieldEnum[]
+    include?: UserSocialMediaInclude<ExtArgs> | null
+    where?: UserSocialMediaWhereInput
   }
 
   /**
@@ -16512,13 +16527,13 @@ export namespace Prisma {
     age: number | null
     profile_picture: string | null
     membershiptype: $Enums.MemberShipType | null
-    terms_accepted: boolean | null
-    terms_accepted_at: Date | null
-    email_verified: boolean | null
-    email_verification_token: string | null
-    email_verification_expires: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    email_verification_expires: Date | null
+    email_verification_token: string | null
+    email_verified: boolean | null
+    terms_accepted: boolean | null
+    terms_accepted_at: Date | null
   }
 
   export type MemberMaxAggregateOutputType = {
@@ -16530,13 +16545,13 @@ export namespace Prisma {
     age: number | null
     profile_picture: string | null
     membershiptype: $Enums.MemberShipType | null
-    terms_accepted: boolean | null
-    terms_accepted_at: Date | null
-    email_verified: boolean | null
-    email_verification_token: string | null
-    email_verification_expires: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    email_verification_expires: Date | null
+    email_verification_token: string | null
+    email_verified: boolean | null
+    terms_accepted: boolean | null
+    terms_accepted_at: Date | null
   }
 
   export type MemberCountAggregateOutputType = {
@@ -16548,13 +16563,13 @@ export namespace Prisma {
     age: number
     profile_picture: number
     membershiptype: number
-    terms_accepted: number
-    terms_accepted_at: number
-    email_verified: number
-    email_verification_token: number
-    email_verification_expires: number
     createdAt: number
     updatedAt: number
+    email_verification_expires: number
+    email_verification_token: number
+    email_verified: number
+    terms_accepted: number
+    terms_accepted_at: number
     _all: number
   }
 
@@ -16576,13 +16591,13 @@ export namespace Prisma {
     age?: true
     profile_picture?: true
     membershiptype?: true
-    terms_accepted?: true
-    terms_accepted_at?: true
-    email_verified?: true
-    email_verification_token?: true
-    email_verification_expires?: true
     createdAt?: true
     updatedAt?: true
+    email_verification_expires?: true
+    email_verification_token?: true
+    email_verified?: true
+    terms_accepted?: true
+    terms_accepted_at?: true
   }
 
   export type MemberMaxAggregateInputType = {
@@ -16594,13 +16609,13 @@ export namespace Prisma {
     age?: true
     profile_picture?: true
     membershiptype?: true
-    terms_accepted?: true
-    terms_accepted_at?: true
-    email_verified?: true
-    email_verification_token?: true
-    email_verification_expires?: true
     createdAt?: true
     updatedAt?: true
+    email_verification_expires?: true
+    email_verification_token?: true
+    email_verified?: true
+    terms_accepted?: true
+    terms_accepted_at?: true
   }
 
   export type MemberCountAggregateInputType = {
@@ -16612,13 +16627,13 @@ export namespace Prisma {
     age?: true
     profile_picture?: true
     membershiptype?: true
-    terms_accepted?: true
-    terms_accepted_at?: true
-    email_verified?: true
-    email_verification_token?: true
-    email_verification_expires?: true
     createdAt?: true
     updatedAt?: true
+    email_verification_expires?: true
+    email_verification_token?: true
+    email_verified?: true
+    terms_accepted?: true
+    terms_accepted_at?: true
     _all?: true
   }
 
@@ -16717,13 +16732,13 @@ export namespace Prisma {
     age: number
     profile_picture: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted: boolean
-    terms_accepted_at: Date | null
-    email_verified: boolean
-    email_verification_token: string | null
-    email_verification_expires: Date | null
     createdAt: Date
     updatedAt: Date
+    email_verification_expires: Date | null
+    email_verification_token: string | null
+    email_verified: boolean
+    terms_accepted: boolean
+    terms_accepted_at: Date | null
     _count: MemberCountAggregateOutputType | null
     _avg: MemberAvgAggregateOutputType | null
     _sum: MemberSumAggregateOutputType | null
@@ -16754,21 +16769,21 @@ export namespace Prisma {
     age?: boolean
     profile_picture?: boolean
     membershiptype?: boolean
-    terms_accepted?: boolean
-    terms_accepted_at?: boolean
-    email_verified?: boolean
-    email_verification_token?: boolean
-    email_verification_expires?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    email_verification_expires?: boolean
+    email_verification_token?: boolean
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: boolean
     address?: boolean | Member$addressArgs<ExtArgs>
     emergency_contact?: boolean | Member$emergency_contactArgs<ExtArgs>
+    invoices?: boolean | Member$invoicesArgs<ExtArgs>
     medical_info?: boolean | Member$medical_infoArgs<ExtArgs>
-    check_ins?: boolean | Member$check_insArgs<ExtArgs>
     attendance?: boolean | Member$attendanceArgs<ExtArgs>
+    check_ins?: boolean | Member$check_insArgs<ExtArgs>
     fitness_goals?: boolean | Member$fitness_goalsArgs<ExtArgs>
     payments?: boolean | Member$paymentsArgs<ExtArgs>
-    invoices?: boolean | Member$invoicesArgs<ExtArgs>
     Subscription?: boolean | Member$SubscriptionArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
@@ -16782,13 +16797,13 @@ export namespace Prisma {
     age?: boolean
     profile_picture?: boolean
     membershiptype?: boolean
-    terms_accepted?: boolean
-    terms_accepted_at?: boolean
-    email_verified?: boolean
-    email_verification_token?: boolean
-    email_verification_expires?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    email_verification_expires?: boolean
+    email_verification_token?: boolean
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: boolean
   }, ExtArgs["result"]["member"]>
 
   export type MemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -16800,13 +16815,13 @@ export namespace Prisma {
     age?: boolean
     profile_picture?: boolean
     membershiptype?: boolean
-    terms_accepted?: boolean
-    terms_accepted_at?: boolean
-    email_verified?: boolean
-    email_verification_token?: boolean
-    email_verification_expires?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    email_verification_expires?: boolean
+    email_verification_token?: boolean
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: boolean
   }, ExtArgs["result"]["member"]>
 
   export type MemberSelectScalar = {
@@ -16818,25 +16833,25 @@ export namespace Prisma {
     age?: boolean
     profile_picture?: boolean
     membershiptype?: boolean
-    terms_accepted?: boolean
-    terms_accepted_at?: boolean
-    email_verified?: boolean
-    email_verification_token?: boolean
-    email_verification_expires?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    email_verification_expires?: boolean
+    email_verification_token?: boolean
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: boolean
   }
 
-  export type MemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone_number" | "password" | "age" | "profile_picture" | "membershiptype" | "terms_accepted" | "terms_accepted_at" | "email_verified" | "email_verification_token" | "email_verification_expires" | "createdAt" | "updatedAt", ExtArgs["result"]["member"]>
+  export type MemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone_number" | "password" | "age" | "profile_picture" | "membershiptype" | "createdAt" | "updatedAt" | "email_verification_expires" | "email_verification_token" | "email_verified" | "terms_accepted" | "terms_accepted_at", ExtArgs["result"]["member"]>
   export type MemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     address?: boolean | Member$addressArgs<ExtArgs>
     emergency_contact?: boolean | Member$emergency_contactArgs<ExtArgs>
+    invoices?: boolean | Member$invoicesArgs<ExtArgs>
     medical_info?: boolean | Member$medical_infoArgs<ExtArgs>
-    check_ins?: boolean | Member$check_insArgs<ExtArgs>
     attendance?: boolean | Member$attendanceArgs<ExtArgs>
+    check_ins?: boolean | Member$check_insArgs<ExtArgs>
     fitness_goals?: boolean | Member$fitness_goalsArgs<ExtArgs>
     payments?: boolean | Member$paymentsArgs<ExtArgs>
-    invoices?: boolean | Member$invoicesArgs<ExtArgs>
     Subscription?: boolean | Member$SubscriptionArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -16848,12 +16863,12 @@ export namespace Prisma {
     objects: {
       address: Prisma.$AddressPayload<ExtArgs> | null
       emergency_contact: Prisma.$EmergencyContactPayload<ExtArgs> | null
+      invoices: Prisma.$InvoicePayload<ExtArgs>[]
       medical_info: Prisma.$MedicalInfoPayload<ExtArgs> | null
-      check_ins: Prisma.$MemberCheckInPayload<ExtArgs>[]
       attendance: Prisma.$MemberAttendancePayload<ExtArgs>[]
+      check_ins: Prisma.$MemberCheckInPayload<ExtArgs>[]
       fitness_goals: Prisma.$MemberFitnessGoalPayload<ExtArgs>[]
       payments: Prisma.$PaymentPayload<ExtArgs>[]
-      invoices: Prisma.$InvoicePayload<ExtArgs>[]
       Subscription: Prisma.$SubscriptionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -16865,13 +16880,13 @@ export namespace Prisma {
       age: number
       profile_picture: string | null
       membershiptype: $Enums.MemberShipType
-      terms_accepted: boolean
-      terms_accepted_at: Date | null
-      email_verified: boolean
-      email_verification_token: string | null
-      email_verification_expires: Date | null
       createdAt: Date
       updatedAt: Date
+      email_verification_expires: Date | null
+      email_verification_token: string | null
+      email_verified: boolean
+      terms_accepted: boolean
+      terms_accepted_at: Date | null
     }, ExtArgs["result"]["member"]>
     composites: {}
   }
@@ -17268,12 +17283,12 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     address<T extends Member$addressArgs<ExtArgs> = {}>(args?: Subset<T, Member$addressArgs<ExtArgs>>): Prisma__AddressClient<$Result.GetResult<Prisma.$AddressPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     emergency_contact<T extends Member$emergency_contactArgs<ExtArgs> = {}>(args?: Subset<T, Member$emergency_contactArgs<ExtArgs>>): Prisma__EmergencyContactClient<$Result.GetResult<Prisma.$EmergencyContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    invoices<T extends Member$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Member$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     medical_info<T extends Member$medical_infoArgs<ExtArgs> = {}>(args?: Subset<T, Member$medical_infoArgs<ExtArgs>>): Prisma__MedicalInfoClient<$Result.GetResult<Prisma.$MedicalInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    check_ins<T extends Member$check_insArgs<ExtArgs> = {}>(args?: Subset<T, Member$check_insArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberCheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendance<T extends Member$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Member$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberAttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    check_ins<T extends Member$check_insArgs<ExtArgs> = {}>(args?: Subset<T, Member$check_insArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberCheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fitness_goals<T extends Member$fitness_goalsArgs<ExtArgs> = {}>(args?: Subset<T, Member$fitness_goalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberFitnessGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     payments<T extends Member$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Member$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    invoices<T extends Member$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Member$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Subscription<T extends Member$SubscriptionArgs<ExtArgs> = {}>(args?: Subset<T, Member$SubscriptionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -17312,13 +17327,13 @@ export namespace Prisma {
     readonly age: FieldRef<"Member", 'Int'>
     readonly profile_picture: FieldRef<"Member", 'String'>
     readonly membershiptype: FieldRef<"Member", 'MemberShipType'>
-    readonly terms_accepted: FieldRef<"Member", 'Boolean'>
-    readonly terms_accepted_at: FieldRef<"Member", 'DateTime'>
-    readonly email_verified: FieldRef<"Member", 'Boolean'>
-    readonly email_verification_token: FieldRef<"Member", 'String'>
-    readonly email_verification_expires: FieldRef<"Member", 'DateTime'>
     readonly createdAt: FieldRef<"Member", 'DateTime'>
     readonly updatedAt: FieldRef<"Member", 'DateTime'>
+    readonly email_verification_expires: FieldRef<"Member", 'DateTime'>
+    readonly email_verification_token: FieldRef<"Member", 'String'>
+    readonly email_verified: FieldRef<"Member", 'Boolean'>
+    readonly terms_accepted: FieldRef<"Member", 'Boolean'>
+    readonly terms_accepted_at: FieldRef<"Member", 'DateTime'>
   }
     
 
@@ -17745,6 +17760,30 @@ export namespace Prisma {
   }
 
   /**
+   * Member.invoices
+   */
+  export type Member$invoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invoice
+     */
+    omit?: InvoiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    where?: InvoiceWhereInput
+    orderBy?: InvoiceOrderByWithRelationInput | InvoiceOrderByWithRelationInput[]
+    cursor?: InvoiceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvoiceScalarFieldEnum | InvoiceScalarFieldEnum[]
+  }
+
+  /**
    * Member.medical_info
    */
   export type Member$medical_infoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17761,30 +17800,6 @@ export namespace Prisma {
      */
     include?: MedicalInfoInclude<ExtArgs> | null
     where?: MedicalInfoWhereInput
-  }
-
-  /**
-   * Member.check_ins
-   */
-  export type Member$check_insArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MemberCheckIn
-     */
-    select?: MemberCheckInSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MemberCheckIn
-     */
-    omit?: MemberCheckInOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MemberCheckInInclude<ExtArgs> | null
-    where?: MemberCheckInWhereInput
-    orderBy?: MemberCheckInOrderByWithRelationInput | MemberCheckInOrderByWithRelationInput[]
-    cursor?: MemberCheckInWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MemberCheckInScalarFieldEnum | MemberCheckInScalarFieldEnum[]
   }
 
   /**
@@ -17809,6 +17824,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MemberAttendanceScalarFieldEnum | MemberAttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * Member.check_ins
+   */
+  export type Member$check_insArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberCheckIn
+     */
+    select?: MemberCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MemberCheckIn
+     */
+    omit?: MemberCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberCheckInInclude<ExtArgs> | null
+    where?: MemberCheckInWhereInput
+    orderBy?: MemberCheckInOrderByWithRelationInput | MemberCheckInOrderByWithRelationInput[]
+    cursor?: MemberCheckInWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MemberCheckInScalarFieldEnum | MemberCheckInScalarFieldEnum[]
   }
 
   /**
@@ -17857,30 +17896,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
-  }
-
-  /**
-   * Member.invoices
-   */
-  export type Member$invoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Invoice
-     */
-    select?: InvoiceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Invoice
-     */
-    omit?: InvoiceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InvoiceInclude<ExtArgs> | null
-    where?: InvoiceWhereInput
-    orderBy?: InvoiceOrderByWithRelationInput | InvoiceOrderByWithRelationInput[]
-    cursor?: InvoiceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: InvoiceScalarFieldEnum | InvoiceScalarFieldEnum[]
   }
 
   /**
@@ -24655,6 +24670,10 @@ export namespace Prisma {
     memberId: string | null
     method: string | null
     createdAt: Date | null
+    status: string | null
+    description: string | null
+    reference: string | null
+    updatedAt: Date | null
   }
 
   export type PaymentMaxAggregateOutputType = {
@@ -24663,6 +24682,10 @@ export namespace Prisma {
     memberId: string | null
     method: string | null
     createdAt: Date | null
+    status: string | null
+    description: string | null
+    reference: string | null
+    updatedAt: Date | null
   }
 
   export type PaymentCountAggregateOutputType = {
@@ -24671,6 +24694,10 @@ export namespace Prisma {
     memberId: number
     method: number
     createdAt: number
+    status: number
+    description: number
+    reference: number
+    updatedAt: number
     _all: number
   }
 
@@ -24689,6 +24716,10 @@ export namespace Prisma {
     memberId?: true
     method?: true
     createdAt?: true
+    status?: true
+    description?: true
+    reference?: true
+    updatedAt?: true
   }
 
   export type PaymentMaxAggregateInputType = {
@@ -24697,6 +24728,10 @@ export namespace Prisma {
     memberId?: true
     method?: true
     createdAt?: true
+    status?: true
+    description?: true
+    reference?: true
+    updatedAt?: true
   }
 
   export type PaymentCountAggregateInputType = {
@@ -24705,6 +24740,10 @@ export namespace Prisma {
     memberId?: true
     method?: true
     createdAt?: true
+    status?: true
+    description?: true
+    reference?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -24800,6 +24839,10 @@ export namespace Prisma {
     memberId: string
     method: string
     createdAt: Date
+    status: string
+    description: string | null
+    reference: string | null
+    updatedAt: Date
     _count: PaymentCountAggregateOutputType | null
     _avg: PaymentAvgAggregateOutputType | null
     _sum: PaymentSumAggregateOutputType | null
@@ -24827,6 +24870,10 @@ export namespace Prisma {
     memberId?: boolean
     method?: boolean
     createdAt?: boolean
+    status?: boolean
+    description?: boolean
+    reference?: boolean
+    updatedAt?: boolean
     Member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["payment"]>
 
@@ -24836,6 +24883,10 @@ export namespace Prisma {
     memberId?: boolean
     method?: boolean
     createdAt?: boolean
+    status?: boolean
+    description?: boolean
+    reference?: boolean
+    updatedAt?: boolean
     Member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["payment"]>
 
@@ -24845,6 +24896,10 @@ export namespace Prisma {
     memberId?: boolean
     method?: boolean
     createdAt?: boolean
+    status?: boolean
+    description?: boolean
+    reference?: boolean
+    updatedAt?: boolean
     Member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["payment"]>
 
@@ -24854,9 +24909,13 @@ export namespace Prisma {
     memberId?: boolean
     method?: boolean
     createdAt?: boolean
+    status?: boolean
+    description?: boolean
+    reference?: boolean
+    updatedAt?: boolean
   }
 
-  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "amount" | "memberId" | "method" | "createdAt", ExtArgs["result"]["payment"]>
+  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "amount" | "memberId" | "method" | "createdAt" | "status" | "description" | "reference" | "updatedAt", ExtArgs["result"]["payment"]>
   export type PaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Member?: boolean | MemberDefaultArgs<ExtArgs>
   }
@@ -24878,6 +24937,10 @@ export namespace Prisma {
       memberId: string
       method: string
       createdAt: Date
+      status: string
+      description: string | null
+      reference: string | null
+      updatedAt: Date
     }, ExtArgs["result"]["payment"]>
     composites: {}
   }
@@ -25307,6 +25370,10 @@ export namespace Prisma {
     readonly memberId: FieldRef<"Payment", 'String'>
     readonly method: FieldRef<"Payment", 'String'>
     readonly createdAt: FieldRef<"Payment", 'DateTime'>
+    readonly status: FieldRef<"Payment", 'String'>
+    readonly description: FieldRef<"Payment", 'String'>
+    readonly reference: FieldRef<"Payment", 'String'>
+    readonly updatedAt: FieldRef<"Payment", 'DateTime'>
   }
     
 
@@ -29015,90 +29082,90 @@ export namespace Prisma {
   export type EquipmentAvgAggregateOutputType = {
     quantity: number | null
     available: number | null
-    inUse: number | null
     cost: number | null
+    inUse: number | null
   }
 
   export type EquipmentSumAggregateOutputType = {
     quantity: number | null
     available: number | null
-    inUse: number | null
     cost: number | null
+    inUse: number | null
   }
 
   export type EquipmentMinAggregateOutputType = {
     id: string | null
     name: string | null
     type: string | null
-    category: string | null
-    brand: string | null
-    model: string | null
-    serialNumber: string | null
     quantity: number | null
-    available: number | null
-    inUse: number | null
-    maintenance: boolean | null
-    lastMaintenance: Date | null
-    nextMaintenance: Date | null
-    status: $Enums.EquipmentStatus | null
-    location: string | null
-    description: string | null
-    imageUrl: string | null
-    purchaseDate: Date | null
-    warrantyExpiry: Date | null
-    cost: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    available: number | null
+    brand: string | null
+    category: string | null
+    cost: number | null
+    description: string | null
+    imageUrl: string | null
+    inUse: number | null
+    lastMaintenance: Date | null
+    location: string | null
+    maintenance: boolean | null
+    model: string | null
+    nextMaintenance: Date | null
+    purchaseDate: Date | null
+    serialNumber: string | null
+    status: $Enums.EquipmentStatus | null
+    warrantyExpiry: Date | null
   }
 
   export type EquipmentMaxAggregateOutputType = {
     id: string | null
     name: string | null
     type: string | null
-    category: string | null
-    brand: string | null
-    model: string | null
-    serialNumber: string | null
     quantity: number | null
-    available: number | null
-    inUse: number | null
-    maintenance: boolean | null
-    lastMaintenance: Date | null
-    nextMaintenance: Date | null
-    status: $Enums.EquipmentStatus | null
-    location: string | null
-    description: string | null
-    imageUrl: string | null
-    purchaseDate: Date | null
-    warrantyExpiry: Date | null
-    cost: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    available: number | null
+    brand: string | null
+    category: string | null
+    cost: number | null
+    description: string | null
+    imageUrl: string | null
+    inUse: number | null
+    lastMaintenance: Date | null
+    location: string | null
+    maintenance: boolean | null
+    model: string | null
+    nextMaintenance: Date | null
+    purchaseDate: Date | null
+    serialNumber: string | null
+    status: $Enums.EquipmentStatus | null
+    warrantyExpiry: Date | null
   }
 
   export type EquipmentCountAggregateOutputType = {
     id: number
     name: number
     type: number
-    category: number
-    brand: number
-    model: number
-    serialNumber: number
     quantity: number
-    available: number
-    inUse: number
-    maintenance: number
-    lastMaintenance: number
-    nextMaintenance: number
-    status: number
-    location: number
-    description: number
-    imageUrl: number
-    purchaseDate: number
-    warrantyExpiry: number
-    cost: number
     createdAt: number
     updatedAt: number
+    available: number
+    brand: number
+    category: number
+    cost: number
+    description: number
+    imageUrl: number
+    inUse: number
+    lastMaintenance: number
+    location: number
+    maintenance: number
+    model: number
+    nextMaintenance: number
+    purchaseDate: number
+    serialNumber: number
+    status: number
+    warrantyExpiry: number
     _all: number
   }
 
@@ -29106,90 +29173,90 @@ export namespace Prisma {
   export type EquipmentAvgAggregateInputType = {
     quantity?: true
     available?: true
-    inUse?: true
     cost?: true
+    inUse?: true
   }
 
   export type EquipmentSumAggregateInputType = {
     quantity?: true
     available?: true
-    inUse?: true
     cost?: true
+    inUse?: true
   }
 
   export type EquipmentMinAggregateInputType = {
     id?: true
     name?: true
     type?: true
-    category?: true
-    brand?: true
-    model?: true
-    serialNumber?: true
     quantity?: true
-    available?: true
-    inUse?: true
-    maintenance?: true
-    lastMaintenance?: true
-    nextMaintenance?: true
-    status?: true
-    location?: true
-    description?: true
-    imageUrl?: true
-    purchaseDate?: true
-    warrantyExpiry?: true
-    cost?: true
     createdAt?: true
     updatedAt?: true
+    available?: true
+    brand?: true
+    category?: true
+    cost?: true
+    description?: true
+    imageUrl?: true
+    inUse?: true
+    lastMaintenance?: true
+    location?: true
+    maintenance?: true
+    model?: true
+    nextMaintenance?: true
+    purchaseDate?: true
+    serialNumber?: true
+    status?: true
+    warrantyExpiry?: true
   }
 
   export type EquipmentMaxAggregateInputType = {
     id?: true
     name?: true
     type?: true
-    category?: true
-    brand?: true
-    model?: true
-    serialNumber?: true
     quantity?: true
-    available?: true
-    inUse?: true
-    maintenance?: true
-    lastMaintenance?: true
-    nextMaintenance?: true
-    status?: true
-    location?: true
-    description?: true
-    imageUrl?: true
-    purchaseDate?: true
-    warrantyExpiry?: true
-    cost?: true
     createdAt?: true
     updatedAt?: true
+    available?: true
+    brand?: true
+    category?: true
+    cost?: true
+    description?: true
+    imageUrl?: true
+    inUse?: true
+    lastMaintenance?: true
+    location?: true
+    maintenance?: true
+    model?: true
+    nextMaintenance?: true
+    purchaseDate?: true
+    serialNumber?: true
+    status?: true
+    warrantyExpiry?: true
   }
 
   export type EquipmentCountAggregateInputType = {
     id?: true
     name?: true
     type?: true
-    category?: true
-    brand?: true
-    model?: true
-    serialNumber?: true
     quantity?: true
-    available?: true
-    inUse?: true
-    maintenance?: true
-    lastMaintenance?: true
-    nextMaintenance?: true
-    status?: true
-    location?: true
-    description?: true
-    imageUrl?: true
-    purchaseDate?: true
-    warrantyExpiry?: true
-    cost?: true
     createdAt?: true
     updatedAt?: true
+    available?: true
+    brand?: true
+    category?: true
+    cost?: true
+    description?: true
+    imageUrl?: true
+    inUse?: true
+    lastMaintenance?: true
+    location?: true
+    maintenance?: true
+    model?: true
+    nextMaintenance?: true
+    purchaseDate?: true
+    serialNumber?: true
+    status?: true
+    warrantyExpiry?: true
     _all?: true
   }
 
@@ -29283,25 +29350,25 @@ export namespace Prisma {
     id: string
     name: string
     type: string
-    category: string
-    brand: string | null
-    model: string | null
-    serialNumber: string | null
     quantity: number
-    available: number
-    inUse: number
-    maintenance: boolean
-    lastMaintenance: Date | null
-    nextMaintenance: Date | null
-    status: $Enums.EquipmentStatus
-    location: string | null
-    description: string | null
-    imageUrl: string | null
-    purchaseDate: Date | null
-    warrantyExpiry: Date | null
-    cost: number | null
     createdAt: Date
     updatedAt: Date
+    available: number
+    brand: string | null
+    category: string
+    cost: number | null
+    description: string | null
+    imageUrl: string | null
+    inUse: number
+    lastMaintenance: Date | null
+    location: string | null
+    maintenance: boolean
+    model: string | null
+    nextMaintenance: Date | null
+    purchaseDate: Date | null
+    serialNumber: string | null
+    status: $Enums.EquipmentStatus
+    warrantyExpiry: Date | null
     _count: EquipmentCountAggregateOutputType | null
     _avg: EquipmentAvgAggregateOutputType | null
     _sum: EquipmentSumAggregateOutputType | null
@@ -29327,25 +29394,25 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     type?: boolean
-    category?: boolean
-    brand?: boolean
-    model?: boolean
-    serialNumber?: boolean
     quantity?: boolean
-    available?: boolean
-    inUse?: boolean
-    maintenance?: boolean
-    lastMaintenance?: boolean
-    nextMaintenance?: boolean
-    status?: boolean
-    location?: boolean
-    description?: boolean
-    imageUrl?: boolean
-    purchaseDate?: boolean
-    warrantyExpiry?: boolean
-    cost?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    available?: boolean
+    brand?: boolean
+    category?: boolean
+    cost?: boolean
+    description?: boolean
+    imageUrl?: boolean
+    inUse?: boolean
+    lastMaintenance?: boolean
+    location?: boolean
+    maintenance?: boolean
+    model?: boolean
+    nextMaintenance?: boolean
+    purchaseDate?: boolean
+    serialNumber?: boolean
+    status?: boolean
+    warrantyExpiry?: boolean
     maintenanceLogs?: boolean | Equipment$maintenanceLogsArgs<ExtArgs>
     _count?: boolean | EquipmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["equipment"]>
@@ -29354,78 +29421,78 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     type?: boolean
-    category?: boolean
-    brand?: boolean
-    model?: boolean
-    serialNumber?: boolean
     quantity?: boolean
-    available?: boolean
-    inUse?: boolean
-    maintenance?: boolean
-    lastMaintenance?: boolean
-    nextMaintenance?: boolean
-    status?: boolean
-    location?: boolean
-    description?: boolean
-    imageUrl?: boolean
-    purchaseDate?: boolean
-    warrantyExpiry?: boolean
-    cost?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    available?: boolean
+    brand?: boolean
+    category?: boolean
+    cost?: boolean
+    description?: boolean
+    imageUrl?: boolean
+    inUse?: boolean
+    lastMaintenance?: boolean
+    location?: boolean
+    maintenance?: boolean
+    model?: boolean
+    nextMaintenance?: boolean
+    purchaseDate?: boolean
+    serialNumber?: boolean
+    status?: boolean
+    warrantyExpiry?: boolean
   }, ExtArgs["result"]["equipment"]>
 
   export type EquipmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
     type?: boolean
-    category?: boolean
-    brand?: boolean
-    model?: boolean
-    serialNumber?: boolean
     quantity?: boolean
-    available?: boolean
-    inUse?: boolean
-    maintenance?: boolean
-    lastMaintenance?: boolean
-    nextMaintenance?: boolean
-    status?: boolean
-    location?: boolean
-    description?: boolean
-    imageUrl?: boolean
-    purchaseDate?: boolean
-    warrantyExpiry?: boolean
-    cost?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    available?: boolean
+    brand?: boolean
+    category?: boolean
+    cost?: boolean
+    description?: boolean
+    imageUrl?: boolean
+    inUse?: boolean
+    lastMaintenance?: boolean
+    location?: boolean
+    maintenance?: boolean
+    model?: boolean
+    nextMaintenance?: boolean
+    purchaseDate?: boolean
+    serialNumber?: boolean
+    status?: boolean
+    warrantyExpiry?: boolean
   }, ExtArgs["result"]["equipment"]>
 
   export type EquipmentSelectScalar = {
     id?: boolean
     name?: boolean
     type?: boolean
-    category?: boolean
-    brand?: boolean
-    model?: boolean
-    serialNumber?: boolean
     quantity?: boolean
-    available?: boolean
-    inUse?: boolean
-    maintenance?: boolean
-    lastMaintenance?: boolean
-    nextMaintenance?: boolean
-    status?: boolean
-    location?: boolean
-    description?: boolean
-    imageUrl?: boolean
-    purchaseDate?: boolean
-    warrantyExpiry?: boolean
-    cost?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    available?: boolean
+    brand?: boolean
+    category?: boolean
+    cost?: boolean
+    description?: boolean
+    imageUrl?: boolean
+    inUse?: boolean
+    lastMaintenance?: boolean
+    location?: boolean
+    maintenance?: boolean
+    model?: boolean
+    nextMaintenance?: boolean
+    purchaseDate?: boolean
+    serialNumber?: boolean
+    status?: boolean
+    warrantyExpiry?: boolean
   }
 
-  export type EquipmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "type" | "category" | "brand" | "model" | "serialNumber" | "quantity" | "available" | "inUse" | "maintenance" | "lastMaintenance" | "nextMaintenance" | "status" | "location" | "description" | "imageUrl" | "purchaseDate" | "warrantyExpiry" | "cost" | "createdAt" | "updatedAt", ExtArgs["result"]["equipment"]>
+  export type EquipmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "type" | "quantity" | "createdAt" | "updatedAt" | "available" | "brand" | "category" | "cost" | "description" | "imageUrl" | "inUse" | "lastMaintenance" | "location" | "maintenance" | "model" | "nextMaintenance" | "purchaseDate" | "serialNumber" | "status" | "warrantyExpiry", ExtArgs["result"]["equipment"]>
   export type EquipmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     maintenanceLogs?: boolean | Equipment$maintenanceLogsArgs<ExtArgs>
     _count?: boolean | EquipmentCountOutputTypeDefaultArgs<ExtArgs>
@@ -29442,25 +29509,25 @@ export namespace Prisma {
       id: string
       name: string
       type: string
-      category: string
-      brand: string | null
-      model: string | null
-      serialNumber: string | null
       quantity: number
-      available: number
-      inUse: number
-      maintenance: boolean
-      lastMaintenance: Date | null
-      nextMaintenance: Date | null
-      status: $Enums.EquipmentStatus
-      location: string | null
-      description: string | null
-      imageUrl: string | null
-      purchaseDate: Date | null
-      warrantyExpiry: Date | null
-      cost: number | null
       createdAt: Date
       updatedAt: Date
+      available: number
+      brand: string | null
+      category: string
+      cost: number | null
+      description: string | null
+      imageUrl: string | null
+      inUse: number
+      lastMaintenance: Date | null
+      location: string | null
+      maintenance: boolean
+      model: string | null
+      nextMaintenance: Date | null
+      purchaseDate: Date | null
+      serialNumber: string | null
+      status: $Enums.EquipmentStatus
+      warrantyExpiry: Date | null
     }, ExtArgs["result"]["equipment"]>
     composites: {}
   }
@@ -29888,25 +29955,25 @@ export namespace Prisma {
     readonly id: FieldRef<"Equipment", 'String'>
     readonly name: FieldRef<"Equipment", 'String'>
     readonly type: FieldRef<"Equipment", 'String'>
-    readonly category: FieldRef<"Equipment", 'String'>
-    readonly brand: FieldRef<"Equipment", 'String'>
-    readonly model: FieldRef<"Equipment", 'String'>
-    readonly serialNumber: FieldRef<"Equipment", 'String'>
     readonly quantity: FieldRef<"Equipment", 'Int'>
-    readonly available: FieldRef<"Equipment", 'Int'>
-    readonly inUse: FieldRef<"Equipment", 'Int'>
-    readonly maintenance: FieldRef<"Equipment", 'Boolean'>
-    readonly lastMaintenance: FieldRef<"Equipment", 'DateTime'>
-    readonly nextMaintenance: FieldRef<"Equipment", 'DateTime'>
-    readonly status: FieldRef<"Equipment", 'EquipmentStatus'>
-    readonly location: FieldRef<"Equipment", 'String'>
-    readonly description: FieldRef<"Equipment", 'String'>
-    readonly imageUrl: FieldRef<"Equipment", 'String'>
-    readonly purchaseDate: FieldRef<"Equipment", 'DateTime'>
-    readonly warrantyExpiry: FieldRef<"Equipment", 'DateTime'>
-    readonly cost: FieldRef<"Equipment", 'Float'>
     readonly createdAt: FieldRef<"Equipment", 'DateTime'>
     readonly updatedAt: FieldRef<"Equipment", 'DateTime'>
+    readonly available: FieldRef<"Equipment", 'Int'>
+    readonly brand: FieldRef<"Equipment", 'String'>
+    readonly category: FieldRef<"Equipment", 'String'>
+    readonly cost: FieldRef<"Equipment", 'Float'>
+    readonly description: FieldRef<"Equipment", 'String'>
+    readonly imageUrl: FieldRef<"Equipment", 'String'>
+    readonly inUse: FieldRef<"Equipment", 'Int'>
+    readonly lastMaintenance: FieldRef<"Equipment", 'DateTime'>
+    readonly location: FieldRef<"Equipment", 'String'>
+    readonly maintenance: FieldRef<"Equipment", 'Boolean'>
+    readonly model: FieldRef<"Equipment", 'String'>
+    readonly nextMaintenance: FieldRef<"Equipment", 'DateTime'>
+    readonly purchaseDate: FieldRef<"Equipment", 'DateTime'>
+    readonly serialNumber: FieldRef<"Equipment", 'String'>
+    readonly status: FieldRef<"Equipment", 'EquipmentStatus'>
+    readonly warrantyExpiry: FieldRef<"Equipment", 'DateTime'>
   }
     
 
@@ -46055,9 +46122,9 @@ export namespace Prisma {
     level?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
     parent?: boolean | RoleHierarchy$parentArgs<ExtArgs>
     children?: boolean | RoleHierarchy$childrenArgs<ExtArgs>
+    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
     _count?: boolean | RoleHierarchyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["roleHierarchy"]>
 
@@ -46068,8 +46135,8 @@ export namespace Prisma {
     level?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
     parent?: boolean | RoleHierarchy$parentArgs<ExtArgs>
+    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["roleHierarchy"]>
 
   export type RoleHierarchySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -46079,8 +46146,8 @@ export namespace Prisma {
     level?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
     parent?: boolean | RoleHierarchy$parentArgs<ExtArgs>
+    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["roleHierarchy"]>
 
   export type RoleHierarchySelectScalar = {
@@ -46094,26 +46161,26 @@ export namespace Prisma {
 
   export type RoleHierarchyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "roleId" | "parentId" | "level" | "createdAt" | "updatedAt", ExtArgs["result"]["roleHierarchy"]>
   export type RoleHierarchyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
     parent?: boolean | RoleHierarchy$parentArgs<ExtArgs>
     children?: boolean | RoleHierarchy$childrenArgs<ExtArgs>
+    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
     _count?: boolean | RoleHierarchyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RoleHierarchyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
     parent?: boolean | RoleHierarchy$parentArgs<ExtArgs>
+    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
   }
   export type RoleHierarchyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
     parent?: boolean | RoleHierarchy$parentArgs<ExtArgs>
+    role?: boolean | CustomRoleDefaultArgs<ExtArgs>
   }
 
   export type $RoleHierarchyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "RoleHierarchy"
     objects: {
-      role: Prisma.$CustomRolePayload<ExtArgs>
       parent: Prisma.$RoleHierarchyPayload<ExtArgs> | null
       children: Prisma.$RoleHierarchyPayload<ExtArgs>[]
+      role: Prisma.$CustomRolePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -46516,9 +46583,9 @@ export namespace Prisma {
    */
   export interface Prisma__RoleHierarchyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    role<T extends CustomRoleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CustomRoleDefaultArgs<ExtArgs>>): Prisma__CustomRoleClient<$Result.GetResult<Prisma.$CustomRolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     parent<T extends RoleHierarchy$parentArgs<ExtArgs> = {}>(args?: Subset<T, RoleHierarchy$parentArgs<ExtArgs>>): Prisma__RoleHierarchyClient<$Result.GetResult<Prisma.$RoleHierarchyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     children<T extends RoleHierarchy$childrenArgs<ExtArgs> = {}>(args?: Subset<T, RoleHierarchy$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoleHierarchyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    role<T extends CustomRoleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CustomRoleDefaultArgs<ExtArgs>>): Prisma__CustomRoleClient<$Result.GetResult<Prisma.$CustomRolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -48178,21 +48245,21 @@ export namespace Prisma {
     password: 'password',
     role: 'role',
     profile_picture: 'profile_picture',
-    isActive: 'isActive',
-    email_verified: 'email_verified',
-    lastLogin: 'lastLogin',
-    loginAttempts: 'loginAttempts',
-    lockedUntil: 'lockedUntil',
-    bio: 'bio',
-    dateOfBirth: 'dateOfBirth',
-    gender: 'gender',
-    department: 'department',
-    position: 'position',
     tokenVersion: 'tokenVersion',
     created_at: 'created_at',
     updated_at: 'updated_at',
     resetToken: 'resetToken',
-    resetTokenExp: 'resetTokenExp'
+    resetTokenExp: 'resetTokenExp',
+    bio: 'bio',
+    dateOfBirth: 'dateOfBirth',
+    department: 'department',
+    email_verified: 'email_verified',
+    gender: 'gender',
+    isActive: 'isActive',
+    lastLogin: 'lastLogin',
+    lockedUntil: 'lockedUntil',
+    loginAttempts: 'loginAttempts',
+    position: 'position'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -48348,13 +48415,13 @@ export namespace Prisma {
     age: 'age',
     profile_picture: 'profile_picture',
     membershiptype: 'membershiptype',
-    terms_accepted: 'terms_accepted',
-    terms_accepted_at: 'terms_accepted_at',
-    email_verified: 'email_verified',
-    email_verification_token: 'email_verification_token',
-    email_verification_expires: 'email_verification_expires',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    email_verification_expires: 'email_verification_expires',
+    email_verification_token: 'email_verification_token',
+    email_verified: 'email_verified',
+    terms_accepted: 'terms_accepted',
+    terms_accepted_at: 'terms_accepted_at'
   };
 
   export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
@@ -48454,7 +48521,11 @@ export namespace Prisma {
     amount: 'amount',
     memberId: 'memberId',
     method: 'method',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    status: 'status',
+    description: 'description',
+    reference: 'reference',
+    updatedAt: 'updatedAt'
   };
 
   export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
@@ -48498,25 +48569,25 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     type: 'type',
-    category: 'category',
-    brand: 'brand',
-    model: 'model',
-    serialNumber: 'serialNumber',
     quantity: 'quantity',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
     available: 'available',
-    inUse: 'inUse',
-    maintenance: 'maintenance',
-    lastMaintenance: 'lastMaintenance',
-    nextMaintenance: 'nextMaintenance',
-    status: 'status',
-    location: 'location',
+    brand: 'brand',
+    category: 'category',
+    cost: 'cost',
     description: 'description',
     imageUrl: 'imageUrl',
+    inUse: 'inUse',
+    lastMaintenance: 'lastMaintenance',
+    location: 'location',
+    maintenance: 'maintenance',
+    model: 'model',
+    nextMaintenance: 'nextMaintenance',
     purchaseDate: 'purchaseDate',
-    warrantyExpiry: 'warrantyExpiry',
-    cost: 'cost',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    serialNumber: 'serialNumber',
+    status: 'status',
+    warrantyExpiry: 'warrantyExpiry'
   };
 
   export type EquipmentScalarFieldEnum = (typeof EquipmentScalarFieldEnum)[keyof typeof EquipmentScalarFieldEnum]
@@ -48864,13 +48935,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -48881,6 +48945,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -48969,32 +49040,32 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     role?: StringFilter<"User"> | string
     profile_picture?: StringNullableFilter<"User"> | string | null
-    isActive?: BoolFilter<"User"> | boolean
-    email_verified?: BoolFilter<"User"> | boolean
-    lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
-    loginAttempts?: IntFilter<"User"> | number
-    lockedUntil?: DateTimeNullableFilter<"User"> | Date | string | null
-    bio?: StringNullableFilter<"User"> | string | null
-    dateOfBirth?: DateTimeNullableFilter<"User"> | Date | string | null
-    gender?: StringNullableFilter<"User"> | string | null
-    department?: StringNullableFilter<"User"> | string | null
-    position?: StringNullableFilter<"User"> | string | null
     tokenVersion?: IntFilter<"User"> | number
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
     resetToken?: StringNullableFilter<"User"> | string | null
     resetTokenExp?: DateTimeNullableFilter<"User"> | Date | string | null
-    address?: XOR<UserAddressNullableScalarRelationFilter, UserAddressWhereInput> | null
-    emergency_contact?: XOR<UserEmergencyContactNullableScalarRelationFilter, UserEmergencyContactWhereInput> | null
-    social_media?: XOR<UserSocialMediaNullableScalarRelationFilter, UserSocialMediaWhereInput> | null
-    preferences?: XOR<UserPreferencesNullableScalarRelationFilter, UserPreferencesWhereInput> | null
-    notification_settings?: XOR<UserNotificationSettingsNullableScalarRelationFilter, UserNotificationSettingsWhereInput> | null
-    privacy_settings?: XOR<UserPrivacySettingsNullableScalarRelationFilter, UserPrivacySettingsWhereInput> | null
-    sessions?: UserSessionListRelationFilter
-    access_logs?: UserAccessLogListRelationFilter
-    ip_restrictions?: UserIPRestrictionListRelationFilter
+    bio?: StringNullableFilter<"User"> | string | null
+    dateOfBirth?: DateTimeNullableFilter<"User"> | Date | string | null
+    department?: StringNullableFilter<"User"> | string | null
+    email_verified?: BoolFilter<"User"> | boolean
+    gender?: StringNullableFilter<"User"> | string | null
+    isActive?: BoolFilter<"User"> | boolean
+    lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
+    lockedUntil?: DateTimeNullableFilter<"User"> | Date | string | null
+    loginAttempts?: IntFilter<"User"> | number
+    position?: StringNullableFilter<"User"> | string | null
     admin_profile?: XOR<AdministrativeProfileNullableScalarRelationFilter, AdministrativeProfileWhereInput> | null
     permission_audits?: PermissionAuditListRelationFilter
+    access_logs?: UserAccessLogListRelationFilter
+    address?: XOR<UserAddressNullableScalarRelationFilter, UserAddressWhereInput> | null
+    emergency_contact?: XOR<UserEmergencyContactNullableScalarRelationFilter, UserEmergencyContactWhereInput> | null
+    ip_restrictions?: UserIPRestrictionListRelationFilter
+    notification_settings?: XOR<UserNotificationSettingsNullableScalarRelationFilter, UserNotificationSettingsWhereInput> | null
+    preferences?: XOR<UserPreferencesNullableScalarRelationFilter, UserPreferencesWhereInput> | null
+    privacy_settings?: XOR<UserPrivacySettingsNullableScalarRelationFilter, UserPrivacySettingsWhereInput> | null
+    sessions?: UserSessionListRelationFilter
+    social_media?: XOR<UserSocialMediaNullableScalarRelationFilter, UserSocialMediaWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -49006,32 +49077,32 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     profile_picture?: SortOrderInput | SortOrder
-    isActive?: SortOrder
-    email_verified?: SortOrder
-    lastLogin?: SortOrderInput | SortOrder
-    loginAttempts?: SortOrder
-    lockedUntil?: SortOrderInput | SortOrder
-    bio?: SortOrderInput | SortOrder
-    dateOfBirth?: SortOrderInput | SortOrder
-    gender?: SortOrderInput | SortOrder
-    department?: SortOrderInput | SortOrder
-    position?: SortOrderInput | SortOrder
     tokenVersion?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     resetToken?: SortOrderInput | SortOrder
     resetTokenExp?: SortOrderInput | SortOrder
-    address?: UserAddressOrderByWithRelationInput
-    emergency_contact?: UserEmergencyContactOrderByWithRelationInput
-    social_media?: UserSocialMediaOrderByWithRelationInput
-    preferences?: UserPreferencesOrderByWithRelationInput
-    notification_settings?: UserNotificationSettingsOrderByWithRelationInput
-    privacy_settings?: UserPrivacySettingsOrderByWithRelationInput
-    sessions?: UserSessionOrderByRelationAggregateInput
-    access_logs?: UserAccessLogOrderByRelationAggregateInput
-    ip_restrictions?: UserIPRestrictionOrderByRelationAggregateInput
+    bio?: SortOrderInput | SortOrder
+    dateOfBirth?: SortOrderInput | SortOrder
+    department?: SortOrderInput | SortOrder
+    email_verified?: SortOrder
+    gender?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    lastLogin?: SortOrderInput | SortOrder
+    lockedUntil?: SortOrderInput | SortOrder
+    loginAttempts?: SortOrder
+    position?: SortOrderInput | SortOrder
     admin_profile?: AdministrativeProfileOrderByWithRelationInput
     permission_audits?: PermissionAuditOrderByRelationAggregateInput
+    access_logs?: UserAccessLogOrderByRelationAggregateInput
+    address?: UserAddressOrderByWithRelationInput
+    emergency_contact?: UserEmergencyContactOrderByWithRelationInput
+    ip_restrictions?: UserIPRestrictionOrderByRelationAggregateInput
+    notification_settings?: UserNotificationSettingsOrderByWithRelationInput
+    preferences?: UserPreferencesOrderByWithRelationInput
+    privacy_settings?: UserPrivacySettingsOrderByWithRelationInput
+    sessions?: UserSessionOrderByRelationAggregateInput
+    social_media?: UserSocialMediaOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -49046,32 +49117,32 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     role?: StringFilter<"User"> | string
     profile_picture?: StringNullableFilter<"User"> | string | null
-    isActive?: BoolFilter<"User"> | boolean
-    email_verified?: BoolFilter<"User"> | boolean
-    lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
-    loginAttempts?: IntFilter<"User"> | number
-    lockedUntil?: DateTimeNullableFilter<"User"> | Date | string | null
-    bio?: StringNullableFilter<"User"> | string | null
-    dateOfBirth?: DateTimeNullableFilter<"User"> | Date | string | null
-    gender?: StringNullableFilter<"User"> | string | null
-    department?: StringNullableFilter<"User"> | string | null
-    position?: StringNullableFilter<"User"> | string | null
     tokenVersion?: IntFilter<"User"> | number
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
     resetToken?: StringNullableFilter<"User"> | string | null
     resetTokenExp?: DateTimeNullableFilter<"User"> | Date | string | null
-    address?: XOR<UserAddressNullableScalarRelationFilter, UserAddressWhereInput> | null
-    emergency_contact?: XOR<UserEmergencyContactNullableScalarRelationFilter, UserEmergencyContactWhereInput> | null
-    social_media?: XOR<UserSocialMediaNullableScalarRelationFilter, UserSocialMediaWhereInput> | null
-    preferences?: XOR<UserPreferencesNullableScalarRelationFilter, UserPreferencesWhereInput> | null
-    notification_settings?: XOR<UserNotificationSettingsNullableScalarRelationFilter, UserNotificationSettingsWhereInput> | null
-    privacy_settings?: XOR<UserPrivacySettingsNullableScalarRelationFilter, UserPrivacySettingsWhereInput> | null
-    sessions?: UserSessionListRelationFilter
-    access_logs?: UserAccessLogListRelationFilter
-    ip_restrictions?: UserIPRestrictionListRelationFilter
+    bio?: StringNullableFilter<"User"> | string | null
+    dateOfBirth?: DateTimeNullableFilter<"User"> | Date | string | null
+    department?: StringNullableFilter<"User"> | string | null
+    email_verified?: BoolFilter<"User"> | boolean
+    gender?: StringNullableFilter<"User"> | string | null
+    isActive?: BoolFilter<"User"> | boolean
+    lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
+    lockedUntil?: DateTimeNullableFilter<"User"> | Date | string | null
+    loginAttempts?: IntFilter<"User"> | number
+    position?: StringNullableFilter<"User"> | string | null
     admin_profile?: XOR<AdministrativeProfileNullableScalarRelationFilter, AdministrativeProfileWhereInput> | null
     permission_audits?: PermissionAuditListRelationFilter
+    access_logs?: UserAccessLogListRelationFilter
+    address?: XOR<UserAddressNullableScalarRelationFilter, UserAddressWhereInput> | null
+    emergency_contact?: XOR<UserEmergencyContactNullableScalarRelationFilter, UserEmergencyContactWhereInput> | null
+    ip_restrictions?: UserIPRestrictionListRelationFilter
+    notification_settings?: XOR<UserNotificationSettingsNullableScalarRelationFilter, UserNotificationSettingsWhereInput> | null
+    preferences?: XOR<UserPreferencesNullableScalarRelationFilter, UserPreferencesWhereInput> | null
+    privacy_settings?: XOR<UserPrivacySettingsNullableScalarRelationFilter, UserPrivacySettingsWhereInput> | null
+    sessions?: UserSessionListRelationFilter
+    social_media?: XOR<UserSocialMediaNullableScalarRelationFilter, UserSocialMediaWhereInput> | null
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -49083,21 +49154,21 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     profile_picture?: SortOrderInput | SortOrder
-    isActive?: SortOrder
-    email_verified?: SortOrder
-    lastLogin?: SortOrderInput | SortOrder
-    loginAttempts?: SortOrder
-    lockedUntil?: SortOrderInput | SortOrder
-    bio?: SortOrderInput | SortOrder
-    dateOfBirth?: SortOrderInput | SortOrder
-    gender?: SortOrderInput | SortOrder
-    department?: SortOrderInput | SortOrder
-    position?: SortOrderInput | SortOrder
     tokenVersion?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     resetToken?: SortOrderInput | SortOrder
     resetTokenExp?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
+    dateOfBirth?: SortOrderInput | SortOrder
+    department?: SortOrderInput | SortOrder
+    email_verified?: SortOrder
+    gender?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    lastLogin?: SortOrderInput | SortOrder
+    lockedUntil?: SortOrderInput | SortOrder
+    loginAttempts?: SortOrder
+    position?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -49117,21 +49188,21 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter<"User"> | string
     role?: StringWithAggregatesFilter<"User"> | string
     profile_picture?: StringNullableWithAggregatesFilter<"User"> | string | null
-    isActive?: BoolWithAggregatesFilter<"User"> | boolean
-    email_verified?: BoolWithAggregatesFilter<"User"> | boolean
-    lastLogin?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-    loginAttempts?: IntWithAggregatesFilter<"User"> | number
-    lockedUntil?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-    bio?: StringNullableWithAggregatesFilter<"User"> | string | null
-    dateOfBirth?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-    gender?: StringNullableWithAggregatesFilter<"User"> | string | null
-    department?: StringNullableWithAggregatesFilter<"User"> | string | null
-    position?: StringNullableWithAggregatesFilter<"User"> | string | null
     tokenVersion?: IntWithAggregatesFilter<"User"> | number
     created_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
     resetToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     resetTokenExp?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    bio?: StringNullableWithAggregatesFilter<"User"> | string | null
+    dateOfBirth?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    department?: StringNullableWithAggregatesFilter<"User"> | string | null
+    email_verified?: BoolWithAggregatesFilter<"User"> | boolean
+    gender?: StringNullableWithAggregatesFilter<"User"> | string | null
+    isActive?: BoolWithAggregatesFilter<"User"> | boolean
+    lastLogin?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    lockedUntil?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    loginAttempts?: IntWithAggregatesFilter<"User"> | number
+    position?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type UserSessionWhereInput = {
@@ -49869,21 +49940,21 @@ export namespace Prisma {
     age?: IntFilter<"Member"> | number
     profile_picture?: StringNullableFilter<"Member"> | string | null
     membershiptype?: EnumMemberShipTypeFilter<"Member"> | $Enums.MemberShipType
-    terms_accepted?: BoolFilter<"Member"> | boolean
-    terms_accepted_at?: DateTimeNullableFilter<"Member"> | Date | string | null
-    email_verified?: BoolFilter<"Member"> | boolean
-    email_verification_token?: StringNullableFilter<"Member"> | string | null
-    email_verification_expires?: DateTimeNullableFilter<"Member"> | Date | string | null
     createdAt?: DateTimeFilter<"Member"> | Date | string
     updatedAt?: DateTimeFilter<"Member"> | Date | string
+    email_verification_expires?: DateTimeNullableFilter<"Member"> | Date | string | null
+    email_verification_token?: StringNullableFilter<"Member"> | string | null
+    email_verified?: BoolFilter<"Member"> | boolean
+    terms_accepted?: BoolFilter<"Member"> | boolean
+    terms_accepted_at?: DateTimeNullableFilter<"Member"> | Date | string | null
     address?: XOR<AddressNullableScalarRelationFilter, AddressWhereInput> | null
     emergency_contact?: XOR<EmergencyContactNullableScalarRelationFilter, EmergencyContactWhereInput> | null
+    invoices?: InvoiceListRelationFilter
     medical_info?: XOR<MedicalInfoNullableScalarRelationFilter, MedicalInfoWhereInput> | null
-    check_ins?: MemberCheckInListRelationFilter
     attendance?: MemberAttendanceListRelationFilter
+    check_ins?: MemberCheckInListRelationFilter
     fitness_goals?: MemberFitnessGoalListRelationFilter
     payments?: PaymentListRelationFilter
-    invoices?: InvoiceListRelationFilter
     Subscription?: SubscriptionListRelationFilter
   }
 
@@ -49896,21 +49967,21 @@ export namespace Prisma {
     age?: SortOrder
     profile_picture?: SortOrderInput | SortOrder
     membershiptype?: SortOrder
-    terms_accepted?: SortOrder
-    terms_accepted_at?: SortOrderInput | SortOrder
-    email_verified?: SortOrder
-    email_verification_token?: SortOrderInput | SortOrder
-    email_verification_expires?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    email_verification_expires?: SortOrderInput | SortOrder
+    email_verification_token?: SortOrderInput | SortOrder
+    email_verified?: SortOrder
+    terms_accepted?: SortOrder
+    terms_accepted_at?: SortOrderInput | SortOrder
     address?: AddressOrderByWithRelationInput
     emergency_contact?: EmergencyContactOrderByWithRelationInput
+    invoices?: InvoiceOrderByRelationAggregateInput
     medical_info?: MedicalInfoOrderByWithRelationInput
-    check_ins?: MemberCheckInOrderByRelationAggregateInput
     attendance?: MemberAttendanceOrderByRelationAggregateInput
+    check_ins?: MemberCheckInOrderByRelationAggregateInput
     fitness_goals?: MemberFitnessGoalOrderByRelationAggregateInput
     payments?: PaymentOrderByRelationAggregateInput
-    invoices?: InvoiceOrderByRelationAggregateInput
     Subscription?: SubscriptionOrderByRelationAggregateInput
   }
 
@@ -49926,21 +49997,21 @@ export namespace Prisma {
     age?: IntFilter<"Member"> | number
     profile_picture?: StringNullableFilter<"Member"> | string | null
     membershiptype?: EnumMemberShipTypeFilter<"Member"> | $Enums.MemberShipType
-    terms_accepted?: BoolFilter<"Member"> | boolean
-    terms_accepted_at?: DateTimeNullableFilter<"Member"> | Date | string | null
-    email_verified?: BoolFilter<"Member"> | boolean
-    email_verification_token?: StringNullableFilter<"Member"> | string | null
-    email_verification_expires?: DateTimeNullableFilter<"Member"> | Date | string | null
     createdAt?: DateTimeFilter<"Member"> | Date | string
     updatedAt?: DateTimeFilter<"Member"> | Date | string
+    email_verification_expires?: DateTimeNullableFilter<"Member"> | Date | string | null
+    email_verification_token?: StringNullableFilter<"Member"> | string | null
+    email_verified?: BoolFilter<"Member"> | boolean
+    terms_accepted?: BoolFilter<"Member"> | boolean
+    terms_accepted_at?: DateTimeNullableFilter<"Member"> | Date | string | null
     address?: XOR<AddressNullableScalarRelationFilter, AddressWhereInput> | null
     emergency_contact?: XOR<EmergencyContactNullableScalarRelationFilter, EmergencyContactWhereInput> | null
+    invoices?: InvoiceListRelationFilter
     medical_info?: XOR<MedicalInfoNullableScalarRelationFilter, MedicalInfoWhereInput> | null
-    check_ins?: MemberCheckInListRelationFilter
     attendance?: MemberAttendanceListRelationFilter
+    check_ins?: MemberCheckInListRelationFilter
     fitness_goals?: MemberFitnessGoalListRelationFilter
     payments?: PaymentListRelationFilter
-    invoices?: InvoiceListRelationFilter
     Subscription?: SubscriptionListRelationFilter
   }, "id" | "email">
 
@@ -49953,13 +50024,13 @@ export namespace Prisma {
     age?: SortOrder
     profile_picture?: SortOrderInput | SortOrder
     membershiptype?: SortOrder
-    terms_accepted?: SortOrder
-    terms_accepted_at?: SortOrderInput | SortOrder
-    email_verified?: SortOrder
-    email_verification_token?: SortOrderInput | SortOrder
-    email_verification_expires?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    email_verification_expires?: SortOrderInput | SortOrder
+    email_verification_token?: SortOrderInput | SortOrder
+    email_verified?: SortOrder
+    terms_accepted?: SortOrder
+    terms_accepted_at?: SortOrderInput | SortOrder
     _count?: MemberCountOrderByAggregateInput
     _avg?: MemberAvgOrderByAggregateInput
     _max?: MemberMaxOrderByAggregateInput
@@ -49979,13 +50050,13 @@ export namespace Prisma {
     age?: IntWithAggregatesFilter<"Member"> | number
     profile_picture?: StringNullableWithAggregatesFilter<"Member"> | string | null
     membershiptype?: EnumMemberShipTypeWithAggregatesFilter<"Member"> | $Enums.MemberShipType
-    terms_accepted?: BoolWithAggregatesFilter<"Member"> | boolean
-    terms_accepted_at?: DateTimeNullableWithAggregatesFilter<"Member"> | Date | string | null
-    email_verified?: BoolWithAggregatesFilter<"Member"> | boolean
-    email_verification_token?: StringNullableWithAggregatesFilter<"Member"> | string | null
-    email_verification_expires?: DateTimeNullableWithAggregatesFilter<"Member"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Member"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Member"> | Date | string
+    email_verification_expires?: DateTimeNullableWithAggregatesFilter<"Member"> | Date | string | null
+    email_verification_token?: StringNullableWithAggregatesFilter<"Member"> | string | null
+    email_verified?: BoolWithAggregatesFilter<"Member"> | boolean
+    terms_accepted?: BoolWithAggregatesFilter<"Member"> | boolean
+    terms_accepted_at?: DateTimeNullableWithAggregatesFilter<"Member"> | Date | string | null
   }
 
   export type MemberCheckInWhereInput = {
@@ -50446,6 +50517,10 @@ export namespace Prisma {
     memberId?: StringFilter<"Payment"> | string
     method?: StringFilter<"Payment"> | string
     createdAt?: DateTimeFilter<"Payment"> | Date | string
+    status?: StringFilter<"Payment"> | string
+    description?: StringNullableFilter<"Payment"> | string | null
+    reference?: StringNullableFilter<"Payment"> | string | null
+    updatedAt?: DateTimeFilter<"Payment"> | Date | string
     Member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
   }
 
@@ -50455,6 +50530,10 @@ export namespace Prisma {
     memberId?: SortOrder
     method?: SortOrder
     createdAt?: SortOrder
+    status?: SortOrder
+    description?: SortOrderInput | SortOrder
+    reference?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
     Member?: MemberOrderByWithRelationInput
   }
 
@@ -50467,6 +50546,10 @@ export namespace Prisma {
     memberId?: StringFilter<"Payment"> | string
     method?: StringFilter<"Payment"> | string
     createdAt?: DateTimeFilter<"Payment"> | Date | string
+    status?: StringFilter<"Payment"> | string
+    description?: StringNullableFilter<"Payment"> | string | null
+    reference?: StringNullableFilter<"Payment"> | string | null
+    updatedAt?: DateTimeFilter<"Payment"> | Date | string
     Member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
   }, "id">
 
@@ -50476,6 +50559,10 @@ export namespace Prisma {
     memberId?: SortOrder
     method?: SortOrder
     createdAt?: SortOrder
+    status?: SortOrder
+    description?: SortOrderInput | SortOrder
+    reference?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
     _count?: PaymentCountOrderByAggregateInput
     _avg?: PaymentAvgOrderByAggregateInput
     _max?: PaymentMaxOrderByAggregateInput
@@ -50492,6 +50579,10 @@ export namespace Prisma {
     memberId?: StringWithAggregatesFilter<"Payment"> | string
     method?: StringWithAggregatesFilter<"Payment"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
+    status?: StringWithAggregatesFilter<"Payment"> | string
+    description?: StringNullableWithAggregatesFilter<"Payment"> | string | null
+    reference?: StringNullableWithAggregatesFilter<"Payment"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
   }
 
   export type InvoiceWhereInput = {
@@ -50678,25 +50769,25 @@ export namespace Prisma {
     id?: StringFilter<"Equipment"> | string
     name?: StringFilter<"Equipment"> | string
     type?: StringFilter<"Equipment"> | string
-    category?: StringFilter<"Equipment"> | string
-    brand?: StringNullableFilter<"Equipment"> | string | null
-    model?: StringNullableFilter<"Equipment"> | string | null
-    serialNumber?: StringNullableFilter<"Equipment"> | string | null
     quantity?: IntFilter<"Equipment"> | number
-    available?: IntFilter<"Equipment"> | number
-    inUse?: IntFilter<"Equipment"> | number
-    maintenance?: BoolFilter<"Equipment"> | boolean
-    lastMaintenance?: DateTimeNullableFilter<"Equipment"> | Date | string | null
-    nextMaintenance?: DateTimeNullableFilter<"Equipment"> | Date | string | null
-    status?: EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
-    location?: StringNullableFilter<"Equipment"> | string | null
-    description?: StringNullableFilter<"Equipment"> | string | null
-    imageUrl?: StringNullableFilter<"Equipment"> | string | null
-    purchaseDate?: DateTimeNullableFilter<"Equipment"> | Date | string | null
-    warrantyExpiry?: DateTimeNullableFilter<"Equipment"> | Date | string | null
-    cost?: FloatNullableFilter<"Equipment"> | number | null
     createdAt?: DateTimeFilter<"Equipment"> | Date | string
     updatedAt?: DateTimeFilter<"Equipment"> | Date | string
+    available?: IntFilter<"Equipment"> | number
+    brand?: StringNullableFilter<"Equipment"> | string | null
+    category?: StringFilter<"Equipment"> | string
+    cost?: FloatNullableFilter<"Equipment"> | number | null
+    description?: StringNullableFilter<"Equipment"> | string | null
+    imageUrl?: StringNullableFilter<"Equipment"> | string | null
+    inUse?: IntFilter<"Equipment"> | number
+    lastMaintenance?: DateTimeNullableFilter<"Equipment"> | Date | string | null
+    location?: StringNullableFilter<"Equipment"> | string | null
+    maintenance?: BoolFilter<"Equipment"> | boolean
+    model?: StringNullableFilter<"Equipment"> | string | null
+    nextMaintenance?: DateTimeNullableFilter<"Equipment"> | Date | string | null
+    purchaseDate?: DateTimeNullableFilter<"Equipment"> | Date | string | null
+    serialNumber?: StringNullableFilter<"Equipment"> | string | null
+    status?: EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
+    warrantyExpiry?: DateTimeNullableFilter<"Equipment"> | Date | string | null
     maintenanceLogs?: MaintenanceLogListRelationFilter
   }
 
@@ -50704,25 +50795,25 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     type?: SortOrder
-    category?: SortOrder
-    brand?: SortOrderInput | SortOrder
-    model?: SortOrderInput | SortOrder
-    serialNumber?: SortOrderInput | SortOrder
     quantity?: SortOrder
-    available?: SortOrder
-    inUse?: SortOrder
-    maintenance?: SortOrder
-    lastMaintenance?: SortOrderInput | SortOrder
-    nextMaintenance?: SortOrderInput | SortOrder
-    status?: SortOrder
-    location?: SortOrderInput | SortOrder
-    description?: SortOrderInput | SortOrder
-    imageUrl?: SortOrderInput | SortOrder
-    purchaseDate?: SortOrderInput | SortOrder
-    warrantyExpiry?: SortOrderInput | SortOrder
-    cost?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    available?: SortOrder
+    brand?: SortOrderInput | SortOrder
+    category?: SortOrder
+    cost?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    inUse?: SortOrder
+    lastMaintenance?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    maintenance?: SortOrder
+    model?: SortOrderInput | SortOrder
+    nextMaintenance?: SortOrderInput | SortOrder
+    purchaseDate?: SortOrderInput | SortOrder
+    serialNumber?: SortOrderInput | SortOrder
+    status?: SortOrder
+    warrantyExpiry?: SortOrderInput | SortOrder
     maintenanceLogs?: MaintenanceLogOrderByRelationAggregateInput
   }
 
@@ -50734,24 +50825,24 @@ export namespace Prisma {
     NOT?: EquipmentWhereInput | EquipmentWhereInput[]
     name?: StringFilter<"Equipment"> | string
     type?: StringFilter<"Equipment"> | string
-    category?: StringFilter<"Equipment"> | string
-    brand?: StringNullableFilter<"Equipment"> | string | null
-    model?: StringNullableFilter<"Equipment"> | string | null
     quantity?: IntFilter<"Equipment"> | number
-    available?: IntFilter<"Equipment"> | number
-    inUse?: IntFilter<"Equipment"> | number
-    maintenance?: BoolFilter<"Equipment"> | boolean
-    lastMaintenance?: DateTimeNullableFilter<"Equipment"> | Date | string | null
-    nextMaintenance?: DateTimeNullableFilter<"Equipment"> | Date | string | null
-    status?: EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
-    location?: StringNullableFilter<"Equipment"> | string | null
-    description?: StringNullableFilter<"Equipment"> | string | null
-    imageUrl?: StringNullableFilter<"Equipment"> | string | null
-    purchaseDate?: DateTimeNullableFilter<"Equipment"> | Date | string | null
-    warrantyExpiry?: DateTimeNullableFilter<"Equipment"> | Date | string | null
-    cost?: FloatNullableFilter<"Equipment"> | number | null
     createdAt?: DateTimeFilter<"Equipment"> | Date | string
     updatedAt?: DateTimeFilter<"Equipment"> | Date | string
+    available?: IntFilter<"Equipment"> | number
+    brand?: StringNullableFilter<"Equipment"> | string | null
+    category?: StringFilter<"Equipment"> | string
+    cost?: FloatNullableFilter<"Equipment"> | number | null
+    description?: StringNullableFilter<"Equipment"> | string | null
+    imageUrl?: StringNullableFilter<"Equipment"> | string | null
+    inUse?: IntFilter<"Equipment"> | number
+    lastMaintenance?: DateTimeNullableFilter<"Equipment"> | Date | string | null
+    location?: StringNullableFilter<"Equipment"> | string | null
+    maintenance?: BoolFilter<"Equipment"> | boolean
+    model?: StringNullableFilter<"Equipment"> | string | null
+    nextMaintenance?: DateTimeNullableFilter<"Equipment"> | Date | string | null
+    purchaseDate?: DateTimeNullableFilter<"Equipment"> | Date | string | null
+    status?: EnumEquipmentStatusFilter<"Equipment"> | $Enums.EquipmentStatus
+    warrantyExpiry?: DateTimeNullableFilter<"Equipment"> | Date | string | null
     maintenanceLogs?: MaintenanceLogListRelationFilter
   }, "id" | "serialNumber">
 
@@ -50759,25 +50850,25 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     type?: SortOrder
-    category?: SortOrder
-    brand?: SortOrderInput | SortOrder
-    model?: SortOrderInput | SortOrder
-    serialNumber?: SortOrderInput | SortOrder
     quantity?: SortOrder
-    available?: SortOrder
-    inUse?: SortOrder
-    maintenance?: SortOrder
-    lastMaintenance?: SortOrderInput | SortOrder
-    nextMaintenance?: SortOrderInput | SortOrder
-    status?: SortOrder
-    location?: SortOrderInput | SortOrder
-    description?: SortOrderInput | SortOrder
-    imageUrl?: SortOrderInput | SortOrder
-    purchaseDate?: SortOrderInput | SortOrder
-    warrantyExpiry?: SortOrderInput | SortOrder
-    cost?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    available?: SortOrder
+    brand?: SortOrderInput | SortOrder
+    category?: SortOrder
+    cost?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    inUse?: SortOrder
+    lastMaintenance?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    maintenance?: SortOrder
+    model?: SortOrderInput | SortOrder
+    nextMaintenance?: SortOrderInput | SortOrder
+    purchaseDate?: SortOrderInput | SortOrder
+    serialNumber?: SortOrderInput | SortOrder
+    status?: SortOrder
+    warrantyExpiry?: SortOrderInput | SortOrder
     _count?: EquipmentCountOrderByAggregateInput
     _avg?: EquipmentAvgOrderByAggregateInput
     _max?: EquipmentMaxOrderByAggregateInput
@@ -50792,25 +50883,25 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Equipment"> | string
     name?: StringWithAggregatesFilter<"Equipment"> | string
     type?: StringWithAggregatesFilter<"Equipment"> | string
-    category?: StringWithAggregatesFilter<"Equipment"> | string
-    brand?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
-    model?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
-    serialNumber?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
     quantity?: IntWithAggregatesFilter<"Equipment"> | number
-    available?: IntWithAggregatesFilter<"Equipment"> | number
-    inUse?: IntWithAggregatesFilter<"Equipment"> | number
-    maintenance?: BoolWithAggregatesFilter<"Equipment"> | boolean
-    lastMaintenance?: DateTimeNullableWithAggregatesFilter<"Equipment"> | Date | string | null
-    nextMaintenance?: DateTimeNullableWithAggregatesFilter<"Equipment"> | Date | string | null
-    status?: EnumEquipmentStatusWithAggregatesFilter<"Equipment"> | $Enums.EquipmentStatus
-    location?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
-    description?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
-    imageUrl?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
-    purchaseDate?: DateTimeNullableWithAggregatesFilter<"Equipment"> | Date | string | null
-    warrantyExpiry?: DateTimeNullableWithAggregatesFilter<"Equipment"> | Date | string | null
-    cost?: FloatNullableWithAggregatesFilter<"Equipment"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Equipment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Equipment"> | Date | string
+    available?: IntWithAggregatesFilter<"Equipment"> | number
+    brand?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
+    category?: StringWithAggregatesFilter<"Equipment"> | string
+    cost?: FloatNullableWithAggregatesFilter<"Equipment"> | number | null
+    description?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
+    imageUrl?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
+    inUse?: IntWithAggregatesFilter<"Equipment"> | number
+    lastMaintenance?: DateTimeNullableWithAggregatesFilter<"Equipment"> | Date | string | null
+    location?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
+    maintenance?: BoolWithAggregatesFilter<"Equipment"> | boolean
+    model?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
+    nextMaintenance?: DateTimeNullableWithAggregatesFilter<"Equipment"> | Date | string | null
+    purchaseDate?: DateTimeNullableWithAggregatesFilter<"Equipment"> | Date | string | null
+    serialNumber?: StringNullableWithAggregatesFilter<"Equipment"> | string | null
+    status?: EnumEquipmentStatusWithAggregatesFilter<"Equipment"> | $Enums.EquipmentStatus
+    warrantyExpiry?: DateTimeNullableWithAggregatesFilter<"Equipment"> | Date | string | null
   }
 
   export type MaintenanceLogWhereInput = {
@@ -52008,9 +52099,9 @@ export namespace Prisma {
     level?: IntFilter<"RoleHierarchy"> | number
     createdAt?: DateTimeFilter<"RoleHierarchy"> | Date | string
     updatedAt?: DateTimeFilter<"RoleHierarchy"> | Date | string
-    role?: XOR<CustomRoleScalarRelationFilter, CustomRoleWhereInput>
     parent?: XOR<RoleHierarchyNullableScalarRelationFilter, RoleHierarchyWhereInput> | null
     children?: RoleHierarchyListRelationFilter
+    role?: XOR<CustomRoleScalarRelationFilter, CustomRoleWhereInput>
   }
 
   export type RoleHierarchyOrderByWithRelationInput = {
@@ -52020,9 +52111,9 @@ export namespace Prisma {
     level?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    role?: CustomRoleOrderByWithRelationInput
     parent?: RoleHierarchyOrderByWithRelationInput
     children?: RoleHierarchyOrderByRelationAggregateInput
+    role?: CustomRoleOrderByWithRelationInput
   }
 
   export type RoleHierarchyWhereUniqueInput = Prisma.AtLeast<{
@@ -52035,9 +52126,9 @@ export namespace Prisma {
     level?: IntFilter<"RoleHierarchy"> | number
     createdAt?: DateTimeFilter<"RoleHierarchy"> | Date | string
     updatedAt?: DateTimeFilter<"RoleHierarchy"> | Date | string
-    role?: XOR<CustomRoleScalarRelationFilter, CustomRoleWhereInput>
     parent?: XOR<RoleHierarchyNullableScalarRelationFilter, RoleHierarchyWhereInput> | null
     children?: RoleHierarchyListRelationFilter
+    role?: XOR<CustomRoleScalarRelationFilter, CustomRoleWhereInput>
   }, "id" | "roleId">
 
   export type RoleHierarchyOrderByWithAggregationInput = {
@@ -52151,32 +52242,32 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
-    sessions?: UserSessionCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
+    address?: UserAddressCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -52188,32 +52279,32 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
-    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
+    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -52224,32 +52315,32 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
+    address?: UserAddressUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -52261,32 +52352,32 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
+    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -52298,21 +52389,21 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -52323,21 +52414,21 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -52349,21 +52440,21 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserSessionCreateInput = {
@@ -53146,21 +53237,21 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalCreateNestedManyWithoutMemberInput
     payments?: PaymentCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionCreateNestedManyWithoutMemberInput
   }
 
@@ -53173,21 +53264,21 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressUncheckedCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactUncheckedCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionUncheckedCreateNestedManyWithoutMemberInput
   }
 
@@ -53200,21 +53291,21 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUpdateManyWithoutMemberNestedInput
     payments?: PaymentUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUpdateManyWithoutMemberNestedInput
   }
 
@@ -53227,21 +53318,21 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUncheckedUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUncheckedUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
@@ -53254,13 +53345,13 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
   }
 
   export type MemberUpdateManyMutationInput = {
@@ -53272,13 +53363,13 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MemberUncheckedUpdateManyInput = {
@@ -53290,13 +53381,13 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MemberCheckInCreateInput = {
@@ -53795,6 +53886,10 @@ export namespace Prisma {
     amount: number
     method: string
     createdAt?: Date | string
+    status?: string
+    description?: string | null
+    reference?: string | null
+    updatedAt?: Date | string
     Member: MemberCreateNestedOneWithoutPaymentsInput
   }
 
@@ -53804,6 +53899,10 @@ export namespace Prisma {
     memberId: string
     method: string
     createdAt?: Date | string
+    status?: string
+    description?: string | null
+    reference?: string | null
+    updatedAt?: Date | string
   }
 
   export type PaymentUpdateInput = {
@@ -53811,6 +53910,10 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     method?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    reference?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Member?: MemberUpdateOneRequiredWithoutPaymentsNestedInput
   }
 
@@ -53820,6 +53923,10 @@ export namespace Prisma {
     memberId?: StringFieldUpdateOperationsInput | string
     method?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    reference?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PaymentCreateManyInput = {
@@ -53828,6 +53935,10 @@ export namespace Prisma {
     memberId: string
     method: string
     createdAt?: Date | string
+    status?: string
+    description?: string | null
+    reference?: string | null
+    updatedAt?: Date | string
   }
 
   export type PaymentUpdateManyMutationInput = {
@@ -53835,6 +53946,10 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     method?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    reference?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PaymentUncheckedUpdateManyInput = {
@@ -53843,6 +53958,10 @@ export namespace Prisma {
     memberId?: StringFieldUpdateOperationsInput | string
     method?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    reference?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InvoiceCreateInput = {
@@ -54025,25 +54144,25 @@ export namespace Prisma {
     id?: string
     name: string
     type: string
-    category: string
-    brand?: string | null
-    model?: string | null
-    serialNumber?: string | null
     quantity: number
-    available?: number
-    inUse?: number
-    maintenance?: boolean
-    lastMaintenance?: Date | string | null
-    nextMaintenance?: Date | string | null
-    status?: $Enums.EquipmentStatus
-    location?: string | null
-    description?: string | null
-    imageUrl?: string | null
-    purchaseDate?: Date | string | null
-    warrantyExpiry?: Date | string | null
-    cost?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    available?: number
+    brand?: string | null
+    category: string
+    cost?: number | null
+    description?: string | null
+    imageUrl?: string | null
+    inUse?: number
+    lastMaintenance?: Date | string | null
+    location?: string | null
+    maintenance?: boolean
+    model?: string | null
+    nextMaintenance?: Date | string | null
+    purchaseDate?: Date | string | null
+    serialNumber?: string | null
+    status?: $Enums.EquipmentStatus
+    warrantyExpiry?: Date | string | null
     maintenanceLogs?: MaintenanceLogCreateNestedManyWithoutEquipmentInput
   }
 
@@ -54051,25 +54170,25 @@ export namespace Prisma {
     id?: string
     name: string
     type: string
-    category: string
-    brand?: string | null
-    model?: string | null
-    serialNumber?: string | null
     quantity: number
-    available?: number
-    inUse?: number
-    maintenance?: boolean
-    lastMaintenance?: Date | string | null
-    nextMaintenance?: Date | string | null
-    status?: $Enums.EquipmentStatus
-    location?: string | null
-    description?: string | null
-    imageUrl?: string | null
-    purchaseDate?: Date | string | null
-    warrantyExpiry?: Date | string | null
-    cost?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    available?: number
+    brand?: string | null
+    category: string
+    cost?: number | null
+    description?: string | null
+    imageUrl?: string | null
+    inUse?: number
+    lastMaintenance?: Date | string | null
+    location?: string | null
+    maintenance?: boolean
+    model?: string | null
+    nextMaintenance?: Date | string | null
+    purchaseDate?: Date | string | null
+    serialNumber?: string | null
+    status?: $Enums.EquipmentStatus
+    warrantyExpiry?: Date | string | null
     maintenanceLogs?: MaintenanceLogUncheckedCreateNestedManyWithoutEquipmentInput
   }
 
@@ -54077,25 +54196,25 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: NullableStringFieldUpdateOperationsInput | string | null
-    model?: NullableStringFieldUpdateOperationsInput | string | null
-    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
-    available?: IntFieldUpdateOperationsInput | number
-    inUse?: IntFieldUpdateOperationsInput | number
-    maintenance?: BoolFieldUpdateOperationsInput | boolean
-    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    available?: IntFieldUpdateOperationsInput | number
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    inUse?: IntFieldUpdateOperationsInput | number
+    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    maintenance?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maintenanceLogs?: MaintenanceLogUpdateManyWithoutEquipmentNestedInput
   }
 
@@ -54103,25 +54222,25 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: NullableStringFieldUpdateOperationsInput | string | null
-    model?: NullableStringFieldUpdateOperationsInput | string | null
-    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
-    available?: IntFieldUpdateOperationsInput | number
-    inUse?: IntFieldUpdateOperationsInput | number
-    maintenance?: BoolFieldUpdateOperationsInput | boolean
-    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    available?: IntFieldUpdateOperationsInput | number
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    inUse?: IntFieldUpdateOperationsInput | number
+    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    maintenance?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maintenanceLogs?: MaintenanceLogUncheckedUpdateManyWithoutEquipmentNestedInput
   }
 
@@ -54129,75 +54248,75 @@ export namespace Prisma {
     id?: string
     name: string
     type: string
-    category: string
-    brand?: string | null
-    model?: string | null
-    serialNumber?: string | null
     quantity: number
-    available?: number
-    inUse?: number
-    maintenance?: boolean
-    lastMaintenance?: Date | string | null
-    nextMaintenance?: Date | string | null
-    status?: $Enums.EquipmentStatus
-    location?: string | null
-    description?: string | null
-    imageUrl?: string | null
-    purchaseDate?: Date | string | null
-    warrantyExpiry?: Date | string | null
-    cost?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    available?: number
+    brand?: string | null
+    category: string
+    cost?: number | null
+    description?: string | null
+    imageUrl?: string | null
+    inUse?: number
+    lastMaintenance?: Date | string | null
+    location?: string | null
+    maintenance?: boolean
+    model?: string | null
+    nextMaintenance?: Date | string | null
+    purchaseDate?: Date | string | null
+    serialNumber?: string | null
+    status?: $Enums.EquipmentStatus
+    warrantyExpiry?: Date | string | null
   }
 
   export type EquipmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: NullableStringFieldUpdateOperationsInput | string | null
-    model?: NullableStringFieldUpdateOperationsInput | string | null
-    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
-    available?: IntFieldUpdateOperationsInput | number
-    inUse?: IntFieldUpdateOperationsInput | number
-    maintenance?: BoolFieldUpdateOperationsInput | boolean
-    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    available?: IntFieldUpdateOperationsInput | number
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    inUse?: IntFieldUpdateOperationsInput | number
+    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    maintenance?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EquipmentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: NullableStringFieldUpdateOperationsInput | string | null
-    model?: NullableStringFieldUpdateOperationsInput | string | null
-    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
-    available?: IntFieldUpdateOperationsInput | number
-    inUse?: IntFieldUpdateOperationsInput | number
-    maintenance?: BoolFieldUpdateOperationsInput | boolean
-    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    available?: IntFieldUpdateOperationsInput | number
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    inUse?: IntFieldUpdateOperationsInput | number
+    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    maintenance?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MaintenanceLogCreateInput = {
@@ -55593,9 +55712,9 @@ export namespace Prisma {
     level?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    role: CustomRoleCreateNestedOneWithoutHierarchyInput
     parent?: RoleHierarchyCreateNestedOneWithoutChildrenInput
     children?: RoleHierarchyCreateNestedManyWithoutParentInput
+    role: CustomRoleCreateNestedOneWithoutHierarchyInput
   }
 
   export type RoleHierarchyUncheckedCreateInput = {
@@ -55613,9 +55732,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: CustomRoleUpdateOneRequiredWithoutHierarchyNestedInput
     parent?: RoleHierarchyUpdateOneWithoutChildrenNestedInput
     children?: RoleHierarchyUpdateManyWithoutParentNestedInput
+    role?: CustomRoleUpdateOneRequiredWithoutHierarchyNestedInput
   }
 
   export type RoleHierarchyUncheckedUpdateInput = {
@@ -55777,9 +55896,15 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -55793,63 +55918,9 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type UserAddressNullableScalarRelationFilter = {
-    is?: UserAddressWhereInput | null
-    isNot?: UserAddressWhereInput | null
-  }
-
-  export type UserEmergencyContactNullableScalarRelationFilter = {
-    is?: UserEmergencyContactWhereInput | null
-    isNot?: UserEmergencyContactWhereInput | null
-  }
-
-  export type UserSocialMediaNullableScalarRelationFilter = {
-    is?: UserSocialMediaWhereInput | null
-    isNot?: UserSocialMediaWhereInput | null
-  }
-
-  export type UserPreferencesNullableScalarRelationFilter = {
-    is?: UserPreferencesWhereInput | null
-    isNot?: UserPreferencesWhereInput | null
-  }
-
-  export type UserNotificationSettingsNullableScalarRelationFilter = {
-    is?: UserNotificationSettingsWhereInput | null
-    isNot?: UserNotificationSettingsWhereInput | null
-  }
-
-  export type UserPrivacySettingsNullableScalarRelationFilter = {
-    is?: UserPrivacySettingsWhereInput | null
-    isNot?: UserPrivacySettingsWhereInput | null
-  }
-
-  export type UserSessionListRelationFilter = {
-    every?: UserSessionWhereInput
-    some?: UserSessionWhereInput
-    none?: UserSessionWhereInput
-  }
-
-  export type UserAccessLogListRelationFilter = {
-    every?: UserAccessLogWhereInput
-    some?: UserAccessLogWhereInput
-    none?: UserAccessLogWhereInput
-  }
-
-  export type UserIPRestrictionListRelationFilter = {
-    every?: UserIPRestrictionWhereInput
-    some?: UserIPRestrictionWhereInput
-    none?: UserIPRestrictionWhereInput
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type AdministrativeProfileNullableScalarRelationFilter = {
@@ -55863,12 +55934,60 @@ export namespace Prisma {
     none?: PermissionAuditWhereInput
   }
 
+  export type UserAccessLogListRelationFilter = {
+    every?: UserAccessLogWhereInput
+    some?: UserAccessLogWhereInput
+    none?: UserAccessLogWhereInput
+  }
+
+  export type UserAddressNullableScalarRelationFilter = {
+    is?: UserAddressWhereInput | null
+    isNot?: UserAddressWhereInput | null
+  }
+
+  export type UserEmergencyContactNullableScalarRelationFilter = {
+    is?: UserEmergencyContactWhereInput | null
+    isNot?: UserEmergencyContactWhereInput | null
+  }
+
+  export type UserIPRestrictionListRelationFilter = {
+    every?: UserIPRestrictionWhereInput
+    some?: UserIPRestrictionWhereInput
+    none?: UserIPRestrictionWhereInput
+  }
+
+  export type UserNotificationSettingsNullableScalarRelationFilter = {
+    is?: UserNotificationSettingsWhereInput | null
+    isNot?: UserNotificationSettingsWhereInput | null
+  }
+
+  export type UserPreferencesNullableScalarRelationFilter = {
+    is?: UserPreferencesWhereInput | null
+    isNot?: UserPreferencesWhereInput | null
+  }
+
+  export type UserPrivacySettingsNullableScalarRelationFilter = {
+    is?: UserPrivacySettingsWhereInput | null
+    isNot?: UserPrivacySettingsWhereInput | null
+  }
+
+  export type UserSessionListRelationFilter = {
+    every?: UserSessionWhereInput
+    some?: UserSessionWhereInput
+    none?: UserSessionWhereInput
+  }
+
+  export type UserSocialMediaNullableScalarRelationFilter = {
+    is?: UserSocialMediaWhereInput | null
+    isNot?: UserSocialMediaWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
-  export type UserSessionOrderByRelationAggregateInput = {
+  export type PermissionAuditOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -55880,7 +55999,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type PermissionAuditOrderByRelationAggregateInput = {
+  export type UserSessionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -55893,27 +56012,27 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     profile_picture?: SortOrder
-    isActive?: SortOrder
-    email_verified?: SortOrder
-    lastLogin?: SortOrder
-    loginAttempts?: SortOrder
-    lockedUntil?: SortOrder
-    bio?: SortOrder
-    dateOfBirth?: SortOrder
-    gender?: SortOrder
-    department?: SortOrder
-    position?: SortOrder
     tokenVersion?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     resetToken?: SortOrder
     resetTokenExp?: SortOrder
+    bio?: SortOrder
+    dateOfBirth?: SortOrder
+    department?: SortOrder
+    email_verified?: SortOrder
+    gender?: SortOrder
+    isActive?: SortOrder
+    lastLogin?: SortOrder
+    lockedUntil?: SortOrder
+    loginAttempts?: SortOrder
+    position?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
     id?: SortOrder
-    loginAttempts?: SortOrder
     tokenVersion?: SortOrder
+    loginAttempts?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -55925,21 +56044,21 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     profile_picture?: SortOrder
-    isActive?: SortOrder
-    email_verified?: SortOrder
-    lastLogin?: SortOrder
-    loginAttempts?: SortOrder
-    lockedUntil?: SortOrder
-    bio?: SortOrder
-    dateOfBirth?: SortOrder
-    gender?: SortOrder
-    department?: SortOrder
-    position?: SortOrder
     tokenVersion?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     resetToken?: SortOrder
     resetTokenExp?: SortOrder
+    bio?: SortOrder
+    dateOfBirth?: SortOrder
+    department?: SortOrder
+    email_verified?: SortOrder
+    gender?: SortOrder
+    isActive?: SortOrder
+    lastLogin?: SortOrder
+    lockedUntil?: SortOrder
+    loginAttempts?: SortOrder
+    position?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -55951,27 +56070,27 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     profile_picture?: SortOrder
-    isActive?: SortOrder
-    email_verified?: SortOrder
-    lastLogin?: SortOrder
-    loginAttempts?: SortOrder
-    lockedUntil?: SortOrder
-    bio?: SortOrder
-    dateOfBirth?: SortOrder
-    gender?: SortOrder
-    department?: SortOrder
-    position?: SortOrder
     tokenVersion?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     resetToken?: SortOrder
     resetTokenExp?: SortOrder
+    bio?: SortOrder
+    dateOfBirth?: SortOrder
+    department?: SortOrder
+    email_verified?: SortOrder
+    gender?: SortOrder
+    isActive?: SortOrder
+    lastLogin?: SortOrder
+    lockedUntil?: SortOrder
+    loginAttempts?: SortOrder
+    position?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
     id?: SortOrder
-    loginAttempts?: SortOrder
     tokenVersion?: SortOrder
+    loginAttempts?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -56026,12 +56145,18 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -56048,18 +56173,12 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type UserScalarRelationFilter = {
@@ -56510,21 +56629,27 @@ export namespace Prisma {
     isNot?: EmergencyContactWhereInput | null
   }
 
+  export type InvoiceListRelationFilter = {
+    every?: InvoiceWhereInput
+    some?: InvoiceWhereInput
+    none?: InvoiceWhereInput
+  }
+
   export type MedicalInfoNullableScalarRelationFilter = {
     is?: MedicalInfoWhereInput | null
     isNot?: MedicalInfoWhereInput | null
-  }
-
-  export type MemberCheckInListRelationFilter = {
-    every?: MemberCheckInWhereInput
-    some?: MemberCheckInWhereInput
-    none?: MemberCheckInWhereInput
   }
 
   export type MemberAttendanceListRelationFilter = {
     every?: MemberAttendanceWhereInput
     some?: MemberAttendanceWhereInput
     none?: MemberAttendanceWhereInput
+  }
+
+  export type MemberCheckInListRelationFilter = {
+    every?: MemberCheckInWhereInput
+    some?: MemberCheckInWhereInput
+    none?: MemberCheckInWhereInput
   }
 
   export type MemberFitnessGoalListRelationFilter = {
@@ -56539,23 +56664,21 @@ export namespace Prisma {
     none?: PaymentWhereInput
   }
 
-  export type InvoiceListRelationFilter = {
-    every?: InvoiceWhereInput
-    some?: InvoiceWhereInput
-    none?: InvoiceWhereInput
-  }
-
   export type SubscriptionListRelationFilter = {
     every?: SubscriptionWhereInput
     some?: SubscriptionWhereInput
     none?: SubscriptionWhereInput
   }
 
-  export type MemberCheckInOrderByRelationAggregateInput = {
+  export type InvoiceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type MemberAttendanceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MemberCheckInOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -56564,10 +56687,6 @@ export namespace Prisma {
   }
 
   export type PaymentOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type InvoiceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -56584,13 +56703,13 @@ export namespace Prisma {
     age?: SortOrder
     profile_picture?: SortOrder
     membershiptype?: SortOrder
-    terms_accepted?: SortOrder
-    terms_accepted_at?: SortOrder
-    email_verified?: SortOrder
-    email_verification_token?: SortOrder
-    email_verification_expires?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    email_verification_expires?: SortOrder
+    email_verification_token?: SortOrder
+    email_verified?: SortOrder
+    terms_accepted?: SortOrder
+    terms_accepted_at?: SortOrder
   }
 
   export type MemberAvgOrderByAggregateInput = {
@@ -56606,13 +56725,13 @@ export namespace Prisma {
     age?: SortOrder
     profile_picture?: SortOrder
     membershiptype?: SortOrder
-    terms_accepted?: SortOrder
-    terms_accepted_at?: SortOrder
-    email_verified?: SortOrder
-    email_verification_token?: SortOrder
-    email_verification_expires?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    email_verification_expires?: SortOrder
+    email_verification_token?: SortOrder
+    email_verified?: SortOrder
+    terms_accepted?: SortOrder
+    terms_accepted_at?: SortOrder
   }
 
   export type MemberMinOrderByAggregateInput = {
@@ -56624,13 +56743,13 @@ export namespace Prisma {
     age?: SortOrder
     profile_picture?: SortOrder
     membershiptype?: SortOrder
-    terms_accepted?: SortOrder
-    terms_accepted_at?: SortOrder
-    email_verified?: SortOrder
-    email_verification_token?: SortOrder
-    email_verification_expires?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    email_verification_expires?: SortOrder
+    email_verification_token?: SortOrder
+    email_verified?: SortOrder
+    terms_accepted?: SortOrder
+    terms_accepted_at?: SortOrder
   }
 
   export type MemberSumOrderByAggregateInput = {
@@ -56943,6 +57062,10 @@ export namespace Prisma {
     memberId?: SortOrder
     method?: SortOrder
     createdAt?: SortOrder
+    status?: SortOrder
+    description?: SortOrder
+    reference?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type PaymentAvgOrderByAggregateInput = {
@@ -56955,6 +57078,10 @@ export namespace Prisma {
     memberId?: SortOrder
     method?: SortOrder
     createdAt?: SortOrder
+    status?: SortOrder
+    description?: SortOrder
+    reference?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type PaymentMinOrderByAggregateInput = {
@@ -56963,6 +57090,10 @@ export namespace Prisma {
     memberId?: SortOrder
     method?: SortOrder
     createdAt?: SortOrder
+    status?: SortOrder
+    description?: SortOrder
+    reference?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type PaymentSumOrderByAggregateInput = {
@@ -57067,13 +57198,6 @@ export namespace Prisma {
     endDate?: SortOrder
   }
 
-  export type EnumEquipmentStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.EquipmentStatus | EnumEquipmentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumEquipmentStatusFilter<$PrismaModel> | $Enums.EquipmentStatus
-  }
-
   export type FloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -57083,6 +57207,13 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type EnumEquipmentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EquipmentStatus | EnumEquipmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEquipmentStatusFilter<$PrismaModel> | $Enums.EquipmentStatus
   }
 
   export type MaintenanceLogListRelationFilter = {
@@ -57099,99 +57230,89 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     type?: SortOrder
-    category?: SortOrder
-    brand?: SortOrder
-    model?: SortOrder
-    serialNumber?: SortOrder
     quantity?: SortOrder
-    available?: SortOrder
-    inUse?: SortOrder
-    maintenance?: SortOrder
-    lastMaintenance?: SortOrder
-    nextMaintenance?: SortOrder
-    status?: SortOrder
-    location?: SortOrder
-    description?: SortOrder
-    imageUrl?: SortOrder
-    purchaseDate?: SortOrder
-    warrantyExpiry?: SortOrder
-    cost?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    available?: SortOrder
+    brand?: SortOrder
+    category?: SortOrder
+    cost?: SortOrder
+    description?: SortOrder
+    imageUrl?: SortOrder
+    inUse?: SortOrder
+    lastMaintenance?: SortOrder
+    location?: SortOrder
+    maintenance?: SortOrder
+    model?: SortOrder
+    nextMaintenance?: SortOrder
+    purchaseDate?: SortOrder
+    serialNumber?: SortOrder
+    status?: SortOrder
+    warrantyExpiry?: SortOrder
   }
 
   export type EquipmentAvgOrderByAggregateInput = {
     quantity?: SortOrder
     available?: SortOrder
-    inUse?: SortOrder
     cost?: SortOrder
+    inUse?: SortOrder
   }
 
   export type EquipmentMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     type?: SortOrder
-    category?: SortOrder
-    brand?: SortOrder
-    model?: SortOrder
-    serialNumber?: SortOrder
     quantity?: SortOrder
-    available?: SortOrder
-    inUse?: SortOrder
-    maintenance?: SortOrder
-    lastMaintenance?: SortOrder
-    nextMaintenance?: SortOrder
-    status?: SortOrder
-    location?: SortOrder
-    description?: SortOrder
-    imageUrl?: SortOrder
-    purchaseDate?: SortOrder
-    warrantyExpiry?: SortOrder
-    cost?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    available?: SortOrder
+    brand?: SortOrder
+    category?: SortOrder
+    cost?: SortOrder
+    description?: SortOrder
+    imageUrl?: SortOrder
+    inUse?: SortOrder
+    lastMaintenance?: SortOrder
+    location?: SortOrder
+    maintenance?: SortOrder
+    model?: SortOrder
+    nextMaintenance?: SortOrder
+    purchaseDate?: SortOrder
+    serialNumber?: SortOrder
+    status?: SortOrder
+    warrantyExpiry?: SortOrder
   }
 
   export type EquipmentMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     type?: SortOrder
-    category?: SortOrder
-    brand?: SortOrder
-    model?: SortOrder
-    serialNumber?: SortOrder
     quantity?: SortOrder
-    available?: SortOrder
-    inUse?: SortOrder
-    maintenance?: SortOrder
-    lastMaintenance?: SortOrder
-    nextMaintenance?: SortOrder
-    status?: SortOrder
-    location?: SortOrder
-    description?: SortOrder
-    imageUrl?: SortOrder
-    purchaseDate?: SortOrder
-    warrantyExpiry?: SortOrder
-    cost?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    available?: SortOrder
+    brand?: SortOrder
+    category?: SortOrder
+    cost?: SortOrder
+    description?: SortOrder
+    imageUrl?: SortOrder
+    inUse?: SortOrder
+    lastMaintenance?: SortOrder
+    location?: SortOrder
+    maintenance?: SortOrder
+    model?: SortOrder
+    nextMaintenance?: SortOrder
+    purchaseDate?: SortOrder
+    serialNumber?: SortOrder
+    status?: SortOrder
+    warrantyExpiry?: SortOrder
   }
 
   export type EquipmentSumOrderByAggregateInput = {
     quantity?: SortOrder
     available?: SortOrder
-    inUse?: SortOrder
     cost?: SortOrder
-  }
-
-  export type EnumEquipmentStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.EquipmentStatus | EnumEquipmentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumEquipmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.EquipmentStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumEquipmentStatusFilter<$PrismaModel>
-    _max?: NestedEnumEquipmentStatusFilter<$PrismaModel>
+    inUse?: SortOrder
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -57208,6 +57329,16 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type EnumEquipmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EquipmentStatus | EnumEquipmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEquipmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.EquipmentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEquipmentStatusFilter<$PrismaModel>
+    _max?: NestedEnumEquipmentStatusFilter<$PrismaModel>
   }
 
   export type EnumMaintenanceTypeFilter<$PrismaModel = never> = {
@@ -57934,15 +58065,15 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type CustomRoleScalarRelationFilter = {
-    is?: CustomRoleWhereInput
-    isNot?: CustomRoleWhereInput
-  }
-
   export type RoleHierarchyListRelationFilter = {
     every?: RoleHierarchyWhereInput
     some?: RoleHierarchyWhereInput
     none?: RoleHierarchyWhereInput
+  }
+
+  export type CustomRoleScalarRelationFilter = {
+    is?: CustomRoleWhereInput
+    isNot?: CustomRoleWhereInput
   }
 
   export type RoleHierarchyOrderByRelationAggregateInput = {
@@ -58028,6 +58159,26 @@ export namespace Prisma {
     userId?: SortOrder
   }
 
+  export type AdministrativeProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<AdministrativeProfileCreateWithoutUserInput, AdministrativeProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: AdministrativeProfileCreateOrConnectWithoutUserInput
+    connect?: AdministrativeProfileWhereUniqueInput
+  }
+
+  export type PermissionAuditCreateNestedManyWithoutUserInput = {
+    create?: XOR<PermissionAuditCreateWithoutUserInput, PermissionAuditUncheckedCreateWithoutUserInput> | PermissionAuditCreateWithoutUserInput[] | PermissionAuditUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PermissionAuditCreateOrConnectWithoutUserInput | PermissionAuditCreateOrConnectWithoutUserInput[]
+    createMany?: PermissionAuditCreateManyUserInputEnvelope
+    connect?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
+  }
+
+  export type UserAccessLogCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput> | UserAccessLogCreateWithoutUserInput[] | UserAccessLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserAccessLogCreateOrConnectWithoutUserInput | UserAccessLogCreateOrConnectWithoutUserInput[]
+    createMany?: UserAccessLogCreateManyUserInputEnvelope
+    connect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
+  }
+
   export type UserAddressCreateNestedOneWithoutUserInput = {
     create?: XOR<UserAddressCreateWithoutUserInput, UserAddressUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserAddressCreateOrConnectWithoutUserInput
@@ -58040,22 +58191,23 @@ export namespace Prisma {
     connect?: UserEmergencyContactWhereUniqueInput
   }
 
-  export type UserSocialMediaCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserSocialMediaCreateOrConnectWithoutUserInput
-    connect?: UserSocialMediaWhereUniqueInput
-  }
-
-  export type UserPreferencesCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserPreferencesCreateOrConnectWithoutUserInput
-    connect?: UserPreferencesWhereUniqueInput
+  export type UserIPRestrictionCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput> | UserIPRestrictionCreateWithoutUserInput[] | UserIPRestrictionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserIPRestrictionCreateOrConnectWithoutUserInput | UserIPRestrictionCreateOrConnectWithoutUserInput[]
+    createMany?: UserIPRestrictionCreateManyUserInputEnvelope
+    connect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
   }
 
   export type UserNotificationSettingsCreateNestedOneWithoutUserInput = {
     create?: XOR<UserNotificationSettingsCreateWithoutUserInput, UserNotificationSettingsUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserNotificationSettingsCreateOrConnectWithoutUserInput
     connect?: UserNotificationSettingsWhereUniqueInput
+  }
+
+  export type UserPreferencesCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserPreferencesCreateOrConnectWithoutUserInput
+    connect?: UserPreferencesWhereUniqueInput
   }
 
   export type UserPrivacySettingsCreateNestedOneWithoutUserInput = {
@@ -58071,88 +58223,10 @@ export namespace Prisma {
     connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
   }
 
-  export type UserAccessLogCreateNestedManyWithoutUserInput = {
-    create?: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput> | UserAccessLogCreateWithoutUserInput[] | UserAccessLogUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserAccessLogCreateOrConnectWithoutUserInput | UserAccessLogCreateOrConnectWithoutUserInput[]
-    createMany?: UserAccessLogCreateManyUserInputEnvelope
-    connect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
-  }
-
-  export type UserIPRestrictionCreateNestedManyWithoutUserInput = {
-    create?: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput> | UserIPRestrictionCreateWithoutUserInput[] | UserIPRestrictionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserIPRestrictionCreateOrConnectWithoutUserInput | UserIPRestrictionCreateOrConnectWithoutUserInput[]
-    createMany?: UserIPRestrictionCreateManyUserInputEnvelope
-    connect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
-  }
-
-  export type AdministrativeProfileCreateNestedOneWithoutUserInput = {
-    create?: XOR<AdministrativeProfileCreateWithoutUserInput, AdministrativeProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: AdministrativeProfileCreateOrConnectWithoutUserInput
-    connect?: AdministrativeProfileWhereUniqueInput
-  }
-
-  export type PermissionAuditCreateNestedManyWithoutUserInput = {
-    create?: XOR<PermissionAuditCreateWithoutUserInput, PermissionAuditUncheckedCreateWithoutUserInput> | PermissionAuditCreateWithoutUserInput[] | PermissionAuditUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PermissionAuditCreateOrConnectWithoutUserInput | PermissionAuditCreateOrConnectWithoutUserInput[]
-    createMany?: PermissionAuditCreateManyUserInputEnvelope
-    connect?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
-  }
-
-  export type UserAddressUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserAddressCreateWithoutUserInput, UserAddressUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserAddressCreateOrConnectWithoutUserInput
-    connect?: UserAddressWhereUniqueInput
-  }
-
-  export type UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserEmergencyContactCreateWithoutUserInput, UserEmergencyContactUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserEmergencyContactCreateOrConnectWithoutUserInput
-    connect?: UserEmergencyContactWhereUniqueInput
-  }
-
-  export type UserSocialMediaUncheckedCreateNestedOneWithoutUserInput = {
+  export type UserSocialMediaCreateNestedOneWithoutUserInput = {
     create?: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserSocialMediaCreateOrConnectWithoutUserInput
     connect?: UserSocialMediaWhereUniqueInput
-  }
-
-  export type UserPreferencesUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserPreferencesCreateOrConnectWithoutUserInput
-    connect?: UserPreferencesWhereUniqueInput
-  }
-
-  export type UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserNotificationSettingsCreateWithoutUserInput, UserNotificationSettingsUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserNotificationSettingsCreateOrConnectWithoutUserInput
-    connect?: UserNotificationSettingsWhereUniqueInput
-  }
-
-  export type UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserPrivacySettingsCreateWithoutUserInput, UserPrivacySettingsUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserPrivacySettingsCreateOrConnectWithoutUserInput
-    connect?: UserPrivacySettingsWhereUniqueInput
-  }
-
-  export type UserSessionUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput> | UserSessionCreateWithoutUserInput[] | UserSessionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserSessionCreateOrConnectWithoutUserInput | UserSessionCreateOrConnectWithoutUserInput[]
-    createMany?: UserSessionCreateManyUserInputEnvelope
-    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
-  }
-
-  export type UserAccessLogUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput> | UserAccessLogCreateWithoutUserInput[] | UserAccessLogUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserAccessLogCreateOrConnectWithoutUserInput | UserAccessLogCreateOrConnectWithoutUserInput[]
-    createMany?: UserAccessLogCreateManyUserInputEnvelope
-    connect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
-  }
-
-  export type UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput> | UserIPRestrictionCreateWithoutUserInput[] | UserIPRestrictionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserIPRestrictionCreateOrConnectWithoutUserInput | UserIPRestrictionCreateOrConnectWithoutUserInput[]
-    createMany?: UserIPRestrictionCreateManyUserInputEnvelope
-    connect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
   }
 
   export type AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput = {
@@ -58168,20 +58242,69 @@ export namespace Prisma {
     connect?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
   }
 
+  export type UserAccessLogUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput> | UserAccessLogCreateWithoutUserInput[] | UserAccessLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserAccessLogCreateOrConnectWithoutUserInput | UserAccessLogCreateOrConnectWithoutUserInput[]
+    createMany?: UserAccessLogCreateManyUserInputEnvelope
+    connect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
+  }
+
+  export type UserAddressUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserAddressCreateWithoutUserInput, UserAddressUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserAddressCreateOrConnectWithoutUserInput
+    connect?: UserAddressWhereUniqueInput
+  }
+
+  export type UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserEmergencyContactCreateWithoutUserInput, UserEmergencyContactUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserEmergencyContactCreateOrConnectWithoutUserInput
+    connect?: UserEmergencyContactWhereUniqueInput
+  }
+
+  export type UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput> | UserIPRestrictionCreateWithoutUserInput[] | UserIPRestrictionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserIPRestrictionCreateOrConnectWithoutUserInput | UserIPRestrictionCreateOrConnectWithoutUserInput[]
+    createMany?: UserIPRestrictionCreateManyUserInputEnvelope
+    connect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
+  }
+
+  export type UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserNotificationSettingsCreateWithoutUserInput, UserNotificationSettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserNotificationSettingsCreateOrConnectWithoutUserInput
+    connect?: UserNotificationSettingsWhereUniqueInput
+  }
+
+  export type UserPreferencesUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserPreferencesCreateOrConnectWithoutUserInput
+    connect?: UserPreferencesWhereUniqueInput
+  }
+
+  export type UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserPrivacySettingsCreateWithoutUserInput, UserPrivacySettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserPrivacySettingsCreateOrConnectWithoutUserInput
+    connect?: UserPrivacySettingsWhereUniqueInput
+  }
+
+  export type UserSessionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput> | UserSessionCreateWithoutUserInput[] | UserSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserSessionCreateOrConnectWithoutUserInput | UserSessionCreateOrConnectWithoutUserInput[]
+    createMany?: UserSessionCreateManyUserInputEnvelope
+    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+  }
+
+  export type UserSocialMediaUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSocialMediaCreateOrConnectWithoutUserInput
+    connect?: UserSocialMediaWhereUniqueInput
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -58196,106 +58319,12 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type UserAddressUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserAddressCreateWithoutUserInput, UserAddressUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserAddressCreateOrConnectWithoutUserInput
-    upsert?: UserAddressUpsertWithoutUserInput
-    disconnect?: UserAddressWhereInput | boolean
-    delete?: UserAddressWhereInput | boolean
-    connect?: UserAddressWhereUniqueInput
-    update?: XOR<XOR<UserAddressUpdateToOneWithWhereWithoutUserInput, UserAddressUpdateWithoutUserInput>, UserAddressUncheckedUpdateWithoutUserInput>
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
-  export type UserEmergencyContactUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserEmergencyContactCreateWithoutUserInput, UserEmergencyContactUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserEmergencyContactCreateOrConnectWithoutUserInput
-    upsert?: UserEmergencyContactUpsertWithoutUserInput
-    disconnect?: UserEmergencyContactWhereInput | boolean
-    delete?: UserEmergencyContactWhereInput | boolean
-    connect?: UserEmergencyContactWhereUniqueInput
-    update?: XOR<XOR<UserEmergencyContactUpdateToOneWithWhereWithoutUserInput, UserEmergencyContactUpdateWithoutUserInput>, UserEmergencyContactUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserSocialMediaUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserSocialMediaCreateOrConnectWithoutUserInput
-    upsert?: UserSocialMediaUpsertWithoutUserInput
-    disconnect?: UserSocialMediaWhereInput | boolean
-    delete?: UserSocialMediaWhereInput | boolean
-    connect?: UserSocialMediaWhereUniqueInput
-    update?: XOR<XOR<UserSocialMediaUpdateToOneWithWhereWithoutUserInput, UserSocialMediaUpdateWithoutUserInput>, UserSocialMediaUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserPreferencesUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserPreferencesCreateOrConnectWithoutUserInput
-    upsert?: UserPreferencesUpsertWithoutUserInput
-    disconnect?: UserPreferencesWhereInput | boolean
-    delete?: UserPreferencesWhereInput | boolean
-    connect?: UserPreferencesWhereUniqueInput
-    update?: XOR<XOR<UserPreferencesUpdateToOneWithWhereWithoutUserInput, UserPreferencesUpdateWithoutUserInput>, UserPreferencesUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserNotificationSettingsUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserNotificationSettingsCreateWithoutUserInput, UserNotificationSettingsUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserNotificationSettingsCreateOrConnectWithoutUserInput
-    upsert?: UserNotificationSettingsUpsertWithoutUserInput
-    disconnect?: UserNotificationSettingsWhereInput | boolean
-    delete?: UserNotificationSettingsWhereInput | boolean
-    connect?: UserNotificationSettingsWhereUniqueInput
-    update?: XOR<XOR<UserNotificationSettingsUpdateToOneWithWhereWithoutUserInput, UserNotificationSettingsUpdateWithoutUserInput>, UserNotificationSettingsUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserPrivacySettingsUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserPrivacySettingsCreateWithoutUserInput, UserPrivacySettingsUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserPrivacySettingsCreateOrConnectWithoutUserInput
-    upsert?: UserPrivacySettingsUpsertWithoutUserInput
-    disconnect?: UserPrivacySettingsWhereInput | boolean
-    delete?: UserPrivacySettingsWhereInput | boolean
-    connect?: UserPrivacySettingsWhereUniqueInput
-    update?: XOR<XOR<UserPrivacySettingsUpdateToOneWithWhereWithoutUserInput, UserPrivacySettingsUpdateWithoutUserInput>, UserPrivacySettingsUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserSessionUpdateManyWithoutUserNestedInput = {
-    create?: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput> | UserSessionCreateWithoutUserInput[] | UserSessionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserSessionCreateOrConnectWithoutUserInput | UserSessionCreateOrConnectWithoutUserInput[]
-    upsert?: UserSessionUpsertWithWhereUniqueWithoutUserInput | UserSessionUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: UserSessionCreateManyUserInputEnvelope
-    set?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
-    disconnect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
-    delete?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
-    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
-    update?: UserSessionUpdateWithWhereUniqueWithoutUserInput | UserSessionUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: UserSessionUpdateManyWithWhereWithoutUserInput | UserSessionUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[]
-  }
-
-  export type UserAccessLogUpdateManyWithoutUserNestedInput = {
-    create?: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput> | UserAccessLogCreateWithoutUserInput[] | UserAccessLogUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserAccessLogCreateOrConnectWithoutUserInput | UserAccessLogCreateOrConnectWithoutUserInput[]
-    upsert?: UserAccessLogUpsertWithWhereUniqueWithoutUserInput | UserAccessLogUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: UserAccessLogCreateManyUserInputEnvelope
-    set?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
-    disconnect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
-    delete?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
-    connect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
-    update?: UserAccessLogUpdateWithWhereUniqueWithoutUserInput | UserAccessLogUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: UserAccessLogUpdateManyWithWhereWithoutUserInput | UserAccessLogUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: UserAccessLogScalarWhereInput | UserAccessLogScalarWhereInput[]
-  }
-
-  export type UserIPRestrictionUpdateManyWithoutUserNestedInput = {
-    create?: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput> | UserIPRestrictionCreateWithoutUserInput[] | UserIPRestrictionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserIPRestrictionCreateOrConnectWithoutUserInput | UserIPRestrictionCreateOrConnectWithoutUserInput[]
-    upsert?: UserIPRestrictionUpsertWithWhereUniqueWithoutUserInput | UserIPRestrictionUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: UserIPRestrictionCreateManyUserInputEnvelope
-    set?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
-    disconnect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
-    delete?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
-    connect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
-    update?: UserIPRestrictionUpdateWithWhereUniqueWithoutUserInput | UserIPRestrictionUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: UserIPRestrictionUpdateManyWithWhereWithoutUserInput | UserIPRestrictionUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: UserIPRestrictionScalarWhereInput | UserIPRestrictionScalarWhereInput[]
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type AdministrativeProfileUpdateOneWithoutUserNestedInput = {
@@ -58322,6 +58351,146 @@ export namespace Prisma {
     deleteMany?: PermissionAuditScalarWhereInput | PermissionAuditScalarWhereInput[]
   }
 
+  export type UserAccessLogUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput> | UserAccessLogCreateWithoutUserInput[] | UserAccessLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserAccessLogCreateOrConnectWithoutUserInput | UserAccessLogCreateOrConnectWithoutUserInput[]
+    upsert?: UserAccessLogUpsertWithWhereUniqueWithoutUserInput | UserAccessLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserAccessLogCreateManyUserInputEnvelope
+    set?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
+    disconnect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
+    delete?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
+    connect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
+    update?: UserAccessLogUpdateWithWhereUniqueWithoutUserInput | UserAccessLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserAccessLogUpdateManyWithWhereWithoutUserInput | UserAccessLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserAccessLogScalarWhereInput | UserAccessLogScalarWhereInput[]
+  }
+
+  export type UserAddressUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserAddressCreateWithoutUserInput, UserAddressUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserAddressCreateOrConnectWithoutUserInput
+    upsert?: UserAddressUpsertWithoutUserInput
+    disconnect?: UserAddressWhereInput | boolean
+    delete?: UserAddressWhereInput | boolean
+    connect?: UserAddressWhereUniqueInput
+    update?: XOR<XOR<UserAddressUpdateToOneWithWhereWithoutUserInput, UserAddressUpdateWithoutUserInput>, UserAddressUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserEmergencyContactUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserEmergencyContactCreateWithoutUserInput, UserEmergencyContactUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserEmergencyContactCreateOrConnectWithoutUserInput
+    upsert?: UserEmergencyContactUpsertWithoutUserInput
+    disconnect?: UserEmergencyContactWhereInput | boolean
+    delete?: UserEmergencyContactWhereInput | boolean
+    connect?: UserEmergencyContactWhereUniqueInput
+    update?: XOR<XOR<UserEmergencyContactUpdateToOneWithWhereWithoutUserInput, UserEmergencyContactUpdateWithoutUserInput>, UserEmergencyContactUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserIPRestrictionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput> | UserIPRestrictionCreateWithoutUserInput[] | UserIPRestrictionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserIPRestrictionCreateOrConnectWithoutUserInput | UserIPRestrictionCreateOrConnectWithoutUserInput[]
+    upsert?: UserIPRestrictionUpsertWithWhereUniqueWithoutUserInput | UserIPRestrictionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserIPRestrictionCreateManyUserInputEnvelope
+    set?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
+    disconnect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
+    delete?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
+    connect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
+    update?: UserIPRestrictionUpdateWithWhereUniqueWithoutUserInput | UserIPRestrictionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserIPRestrictionUpdateManyWithWhereWithoutUserInput | UserIPRestrictionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserIPRestrictionScalarWhereInput | UserIPRestrictionScalarWhereInput[]
+  }
+
+  export type UserNotificationSettingsUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserNotificationSettingsCreateWithoutUserInput, UserNotificationSettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserNotificationSettingsCreateOrConnectWithoutUserInput
+    upsert?: UserNotificationSettingsUpsertWithoutUserInput
+    disconnect?: UserNotificationSettingsWhereInput | boolean
+    delete?: UserNotificationSettingsWhereInput | boolean
+    connect?: UserNotificationSettingsWhereUniqueInput
+    update?: XOR<XOR<UserNotificationSettingsUpdateToOneWithWhereWithoutUserInput, UserNotificationSettingsUpdateWithoutUserInput>, UserNotificationSettingsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserPreferencesUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserPreferencesCreateOrConnectWithoutUserInput
+    upsert?: UserPreferencesUpsertWithoutUserInput
+    disconnect?: UserPreferencesWhereInput | boolean
+    delete?: UserPreferencesWhereInput | boolean
+    connect?: UserPreferencesWhereUniqueInput
+    update?: XOR<XOR<UserPreferencesUpdateToOneWithWhereWithoutUserInput, UserPreferencesUpdateWithoutUserInput>, UserPreferencesUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserPrivacySettingsUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserPrivacySettingsCreateWithoutUserInput, UserPrivacySettingsUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserPrivacySettingsCreateOrConnectWithoutUserInput
+    upsert?: UserPrivacySettingsUpsertWithoutUserInput
+    disconnect?: UserPrivacySettingsWhereInput | boolean
+    delete?: UserPrivacySettingsWhereInput | boolean
+    connect?: UserPrivacySettingsWhereUniqueInput
+    update?: XOR<XOR<UserPrivacySettingsUpdateToOneWithWhereWithoutUserInput, UserPrivacySettingsUpdateWithoutUserInput>, UserPrivacySettingsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserSessionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput> | UserSessionCreateWithoutUserInput[] | UserSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserSessionCreateOrConnectWithoutUserInput | UserSessionCreateOrConnectWithoutUserInput[]
+    upsert?: UserSessionUpsertWithWhereUniqueWithoutUserInput | UserSessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserSessionCreateManyUserInputEnvelope
+    set?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    disconnect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    delete?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    update?: UserSessionUpdateWithWhereUniqueWithoutUserInput | UserSessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserSessionUpdateManyWithWhereWithoutUserInput | UserSessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[]
+  }
+
+  export type UserSocialMediaUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSocialMediaCreateOrConnectWithoutUserInput
+    upsert?: UserSocialMediaUpsertWithoutUserInput
+    disconnect?: UserSocialMediaWhereInput | boolean
+    delete?: UserSocialMediaWhereInput | boolean
+    connect?: UserSocialMediaWhereUniqueInput
+    update?: XOR<XOR<UserSocialMediaUpdateToOneWithWhereWithoutUserInput, UserSocialMediaUpdateWithoutUserInput>, UserSocialMediaUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<AdministrativeProfileCreateWithoutUserInput, AdministrativeProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: AdministrativeProfileCreateOrConnectWithoutUserInput
+    upsert?: AdministrativeProfileUpsertWithoutUserInput
+    disconnect?: AdministrativeProfileWhereInput | boolean
+    delete?: AdministrativeProfileWhereInput | boolean
+    connect?: AdministrativeProfileWhereUniqueInput
+    update?: XOR<XOR<AdministrativeProfileUpdateToOneWithWhereWithoutUserInput, AdministrativeProfileUpdateWithoutUserInput>, AdministrativeProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PermissionAuditUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PermissionAuditCreateWithoutUserInput, PermissionAuditUncheckedCreateWithoutUserInput> | PermissionAuditCreateWithoutUserInput[] | PermissionAuditUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PermissionAuditCreateOrConnectWithoutUserInput | PermissionAuditCreateOrConnectWithoutUserInput[]
+    upsert?: PermissionAuditUpsertWithWhereUniqueWithoutUserInput | PermissionAuditUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PermissionAuditCreateManyUserInputEnvelope
+    set?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
+    disconnect?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
+    delete?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
+    connect?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
+    update?: PermissionAuditUpdateWithWhereUniqueWithoutUserInput | PermissionAuditUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PermissionAuditUpdateManyWithWhereWithoutUserInput | PermissionAuditUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PermissionAuditScalarWhereInput | PermissionAuditScalarWhereInput[]
+  }
+
+  export type UserAccessLogUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput> | UserAccessLogCreateWithoutUserInput[] | UserAccessLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserAccessLogCreateOrConnectWithoutUserInput | UserAccessLogCreateOrConnectWithoutUserInput[]
+    upsert?: UserAccessLogUpsertWithWhereUniqueWithoutUserInput | UserAccessLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserAccessLogCreateManyUserInputEnvelope
+    set?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
+    disconnect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
+    delete?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
+    connect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
+    update?: UserAccessLogUpdateWithWhereUniqueWithoutUserInput | UserAccessLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserAccessLogUpdateManyWithWhereWithoutUserInput | UserAccessLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserAccessLogScalarWhereInput | UserAccessLogScalarWhereInput[]
+  }
+
   export type UserAddressUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<UserAddressCreateWithoutUserInput, UserAddressUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserAddressCreateOrConnectWithoutUserInput
@@ -58342,24 +58511,18 @@ export namespace Prisma {
     update?: XOR<XOR<UserEmergencyContactUpdateToOneWithWhereWithoutUserInput, UserEmergencyContactUpdateWithoutUserInput>, UserEmergencyContactUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserSocialMediaCreateOrConnectWithoutUserInput
-    upsert?: UserSocialMediaUpsertWithoutUserInput
-    disconnect?: UserSocialMediaWhereInput | boolean
-    delete?: UserSocialMediaWhereInput | boolean
-    connect?: UserSocialMediaWhereUniqueInput
-    update?: XOR<XOR<UserSocialMediaUpdateToOneWithWhereWithoutUserInput, UserSocialMediaUpdateWithoutUserInput>, UserSocialMediaUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserPreferencesUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserPreferencesCreateOrConnectWithoutUserInput
-    upsert?: UserPreferencesUpsertWithoutUserInput
-    disconnect?: UserPreferencesWhereInput | boolean
-    delete?: UserPreferencesWhereInput | boolean
-    connect?: UserPreferencesWhereUniqueInput
-    update?: XOR<XOR<UserPreferencesUpdateToOneWithWhereWithoutUserInput, UserPreferencesUpdateWithoutUserInput>, UserPreferencesUncheckedUpdateWithoutUserInput>
+  export type UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput> | UserIPRestrictionCreateWithoutUserInput[] | UserIPRestrictionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserIPRestrictionCreateOrConnectWithoutUserInput | UserIPRestrictionCreateOrConnectWithoutUserInput[]
+    upsert?: UserIPRestrictionUpsertWithWhereUniqueWithoutUserInput | UserIPRestrictionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserIPRestrictionCreateManyUserInputEnvelope
+    set?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
+    disconnect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
+    delete?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
+    connect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
+    update?: UserIPRestrictionUpdateWithWhereUniqueWithoutUserInput | UserIPRestrictionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserIPRestrictionUpdateManyWithWhereWithoutUserInput | UserIPRestrictionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserIPRestrictionScalarWhereInput | UserIPRestrictionScalarWhereInput[]
   }
 
   export type UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput = {
@@ -58370,6 +58533,16 @@ export namespace Prisma {
     delete?: UserNotificationSettingsWhereInput | boolean
     connect?: UserNotificationSettingsWhereUniqueInput
     update?: XOR<XOR<UserNotificationSettingsUpdateToOneWithWhereWithoutUserInput, UserNotificationSettingsUpdateWithoutUserInput>, UserNotificationSettingsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserPreferencesUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserPreferencesCreateOrConnectWithoutUserInput
+    upsert?: UserPreferencesUpsertWithoutUserInput
+    disconnect?: UserPreferencesWhereInput | boolean
+    delete?: UserPreferencesWhereInput | boolean
+    connect?: UserPreferencesWhereUniqueInput
+    update?: XOR<XOR<UserPreferencesUpdateToOneWithWhereWithoutUserInput, UserPreferencesUpdateWithoutUserInput>, UserPreferencesUncheckedUpdateWithoutUserInput>
   }
 
   export type UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput = {
@@ -58396,56 +58569,14 @@ export namespace Prisma {
     deleteMany?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[]
   }
 
-  export type UserAccessLogUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput> | UserAccessLogCreateWithoutUserInput[] | UserAccessLogUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserAccessLogCreateOrConnectWithoutUserInput | UserAccessLogCreateOrConnectWithoutUserInput[]
-    upsert?: UserAccessLogUpsertWithWhereUniqueWithoutUserInput | UserAccessLogUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: UserAccessLogCreateManyUserInputEnvelope
-    set?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
-    disconnect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
-    delete?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
-    connect?: UserAccessLogWhereUniqueInput | UserAccessLogWhereUniqueInput[]
-    update?: UserAccessLogUpdateWithWhereUniqueWithoutUserInput | UserAccessLogUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: UserAccessLogUpdateManyWithWhereWithoutUserInput | UserAccessLogUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: UserAccessLogScalarWhereInput | UserAccessLogScalarWhereInput[]
-  }
-
-  export type UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput> | UserIPRestrictionCreateWithoutUserInput[] | UserIPRestrictionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserIPRestrictionCreateOrConnectWithoutUserInput | UserIPRestrictionCreateOrConnectWithoutUserInput[]
-    upsert?: UserIPRestrictionUpsertWithWhereUniqueWithoutUserInput | UserIPRestrictionUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: UserIPRestrictionCreateManyUserInputEnvelope
-    set?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
-    disconnect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
-    delete?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
-    connect?: UserIPRestrictionWhereUniqueInput | UserIPRestrictionWhereUniqueInput[]
-    update?: UserIPRestrictionUpdateWithWhereUniqueWithoutUserInput | UserIPRestrictionUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: UserIPRestrictionUpdateManyWithWhereWithoutUserInput | UserIPRestrictionUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: UserIPRestrictionScalarWhereInput | UserIPRestrictionScalarWhereInput[]
-  }
-
-  export type AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<AdministrativeProfileCreateWithoutUserInput, AdministrativeProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: AdministrativeProfileCreateOrConnectWithoutUserInput
-    upsert?: AdministrativeProfileUpsertWithoutUserInput
-    disconnect?: AdministrativeProfileWhereInput | boolean
-    delete?: AdministrativeProfileWhereInput | boolean
-    connect?: AdministrativeProfileWhereUniqueInput
-    update?: XOR<XOR<AdministrativeProfileUpdateToOneWithWhereWithoutUserInput, AdministrativeProfileUpdateWithoutUserInput>, AdministrativeProfileUncheckedUpdateWithoutUserInput>
-  }
-
-  export type PermissionAuditUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<PermissionAuditCreateWithoutUserInput, PermissionAuditUncheckedCreateWithoutUserInput> | PermissionAuditCreateWithoutUserInput[] | PermissionAuditUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PermissionAuditCreateOrConnectWithoutUserInput | PermissionAuditCreateOrConnectWithoutUserInput[]
-    upsert?: PermissionAuditUpsertWithWhereUniqueWithoutUserInput | PermissionAuditUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: PermissionAuditCreateManyUserInputEnvelope
-    set?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
-    disconnect?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
-    delete?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
-    connect?: PermissionAuditWhereUniqueInput | PermissionAuditWhereUniqueInput[]
-    update?: PermissionAuditUpdateWithWhereUniqueWithoutUserInput | PermissionAuditUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: PermissionAuditUpdateManyWithWhereWithoutUserInput | PermissionAuditUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: PermissionAuditScalarWhereInput | PermissionAuditScalarWhereInput[]
+  export type UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserSocialMediaCreateOrConnectWithoutUserInput
+    upsert?: UserSocialMediaUpsertWithoutUserInput
+    disconnect?: UserSocialMediaWhereInput | boolean
+    delete?: UserSocialMediaWhereInput | boolean
+    connect?: UserSocialMediaWhereUniqueInput
+    update?: XOR<XOR<UserSocialMediaUpdateToOneWithWhereWithoutUserInput, UserSocialMediaUpdateWithoutUserInput>, UserSocialMediaUncheckedUpdateWithoutUserInput>
   }
 
   export type UserCreateNestedOneWithoutSessionsInput = {
@@ -58586,17 +58717,17 @@ export namespace Prisma {
     connect?: EmergencyContactWhereUniqueInput
   }
 
+  export type InvoiceCreateNestedManyWithoutMemberInput = {
+    create?: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput> | InvoiceCreateWithoutMemberInput[] | InvoiceUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutMemberInput | InvoiceCreateOrConnectWithoutMemberInput[]
+    createMany?: InvoiceCreateManyMemberInputEnvelope
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+  }
+
   export type MedicalInfoCreateNestedOneWithoutMemberInput = {
     create?: XOR<MedicalInfoCreateWithoutMemberInput, MedicalInfoUncheckedCreateWithoutMemberInput>
     connectOrCreate?: MedicalInfoCreateOrConnectWithoutMemberInput
     connect?: MedicalInfoWhereUniqueInput
-  }
-
-  export type MemberCheckInCreateNestedManyWithoutMemberInput = {
-    create?: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput> | MemberCheckInCreateWithoutMemberInput[] | MemberCheckInUncheckedCreateWithoutMemberInput[]
-    connectOrCreate?: MemberCheckInCreateOrConnectWithoutMemberInput | MemberCheckInCreateOrConnectWithoutMemberInput[]
-    createMany?: MemberCheckInCreateManyMemberInputEnvelope
-    connect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
   }
 
   export type MemberAttendanceCreateNestedManyWithoutMemberInput = {
@@ -58604,6 +58735,13 @@ export namespace Prisma {
     connectOrCreate?: MemberAttendanceCreateOrConnectWithoutMemberInput | MemberAttendanceCreateOrConnectWithoutMemberInput[]
     createMany?: MemberAttendanceCreateManyMemberInputEnvelope
     connect?: MemberAttendanceWhereUniqueInput | MemberAttendanceWhereUniqueInput[]
+  }
+
+  export type MemberCheckInCreateNestedManyWithoutMemberInput = {
+    create?: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput> | MemberCheckInCreateWithoutMemberInput[] | MemberCheckInUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: MemberCheckInCreateOrConnectWithoutMemberInput | MemberCheckInCreateOrConnectWithoutMemberInput[]
+    createMany?: MemberCheckInCreateManyMemberInputEnvelope
+    connect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
   }
 
   export type MemberFitnessGoalCreateNestedManyWithoutMemberInput = {
@@ -58618,13 +58756,6 @@ export namespace Prisma {
     connectOrCreate?: PaymentCreateOrConnectWithoutMemberInput | PaymentCreateOrConnectWithoutMemberInput[]
     createMany?: PaymentCreateManyMemberInputEnvelope
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
-  }
-
-  export type InvoiceCreateNestedManyWithoutMemberInput = {
-    create?: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput> | InvoiceCreateWithoutMemberInput[] | InvoiceUncheckedCreateWithoutMemberInput[]
-    connectOrCreate?: InvoiceCreateOrConnectWithoutMemberInput | InvoiceCreateOrConnectWithoutMemberInput[]
-    createMany?: InvoiceCreateManyMemberInputEnvelope
-    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
   }
 
   export type SubscriptionCreateNestedManyWithoutMemberInput = {
@@ -58646,17 +58777,17 @@ export namespace Prisma {
     connect?: EmergencyContactWhereUniqueInput
   }
 
+  export type InvoiceUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput> | InvoiceCreateWithoutMemberInput[] | InvoiceUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutMemberInput | InvoiceCreateOrConnectWithoutMemberInput[]
+    createMany?: InvoiceCreateManyMemberInputEnvelope
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+  }
+
   export type MedicalInfoUncheckedCreateNestedOneWithoutMemberInput = {
     create?: XOR<MedicalInfoCreateWithoutMemberInput, MedicalInfoUncheckedCreateWithoutMemberInput>
     connectOrCreate?: MedicalInfoCreateOrConnectWithoutMemberInput
     connect?: MedicalInfoWhereUniqueInput
-  }
-
-  export type MemberCheckInUncheckedCreateNestedManyWithoutMemberInput = {
-    create?: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput> | MemberCheckInCreateWithoutMemberInput[] | MemberCheckInUncheckedCreateWithoutMemberInput[]
-    connectOrCreate?: MemberCheckInCreateOrConnectWithoutMemberInput | MemberCheckInCreateOrConnectWithoutMemberInput[]
-    createMany?: MemberCheckInCreateManyMemberInputEnvelope
-    connect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
   }
 
   export type MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput = {
@@ -58664,6 +58795,13 @@ export namespace Prisma {
     connectOrCreate?: MemberAttendanceCreateOrConnectWithoutMemberInput | MemberAttendanceCreateOrConnectWithoutMemberInput[]
     createMany?: MemberAttendanceCreateManyMemberInputEnvelope
     connect?: MemberAttendanceWhereUniqueInput | MemberAttendanceWhereUniqueInput[]
+  }
+
+  export type MemberCheckInUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput> | MemberCheckInCreateWithoutMemberInput[] | MemberCheckInUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: MemberCheckInCreateOrConnectWithoutMemberInput | MemberCheckInCreateOrConnectWithoutMemberInput[]
+    createMany?: MemberCheckInCreateManyMemberInputEnvelope
+    connect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
   }
 
   export type MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput = {
@@ -58678,13 +58816,6 @@ export namespace Prisma {
     connectOrCreate?: PaymentCreateOrConnectWithoutMemberInput | PaymentCreateOrConnectWithoutMemberInput[]
     createMany?: PaymentCreateManyMemberInputEnvelope
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
-  }
-
-  export type InvoiceUncheckedCreateNestedManyWithoutMemberInput = {
-    create?: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput> | InvoiceCreateWithoutMemberInput[] | InvoiceUncheckedCreateWithoutMemberInput[]
-    connectOrCreate?: InvoiceCreateOrConnectWithoutMemberInput | InvoiceCreateOrConnectWithoutMemberInput[]
-    createMany?: InvoiceCreateManyMemberInputEnvelope
-    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
   }
 
   export type SubscriptionUncheckedCreateNestedManyWithoutMemberInput = {
@@ -58718,6 +58849,20 @@ export namespace Prisma {
     update?: XOR<XOR<EmergencyContactUpdateToOneWithWhereWithoutMemberInput, EmergencyContactUpdateWithoutMemberInput>, EmergencyContactUncheckedUpdateWithoutMemberInput>
   }
 
+  export type InvoiceUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput> | InvoiceCreateWithoutMemberInput[] | InvoiceUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutMemberInput | InvoiceCreateOrConnectWithoutMemberInput[]
+    upsert?: InvoiceUpsertWithWhereUniqueWithoutMemberInput | InvoiceUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: InvoiceCreateManyMemberInputEnvelope
+    set?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    disconnect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    delete?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    update?: InvoiceUpdateWithWhereUniqueWithoutMemberInput | InvoiceUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: InvoiceUpdateManyWithWhereWithoutMemberInput | InvoiceUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+  }
+
   export type MedicalInfoUpdateOneWithoutMemberNestedInput = {
     create?: XOR<MedicalInfoCreateWithoutMemberInput, MedicalInfoUncheckedCreateWithoutMemberInput>
     connectOrCreate?: MedicalInfoCreateOrConnectWithoutMemberInput
@@ -58726,20 +58871,6 @@ export namespace Prisma {
     delete?: MedicalInfoWhereInput | boolean
     connect?: MedicalInfoWhereUniqueInput
     update?: XOR<XOR<MedicalInfoUpdateToOneWithWhereWithoutMemberInput, MedicalInfoUpdateWithoutMemberInput>, MedicalInfoUncheckedUpdateWithoutMemberInput>
-  }
-
-  export type MemberCheckInUpdateManyWithoutMemberNestedInput = {
-    create?: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput> | MemberCheckInCreateWithoutMemberInput[] | MemberCheckInUncheckedCreateWithoutMemberInput[]
-    connectOrCreate?: MemberCheckInCreateOrConnectWithoutMemberInput | MemberCheckInCreateOrConnectWithoutMemberInput[]
-    upsert?: MemberCheckInUpsertWithWhereUniqueWithoutMemberInput | MemberCheckInUpsertWithWhereUniqueWithoutMemberInput[]
-    createMany?: MemberCheckInCreateManyMemberInputEnvelope
-    set?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
-    disconnect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
-    delete?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
-    connect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
-    update?: MemberCheckInUpdateWithWhereUniqueWithoutMemberInput | MemberCheckInUpdateWithWhereUniqueWithoutMemberInput[]
-    updateMany?: MemberCheckInUpdateManyWithWhereWithoutMemberInput | MemberCheckInUpdateManyWithWhereWithoutMemberInput[]
-    deleteMany?: MemberCheckInScalarWhereInput | MemberCheckInScalarWhereInput[]
   }
 
   export type MemberAttendanceUpdateManyWithoutMemberNestedInput = {
@@ -58754,6 +58885,20 @@ export namespace Prisma {
     update?: MemberAttendanceUpdateWithWhereUniqueWithoutMemberInput | MemberAttendanceUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: MemberAttendanceUpdateManyWithWhereWithoutMemberInput | MemberAttendanceUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: MemberAttendanceScalarWhereInput | MemberAttendanceScalarWhereInput[]
+  }
+
+  export type MemberCheckInUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput> | MemberCheckInCreateWithoutMemberInput[] | MemberCheckInUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: MemberCheckInCreateOrConnectWithoutMemberInput | MemberCheckInCreateOrConnectWithoutMemberInput[]
+    upsert?: MemberCheckInUpsertWithWhereUniqueWithoutMemberInput | MemberCheckInUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: MemberCheckInCreateManyMemberInputEnvelope
+    set?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
+    disconnect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
+    delete?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
+    connect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
+    update?: MemberCheckInUpdateWithWhereUniqueWithoutMemberInput | MemberCheckInUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: MemberCheckInUpdateManyWithWhereWithoutMemberInput | MemberCheckInUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: MemberCheckInScalarWhereInput | MemberCheckInScalarWhereInput[]
   }
 
   export type MemberFitnessGoalUpdateManyWithoutMemberNestedInput = {
@@ -58782,20 +58927,6 @@ export namespace Prisma {
     update?: PaymentUpdateWithWhereUniqueWithoutMemberInput | PaymentUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: PaymentUpdateManyWithWhereWithoutMemberInput | PaymentUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
-  }
-
-  export type InvoiceUpdateManyWithoutMemberNestedInput = {
-    create?: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput> | InvoiceCreateWithoutMemberInput[] | InvoiceUncheckedCreateWithoutMemberInput[]
-    connectOrCreate?: InvoiceCreateOrConnectWithoutMemberInput | InvoiceCreateOrConnectWithoutMemberInput[]
-    upsert?: InvoiceUpsertWithWhereUniqueWithoutMemberInput | InvoiceUpsertWithWhereUniqueWithoutMemberInput[]
-    createMany?: InvoiceCreateManyMemberInputEnvelope
-    set?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
-    disconnect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
-    delete?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
-    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
-    update?: InvoiceUpdateWithWhereUniqueWithoutMemberInput | InvoiceUpdateWithWhereUniqueWithoutMemberInput[]
-    updateMany?: InvoiceUpdateManyWithWhereWithoutMemberInput | InvoiceUpdateManyWithWhereWithoutMemberInput[]
-    deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
   }
 
   export type SubscriptionUpdateManyWithoutMemberNestedInput = {
@@ -58832,6 +58963,20 @@ export namespace Prisma {
     update?: XOR<XOR<EmergencyContactUpdateToOneWithWhereWithoutMemberInput, EmergencyContactUpdateWithoutMemberInput>, EmergencyContactUncheckedUpdateWithoutMemberInput>
   }
 
+  export type InvoiceUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput> | InvoiceCreateWithoutMemberInput[] | InvoiceUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutMemberInput | InvoiceCreateOrConnectWithoutMemberInput[]
+    upsert?: InvoiceUpsertWithWhereUniqueWithoutMemberInput | InvoiceUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: InvoiceCreateManyMemberInputEnvelope
+    set?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    disconnect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    delete?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    update?: InvoiceUpdateWithWhereUniqueWithoutMemberInput | InvoiceUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: InvoiceUpdateManyWithWhereWithoutMemberInput | InvoiceUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+  }
+
   export type MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput = {
     create?: XOR<MedicalInfoCreateWithoutMemberInput, MedicalInfoUncheckedCreateWithoutMemberInput>
     connectOrCreate?: MedicalInfoCreateOrConnectWithoutMemberInput
@@ -58840,20 +58985,6 @@ export namespace Prisma {
     delete?: MedicalInfoWhereInput | boolean
     connect?: MedicalInfoWhereUniqueInput
     update?: XOR<XOR<MedicalInfoUpdateToOneWithWhereWithoutMemberInput, MedicalInfoUpdateWithoutMemberInput>, MedicalInfoUncheckedUpdateWithoutMemberInput>
-  }
-
-  export type MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput = {
-    create?: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput> | MemberCheckInCreateWithoutMemberInput[] | MemberCheckInUncheckedCreateWithoutMemberInput[]
-    connectOrCreate?: MemberCheckInCreateOrConnectWithoutMemberInput | MemberCheckInCreateOrConnectWithoutMemberInput[]
-    upsert?: MemberCheckInUpsertWithWhereUniqueWithoutMemberInput | MemberCheckInUpsertWithWhereUniqueWithoutMemberInput[]
-    createMany?: MemberCheckInCreateManyMemberInputEnvelope
-    set?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
-    disconnect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
-    delete?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
-    connect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
-    update?: MemberCheckInUpdateWithWhereUniqueWithoutMemberInput | MemberCheckInUpdateWithWhereUniqueWithoutMemberInput[]
-    updateMany?: MemberCheckInUpdateManyWithWhereWithoutMemberInput | MemberCheckInUpdateManyWithWhereWithoutMemberInput[]
-    deleteMany?: MemberCheckInScalarWhereInput | MemberCheckInScalarWhereInput[]
   }
 
   export type MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput = {
@@ -58868,6 +58999,20 @@ export namespace Prisma {
     update?: MemberAttendanceUpdateWithWhereUniqueWithoutMemberInput | MemberAttendanceUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: MemberAttendanceUpdateManyWithWhereWithoutMemberInput | MemberAttendanceUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: MemberAttendanceScalarWhereInput | MemberAttendanceScalarWhereInput[]
+  }
+
+  export type MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput> | MemberCheckInCreateWithoutMemberInput[] | MemberCheckInUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: MemberCheckInCreateOrConnectWithoutMemberInput | MemberCheckInCreateOrConnectWithoutMemberInput[]
+    upsert?: MemberCheckInUpsertWithWhereUniqueWithoutMemberInput | MemberCheckInUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: MemberCheckInCreateManyMemberInputEnvelope
+    set?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
+    disconnect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
+    delete?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
+    connect?: MemberCheckInWhereUniqueInput | MemberCheckInWhereUniqueInput[]
+    update?: MemberCheckInUpdateWithWhereUniqueWithoutMemberInput | MemberCheckInUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: MemberCheckInUpdateManyWithWhereWithoutMemberInput | MemberCheckInUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: MemberCheckInScalarWhereInput | MemberCheckInScalarWhereInput[]
   }
 
   export type MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput = {
@@ -58896,20 +59041,6 @@ export namespace Prisma {
     update?: PaymentUpdateWithWhereUniqueWithoutMemberInput | PaymentUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: PaymentUpdateManyWithWhereWithoutMemberInput | PaymentUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
-  }
-
-  export type InvoiceUncheckedUpdateManyWithoutMemberNestedInput = {
-    create?: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput> | InvoiceCreateWithoutMemberInput[] | InvoiceUncheckedCreateWithoutMemberInput[]
-    connectOrCreate?: InvoiceCreateOrConnectWithoutMemberInput | InvoiceCreateOrConnectWithoutMemberInput[]
-    upsert?: InvoiceUpsertWithWhereUniqueWithoutMemberInput | InvoiceUpsertWithWhereUniqueWithoutMemberInput[]
-    createMany?: InvoiceCreateManyMemberInputEnvelope
-    set?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
-    disconnect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
-    delete?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
-    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
-    update?: InvoiceUpdateWithWhereUniqueWithoutMemberInput | InvoiceUpdateWithWhereUniqueWithoutMemberInput[]
-    updateMany?: InvoiceUpdateManyWithWhereWithoutMemberInput | InvoiceUpdateManyWithWhereWithoutMemberInput[]
-    deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
   }
 
   export type SubscriptionUncheckedUpdateManyWithoutMemberNestedInput = {
@@ -59174,16 +59305,16 @@ export namespace Prisma {
     connect?: MaintenanceLogWhereUniqueInput | MaintenanceLogWhereUniqueInput[]
   }
 
-  export type EnumEquipmentStatusFieldUpdateOperationsInput = {
-    set?: $Enums.EquipmentStatus
-  }
-
   export type NullableFloatFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type EnumEquipmentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EquipmentStatus
   }
 
   export type MaintenanceLogUpdateManyWithoutEquipmentNestedInput = {
@@ -59332,12 +59463,6 @@ export namespace Prisma {
     update?: XOR<XOR<RoleHierarchyUpdateToOneWithWhereWithoutRoleInput, RoleHierarchyUpdateWithoutRoleInput>, RoleHierarchyUncheckedUpdateWithoutRoleInput>
   }
 
-  export type CustomRoleCreateNestedOneWithoutHierarchyInput = {
-    create?: XOR<CustomRoleCreateWithoutHierarchyInput, CustomRoleUncheckedCreateWithoutHierarchyInput>
-    connectOrCreate?: CustomRoleCreateOrConnectWithoutHierarchyInput
-    connect?: CustomRoleWhereUniqueInput
-  }
-
   export type RoleHierarchyCreateNestedOneWithoutChildrenInput = {
     create?: XOR<RoleHierarchyCreateWithoutChildrenInput, RoleHierarchyUncheckedCreateWithoutChildrenInput>
     connectOrCreate?: RoleHierarchyCreateOrConnectWithoutChildrenInput
@@ -59351,19 +59476,17 @@ export namespace Prisma {
     connect?: RoleHierarchyWhereUniqueInput | RoleHierarchyWhereUniqueInput[]
   }
 
+  export type CustomRoleCreateNestedOneWithoutHierarchyInput = {
+    create?: XOR<CustomRoleCreateWithoutHierarchyInput, CustomRoleUncheckedCreateWithoutHierarchyInput>
+    connectOrCreate?: CustomRoleCreateOrConnectWithoutHierarchyInput
+    connect?: CustomRoleWhereUniqueInput
+  }
+
   export type RoleHierarchyUncheckedCreateNestedManyWithoutParentInput = {
     create?: XOR<RoleHierarchyCreateWithoutParentInput, RoleHierarchyUncheckedCreateWithoutParentInput> | RoleHierarchyCreateWithoutParentInput[] | RoleHierarchyUncheckedCreateWithoutParentInput[]
     connectOrCreate?: RoleHierarchyCreateOrConnectWithoutParentInput | RoleHierarchyCreateOrConnectWithoutParentInput[]
     createMany?: RoleHierarchyCreateManyParentInputEnvelope
     connect?: RoleHierarchyWhereUniqueInput | RoleHierarchyWhereUniqueInput[]
-  }
-
-  export type CustomRoleUpdateOneRequiredWithoutHierarchyNestedInput = {
-    create?: XOR<CustomRoleCreateWithoutHierarchyInput, CustomRoleUncheckedCreateWithoutHierarchyInput>
-    connectOrCreate?: CustomRoleCreateOrConnectWithoutHierarchyInput
-    upsert?: CustomRoleUpsertWithoutHierarchyInput
-    connect?: CustomRoleWhereUniqueInput
-    update?: XOR<XOR<CustomRoleUpdateToOneWithWhereWithoutHierarchyInput, CustomRoleUpdateWithoutHierarchyInput>, CustomRoleUncheckedUpdateWithoutHierarchyInput>
   }
 
   export type RoleHierarchyUpdateOneWithoutChildrenNestedInput = {
@@ -59388,6 +59511,14 @@ export namespace Prisma {
     update?: RoleHierarchyUpdateWithWhereUniqueWithoutParentInput | RoleHierarchyUpdateWithWhereUniqueWithoutParentInput[]
     updateMany?: RoleHierarchyUpdateManyWithWhereWithoutParentInput | RoleHierarchyUpdateManyWithWhereWithoutParentInput[]
     deleteMany?: RoleHierarchyScalarWhereInput | RoleHierarchyScalarWhereInput[]
+  }
+
+  export type CustomRoleUpdateOneRequiredWithoutHierarchyNestedInput = {
+    create?: XOR<CustomRoleCreateWithoutHierarchyInput, CustomRoleUncheckedCreateWithoutHierarchyInput>
+    connectOrCreate?: CustomRoleCreateOrConnectWithoutHierarchyInput
+    upsert?: CustomRoleUpsertWithoutHierarchyInput
+    connect?: CustomRoleWhereUniqueInput
+    update?: XOR<XOR<CustomRoleUpdateToOneWithWhereWithoutHierarchyInput, CustomRoleUpdateWithoutHierarchyInput>, CustomRoleUncheckedUpdateWithoutHierarchyInput>
   }
 
   export type RoleHierarchyUncheckedUpdateManyWithoutParentNestedInput = {
@@ -59457,9 +59588,15 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -59473,15 +59610,9 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -59556,12 +59687,18 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -59578,18 +59715,12 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumMemberShipTypeFilter<$PrismaModel = never> = {
@@ -59659,16 +59790,6 @@ export namespace Prisma {
     not?: NestedEnumEquipmentStatusFilter<$PrismaModel> | $Enums.EquipmentStatus
   }
 
-  export type NestedEnumEquipmentStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.EquipmentStatus | EnumEquipmentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumEquipmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.EquipmentStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumEquipmentStatusFilter<$PrismaModel>
-    _max?: NestedEnumEquipmentStatusFilter<$PrismaModel>
-  }
-
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -59683,6 +59804,16 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumEquipmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EquipmentStatus | EnumEquipmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EquipmentStatus[] | ListEnumEquipmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEquipmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.EquipmentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEquipmentStatusFilter<$PrismaModel>
+    _max?: NestedEnumEquipmentStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumMaintenanceTypeFilter<$PrismaModel = never> = {
@@ -59723,6 +59854,95 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type AdministrativeProfileCreateWithoutUserInput = {
+    id?: string
+    adminLevel?: string
+    departments?: AdministrativeProfileCreatedepartmentsInput | string[]
+    responsibilities?: AdministrativeProfileCreateresponsibilitiesInput | string[]
+    criticalPermissions?: AdministrativeProfileCreatecriticalPermissionsInput | string[]
+    emergencyContact?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdministrativeProfileUncheckedCreateWithoutUserInput = {
+    id?: string
+    adminLevel?: string
+    departments?: AdministrativeProfileCreatedepartmentsInput | string[]
+    responsibilities?: AdministrativeProfileCreateresponsibilitiesInput | string[]
+    criticalPermissions?: AdministrativeProfileCreatecriticalPermissionsInput | string[]
+    emergencyContact?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdministrativeProfileCreateOrConnectWithoutUserInput = {
+    where: AdministrativeProfileWhereUniqueInput
+    create: XOR<AdministrativeProfileCreateWithoutUserInput, AdministrativeProfileUncheckedCreateWithoutUserInput>
+  }
+
+  export type PermissionAuditCreateWithoutUserInput = {
+    id?: string
+    action: string
+    permissionId: string
+    oldValue?: string | null
+    newValue: string
+    reason?: string | null
+    performedBy?: string | null
+    createdAt?: Date | string
+  }
+
+  export type PermissionAuditUncheckedCreateWithoutUserInput = {
+    id?: string
+    action: string
+    permissionId: string
+    oldValue?: string | null
+    newValue: string
+    reason?: string | null
+    performedBy?: string | null
+    createdAt?: Date | string
+  }
+
+  export type PermissionAuditCreateOrConnectWithoutUserInput = {
+    where: PermissionAuditWhereUniqueInput
+    create: XOR<PermissionAuditCreateWithoutUserInput, PermissionAuditUncheckedCreateWithoutUserInput>
+  }
+
+  export type PermissionAuditCreateManyUserInputEnvelope = {
+    data: PermissionAuditCreateManyUserInput | PermissionAuditCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserAccessLogCreateWithoutUserInput = {
+    id?: string
+    action: string
+    ipAddress?: string | null
+    userAgent?: string | null
+    success: boolean
+    details?: string | null
+    createdAt?: Date | string
+  }
+
+  export type UserAccessLogUncheckedCreateWithoutUserInput = {
+    id?: string
+    action: string
+    ipAddress?: string | null
+    userAgent?: string | null
+    success: boolean
+    details?: string | null
+    createdAt?: Date | string
+  }
+
+  export type UserAccessLogCreateOrConnectWithoutUserInput = {
+    where: UserAccessLogWhereUniqueInput
+    create: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserAccessLogCreateManyUserInputEnvelope = {
+    data: UserAccessLogCreateManyUserInput | UserAccessLogCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserAddressCreateWithoutUserInput = {
@@ -59775,56 +59995,34 @@ export namespace Prisma {
     create: XOR<UserEmergencyContactCreateWithoutUserInput, UserEmergencyContactUncheckedCreateWithoutUserInput>
   }
 
-  export type UserSocialMediaCreateWithoutUserInput = {
-    linkedin?: string | null
-    twitter?: string | null
-    facebook?: string | null
-    instagram?: string | null
+  export type UserIPRestrictionCreateWithoutUserInput = {
+    id?: string
+    ipAddress: string
+    type: string
+    reason?: string | null
+    expiresAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type UserSocialMediaUncheckedCreateWithoutUserInput = {
-    id?: number
-    linkedin?: string | null
-    twitter?: string | null
-    facebook?: string | null
-    instagram?: string | null
+  export type UserIPRestrictionUncheckedCreateWithoutUserInput = {
+    id?: string
+    ipAddress: string
+    type: string
+    reason?: string | null
+    expiresAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type UserSocialMediaCreateOrConnectWithoutUserInput = {
-    where: UserSocialMediaWhereUniqueInput
-    create: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
+  export type UserIPRestrictionCreateOrConnectWithoutUserInput = {
+    where: UserIPRestrictionWhereUniqueInput
+    create: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput>
   }
 
-  export type UserPreferencesCreateWithoutUserInput = {
-    theme?: string
-    language?: string
-    timezone?: string
-    dateFormat?: string
-    timeFormat?: string
-    currency?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type UserPreferencesUncheckedCreateWithoutUserInput = {
-    id?: number
-    theme?: string
-    language?: string
-    timezone?: string
-    dateFormat?: string
-    timeFormat?: string
-    currency?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type UserPreferencesCreateOrConnectWithoutUserInput = {
-    where: UserPreferencesWhereUniqueInput
-    create: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
+  export type UserIPRestrictionCreateManyUserInputEnvelope = {
+    data: UserIPRestrictionCreateManyUserInput | UserIPRestrictionCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserNotificationSettingsCreateWithoutUserInput = {
@@ -59863,6 +60061,34 @@ export namespace Prisma {
   export type UserNotificationSettingsCreateOrConnectWithoutUserInput = {
     where: UserNotificationSettingsWhereUniqueInput
     create: XOR<UserNotificationSettingsCreateWithoutUserInput, UserNotificationSettingsUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserPreferencesCreateWithoutUserInput = {
+    theme?: string
+    language?: string
+    timezone?: string
+    dateFormat?: string
+    timeFormat?: string
+    currency?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserPreferencesUncheckedCreateWithoutUserInput = {
+    id?: number
+    theme?: string
+    language?: string
+    timezone?: string
+    dateFormat?: string
+    timeFormat?: string
+    currency?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserPreferencesCreateOrConnectWithoutUserInput = {
+    where: UserPreferencesWhereUniqueInput
+    create: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
   }
 
   export type UserPrivacySettingsCreateWithoutUserInput = {
@@ -59929,123 +60155,122 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserAccessLogCreateWithoutUserInput = {
-    id?: string
-    action: string
-    ipAddress?: string | null
-    userAgent?: string | null
-    success: boolean
-    details?: string | null
-    createdAt?: Date | string
-  }
-
-  export type UserAccessLogUncheckedCreateWithoutUserInput = {
-    id?: string
-    action: string
-    ipAddress?: string | null
-    userAgent?: string | null
-    success: boolean
-    details?: string | null
-    createdAt?: Date | string
-  }
-
-  export type UserAccessLogCreateOrConnectWithoutUserInput = {
-    where: UserAccessLogWhereUniqueInput
-    create: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput>
-  }
-
-  export type UserAccessLogCreateManyUserInputEnvelope = {
-    data: UserAccessLogCreateManyUserInput | UserAccessLogCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type UserIPRestrictionCreateWithoutUserInput = {
-    id?: string
-    ipAddress: string
-    type: string
-    reason?: string | null
-    expiresAt?: Date | string | null
+  export type UserSocialMediaCreateWithoutUserInput = {
+    linkedin?: string | null
+    twitter?: string | null
+    facebook?: string | null
+    instagram?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type UserIPRestrictionUncheckedCreateWithoutUserInput = {
-    id?: string
-    ipAddress: string
-    type: string
-    reason?: string | null
-    expiresAt?: Date | string | null
+  export type UserSocialMediaUncheckedCreateWithoutUserInput = {
+    id?: number
+    linkedin?: string | null
+    twitter?: string | null
+    facebook?: string | null
+    instagram?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type UserIPRestrictionCreateOrConnectWithoutUserInput = {
-    where: UserIPRestrictionWhereUniqueInput
-    create: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput>
+  export type UserSocialMediaCreateOrConnectWithoutUserInput = {
+    where: UserSocialMediaWhereUniqueInput
+    create: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
   }
 
-  export type UserIPRestrictionCreateManyUserInputEnvelope = {
-    data: UserIPRestrictionCreateManyUserInput | UserIPRestrictionCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AdministrativeProfileCreateWithoutUserInput = {
-    id?: string
-    adminLevel?: string
-    departments?: AdministrativeProfileCreatedepartmentsInput | string[]
-    responsibilities?: AdministrativeProfileCreateresponsibilitiesInput | string[]
-    criticalPermissions?: AdministrativeProfileCreatecriticalPermissionsInput | string[]
-    emergencyContact?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AdministrativeProfileUncheckedCreateWithoutUserInput = {
-    id?: string
-    adminLevel?: string
-    departments?: AdministrativeProfileCreatedepartmentsInput | string[]
-    responsibilities?: AdministrativeProfileCreateresponsibilitiesInput | string[]
-    criticalPermissions?: AdministrativeProfileCreatecriticalPermissionsInput | string[]
-    emergencyContact?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AdministrativeProfileCreateOrConnectWithoutUserInput = {
-    where: AdministrativeProfileWhereUniqueInput
+  export type AdministrativeProfileUpsertWithoutUserInput = {
+    update: XOR<AdministrativeProfileUpdateWithoutUserInput, AdministrativeProfileUncheckedUpdateWithoutUserInput>
     create: XOR<AdministrativeProfileCreateWithoutUserInput, AdministrativeProfileUncheckedCreateWithoutUserInput>
+    where?: AdministrativeProfileWhereInput
   }
 
-  export type PermissionAuditCreateWithoutUserInput = {
-    id?: string
-    action: string
-    permissionId: string
-    oldValue?: string | null
-    newValue: string
-    reason?: string | null
-    performedBy?: string | null
-    createdAt?: Date | string
+  export type AdministrativeProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: AdministrativeProfileWhereInput
+    data: XOR<AdministrativeProfileUpdateWithoutUserInput, AdministrativeProfileUncheckedUpdateWithoutUserInput>
   }
 
-  export type PermissionAuditUncheckedCreateWithoutUserInput = {
-    id?: string
-    action: string
-    permissionId: string
-    oldValue?: string | null
-    newValue: string
-    reason?: string | null
-    performedBy?: string | null
-    createdAt?: Date | string
+  export type AdministrativeProfileUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminLevel?: StringFieldUpdateOperationsInput | string
+    departments?: AdministrativeProfileUpdatedepartmentsInput | string[]
+    responsibilities?: AdministrativeProfileUpdateresponsibilitiesInput | string[]
+    criticalPermissions?: AdministrativeProfileUpdatecriticalPermissionsInput | string[]
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PermissionAuditCreateOrConnectWithoutUserInput = {
+  export type AdministrativeProfileUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminLevel?: StringFieldUpdateOperationsInput | string
+    departments?: AdministrativeProfileUpdatedepartmentsInput | string[]
+    responsibilities?: AdministrativeProfileUpdateresponsibilitiesInput | string[]
+    criticalPermissions?: AdministrativeProfileUpdatecriticalPermissionsInput | string[]
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PermissionAuditUpsertWithWhereUniqueWithoutUserInput = {
     where: PermissionAuditWhereUniqueInput
+    update: XOR<PermissionAuditUpdateWithoutUserInput, PermissionAuditUncheckedUpdateWithoutUserInput>
     create: XOR<PermissionAuditCreateWithoutUserInput, PermissionAuditUncheckedCreateWithoutUserInput>
   }
 
-  export type PermissionAuditCreateManyUserInputEnvelope = {
-    data: PermissionAuditCreateManyUserInput | PermissionAuditCreateManyUserInput[]
-    skipDuplicates?: boolean
+  export type PermissionAuditUpdateWithWhereUniqueWithoutUserInput = {
+    where: PermissionAuditWhereUniqueInput
+    data: XOR<PermissionAuditUpdateWithoutUserInput, PermissionAuditUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PermissionAuditUpdateManyWithWhereWithoutUserInput = {
+    where: PermissionAuditScalarWhereInput
+    data: XOR<PermissionAuditUpdateManyMutationInput, PermissionAuditUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PermissionAuditScalarWhereInput = {
+    AND?: PermissionAuditScalarWhereInput | PermissionAuditScalarWhereInput[]
+    OR?: PermissionAuditScalarWhereInput[]
+    NOT?: PermissionAuditScalarWhereInput | PermissionAuditScalarWhereInput[]
+    id?: StringFilter<"PermissionAudit"> | string
+    userId?: IntFilter<"PermissionAudit"> | number
+    action?: StringFilter<"PermissionAudit"> | string
+    permissionId?: StringFilter<"PermissionAudit"> | string
+    oldValue?: StringNullableFilter<"PermissionAudit"> | string | null
+    newValue?: StringFilter<"PermissionAudit"> | string
+    reason?: StringNullableFilter<"PermissionAudit"> | string | null
+    performedBy?: StringNullableFilter<"PermissionAudit"> | string | null
+    createdAt?: DateTimeFilter<"PermissionAudit"> | Date | string
+  }
+
+  export type UserAccessLogUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserAccessLogWhereUniqueInput
+    update: XOR<UserAccessLogUpdateWithoutUserInput, UserAccessLogUncheckedUpdateWithoutUserInput>
+    create: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserAccessLogUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserAccessLogWhereUniqueInput
+    data: XOR<UserAccessLogUpdateWithoutUserInput, UserAccessLogUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserAccessLogUpdateManyWithWhereWithoutUserInput = {
+    where: UserAccessLogScalarWhereInput
+    data: XOR<UserAccessLogUpdateManyMutationInput, UserAccessLogUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserAccessLogScalarWhereInput = {
+    AND?: UserAccessLogScalarWhereInput | UserAccessLogScalarWhereInput[]
+    OR?: UserAccessLogScalarWhereInput[]
+    NOT?: UserAccessLogScalarWhereInput | UserAccessLogScalarWhereInput[]
+    id?: StringFilter<"UserAccessLog"> | string
+    userId?: IntFilter<"UserAccessLog"> | number
+    action?: StringFilter<"UserAccessLog"> | string
+    ipAddress?: StringNullableFilter<"UserAccessLog"> | string | null
+    userAgent?: StringNullableFilter<"UserAccessLog"> | string | null
+    success?: BoolFilter<"UserAccessLog"> | boolean
+    details?: StringNullableFilter<"UserAccessLog"> | string | null
+    createdAt?: DateTimeFilter<"UserAccessLog"> | Date | string
   }
 
   export type UserAddressUpsertWithoutUserInput = {
@@ -60110,68 +60335,34 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserSocialMediaUpsertWithoutUserInput = {
-    update: XOR<UserSocialMediaUpdateWithoutUserInput, UserSocialMediaUncheckedUpdateWithoutUserInput>
-    create: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
-    where?: UserSocialMediaWhereInput
+  export type UserIPRestrictionUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserIPRestrictionWhereUniqueInput
+    update: XOR<UserIPRestrictionUpdateWithoutUserInput, UserIPRestrictionUncheckedUpdateWithoutUserInput>
+    create: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput>
   }
 
-  export type UserSocialMediaUpdateToOneWithWhereWithoutUserInput = {
-    where?: UserSocialMediaWhereInput
-    data: XOR<UserSocialMediaUpdateWithoutUserInput, UserSocialMediaUncheckedUpdateWithoutUserInput>
+  export type UserIPRestrictionUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserIPRestrictionWhereUniqueInput
+    data: XOR<UserIPRestrictionUpdateWithoutUserInput, UserIPRestrictionUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserSocialMediaUpdateWithoutUserInput = {
-    linkedin?: NullableStringFieldUpdateOperationsInput | string | null
-    twitter?: NullableStringFieldUpdateOperationsInput | string | null
-    facebook?: NullableStringFieldUpdateOperationsInput | string | null
-    instagram?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type UserIPRestrictionUpdateManyWithWhereWithoutUserInput = {
+    where: UserIPRestrictionScalarWhereInput
+    data: XOR<UserIPRestrictionUpdateManyMutationInput, UserIPRestrictionUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type UserSocialMediaUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    linkedin?: NullableStringFieldUpdateOperationsInput | string | null
-    twitter?: NullableStringFieldUpdateOperationsInput | string | null
-    facebook?: NullableStringFieldUpdateOperationsInput | string | null
-    instagram?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UserPreferencesUpsertWithoutUserInput = {
-    update: XOR<UserPreferencesUpdateWithoutUserInput, UserPreferencesUncheckedUpdateWithoutUserInput>
-    create: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
-    where?: UserPreferencesWhereInput
-  }
-
-  export type UserPreferencesUpdateToOneWithWhereWithoutUserInput = {
-    where?: UserPreferencesWhereInput
-    data: XOR<UserPreferencesUpdateWithoutUserInput, UserPreferencesUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserPreferencesUpdateWithoutUserInput = {
-    theme?: StringFieldUpdateOperationsInput | string
-    language?: StringFieldUpdateOperationsInput | string
-    timezone?: StringFieldUpdateOperationsInput | string
-    dateFormat?: StringFieldUpdateOperationsInput | string
-    timeFormat?: StringFieldUpdateOperationsInput | string
-    currency?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UserPreferencesUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    theme?: StringFieldUpdateOperationsInput | string
-    language?: StringFieldUpdateOperationsInput | string
-    timezone?: StringFieldUpdateOperationsInput | string
-    dateFormat?: StringFieldUpdateOperationsInput | string
-    timeFormat?: StringFieldUpdateOperationsInput | string
-    currency?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type UserIPRestrictionScalarWhereInput = {
+    AND?: UserIPRestrictionScalarWhereInput | UserIPRestrictionScalarWhereInput[]
+    OR?: UserIPRestrictionScalarWhereInput[]
+    NOT?: UserIPRestrictionScalarWhereInput | UserIPRestrictionScalarWhereInput[]
+    id?: StringFilter<"UserIPRestriction"> | string
+    userId?: IntFilter<"UserIPRestriction"> | number
+    ipAddress?: StringFilter<"UserIPRestriction"> | string
+    type?: StringFilter<"UserIPRestriction"> | string
+    reason?: StringNullableFilter<"UserIPRestriction"> | string | null
+    expiresAt?: DateTimeNullableFilter<"UserIPRestriction"> | Date | string | null
+    createdAt?: DateTimeFilter<"UserIPRestriction"> | Date | string
+    updatedAt?: DateTimeFilter<"UserIPRestriction"> | Date | string
   }
 
   export type UserNotificationSettingsUpsertWithoutUserInput = {
@@ -60214,6 +60405,40 @@ export namespace Prisma {
     sms_loginAlerts?: BoolFieldUpdateOperationsInput | boolean
     sms_securityUpdates?: BoolFieldUpdateOperationsInput | boolean
     sms_emergencyAlerts?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserPreferencesUpsertWithoutUserInput = {
+    update: XOR<UserPreferencesUpdateWithoutUserInput, UserPreferencesUncheckedUpdateWithoutUserInput>
+    create: XOR<UserPreferencesCreateWithoutUserInput, UserPreferencesUncheckedCreateWithoutUserInput>
+    where?: UserPreferencesWhereInput
+  }
+
+  export type UserPreferencesUpdateToOneWithWhereWithoutUserInput = {
+    where?: UserPreferencesWhereInput
+    data: XOR<UserPreferencesUpdateWithoutUserInput, UserPreferencesUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserPreferencesUpdateWithoutUserInput = {
+    theme?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    dateFormat?: StringFieldUpdateOperationsInput | string
+    timeFormat?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserPreferencesUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    theme?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    dateFormat?: StringFieldUpdateOperationsInput | string
+    timeFormat?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60284,128 +60509,34 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"UserSession"> | Date | string
   }
 
-  export type UserAccessLogUpsertWithWhereUniqueWithoutUserInput = {
-    where: UserAccessLogWhereUniqueInput
-    update: XOR<UserAccessLogUpdateWithoutUserInput, UserAccessLogUncheckedUpdateWithoutUserInput>
-    create: XOR<UserAccessLogCreateWithoutUserInput, UserAccessLogUncheckedCreateWithoutUserInput>
+  export type UserSocialMediaUpsertWithoutUserInput = {
+    update: XOR<UserSocialMediaUpdateWithoutUserInput, UserSocialMediaUncheckedUpdateWithoutUserInput>
+    create: XOR<UserSocialMediaCreateWithoutUserInput, UserSocialMediaUncheckedCreateWithoutUserInput>
+    where?: UserSocialMediaWhereInput
   }
 
-  export type UserAccessLogUpdateWithWhereUniqueWithoutUserInput = {
-    where: UserAccessLogWhereUniqueInput
-    data: XOR<UserAccessLogUpdateWithoutUserInput, UserAccessLogUncheckedUpdateWithoutUserInput>
+  export type UserSocialMediaUpdateToOneWithWhereWithoutUserInput = {
+    where?: UserSocialMediaWhereInput
+    data: XOR<UserSocialMediaUpdateWithoutUserInput, UserSocialMediaUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserAccessLogUpdateManyWithWhereWithoutUserInput = {
-    where: UserAccessLogScalarWhereInput
-    data: XOR<UserAccessLogUpdateManyMutationInput, UserAccessLogUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type UserAccessLogScalarWhereInput = {
-    AND?: UserAccessLogScalarWhereInput | UserAccessLogScalarWhereInput[]
-    OR?: UserAccessLogScalarWhereInput[]
-    NOT?: UserAccessLogScalarWhereInput | UserAccessLogScalarWhereInput[]
-    id?: StringFilter<"UserAccessLog"> | string
-    userId?: IntFilter<"UserAccessLog"> | number
-    action?: StringFilter<"UserAccessLog"> | string
-    ipAddress?: StringNullableFilter<"UserAccessLog"> | string | null
-    userAgent?: StringNullableFilter<"UserAccessLog"> | string | null
-    success?: BoolFilter<"UserAccessLog"> | boolean
-    details?: StringNullableFilter<"UserAccessLog"> | string | null
-    createdAt?: DateTimeFilter<"UserAccessLog"> | Date | string
-  }
-
-  export type UserIPRestrictionUpsertWithWhereUniqueWithoutUserInput = {
-    where: UserIPRestrictionWhereUniqueInput
-    update: XOR<UserIPRestrictionUpdateWithoutUserInput, UserIPRestrictionUncheckedUpdateWithoutUserInput>
-    create: XOR<UserIPRestrictionCreateWithoutUserInput, UserIPRestrictionUncheckedCreateWithoutUserInput>
-  }
-
-  export type UserIPRestrictionUpdateWithWhereUniqueWithoutUserInput = {
-    where: UserIPRestrictionWhereUniqueInput
-    data: XOR<UserIPRestrictionUpdateWithoutUserInput, UserIPRestrictionUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserIPRestrictionUpdateManyWithWhereWithoutUserInput = {
-    where: UserIPRestrictionScalarWhereInput
-    data: XOR<UserIPRestrictionUpdateManyMutationInput, UserIPRestrictionUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type UserIPRestrictionScalarWhereInput = {
-    AND?: UserIPRestrictionScalarWhereInput | UserIPRestrictionScalarWhereInput[]
-    OR?: UserIPRestrictionScalarWhereInput[]
-    NOT?: UserIPRestrictionScalarWhereInput | UserIPRestrictionScalarWhereInput[]
-    id?: StringFilter<"UserIPRestriction"> | string
-    userId?: IntFilter<"UserIPRestriction"> | number
-    ipAddress?: StringFilter<"UserIPRestriction"> | string
-    type?: StringFilter<"UserIPRestriction"> | string
-    reason?: StringNullableFilter<"UserIPRestriction"> | string | null
-    expiresAt?: DateTimeNullableFilter<"UserIPRestriction"> | Date | string | null
-    createdAt?: DateTimeFilter<"UserIPRestriction"> | Date | string
-    updatedAt?: DateTimeFilter<"UserIPRestriction"> | Date | string
-  }
-
-  export type AdministrativeProfileUpsertWithoutUserInput = {
-    update: XOR<AdministrativeProfileUpdateWithoutUserInput, AdministrativeProfileUncheckedUpdateWithoutUserInput>
-    create: XOR<AdministrativeProfileCreateWithoutUserInput, AdministrativeProfileUncheckedCreateWithoutUserInput>
-    where?: AdministrativeProfileWhereInput
-  }
-
-  export type AdministrativeProfileUpdateToOneWithWhereWithoutUserInput = {
-    where?: AdministrativeProfileWhereInput
-    data: XOR<AdministrativeProfileUpdateWithoutUserInput, AdministrativeProfileUncheckedUpdateWithoutUserInput>
-  }
-
-  export type AdministrativeProfileUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    adminLevel?: StringFieldUpdateOperationsInput | string
-    departments?: AdministrativeProfileUpdatedepartmentsInput | string[]
-    responsibilities?: AdministrativeProfileUpdateresponsibilitiesInput | string[]
-    criticalPermissions?: AdministrativeProfileUpdatecriticalPermissionsInput | string[]
-    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+  export type UserSocialMediaUpdateWithoutUserInput = {
+    linkedin?: NullableStringFieldUpdateOperationsInput | string | null
+    twitter?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AdministrativeProfileUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    adminLevel?: StringFieldUpdateOperationsInput | string
-    departments?: AdministrativeProfileUpdatedepartmentsInput | string[]
-    responsibilities?: AdministrativeProfileUpdateresponsibilitiesInput | string[]
-    criticalPermissions?: AdministrativeProfileUpdatecriticalPermissionsInput | string[]
-    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+  export type UserSocialMediaUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    linkedin?: NullableStringFieldUpdateOperationsInput | string | null
+    twitter?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PermissionAuditUpsertWithWhereUniqueWithoutUserInput = {
-    where: PermissionAuditWhereUniqueInput
-    update: XOR<PermissionAuditUpdateWithoutUserInput, PermissionAuditUncheckedUpdateWithoutUserInput>
-    create: XOR<PermissionAuditCreateWithoutUserInput, PermissionAuditUncheckedCreateWithoutUserInput>
-  }
-
-  export type PermissionAuditUpdateWithWhereUniqueWithoutUserInput = {
-    where: PermissionAuditWhereUniqueInput
-    data: XOR<PermissionAuditUpdateWithoutUserInput, PermissionAuditUncheckedUpdateWithoutUserInput>
-  }
-
-  export type PermissionAuditUpdateManyWithWhereWithoutUserInput = {
-    where: PermissionAuditScalarWhereInput
-    data: XOR<PermissionAuditUpdateManyMutationInput, PermissionAuditUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type PermissionAuditScalarWhereInput = {
-    AND?: PermissionAuditScalarWhereInput | PermissionAuditScalarWhereInput[]
-    OR?: PermissionAuditScalarWhereInput[]
-    NOT?: PermissionAuditScalarWhereInput | PermissionAuditScalarWhereInput[]
-    id?: StringFilter<"PermissionAudit"> | string
-    userId?: IntFilter<"PermissionAudit"> | number
-    action?: StringFilter<"PermissionAudit"> | string
-    permissionId?: StringFilter<"PermissionAudit"> | string
-    oldValue?: StringNullableFilter<"PermissionAudit"> | string | null
-    newValue?: StringFilter<"PermissionAudit"> | string
-    reason?: StringNullableFilter<"PermissionAudit"> | string | null
-    performedBy?: StringNullableFilter<"PermissionAudit"> | string | null
-    createdAt?: DateTimeFilter<"PermissionAudit"> | Date | string
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -60416,31 +60547,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
+    address?: UserAddressCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -60452,31 +60583,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
+    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -60503,31 +60634,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
+    address?: UserAddressUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -60539,31 +60670,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
+    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAccess_logsInput = {
@@ -60574,31 +60705,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
-    sessions?: UserSessionCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    address?: UserAddressCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccess_logsInput = {
@@ -60610,31 +60741,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
-    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccess_logsInput = {
@@ -60661,31 +60792,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    address?: UserAddressUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccess_logsInput = {
@@ -60697,31 +60828,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutIp_restrictionsInput = {
@@ -60732,31 +60863,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
-    sessions?: UserSessionCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
+    address?: UserAddressCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
+    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutIp_restrictionsInput = {
@@ -60768,31 +60899,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
-    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
+    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
+    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutIp_restrictionsInput = {
@@ -60819,31 +60950,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
+    address?: UserAddressUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutIp_restrictionsInput = {
@@ -60855,31 +60986,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
+    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAddressInput = {
@@ -60890,31 +61021,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
-    sessions?: UserSessionCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
+    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAddressInput = {
@@ -60926,31 +61057,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
-    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
+    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAddressInput = {
@@ -60977,31 +61108,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressInput = {
@@ -61013,31 +61144,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutEmergency_contactInput = {
@@ -61048,31 +61179,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
-    sessions?: UserSessionCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
+    address?: UserAddressCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmergency_contactInput = {
@@ -61084,31 +61215,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
-    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
+    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmergency_contactInput = {
@@ -61135,31 +61266,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
+    address?: UserAddressUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmergency_contactInput = {
@@ -61171,31 +61302,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
+    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSocial_mediaInput = {
@@ -61206,31 +61337,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
-    sessions?: UserSessionCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
+    address?: UserAddressCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSocial_mediaInput = {
@@ -61242,31 +61373,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
-    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
-    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
+    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
+    privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSocial_mediaInput = {
@@ -61293,31 +61424,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
+    address?: UserAddressUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSocial_mediaInput = {
@@ -61329,31 +61460,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
-    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
+    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
+    privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPreferencesInput = {
@@ -61364,31 +61495,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
+    admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
+    permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
     address?: UserAddressCreateNestedOneWithoutUserInput
     emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
     notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
     privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
-    admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
-    permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPreferencesInput = {
@@ -61400,31 +61531,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
+    admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
+    permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
     address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
     emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
     notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
     privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
-    admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
-    permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPreferencesInput = {
@@ -61451,31 +61582,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
+    permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
     address?: UserAddressUpdateOneWithoutUserNestedInput
     emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
     notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
     privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
-    admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
-    permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreferencesInput = {
@@ -61487,31 +61618,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
+    permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
     address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
     emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
     notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
     privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
-    admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
-    permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotification_settingsInput = {
@@ -61522,31 +61653,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
+    admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
+    permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
     address?: UserAddressCreateNestedOneWithoutUserInput
     emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
     preferences?: UserPreferencesCreateNestedOneWithoutUserInput
     privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
-    admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
-    permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotification_settingsInput = {
@@ -61558,31 +61689,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
+    admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
+    permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
     address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
     emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
     preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
     privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
-    admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
-    permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotification_settingsInput = {
@@ -61609,31 +61740,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
+    permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
     address?: UserAddressUpdateOneWithoutUserNestedInput
     emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
     preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
     privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
-    admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
-    permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotification_settingsInput = {
@@ -61645,31 +61776,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
+    permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
     address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
     emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
     preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
     privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
-    admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
-    permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPrivacy_settingsInput = {
@@ -61680,31 +61811,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
-    sessions?: UserSessionCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
+    address?: UserAddressCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPrivacy_settingsInput = {
@@ -61716,31 +61847,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
-    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
-    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
-    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
-    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
     admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
     permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
+    address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
+    emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
+    notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPrivacy_settingsInput = {
@@ -61767,31 +61898,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
+    address?: UserAddressUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPrivacy_settingsInput = {
@@ -61803,31 +61934,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
-    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
-    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
     admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
     permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
+    address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
+    emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
+    notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type AddressCreateWithoutMemberInput = {
@@ -61882,6 +62013,30 @@ export namespace Prisma {
     create: XOR<EmergencyContactCreateWithoutMemberInput, EmergencyContactUncheckedCreateWithoutMemberInput>
   }
 
+  export type InvoiceCreateWithoutMemberInput = {
+    id?: string
+    amount: number
+    details: string
+    createdAt?: Date | string
+  }
+
+  export type InvoiceUncheckedCreateWithoutMemberInput = {
+    id?: string
+    amount: number
+    details: string
+    createdAt?: Date | string
+  }
+
+  export type InvoiceCreateOrConnectWithoutMemberInput = {
+    where: InvoiceWhereUniqueInput
+    create: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput>
+  }
+
+  export type InvoiceCreateManyMemberInputEnvelope = {
+    data: InvoiceCreateManyMemberInput | InvoiceCreateManyMemberInput[]
+    skipDuplicates?: boolean
+  }
+
   export type MedicalInfoCreateWithoutMemberInput = {
     id?: string
     fitness_goals?: MedicalInfoCreatefitness_goalsInput | string[]
@@ -61907,36 +62062,6 @@ export namespace Prisma {
   export type MedicalInfoCreateOrConnectWithoutMemberInput = {
     where: MedicalInfoWhereUniqueInput
     create: XOR<MedicalInfoCreateWithoutMemberInput, MedicalInfoUncheckedCreateWithoutMemberInput>
-  }
-
-  export type MemberCheckInCreateWithoutMemberInput = {
-    id?: string
-    checkInTime?: Date | string
-    checkOutTime?: Date | string | null
-    location?: string | null
-    notes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MemberCheckInUncheckedCreateWithoutMemberInput = {
-    id?: string
-    checkInTime?: Date | string
-    checkOutTime?: Date | string | null
-    location?: string | null
-    notes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MemberCheckInCreateOrConnectWithoutMemberInput = {
-    where: MemberCheckInWhereUniqueInput
-    create: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput>
-  }
-
-  export type MemberCheckInCreateManyMemberInputEnvelope = {
-    data: MemberCheckInCreateManyMemberInput | MemberCheckInCreateManyMemberInput[]
-    skipDuplicates?: boolean
   }
 
   export type MemberAttendanceCreateWithoutMemberInput = {
@@ -61966,6 +62091,36 @@ export namespace Prisma {
 
   export type MemberAttendanceCreateManyMemberInputEnvelope = {
     data: MemberAttendanceCreateManyMemberInput | MemberAttendanceCreateManyMemberInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MemberCheckInCreateWithoutMemberInput = {
+    id?: string
+    checkInTime?: Date | string
+    checkOutTime?: Date | string | null
+    location?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MemberCheckInUncheckedCreateWithoutMemberInput = {
+    id?: string
+    checkInTime?: Date | string
+    checkOutTime?: Date | string | null
+    location?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MemberCheckInCreateOrConnectWithoutMemberInput = {
+    where: MemberCheckInWhereUniqueInput
+    create: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput>
+  }
+
+  export type MemberCheckInCreateManyMemberInputEnvelope = {
+    data: MemberCheckInCreateManyMemberInput | MemberCheckInCreateManyMemberInput[]
     skipDuplicates?: boolean
   }
 
@@ -62010,6 +62165,10 @@ export namespace Prisma {
     amount: number
     method: string
     createdAt?: Date | string
+    status?: string
+    description?: string | null
+    reference?: string | null
+    updatedAt?: Date | string
   }
 
   export type PaymentUncheckedCreateWithoutMemberInput = {
@@ -62017,6 +62176,10 @@ export namespace Prisma {
     amount: number
     method: string
     createdAt?: Date | string
+    status?: string
+    description?: string | null
+    reference?: string | null
+    updatedAt?: Date | string
   }
 
   export type PaymentCreateOrConnectWithoutMemberInput = {
@@ -62026,30 +62189,6 @@ export namespace Prisma {
 
   export type PaymentCreateManyMemberInputEnvelope = {
     data: PaymentCreateManyMemberInput | PaymentCreateManyMemberInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type InvoiceCreateWithoutMemberInput = {
-    id?: string
-    amount: number
-    details: string
-    createdAt?: Date | string
-  }
-
-  export type InvoiceUncheckedCreateWithoutMemberInput = {
-    id?: string
-    amount: number
-    details: string
-    createdAt?: Date | string
-  }
-
-  export type InvoiceCreateOrConnectWithoutMemberInput = {
-    where: InvoiceWhereUniqueInput
-    create: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput>
-  }
-
-  export type InvoiceCreateManyMemberInputEnvelope = {
-    data: InvoiceCreateManyMemberInput | InvoiceCreateManyMemberInput[]
     skipDuplicates?: boolean
   }
 
@@ -62141,6 +62280,33 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InvoiceUpsertWithWhereUniqueWithoutMemberInput = {
+    where: InvoiceWhereUniqueInput
+    update: XOR<InvoiceUpdateWithoutMemberInput, InvoiceUncheckedUpdateWithoutMemberInput>
+    create: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput>
+  }
+
+  export type InvoiceUpdateWithWhereUniqueWithoutMemberInput = {
+    where: InvoiceWhereUniqueInput
+    data: XOR<InvoiceUpdateWithoutMemberInput, InvoiceUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type InvoiceUpdateManyWithWhereWithoutMemberInput = {
+    where: InvoiceScalarWhereInput
+    data: XOR<InvoiceUpdateManyMutationInput, InvoiceUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type InvoiceScalarWhereInput = {
+    AND?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+    OR?: InvoiceScalarWhereInput[]
+    NOT?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+    id?: StringFilter<"Invoice"> | string
+    memberId?: StringFilter<"Invoice"> | string
+    amount?: FloatFilter<"Invoice"> | number
+    details?: StringFilter<"Invoice"> | string
+    createdAt?: DateTimeFilter<"Invoice"> | Date | string
+  }
+
   export type MedicalInfoUpsertWithoutMemberInput = {
     update: XOR<MedicalInfoUpdateWithoutMemberInput, MedicalInfoUncheckedUpdateWithoutMemberInput>
     create: XOR<MedicalInfoCreateWithoutMemberInput, MedicalInfoUncheckedCreateWithoutMemberInput>
@@ -62174,36 +62340,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MemberCheckInUpsertWithWhereUniqueWithoutMemberInput = {
-    where: MemberCheckInWhereUniqueInput
-    update: XOR<MemberCheckInUpdateWithoutMemberInput, MemberCheckInUncheckedUpdateWithoutMemberInput>
-    create: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput>
-  }
-
-  export type MemberCheckInUpdateWithWhereUniqueWithoutMemberInput = {
-    where: MemberCheckInWhereUniqueInput
-    data: XOR<MemberCheckInUpdateWithoutMemberInput, MemberCheckInUncheckedUpdateWithoutMemberInput>
-  }
-
-  export type MemberCheckInUpdateManyWithWhereWithoutMemberInput = {
-    where: MemberCheckInScalarWhereInput
-    data: XOR<MemberCheckInUpdateManyMutationInput, MemberCheckInUncheckedUpdateManyWithoutMemberInput>
-  }
-
-  export type MemberCheckInScalarWhereInput = {
-    AND?: MemberCheckInScalarWhereInput | MemberCheckInScalarWhereInput[]
-    OR?: MemberCheckInScalarWhereInput[]
-    NOT?: MemberCheckInScalarWhereInput | MemberCheckInScalarWhereInput[]
-    id?: StringFilter<"MemberCheckIn"> | string
-    memberId?: StringFilter<"MemberCheckIn"> | string
-    checkInTime?: DateTimeFilter<"MemberCheckIn"> | Date | string
-    checkOutTime?: DateTimeNullableFilter<"MemberCheckIn"> | Date | string | null
-    location?: StringNullableFilter<"MemberCheckIn"> | string | null
-    notes?: StringNullableFilter<"MemberCheckIn"> | string | null
-    createdAt?: DateTimeFilter<"MemberCheckIn"> | Date | string
-    updatedAt?: DateTimeFilter<"MemberCheckIn"> | Date | string
-  }
-
   export type MemberAttendanceUpsertWithWhereUniqueWithoutMemberInput = {
     where: MemberAttendanceWhereUniqueInput
     update: XOR<MemberAttendanceUpdateWithoutMemberInput, MemberAttendanceUncheckedUpdateWithoutMemberInput>
@@ -62232,6 +62368,36 @@ export namespace Prisma {
     duration?: IntNullableFilter<"MemberAttendance"> | number | null
     createdAt?: DateTimeFilter<"MemberAttendance"> | Date | string
     updatedAt?: DateTimeFilter<"MemberAttendance"> | Date | string
+  }
+
+  export type MemberCheckInUpsertWithWhereUniqueWithoutMemberInput = {
+    where: MemberCheckInWhereUniqueInput
+    update: XOR<MemberCheckInUpdateWithoutMemberInput, MemberCheckInUncheckedUpdateWithoutMemberInput>
+    create: XOR<MemberCheckInCreateWithoutMemberInput, MemberCheckInUncheckedCreateWithoutMemberInput>
+  }
+
+  export type MemberCheckInUpdateWithWhereUniqueWithoutMemberInput = {
+    where: MemberCheckInWhereUniqueInput
+    data: XOR<MemberCheckInUpdateWithoutMemberInput, MemberCheckInUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type MemberCheckInUpdateManyWithWhereWithoutMemberInput = {
+    where: MemberCheckInScalarWhereInput
+    data: XOR<MemberCheckInUpdateManyMutationInput, MemberCheckInUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type MemberCheckInScalarWhereInput = {
+    AND?: MemberCheckInScalarWhereInput | MemberCheckInScalarWhereInput[]
+    OR?: MemberCheckInScalarWhereInput[]
+    NOT?: MemberCheckInScalarWhereInput | MemberCheckInScalarWhereInput[]
+    id?: StringFilter<"MemberCheckIn"> | string
+    memberId?: StringFilter<"MemberCheckIn"> | string
+    checkInTime?: DateTimeFilter<"MemberCheckIn"> | Date | string
+    checkOutTime?: DateTimeNullableFilter<"MemberCheckIn"> | Date | string | null
+    location?: StringNullableFilter<"MemberCheckIn"> | string | null
+    notes?: StringNullableFilter<"MemberCheckIn"> | string | null
+    createdAt?: DateTimeFilter<"MemberCheckIn"> | Date | string
+    updatedAt?: DateTimeFilter<"MemberCheckIn"> | Date | string
   }
 
   export type MemberFitnessGoalUpsertWithWhereUniqueWithoutMemberInput = {
@@ -62292,33 +62458,10 @@ export namespace Prisma {
     memberId?: StringFilter<"Payment"> | string
     method?: StringFilter<"Payment"> | string
     createdAt?: DateTimeFilter<"Payment"> | Date | string
-  }
-
-  export type InvoiceUpsertWithWhereUniqueWithoutMemberInput = {
-    where: InvoiceWhereUniqueInput
-    update: XOR<InvoiceUpdateWithoutMemberInput, InvoiceUncheckedUpdateWithoutMemberInput>
-    create: XOR<InvoiceCreateWithoutMemberInput, InvoiceUncheckedCreateWithoutMemberInput>
-  }
-
-  export type InvoiceUpdateWithWhereUniqueWithoutMemberInput = {
-    where: InvoiceWhereUniqueInput
-    data: XOR<InvoiceUpdateWithoutMemberInput, InvoiceUncheckedUpdateWithoutMemberInput>
-  }
-
-  export type InvoiceUpdateManyWithWhereWithoutMemberInput = {
-    where: InvoiceScalarWhereInput
-    data: XOR<InvoiceUpdateManyMutationInput, InvoiceUncheckedUpdateManyWithoutMemberInput>
-  }
-
-  export type InvoiceScalarWhereInput = {
-    AND?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
-    OR?: InvoiceScalarWhereInput[]
-    NOT?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
-    id?: StringFilter<"Invoice"> | string
-    memberId?: StringFilter<"Invoice"> | string
-    amount?: FloatFilter<"Invoice"> | number
-    details?: StringFilter<"Invoice"> | string
-    createdAt?: DateTimeFilter<"Invoice"> | Date | string
+    status?: StringFilter<"Payment"> | string
+    description?: StringNullableFilter<"Payment"> | string | null
+    reference?: StringNullableFilter<"Payment"> | string | null
+    updatedAt?: DateTimeFilter<"Payment"> | Date | string
   }
 
   export type SubscriptionUpsertWithWhereUniqueWithoutMemberInput = {
@@ -62357,20 +62500,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
     attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalCreateNestedManyWithoutMemberInput
     payments?: PaymentCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionCreateNestedManyWithoutMemberInput
   }
 
@@ -62383,20 +62526,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressUncheckedCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactUncheckedCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
     attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionUncheckedCreateNestedManyWithoutMemberInput
   }
 
@@ -62425,20 +62568,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
     attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUpdateManyWithoutMemberNestedInput
     payments?: PaymentUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUpdateManyWithoutMemberNestedInput
   }
 
@@ -62451,20 +62594,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUncheckedUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUncheckedUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
     attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
@@ -62477,20 +62620,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
     check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalCreateNestedManyWithoutMemberInput
     payments?: PaymentCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionCreateNestedManyWithoutMemberInput
   }
 
@@ -62503,20 +62646,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressUncheckedCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactUncheckedCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
     check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionUncheckedCreateNestedManyWithoutMemberInput
   }
 
@@ -62545,20 +62688,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
     check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUpdateManyWithoutMemberNestedInput
     payments?: PaymentUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUpdateManyWithoutMemberNestedInput
   }
 
@@ -62571,20 +62714,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUncheckedUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUncheckedUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
     check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
@@ -62597,20 +62740,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactCreateNestedOneWithoutMemberInput
-    medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
-    attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
-    payments?: PaymentCreateNestedManyWithoutMemberInput
     invoices?: InvoiceCreateNestedManyWithoutMemberInput
+    medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
+    attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
+    payments?: PaymentCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionCreateNestedManyWithoutMemberInput
   }
 
@@ -62623,20 +62766,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressUncheckedCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactUncheckedCreateNestedOneWithoutMemberInput
-    medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
-    attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
-    payments?: PaymentUncheckedCreateNestedManyWithoutMemberInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
+    medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
+    attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionUncheckedCreateNestedManyWithoutMemberInput
   }
 
@@ -62665,20 +62808,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUpdateOneWithoutMemberNestedInput
-    medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
-    attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
-    payments?: PaymentUpdateManyWithoutMemberNestedInput
     invoices?: InvoiceUpdateManyWithoutMemberNestedInput
+    medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
+    attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
+    payments?: PaymentUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUpdateManyWithoutMemberNestedInput
   }
 
@@ -62691,20 +62834,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUncheckedUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUncheckedUpdateOneWithoutMemberNestedInput
-    medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
-    attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    payments?: PaymentUncheckedUpdateManyWithoutMemberNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
+    medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
+    attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
@@ -62717,20 +62860,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     emergency_contact?: EmergencyContactCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalCreateNestedManyWithoutMemberInput
     payments?: PaymentCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionCreateNestedManyWithoutMemberInput
   }
 
@@ -62743,20 +62886,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     emergency_contact?: EmergencyContactUncheckedCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionUncheckedCreateNestedManyWithoutMemberInput
   }
 
@@ -62785,20 +62928,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     emergency_contact?: EmergencyContactUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUpdateManyWithoutMemberNestedInput
     payments?: PaymentUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUpdateManyWithoutMemberNestedInput
   }
 
@@ -62811,20 +62954,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     emergency_contact?: EmergencyContactUncheckedUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
@@ -62837,20 +62980,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalCreateNestedManyWithoutMemberInput
     payments?: PaymentCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionCreateNestedManyWithoutMemberInput
   }
 
@@ -62863,20 +63006,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressUncheckedCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionUncheckedCreateNestedManyWithoutMemberInput
   }
 
@@ -62905,20 +63048,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUpdateManyWithoutMemberNestedInput
     payments?: PaymentUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUpdateManyWithoutMemberNestedInput
   }
 
@@ -62931,20 +63074,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUncheckedUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
@@ -62957,20 +63100,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
+    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalCreateNestedManyWithoutMemberInput
     payments?: PaymentCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionCreateNestedManyWithoutMemberInput
   }
 
@@ -62983,20 +63126,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressUncheckedCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactUncheckedCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionUncheckedCreateNestedManyWithoutMemberInput
   }
 
@@ -63025,20 +63168,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
+    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUpdateManyWithoutMemberNestedInput
     payments?: PaymentUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUpdateManyWithoutMemberNestedInput
   }
 
@@ -63051,20 +63194,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUncheckedUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUncheckedUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
@@ -63077,20 +63220,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactCreateNestedOneWithoutMemberInput
-    medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
-    attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
-    fitness_goals?: MemberFitnessGoalCreateNestedManyWithoutMemberInput
     invoices?: InvoiceCreateNestedManyWithoutMemberInput
+    medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
+    attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
+    fitness_goals?: MemberFitnessGoalCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionCreateNestedManyWithoutMemberInput
   }
 
@@ -63103,20 +63246,20 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressUncheckedCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactUncheckedCreateNestedOneWithoutMemberInput
-    medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
-    attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
-    fitness_goals?: MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
+    medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
+    attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
+    fitness_goals?: MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionUncheckedCreateNestedManyWithoutMemberInput
   }
 
@@ -63145,20 +63288,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUpdateOneWithoutMemberNestedInput
-    medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
-    attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
-    fitness_goals?: MemberFitnessGoalUpdateManyWithoutMemberNestedInput
     invoices?: InvoiceUpdateManyWithoutMemberNestedInput
+    medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
+    attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
+    fitness_goals?: MemberFitnessGoalUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUpdateManyWithoutMemberNestedInput
   }
 
@@ -63171,20 +63314,20 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUncheckedUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUncheckedUpdateOneWithoutMemberNestedInput
-    medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
-    attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    fitness_goals?: MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
+    medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
+    attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
+    fitness_goals?: MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
@@ -63197,18 +63340,18 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactCreateNestedOneWithoutMemberInput
     medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalCreateNestedManyWithoutMemberInput
     payments?: PaymentCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionCreateNestedManyWithoutMemberInput
@@ -63223,18 +63366,18 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressUncheckedCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactUncheckedCreateNestedOneWithoutMemberInput
     medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMemberInput
     Subscription?: SubscriptionUncheckedCreateNestedManyWithoutMemberInput
@@ -63265,18 +63408,18 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUpdateOneWithoutMemberNestedInput
     medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUpdateManyWithoutMemberNestedInput
     payments?: PaymentUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUpdateManyWithoutMemberNestedInput
@@ -63291,18 +63434,18 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUncheckedUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUncheckedUpdateOneWithoutMemberNestedInput
     medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMemberNestedInput
     Subscription?: SubscriptionUncheckedUpdateManyWithoutMemberNestedInput
@@ -63357,21 +63500,21 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalCreateNestedManyWithoutMemberInput
     payments?: PaymentCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutSubscriptionInput = {
@@ -63383,21 +63526,21 @@ export namespace Prisma {
     age: number
     profile_picture?: string | null
     membershiptype: $Enums.MemberShipType
-    terms_accepted?: boolean
-    terms_accepted_at?: Date | string | null
-    email_verified?: boolean
-    email_verification_token?: string | null
-    email_verification_expires?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    email_verification_expires?: Date | string | null
+    email_verification_token?: string | null
+    email_verified?: boolean
+    terms_accepted?: boolean
+    terms_accepted_at?: Date | string | null
     address?: AddressUncheckedCreateNestedOneWithoutMemberInput
     emergency_contact?: EmergencyContactUncheckedCreateNestedOneWithoutMemberInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
     medical_info?: MedicalInfoUncheckedCreateNestedOneWithoutMemberInput
-    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     attendance?: MemberAttendanceUncheckedCreateNestedManyWithoutMemberInput
+    check_ins?: MemberCheckInUncheckedCreateNestedManyWithoutMemberInput
     fitness_goals?: MemberFitnessGoalUncheckedCreateNestedManyWithoutMemberInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMemberInput
-    invoices?: InvoiceUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutSubscriptionInput = {
@@ -63448,21 +63591,21 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUpdateManyWithoutMemberNestedInput
     payments?: PaymentUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutSubscriptionInput = {
@@ -63474,21 +63617,21 @@ export namespace Prisma {
     age?: IntFieldUpdateOperationsInput | number
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
     membershiptype?: EnumMemberShipTypeFieldUpdateOperationsInput | $Enums.MemberShipType
-    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
-    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
-    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email_verification_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email_verification_token?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: AddressUncheckedUpdateOneWithoutMemberNestedInput
     emergency_contact?: EmergencyContactUncheckedUpdateOneWithoutMemberNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
     medical_info?: MedicalInfoUncheckedUpdateOneWithoutMemberNestedInput
-    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: MemberAttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    check_ins?: MemberCheckInUncheckedUpdateManyWithoutMemberNestedInput
     fitness_goals?: MemberFitnessGoalUncheckedUpdateManyWithoutMemberNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMemberNestedInput
-    invoices?: InvoiceUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MembershipPlanUpsertWithoutSubscriptionsInput = {
@@ -63584,50 +63727,50 @@ export namespace Prisma {
     id?: string
     name: string
     type: string
-    category: string
-    brand?: string | null
-    model?: string | null
-    serialNumber?: string | null
     quantity: number
-    available?: number
-    inUse?: number
-    maintenance?: boolean
-    lastMaintenance?: Date | string | null
-    nextMaintenance?: Date | string | null
-    status?: $Enums.EquipmentStatus
-    location?: string | null
-    description?: string | null
-    imageUrl?: string | null
-    purchaseDate?: Date | string | null
-    warrantyExpiry?: Date | string | null
-    cost?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    available?: number
+    brand?: string | null
+    category: string
+    cost?: number | null
+    description?: string | null
+    imageUrl?: string | null
+    inUse?: number
+    lastMaintenance?: Date | string | null
+    location?: string | null
+    maintenance?: boolean
+    model?: string | null
+    nextMaintenance?: Date | string | null
+    purchaseDate?: Date | string | null
+    serialNumber?: string | null
+    status?: $Enums.EquipmentStatus
+    warrantyExpiry?: Date | string | null
   }
 
   export type EquipmentUncheckedCreateWithoutMaintenanceLogsInput = {
     id?: string
     name: string
     type: string
-    category: string
-    brand?: string | null
-    model?: string | null
-    serialNumber?: string | null
     quantity: number
-    available?: number
-    inUse?: number
-    maintenance?: boolean
-    lastMaintenance?: Date | string | null
-    nextMaintenance?: Date | string | null
-    status?: $Enums.EquipmentStatus
-    location?: string | null
-    description?: string | null
-    imageUrl?: string | null
-    purchaseDate?: Date | string | null
-    warrantyExpiry?: Date | string | null
-    cost?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    available?: number
+    brand?: string | null
+    category: string
+    cost?: number | null
+    description?: string | null
+    imageUrl?: string | null
+    inUse?: number
+    lastMaintenance?: Date | string | null
+    location?: string | null
+    maintenance?: boolean
+    model?: string | null
+    nextMaintenance?: Date | string | null
+    purchaseDate?: Date | string | null
+    serialNumber?: string | null
+    status?: $Enums.EquipmentStatus
+    warrantyExpiry?: Date | string | null
   }
 
   export type EquipmentCreateOrConnectWithoutMaintenanceLogsInput = {
@@ -63650,50 +63793,50 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: NullableStringFieldUpdateOperationsInput | string | null
-    model?: NullableStringFieldUpdateOperationsInput | string | null
-    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
-    available?: IntFieldUpdateOperationsInput | number
-    inUse?: IntFieldUpdateOperationsInput | number
-    maintenance?: BoolFieldUpdateOperationsInput | boolean
-    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    available?: IntFieldUpdateOperationsInput | number
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    inUse?: IntFieldUpdateOperationsInput | number
+    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    maintenance?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EquipmentUncheckedUpdateWithoutMaintenanceLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: NullableStringFieldUpdateOperationsInput | string | null
-    model?: NullableStringFieldUpdateOperationsInput | string | null
-    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
-    available?: IntFieldUpdateOperationsInput | number
-    inUse?: IntFieldUpdateOperationsInput | number
-    maintenance?: BoolFieldUpdateOperationsInput | boolean
-    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cost?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    available?: IntFieldUpdateOperationsInput | number
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    cost?: NullableFloatFieldUpdateOperationsInput | number | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    inUse?: IntFieldUpdateOperationsInput | number
+    lastMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    maintenance?: BoolFieldUpdateOperationsInput | boolean
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    nextMaintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    purchaseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEquipmentStatusFieldUpdateOperationsInput | $Enums.EquipmentStatus
+    warrantyExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserCreateWithoutAdmin_profileInput = {
@@ -63704,31 +63847,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
+    permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
     address?: UserAddressCreateNestedOneWithoutUserInput
     emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
     notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
     privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
-    permission_audits?: PermissionAuditCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAdmin_profileInput = {
@@ -63740,31 +63883,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
+    permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
     address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
     emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
     notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
     privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
-    permission_audits?: PermissionAuditUncheckedCreateNestedManyWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAdmin_profileInput = {
@@ -63791,31 +63934,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
     address?: UserAddressUpdateOneWithoutUserNestedInput
     emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
     notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
     privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
-    permission_audits?: PermissionAuditUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAdmin_profileInput = {
@@ -63827,31 +63970,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
     address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
     emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
     notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
     privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
-    permission_audits?: PermissionAuditUncheckedUpdateManyWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type RoleHierarchyCreateWithoutRoleInput = {
@@ -63906,6 +64049,57 @@ export namespace Prisma {
     children?: RoleHierarchyUncheckedUpdateManyWithoutParentNestedInput
   }
 
+  export type RoleHierarchyCreateWithoutChildrenInput = {
+    id?: string
+    level?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: RoleHierarchyCreateNestedOneWithoutChildrenInput
+    role: CustomRoleCreateNestedOneWithoutHierarchyInput
+  }
+
+  export type RoleHierarchyUncheckedCreateWithoutChildrenInput = {
+    id?: string
+    roleId: string
+    parentId?: string | null
+    level?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoleHierarchyCreateOrConnectWithoutChildrenInput = {
+    where: RoleHierarchyWhereUniqueInput
+    create: XOR<RoleHierarchyCreateWithoutChildrenInput, RoleHierarchyUncheckedCreateWithoutChildrenInput>
+  }
+
+  export type RoleHierarchyCreateWithoutParentInput = {
+    id?: string
+    level?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: RoleHierarchyCreateNestedManyWithoutParentInput
+    role: CustomRoleCreateNestedOneWithoutHierarchyInput
+  }
+
+  export type RoleHierarchyUncheckedCreateWithoutParentInput = {
+    id?: string
+    roleId: string
+    level?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: RoleHierarchyUncheckedCreateNestedManyWithoutParentInput
+  }
+
+  export type RoleHierarchyCreateOrConnectWithoutParentInput = {
+    where: RoleHierarchyWhereUniqueInput
+    create: XOR<RoleHierarchyCreateWithoutParentInput, RoleHierarchyUncheckedCreateWithoutParentInput>
+  }
+
+  export type RoleHierarchyCreateManyParentInputEnvelope = {
+    data: RoleHierarchyCreateManyParentInput | RoleHierarchyCreateManyParentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CustomRoleCreateWithoutHierarchyInput = {
     id?: string
     name: string
@@ -63933,90 +64127,6 @@ export namespace Prisma {
     create: XOR<CustomRoleCreateWithoutHierarchyInput, CustomRoleUncheckedCreateWithoutHierarchyInput>
   }
 
-  export type RoleHierarchyCreateWithoutChildrenInput = {
-    id?: string
-    level?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    role: CustomRoleCreateNestedOneWithoutHierarchyInput
-    parent?: RoleHierarchyCreateNestedOneWithoutChildrenInput
-  }
-
-  export type RoleHierarchyUncheckedCreateWithoutChildrenInput = {
-    id?: string
-    roleId: string
-    parentId?: string | null
-    level?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type RoleHierarchyCreateOrConnectWithoutChildrenInput = {
-    where: RoleHierarchyWhereUniqueInput
-    create: XOR<RoleHierarchyCreateWithoutChildrenInput, RoleHierarchyUncheckedCreateWithoutChildrenInput>
-  }
-
-  export type RoleHierarchyCreateWithoutParentInput = {
-    id?: string
-    level?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    role: CustomRoleCreateNestedOneWithoutHierarchyInput
-    children?: RoleHierarchyCreateNestedManyWithoutParentInput
-  }
-
-  export type RoleHierarchyUncheckedCreateWithoutParentInput = {
-    id?: string
-    roleId: string
-    level?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    children?: RoleHierarchyUncheckedCreateNestedManyWithoutParentInput
-  }
-
-  export type RoleHierarchyCreateOrConnectWithoutParentInput = {
-    where: RoleHierarchyWhereUniqueInput
-    create: XOR<RoleHierarchyCreateWithoutParentInput, RoleHierarchyUncheckedCreateWithoutParentInput>
-  }
-
-  export type RoleHierarchyCreateManyParentInputEnvelope = {
-    data: RoleHierarchyCreateManyParentInput | RoleHierarchyCreateManyParentInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type CustomRoleUpsertWithoutHierarchyInput = {
-    update: XOR<CustomRoleUpdateWithoutHierarchyInput, CustomRoleUncheckedUpdateWithoutHierarchyInput>
-    create: XOR<CustomRoleCreateWithoutHierarchyInput, CustomRoleUncheckedCreateWithoutHierarchyInput>
-    where?: CustomRoleWhereInput
-  }
-
-  export type CustomRoleUpdateToOneWithWhereWithoutHierarchyInput = {
-    where?: CustomRoleWhereInput
-    data: XOR<CustomRoleUpdateWithoutHierarchyInput, CustomRoleUncheckedUpdateWithoutHierarchyInput>
-  }
-
-  export type CustomRoleUpdateWithoutHierarchyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    permissions?: CustomRoleUpdatepermissionsInput | string[]
-    parentRole?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type CustomRoleUncheckedUpdateWithoutHierarchyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    permissions?: CustomRoleUpdatepermissionsInput | string[]
-    parentRole?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type RoleHierarchyUpsertWithoutChildrenInput = {
     update: XOR<RoleHierarchyUpdateWithoutChildrenInput, RoleHierarchyUncheckedUpdateWithoutChildrenInput>
     create: XOR<RoleHierarchyCreateWithoutChildrenInput, RoleHierarchyUncheckedCreateWithoutChildrenInput>
@@ -64033,8 +64143,8 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: CustomRoleUpdateOneRequiredWithoutHierarchyNestedInput
     parent?: RoleHierarchyUpdateOneWithoutChildrenNestedInput
+    role?: CustomRoleUpdateOneRequiredWithoutHierarchyNestedInput
   }
 
   export type RoleHierarchyUncheckedUpdateWithoutChildrenInput = {
@@ -64074,6 +64184,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"RoleHierarchy"> | Date | string
   }
 
+  export type CustomRoleUpsertWithoutHierarchyInput = {
+    update: XOR<CustomRoleUpdateWithoutHierarchyInput, CustomRoleUncheckedUpdateWithoutHierarchyInput>
+    create: XOR<CustomRoleCreateWithoutHierarchyInput, CustomRoleUncheckedCreateWithoutHierarchyInput>
+    where?: CustomRoleWhereInput
+  }
+
+  export type CustomRoleUpdateToOneWithWhereWithoutHierarchyInput = {
+    where?: CustomRoleWhereInput
+    data: XOR<CustomRoleUpdateWithoutHierarchyInput, CustomRoleUncheckedUpdateWithoutHierarchyInput>
+  }
+
+  export type CustomRoleUpdateWithoutHierarchyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: CustomRoleUpdatepermissionsInput | string[]
+    parentRole?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CustomRoleUncheckedUpdateWithoutHierarchyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: CustomRoleUpdatepermissionsInput | string[]
+    parentRole?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateWithoutPermission_auditsInput = {
     name: string
     username?: string | null
@@ -64082,31 +64225,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
+    admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
+    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
     address?: UserAddressCreateNestedOneWithoutUserInput
     emergency_contact?: UserEmergencyContactCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
     notification_settings?: UserNotificationSettingsCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesCreateNestedOneWithoutUserInput
     privacy_settings?: UserPrivacySettingsCreateNestedOneWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionCreateNestedManyWithoutUserInput
-    admin_profile?: AdministrativeProfileCreateNestedOneWithoutUserInput
+    social_media?: UserSocialMediaCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPermission_auditsInput = {
@@ -64118,31 +64261,31 @@ export namespace Prisma {
     password: string
     role?: string
     profile_picture?: string | null
-    isActive?: boolean
-    email_verified?: boolean
-    lastLogin?: Date | string | null
-    loginAttempts?: number
-    lockedUntil?: Date | string | null
-    bio?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    department?: string | null
-    position?: string | null
     tokenVersion?: number
     created_at?: Date | string
     updated_at?: Date | string
     resetToken?: string | null
     resetTokenExp?: Date | string | null
+    bio?: string | null
+    dateOfBirth?: Date | string | null
+    department?: string | null
+    email_verified?: boolean
+    gender?: string | null
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    lockedUntil?: Date | string | null
+    loginAttempts?: number
+    position?: string | null
+    admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
+    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
     address?: UserAddressUncheckedCreateNestedOneWithoutUserInput
     emergency_contact?: UserEmergencyContactUncheckedCreateNestedOneWithoutUserInput
-    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
-    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
+    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
     notification_settings?: UserNotificationSettingsUncheckedCreateNestedOneWithoutUserInput
+    preferences?: UserPreferencesUncheckedCreateNestedOneWithoutUserInput
     privacy_settings?: UserPrivacySettingsUncheckedCreateNestedOneWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
-    access_logs?: UserAccessLogUncheckedCreateNestedManyWithoutUserInput
-    ip_restrictions?: UserIPRestrictionUncheckedCreateNestedManyWithoutUserInput
-    admin_profile?: AdministrativeProfileUncheckedCreateNestedOneWithoutUserInput
+    social_media?: UserSocialMediaUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPermission_auditsInput = {
@@ -64169,31 +64312,31 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
+    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
     address?: UserAddressUpdateOneWithoutUserNestedInput
     emergency_contact?: UserEmergencyContactUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
     notification_settings?: UserNotificationSettingsUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUpdateOneWithoutUserNestedInput
     privacy_settings?: UserPrivacySettingsUpdateOneWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUpdateManyWithoutUserNestedInput
-    admin_profile?: AdministrativeProfileUpdateOneWithoutUserNestedInput
+    social_media?: UserSocialMediaUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPermission_auditsInput = {
@@ -64205,45 +64348,42 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     profile_picture?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    email_verified?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loginAttempts?: IntFieldUpdateOperationsInput | number
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
     tokenVersion?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     resetToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetTokenExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loginAttempts?: IntFieldUpdateOperationsInput | number
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
+    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
     address?: UserAddressUncheckedUpdateOneWithoutUserNestedInput
     emergency_contact?: UserEmergencyContactUncheckedUpdateOneWithoutUserNestedInput
-    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
-    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
+    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
     notification_settings?: UserNotificationSettingsUncheckedUpdateOneWithoutUserNestedInput
+    preferences?: UserPreferencesUncheckedUpdateOneWithoutUserNestedInput
     privacy_settings?: UserPrivacySettingsUncheckedUpdateOneWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
-    access_logs?: UserAccessLogUncheckedUpdateManyWithoutUserNestedInput
-    ip_restrictions?: UserIPRestrictionUncheckedUpdateManyWithoutUserNestedInput
-    admin_profile?: AdministrativeProfileUncheckedUpdateOneWithoutUserNestedInput
+    social_media?: UserSocialMediaUncheckedUpdateOneWithoutUserNestedInput
   }
 
-  export type UserSessionCreateManyUserInput = {
+  export type PermissionAuditCreateManyUserInput = {
     id?: string
-    token: string
-    deviceType?: string | null
-    deviceInfo?: string | null
-    ipAddress?: string | null
-    userAgent?: string | null
-    isActive?: boolean
-    lastActivity?: Date | string
-    expiresAt: Date | string
+    action: string
+    permissionId: string
+    oldValue?: string | null
+    newValue: string
+    reason?: string | null
+    performedBy?: string | null
     createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type UserAccessLogCreateManyUserInput = {
@@ -64266,57 +64406,51 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type PermissionAuditCreateManyUserInput = {
+  export type UserSessionCreateManyUserInput = {
     id?: string
-    action: string
-    permissionId: string
-    oldValue?: string | null
-    newValue: string
-    reason?: string | null
-    performedBy?: string | null
+    token: string
+    deviceType?: string | null
+    deviceInfo?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    isActive?: boolean
+    lastActivity?: Date | string
+    expiresAt: Date | string
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type UserSessionUpdateWithoutUserInput = {
+  export type PermissionAuditUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
-    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
-    deviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
-    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    lastActivity?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    action?: StringFieldUpdateOperationsInput | string
+    permissionId?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
+    newValue?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserSessionUncheckedUpdateWithoutUserInput = {
+  export type PermissionAuditUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
-    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
-    deviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
-    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    lastActivity?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    action?: StringFieldUpdateOperationsInput | string
+    permissionId?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
+    newValue?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserSessionUncheckedUpdateManyWithoutUserInput = {
+  export type PermissionAuditUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
-    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
-    deviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
-    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    lastActivity?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    action?: StringFieldUpdateOperationsInput | string
+    permissionId?: StringFieldUpdateOperationsInput | string
+    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
+    newValue?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserAccessLogUpdateWithoutUserInput = {
@@ -64379,47 +64513,53 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PermissionAuditUpdateWithoutUserInput = {
+  export type UserSessionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    permissionId?: StringFieldUpdateOperationsInput | string
-    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
-    newValue?: StringFieldUpdateOperationsInput | string
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: StringFieldUpdateOperationsInput | string
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    deviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastActivity?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PermissionAuditUncheckedUpdateWithoutUserInput = {
+  export type UserSessionUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    permissionId?: StringFieldUpdateOperationsInput | string
-    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
-    newValue?: StringFieldUpdateOperationsInput | string
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: StringFieldUpdateOperationsInput | string
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    deviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastActivity?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PermissionAuditUncheckedUpdateManyWithoutUserInput = {
+  export type UserSessionUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    action?: StringFieldUpdateOperationsInput | string
-    permissionId?: StringFieldUpdateOperationsInput | string
-    oldValue?: NullableStringFieldUpdateOperationsInput | string | null
-    newValue?: StringFieldUpdateOperationsInput | string
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    performedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: StringFieldUpdateOperationsInput | string
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    deviceInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastActivity?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MemberCheckInCreateManyMemberInput = {
+  export type InvoiceCreateManyMemberInput = {
     id?: string
-    checkInTime?: Date | string
-    checkOutTime?: Date | string | null
-    location?: string | null
-    notes?: string | null
+    amount: number
+    details: string
     createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type MemberAttendanceCreateManyMemberInput = {
@@ -64428,6 +64568,16 @@ export namespace Prisma {
     timeIn: Date | string
     timeOut?: Date | string | null
     duration?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MemberCheckInCreateManyMemberInput = {
+    id?: string
+    checkInTime?: Date | string
+    checkOutTime?: Date | string | null
+    location?: string | null
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -64450,13 +64600,10 @@ export namespace Prisma {
     amount: number
     method: string
     createdAt?: Date | string
-  }
-
-  export type InvoiceCreateManyMemberInput = {
-    id?: string
-    amount: number
-    details: string
-    createdAt?: Date | string
+    status?: string
+    description?: string | null
+    reference?: string | null
+    updatedAt?: Date | string
   }
 
   export type SubscriptionCreateManyMemberInput = {
@@ -64466,34 +64613,25 @@ export namespace Prisma {
     endDate: Date | string
   }
 
-  export type MemberCheckInUpdateWithoutMemberInput = {
+  export type InvoiceUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    details?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MemberCheckInUncheckedUpdateWithoutMemberInput = {
+  export type InvoiceUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    details?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MemberCheckInUncheckedUpdateManyWithoutMemberInput = {
+  export type InvoiceUncheckedUpdateManyWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    details?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MemberAttendanceUpdateWithoutMemberInput = {
@@ -64522,6 +64660,36 @@ export namespace Prisma {
     timeIn?: DateTimeFieldUpdateOperationsInput | Date | string
     timeOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     duration?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberCheckInUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberCheckInUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberCheckInUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -64570,6 +64738,10 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     method?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    reference?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PaymentUncheckedUpdateWithoutMemberInput = {
@@ -64577,6 +64749,10 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     method?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    reference?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PaymentUncheckedUpdateManyWithoutMemberInput = {
@@ -64584,27 +64760,10 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     method?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type InvoiceUpdateWithoutMemberInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    amount?: FloatFieldUpdateOperationsInput | number
-    details?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type InvoiceUncheckedUpdateWithoutMemberInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    amount?: FloatFieldUpdateOperationsInput | number
-    details?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type InvoiceUncheckedUpdateManyWithoutMemberInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    amount?: FloatFieldUpdateOperationsInput | number
-    details?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    reference?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SubscriptionUpdateWithoutMemberInput = {
@@ -64709,8 +64868,8 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: CustomRoleUpdateOneRequiredWithoutHierarchyNestedInput
     children?: RoleHierarchyUpdateManyWithoutParentNestedInput
+    role?: CustomRoleUpdateOneRequiredWithoutHierarchyNestedInput
   }
 
   export type RoleHierarchyUncheckedUpdateWithoutParentInput = {
