@@ -407,7 +407,7 @@ const Dashboard = () => {
               <span className="text-sm font-medium">Manage Equipment</span>
             </Link>
             <Link
-              to="/payments"
+              to="/payments/manage"
               className="flex flex-col items-center p-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl hover:from-orange-700 hover:to-red-700 transition-all"
             >
               <DollarSign className="h-8 w-8 mb-2" />

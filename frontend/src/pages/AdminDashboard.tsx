@@ -527,7 +527,6 @@ const barChartOptions = {
       borderRadius: 8,
     },
   },
-
 };
 
 const doughnutChartOptions = {
@@ -593,7 +592,6 @@ const doughnutChartOptions = {
       hoverOffset: 8,
     },
   },
-
 };
 
 // Mock revenue breakdown data - commented out for now
@@ -748,15 +746,14 @@ const AdminDashboard = () => {
   // Fetch maintenance alerts and equipment stats
   const fetchMaintenanceAlerts = async () => {
     try {
-
       const response = await userAPI.getEquipmentStats();
       const data = response.data as any;
-      
+
       setEquipmentStats(data.stats);
-      
+
       // Create maintenance alerts from real data
       const alerts = [];
-      
+
       // Add maintenance due alerts
       if (data.maintenanceDue && data.maintenanceDue.length > 0) {
         alerts.push({
@@ -769,7 +766,7 @@ const AdminDashboard = () => {
           icon: AlertTriangle,
         });
       }
-      
+
       // Add equipment status alerts
       if (data.stats) {
         if (data.stats.maintenance > 0) {
@@ -783,7 +780,7 @@ const AdminDashboard = () => {
             icon: Wrench,
           });
         }
-        
+
         if (data.stats.outOfService > 0) {
           alerts.push({
             id: 3,
@@ -796,7 +793,7 @@ const AdminDashboard = () => {
           });
         }
       }
-      
+
       // Add default info alert if no maintenance issues
       if (alerts.length === 0) {
         alerts.push({
@@ -809,14 +806,13 @@ const AdminDashboard = () => {
           icon: CheckCircle,
         });
       }
-      
+
       setMaintenanceAlerts(alerts);
     } catch (error) {
       console.error("Error fetching maintenance alerts:", error);
       // Fallback to mock data if API fails
       setMaintenanceAlerts(mockSystemAlerts);
     } finally {
-      
     }
   };
 
@@ -943,13 +939,22 @@ const AdminDashboard = () => {
                     Equipment
                   </p>
                   <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
-                    {equipmentStats ? equipmentStats.total : mockAdminStats.equipmentCount}
+                    {equipmentStats
+                      ? equipmentStats.total
+                      : mockAdminStats.equipmentCount}
                   </p>
                   <div className="flex items-center gap-2 mt-2">
                     <div className="flex items-center gap-1 text-purple-600">
                       <CheckCircle className="w-4 h-4" />
                       <span className="text-sm font-medium">
-                        {equipmentStats ? Math.round((equipmentStats.operational / equipmentStats.total) * 100) : 98}%
+                        {equipmentStats
+                          ? Math.round(
+                              (equipmentStats.operational /
+                                equipmentStats.total) *
+                                100
+                            )
+                          : 98}
+                        %
                       </span>
                     </div>
                     <span className="text-sm text-slate-500">operational</span>
@@ -958,9 +963,13 @@ const AdminDashboard = () => {
                     <div className="flex items-center gap-2 mt-2">
                       <div className="flex items-center gap-1 text-yellow-600">
                         <Wrench className="w-4 h-4" />
-                        <span className="text-sm font-medium">{equipmentStats.maintenance}</span>
+                        <span className="text-sm font-medium">
+                          {equipmentStats.maintenance}
+                        </span>
                       </div>
-                      <span className="text-sm text-slate-500">in maintenance</span>
+                      <span className="text-sm text-slate-500">
+                        in maintenance
+                      </span>
                     </div>
                   )}
                 </div>
@@ -1021,7 +1030,9 @@ const AdminDashboard = () => {
                   <div className="flex items-center gap-2 mt-2">
                     <div className="flex items-center gap-1 text-blue-600">
                       <UserCheck className="w-4 h-4" />
-                      <span className="text-sm font-medium">{mockAdminStats.activeMembers}</span>
+                      <span className="text-sm font-medium">
+                        {mockAdminStats.activeMembers}
+                      </span>
                     </div>
                     <span className="text-sm text-slate-500">active</span>
                   </div>
@@ -2211,7 +2222,7 @@ const AdminDashboard = () => {
                   </Link>
 
                   <Link
-                    to="/payments"
+                    to="/payments/manage"
                     className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 hover:from-purple-100 hover:to-pink-100 dark:hover:from-purple-800/30 dark:hover:to-pink-800/30 transition-all group"
                   >
                     <div className="p-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 mb-3 group-hover:scale-110 transition-transform">
@@ -2259,14 +2270,23 @@ const AdminDashboard = () => {
                       <div className="flex items-center gap-3">
                         <CheckCircle className="w-5 h-5 text-green-600" />
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-white">Operational</p>
+                          <p className="font-medium text-gray-900 dark:text-white">
+                            Operational
+                          </p>
                           <p className="text-sm text-gray-600 dark:text-gray-400">
                             {equipmentStats.operational} equipment items
                           </p>
                         </div>
                       </div>
-                      <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                        {Math.round((equipmentStats.operational / equipmentStats.total) * 100)}%
+                      <Badge
+                        variant="secondary"
+                        className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                      >
+                        {Math.round(
+                          (equipmentStats.operational / equipmentStats.total) *
+                            100
+                        )}
+                        %
                       </Badge>
                     </div>
 
@@ -2275,14 +2295,24 @@ const AdminDashboard = () => {
                         <div className="flex items-center gap-3">
                           <Wrench className="w-5 h-5 text-yellow-600" />
                           <div>
-                            <p className="font-medium text-gray-900 dark:text-white">Under Maintenance</p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              Under Maintenance
+                            </p>
                             <p className="text-sm text-gray-600 dark:text-gray-400">
                               {equipmentStats.maintenance} equipment items
                             </p>
                           </div>
                         </div>
-                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                          {Math.round((equipmentStats.maintenance / equipmentStats.total) * 100)}%
+                        <Badge
+                          variant="secondary"
+                          className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                        >
+                          {Math.round(
+                            (equipmentStats.maintenance /
+                              equipmentStats.total) *
+                              100
+                          )}
+                          %
                         </Badge>
                       </div>
                     )}
@@ -2292,14 +2322,24 @@ const AdminDashboard = () => {
                         <div className="flex items-center gap-3">
                           <XCircle className="w-5 h-5 text-red-600" />
                           <div>
-                            <p className="font-medium text-gray-900 dark:text-white">Out of Service</p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              Out of Service
+                            </p>
                             <p className="text-sm text-gray-600 dark:text-gray-400">
                               {equipmentStats.outOfService} equipment items
                             </p>
                           </div>
                         </div>
-                        <Badge variant="secondary" className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                          {Math.round((equipmentStats.outOfService / equipmentStats.total) * 100)}%
+                        <Badge
+                          variant="secondary"
+                          className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                        >
+                          {Math.round(
+                            (equipmentStats.outOfService /
+                              equipmentStats.total) *
+                              100
+                          )}
+                          %
                         </Badge>
                       </div>
                     )}

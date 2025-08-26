@@ -21,6 +21,7 @@ import GetSingle from "./pages/equipments/GetSingle";
 import GetAll from "./pages/equipments/GetAll";
 import EquipmentDashboard from "./pages/equipments/EquipmentDashboard";
 import ProfileSettings from "./pages/ProfileSettings";
+import PaymentManagement from "./pages/payments/PaymentManagement";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export const router = createBrowserRouter([
@@ -147,6 +148,19 @@ export const router = createBrowserRouter([
             element: (
               <ProtectedRoute requireStaff>
                 <GetSingle />
+              </ProtectedRoute>
+            ),
+          },
+        ],
+      },
+      {
+        path: "payments",
+        children: [
+          {
+            path: "manage",
+            element: (
+              <ProtectedRoute requireAdmin>
+                <PaymentManagement />
               </ProtectedRoute>
             ),
           },

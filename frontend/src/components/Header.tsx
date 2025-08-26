@@ -8,7 +8,9 @@ import { isAdmin, isStaff, isMember } from "../utils/auth";
 
 const Header = () => {
   const loginState = useSelector((state: RootState) => state.loginSlice);
-  const memberLoginState = useSelector((state: RootState) => state.loginMemberSlice);
+  const memberLoginState = useSelector(
+    (state: RootState) => state.loginMemberSlice
+  );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -27,7 +29,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
-            {(loginState.data.isSuccess || memberLoginState.data.isSuccess) ? (
+            {loginState.data.isSuccess || memberLoginState.data.isSuccess ? (
               <div className="flex items-center space-x-4">
                 {isAdmin() && (
                   <Link
@@ -39,12 +41,22 @@ const Header = () => {
                   </Link>
                 )}
                 {(isAdmin() || isStaff()) && (
-                  <Link
-                    to="/dashboard"
-                    className="px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  >
-                    Dashboard
-                  </Link>
+                  <>
+                    <Link
+                      to="/dashboard"
+                      className="px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      Dashboard
+                    </Link>
+                    {isAdmin() && (
+                      <Link
+                        to="/payments/manage"
+                        className="px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                      >
+                        Payments
+                      </Link>
+                    )}
+                  </>
                 )}
                 {isMember() && (
                   <Link
@@ -103,7 +115,7 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-slate-200 dark:border-slate-700">
             <div className="flex flex-col space-y-2">
-              {(loginState.data.isSuccess || memberLoginState.data.isSuccess) ? (
+              {loginState.data.isSuccess || memberLoginState.data.isSuccess ? (
                 <>
                   {isAdmin() && (
                     <Link
