@@ -100,6 +100,9 @@ const PaymentManagement = () => {
     method: "",
     description: "",
     reference: "",
+    currency: "USD",
+    taxAmount: 0,
+    processingFee: 0,
   });
 
   // Edit payment form state
@@ -179,6 +182,9 @@ const PaymentManagement = () => {
         method: newPayment.method,
         description: newPayment.description || undefined,
         reference: newPayment.reference || undefined,
+        currency: newPayment.currency,
+        taxAmount: newPayment.taxAmount,
+        processingFee: newPayment.processingFee,
       };
 
       const response = await paymentAPI.createPayment(paymentData);
@@ -191,6 +197,9 @@ const PaymentManagement = () => {
           method: "",
           description: "",
           reference: "",
+          currency: "USD",
+          taxAmount: 0,
+          processingFee: 0,
         });
         fetchPayments();
         fetchStats();
@@ -214,6 +223,12 @@ const PaymentManagement = () => {
         updateData.description = editingPayment.description;
       if (editingPayment.reference !== undefined)
         updateData.reference = editingPayment.reference;
+      if (editingPayment.currency !== undefined)
+        updateData.currency = editingPayment.currency;
+      if (editingPayment.taxAmount !== undefined)
+        updateData.taxAmount = editingPayment.taxAmount;
+      if (editingPayment.processingFee !== undefined)
+        updateData.processingFee = editingPayment.processingFee;
 
       const response = await paymentAPI.updatePayment(
         editingPayment.id,
@@ -628,110 +643,287 @@ const PaymentManagement = () => {
                 </Button>
               </div>
 
-              {/* Payments Table */}
-              <div className="border rounded-lg overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Payment ID</TableHead>
-                      <TableHead>Member</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Method</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredPayments.length === 0 ? (
-                      <TableRow>
-                        <TableCell
-                          colSpan={7}
-                          className="text-center py-8 text-gray-500"
-                        >
-                          No payments found
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      filteredPayments.map((payment) => (
-                        <TableRow key={payment.id}>
-                          <TableCell className="font-mono text-sm">
-                            {payment.id.slice(-8)}
-                          </TableCell>
-                          <TableCell>
-                            <div>
-                              <div className="font-medium">
-                                {getMemberName(payment.memberId)}
+              {/* Quick Actions Bar */}
+              <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-4 mb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {filteredPayments.filter(p => p.status === 'COMPLETED').length} Completed
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {filteredPayments.filter(p => p.status === 'PENDING').length} Pending
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {filteredPayments.filter(p => p.status === 'FAILED').length} Failed
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => exportPayments("csv")}
+                      className="text-xs"
+                    >
+                      <DownloadIcon className="w-3 h-3 mr-1" />
+                      Export CSV
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => exportPayments("json")}
+                      className="text-xs"
+                    >
+                      <FileText className="w-3 h-3 mr-1" />
+                      Export JSON
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={fetchPayments}
+                      className="text-xs"
+                    >
+                      <RefreshCw className="w-3 h-3 mr-1" />
+                      Refresh
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Redesigned Payments Table */}
+              <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+                {/* Table Header with Enhanced Styling */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="grid grid-cols-12 gap-4 items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    <div className="col-span-2">Payment Details</div>
+                    <div className="col-span-2">Member</div>
+                    <div className="col-span-2">Amount & Currency</div>
+                    <div className="col-span-2">Payment Info</div>
+                    <div className="col-span-2">Date & Status</div>
+                    <div className="col-span-2 text-right">Actions</div>
+                  </div>
+                </div>
+
+                {/* Table Body */}
+                <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                  {filteredPayments.length === 0 ? (
+                    <div className="px-6 py-12 text-center">
+                      <div className="mx-auto w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+                        <Receipt className="w-12 h-12 text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                        No payments found
+                      </h3>
+                      <p className="text-gray-500 dark:text-gray-400 mb-4">
+                        Try adjusting your search or filter criteria
+                      </p>
+                      <Button
+                        onClick={() => setShowCreatePayment(true)}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Create First Payment
+                      </Button>
+                    </div>
+                  ) : (
+                    filteredPayments.map((payment) => (
+                      <div
+                        key={payment.id}
+                        className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-200"
+                      >
+                        <div className="grid grid-cols-12 gap-4 items-center">
+                          {/* Payment Details Column */}
+                          <div className="col-span-2">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                                <DollarSign className="w-5 h-5 text-white" />
                               </div>
-                              <div className="text-sm text-gray-500">
-                                {payment.memberId}
+                              <div>
+                                <div className="font-mono text-sm font-medium text-gray-900 dark:text-white">
+                                  #{payment.id.slice(-8)}
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  {payment.reference || 'No reference'}
+                                </div>
                               </div>
                             </div>
-                          </TableCell>
-                          <TableCell className="font-medium">
-                            ${payment.amount.toFixed(2)}
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline" className="capitalize">
-                              {payment.method.replace("_", " ")}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            {new Date(payment.createdAt).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell>
-                            <Badge
-                              className={getPaymentStatusColor(payment.status)}
-                            >
-                              {payment.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  <MoreVertical className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <DropdownMenuItem
-                                  onClick={() => {
-                                    setSelectedPayment(payment);
-                                    setShowPaymentDetails(true);
-                                  }}
+                          </div>
+
+                          {/* Member Column */}
+                          <div className="col-span-2">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                                <span className="text-xs font-medium text-white">
+                                  {getMemberName(payment.memberId).charAt(0).toUpperCase()}
+                                </span>
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900 dark:text-white">
+                                  {getMemberName(payment.memberId)}
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  {payment.memberId.slice(-6)}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Amount & Currency Column */}
+                          <div className="col-span-2">
+                            <div className="space-y-1">
+                              <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                                ${payment.amount.toFixed(2)}
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Badge 
+                                  variant="outline" 
+                                  className="text-xs px-2 py-1 border-blue-200 text-blue-700 dark:border-blue-800 dark:text-blue-300"
                                 >
-                                  <Eye className="w-4 h-4 mr-2" />
-                                  View Details
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => {
-                                    setEditingPayment(payment);
-                                    setShowEditPayment(true);
-                                  }}
-                                >
-                                  <Edit className="w-4 h-4 mr-2" />
-                                  Edit Payment
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                  onClick={() =>
-                                    handleDeletePayment(payment.id)
-                                  }
-                                  className="text-red-600"
-                                >
-                                  <Trash2 className="w-4 h-4 mr-2" />
-                                  Delete Payment
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
+                                  {payment.currency || "USD"}
+                                </Badge>
+                                {payment.taxAmount && payment.taxAmount > 0 && (
+                                  <span className="text-xs text-gray-500">
+                                    +${payment.taxAmount.toFixed(2)} tax
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Payment Info Column */}
+                          <div className="col-span-2">
+                            <div className="space-y-2">
+                              <Badge 
+                                variant="outline" 
+                                className="capitalize px-3 py-1 text-xs font-medium"
+                              >
+                                {payment.method.replace("_", " ")}
+                              </Badge>
+                              {payment.processingFee && payment.processingFee > 0 && (
+                                <div className="text-xs text-gray-500">
+                                  Fee: ${payment.processingFee.toFixed(2)}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Date & Status Column */}
+                          <div className="col-span-2">
+                            <div className="space-y-2">
+                              <div className="text-sm text-gray-900 dark:text-white">
+                                {new Date(payment.createdAt).toLocaleDateString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric',
+                                  year: 'numeric'
+                                })}
+                              </div>
+                              <Badge
+                                className={`px-3 py-1 text-xs font-medium ${getPaymentStatusColor(payment.status)}`}
+                              >
+                                {payment.status}
+                              </Badge>
+                            </div>
+                          </div>
+
+                          {/* Actions Column */}
+                          <div className="col-span-2 text-right">
+                            <div className="flex items-center justify-end space-x-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setSelectedPayment(payment);
+                                  setShowPaymentDetails(true);
+                                }}
+                                className="h-8 w-8 p-0 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                              >
+                                <Eye className="w-4 h-4 text-blue-600" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setEditingPayment(payment);
+                                  setShowEditPayment(true);
+                                }}
+                                className="h-8 w-8 p-0 hover:bg-green-50 dark:hover:bg-green-900/20"
+                              >
+                                <Edit className="w-4 h-4 text-green-600" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeletePayment(payment.id)}
+                                className="h-8 w-8 p-0 hover:bg-red-50 dark:hover:bg-red-900/20"
+                              >
+                                <Trash2 className="w-4 h-4 text-red-600" />
+                              </Button>
+                            </div>
+                          </div>
+                                                 </div>
+                       </div>
+                     ))
+                   )}
+                   
+                   {/* Summary Row */}
+                   {filteredPayments.length > 0 && (
+                     <div className="bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-700 px-6 py-4 border-t-2 border-blue-200 dark:border-blue-800">
+                       <div className="grid grid-cols-12 gap-4 items-center">
+                         <div className="col-span-2">
+                           <div className="flex items-center space-x-2">
+                             <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                               <span className="text-xs font-bold text-blue-600 dark:text-blue-400">
+                                 {filteredPayments.length}
+                               </span>
+                             </div>
+                             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                               Total Payments
+                             </span>
+                           </div>
+                         </div>
+                         <div className="col-span-2"></div>
+                         <div className="col-span-2">
+                           <div className="text-right">
+                             <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                               ${filteredPayments.reduce((sum, p) => sum + p.amount, 0).toFixed(2)}
+                             </div>
+                             <div className="text-xs text-gray-500">
+                               Total Amount
+                             </div>
+                           </div>
+                         </div>
+                         <div className="col-span-2">
+                           <div className="text-center">
+                             <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                               {filteredPayments.filter(p => p.status === 'COMPLETED').length} Completed
+                             </div>
+                             <div className="text-xs text-gray-500">
+                               {filteredPayments.filter(p => p.status === 'PENDING').length} Pending
+                             </div>
+                           </div>
+                         </div>
+                         <div className="col-span-2">
+                           <div className="text-center">
+                             <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                               {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                             </div>
+                             <div className="text-xs text-gray-500">Current Period</div>
+                           </div>
+                         </div>
+                         <div className="col-span-2"></div>
+                       </div>
+                     </div>
+                   )}
+                 </div>
+               </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -822,6 +1014,61 @@ const PaymentManagement = () => {
                 value={newPayment.reference}
                 onChange={(e) =>
                   setNewPayment({ ...newPayment, reference: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Enhanced Payment Fields */}
+            <div className="grid gap-2">
+              <Label htmlFor="currency">Currency</Label>
+              <Select
+                value={newPayment.currency || "USD"}
+                onValueChange={(value) =>
+                  setNewPayment({ ...newPayment, currency: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select currency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="USD">USD ($)</SelectItem>
+                  <SelectItem value="EUR">EUR (€)</SelectItem>
+                  <SelectItem value="GBP">GBP (£)</SelectItem>
+                  <SelectItem value="CAD">CAD (C$)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="taxAmount">Tax Amount (Optional)</Label>
+              <Input
+                id="taxAmount"
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                value={newPayment.taxAmount || ""}
+                onChange={(e) =>
+                  setNewPayment({
+                    ...newPayment,
+                    taxAmount: parseFloat(e.target.value) || 0,
+                  })
+                }
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="processingFee">Processing Fee (Optional)</Label>
+              <Input
+                id="processingFee"
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                value={newPayment.processingFee || ""}
+                onChange={(e) =>
+                  setNewPayment({
+                    ...newPayment,
+                    processingFee: parseFloat(e.target.value) || 0,
+                  })
                 }
               />
             </div>
@@ -937,6 +1184,61 @@ const PaymentManagement = () => {
                   }
                 />
               </div>
+
+              {/* Enhanced Payment Fields */}
+              <div className="grid gap-2">
+                <Label htmlFor="edit-currency">Currency</Label>
+                <Select
+                  value={editingPayment.currency || "USD"}
+                  onValueChange={(value) =>
+                    setEditingPayment({ ...editingPayment, currency: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select currency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="USD">USD ($)</SelectItem>
+                    <SelectItem value="EUR">EUR (€)</SelectItem>
+                    <SelectItem value="GBP">GBP (£)</SelectItem>
+                    <SelectItem value="CAD">CAD (C$)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="edit-taxAmount">Tax Amount</Label>
+                <Input
+                  id="edit-taxAmount"
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={editingPayment.taxAmount || 0}
+                  onChange={(e) =>
+                    setEditingPayment({
+                      ...editingPayment,
+                      taxAmount: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="edit-processingFee">Processing Fee</Label>
+                <Input
+                  id="edit-processingFee"
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={editingPayment.processingFee || 0}
+                  onChange={(e) =>
+                    setEditingPayment({
+                      ...editingPayment,
+                      processingFee: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                />
+              </div>
             </div>
           )}
           <DialogFooter>
@@ -1026,6 +1328,81 @@ const PaymentManagement = () => {
                     </p>
                   </div>
                 )}
+
+                {/* Enhanced Payment Fields */}
+                {selectedPayment.currency && (
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">
+                      Currency
+                    </Label>
+                    <p className="text-sm font-medium">
+                      {selectedPayment.currency}
+                    </p>
+                  </div>
+                )}
+                {selectedPayment.lateFees && selectedPayment.lateFees > 0 && (
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">
+                      Late Fees
+                    </Label>
+                    <p className="text-sm text-red-600 font-medium">
+                      ${selectedPayment.lateFees.toFixed(2)}
+                    </p>
+                  </div>
+                )}
+                {selectedPayment.taxAmount && selectedPayment.taxAmount > 0 && (
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">
+                      Tax Amount
+                    </Label>
+                    <p className="text-sm text-gray-600 font-medium">
+                      ${selectedPayment.taxAmount.toFixed(2)}
+                    </p>
+                  </div>
+                )}
+                {selectedPayment.processingFee &&
+                  selectedPayment.processingFee > 0 && (
+                    <div>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Processing Fee
+                      </Label>
+                      <p className="text-sm text-gray-600 font-medium">
+                        ${selectedPayment.processingFee.toFixed(2)}
+                      </p>
+                    </div>
+                  )}
+                {selectedPayment.gatewayTransactionId && (
+                  <div className="col-span-2">
+                    <Label className="text-sm font-medium text-gray-500">
+                      Gateway Transaction ID
+                    </Label>
+                    <p className="text-sm font-mono text-gray-600">
+                      {selectedPayment.gatewayTransactionId}
+                    </p>
+                  </div>
+                )}
+                {selectedPayment.retryCount &&
+                  selectedPayment.retryCount > 0 && (
+                    <div>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Retry Count
+                      </Label>
+                      <p className="text-sm text-orange-600 font-medium">
+                        {selectedPayment.retryCount}
+                      </p>
+                    </div>
+                  )}
+                {selectedPayment.nextRetryDate && (
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">
+                      Next Retry Date
+                    </Label>
+                    <p className="text-sm text-gray-600">
+                      {new Date(selectedPayment.nextRetryDate).toLocaleString()}
+                    </p>
+                  </div>
+                )}
+
                 <div className="col-span-2">
                   <Label className="text-sm font-medium text-gray-500">
                     Last Updated

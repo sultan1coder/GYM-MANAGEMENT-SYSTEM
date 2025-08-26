@@ -130,6 +130,17 @@ export interface Payment {
   reference?: string;
   createdAt: Date;
   updatedAt: Date;
+
+  // Enhanced Payment Features
+  lateFees?: number;
+  taxAmount?: number;
+  processingFee?: number;
+  currency?: string;
+  gatewayTransactionId?: string;
+  gatewayResponse?: any;
+  retryCount?: number;
+  nextRetryDate?: Date;
+
   Member: Member;
 }
 
