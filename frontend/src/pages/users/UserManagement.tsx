@@ -81,6 +81,8 @@ import {
   updateUserStatus,
   getUserActivity,
   bulkUpdateUserRoles,
+  userAPI,
+  getUserProfile,
 } from "@/services/api";
 
 interface UserTemplate {
@@ -1197,48 +1199,32 @@ const UserManagement: React.FC = () => {
 
   // User action handlers
   const handleEditUser = (user: any) => {
-    // TODO: Implement edit user functionality
-    toast.info("Edit user functionality coming soon!");
-  };
-
-  // Profile management handlers
-  const handleEditProfile = async (user: any) => {
-    try {
-      const response = await getUserProfile(user.id);
-      if (response.isSuccess) {
-        setEditingProfile(response.data.profile);
-        // Initialize formik with profile data
-        profileFormik.setValues({
-          basicInfo: {
-            name: response.data.profile.basicInfo.name,
-            phone_number: response.data.profile.basicInfo.phone_number,
-            bio: response.data.profile.basicInfo.bio,
-            dateOfBirth: response.data.profile.basicInfo.dateOfBirth,
-            gender: response.data.profile.basicInfo.gender,
-          },
-          address: response.data.profile.address,
-          emergencyContact: response.data.profile.emergencyContact,
-          socialMedia: response.data.profile.socialMedia,
-          preferences: response.data.profile.preferences,
-          notificationSettings: response.data.profile.notificationSettings,
-          privacySettings: response.data.profile.privacySettings,
-        });
-        setShowProfileEditor(true);
-      }
-    } catch (error) {
-      toast.error("Failed to load user profile");
-      console.error("Profile loading error:", error);
-    }
+    setSelectedUser(user);
+    // Populate form with user data
+    createUserFormik.setValues({
+      name: user.name || "",
+      email: user.email || "",
+      username: user.username || "",
+      phone_number: user.phone_number || "",
+      password: "", // Don't populate password for security
+      role: user.role || "staff",
+    });
+    setShowCreateUser(true);
   };
 
   const handleDeleteUser = async (user: any) => {
     if (window.confirm(`Are you sure you want to delete ${user.name}?`)) {
       try {
-        // TODO: Implement delete user API call
-        toast.success(`User ${user.name} deleted successfully!`);
-        refetch();
+        const response = await userAPI.deleteUser(user.id);
+        if (response.data.isSuccess) {
+          toast.success(`User ${user.name} deleted successfully!`);
+          refetch();
+        } else {
+          toast.error(response.data.message || "Failed to delete user");
+        }
       } catch (error) {
         toast.error("Failed to delete user");
+        console.error("Delete user error:", error);
       }
     }
   };
@@ -1246,15 +1232,50 @@ const UserManagement: React.FC = () => {
   const handleUserStatusToggle = async (user: any) => {
     try {
       const isActive = !user.created_at; // Toggle based on current status
-      // TODO: Implement status update API call
-      toast.success(
-        `User ${user.name} ${
-          isActive ? "activated" : "deactivated"
-        } successfully!`
-      );
-      refetch();
+      const response = await updateUserStatus(user.id, isActive);
+      if (response.isSuccess) {
+        toast.success(
+          `User ${user.name} ${
+            isActive ? "activated" : "deactivated"
+          } successfully!`
+        );
+        refetch();
+      } else {
+        toast.error(response.message || "Failed to update user status");
+      }
     } catch (error) {
       toast.error("Failed to update user status");
+      console.error("Status update error:", error);
+    }
+  };
+
+  // Profile management handlers
+  const handleEditProfile = async (user: any) => {
+    try {
+      const response = await getUserProfile(user.id);
+      if (response.isSuccess) {
+        setEditingProfile(response.profile);
+        // Initialize formik with profile data
+        profileFormik.setValues({
+          basicInfo: {
+            name: response.profile.basicInfo.name,
+            phone_number: response.profile.basicInfo.phone_number,
+            bio: response.profile.basicInfo.bio,
+            dateOfBirth: response.profile.basicInfo.dateOfBirth,
+            gender: response.profile.basicInfo.gender,
+          },
+          address: response.profile.address,
+          emergencyContact: response.profile.emergencyContact,
+          socialMedia: response.profile.socialMedia,
+          preferences: response.profile.preferences,
+          notificationSettings: response.profile.notificationSettings,
+          privacySettings: response.profile.privacySettings,
+        });
+        setShowProfileEditor(true);
+      }
+    } catch (error) {
+      toast.error("Failed to load user profile");
+      console.error("Profile loading error:", error);
     }
   };
 
@@ -3849,21 +3870,37 @@ const UserManagement: React.FC = () => {
       email: yup.string().email("Invalid email").required("Email is required"),
       username: yup.string().required("Username is required"),
       phone_number: yup.string().required("Phone number is required"),
-      password: yup
-        .string()
-        .min(8, "Password must be at least 8 characters")
-        .required("Password is required"),
+      password: yup.string().optional(),
       role: yup.string().required("Role is required"),
     }),
     onSubmit: async (values) => {
       try {
-        await createUserByAdmin(values);
-        toast.success("User created successfully!");
+        if (selectedUser) {
+          // Edit mode - update existing user
+          const updateData: any = { ...values };
+          // Remove password if it's empty (user didn't want to change it)
+          if (!updateData.password) {
+            delete updateData.password;
+          }
+          // Ensure role is properly typed
+          if (updateData.role) {
+            updateData.role = updateData.role as "admin" | "staff";
+          }
+          await userAPI.updateUser(selectedUser.id, updateData);
+          toast.success("User updated successfully!");
+        } else {
+          // Create mode - create new user
+          await createUserByAdmin(values);
+          toast.success("User created successfully!");
+        }
         setShowCreateUser(false);
+        setSelectedUser(null);
         createUserFormik.resetForm();
         refetch();
       } catch (error) {
-        toast.error("Failed to create user");
+        toast.error(
+          selectedUser ? "Failed to update user" : "Failed to create user"
+        );
       }
     },
   });
@@ -5421,41 +5458,41 @@ const UserManagement: React.FC = () => {
                           >
                             <Eye className="w-4 h-4" />
                           </Button>
-                                                      <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleEditProfile(user)}
-                              className="text-blue-600"
-                            >
-                              <User className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleEditUser(user)}
-                            >
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="text-red-600"
-                              onClick={() => handleDeleteUser(user)}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleUserStatusToggle(user)}
-                              className={
-                                user.created_at
-                                  ? "text-yellow-600"
-                                  : "text-green-600"
-                              }
-                            >
-                              {user.created_at ? "Deactivate" : "Activate"}
-                            </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleEditProfile(user)}
+                            className="text-blue-600"
+                          >
+                            <User className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleEditUser(user)}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-red-600"
+                            onClick={() => handleDeleteUser(user)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleUserStatusToggle(user)}
+                            className={
+                              user.created_at
+                                ? "text-yellow-600"
+                                : "text-green-600"
+                            }
+                          >
+                            {user.created_at ? "Deactivate" : "Activate"}
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -6851,7 +6888,7 @@ const UserManagement: React.FC = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setEditingProfile(profile)}
+                          onClick={() => handleEditUser(user)}
                         >
                           <Edit className="w-4 h-4" />
                         </Button>
@@ -7232,7 +7269,7 @@ const UserManagement: React.FC = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setEditingAdminProfile(profile)}
+                          onClick={() => handleEditUser(user)}
                         >
                           <Edit className="w-4 h-4" />
                         </Button>
@@ -8962,13 +8999,26 @@ const UserManagement: React.FC = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Create User Dialog */}
-      <Dialog open={showCreateUser} onOpenChange={setShowCreateUser}>
+      {/* Create/Edit User Dialog */}
+      <Dialog
+        open={showCreateUser}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedUser(null);
+            createUserFormik.resetForm();
+          }
+          setShowCreateUser(open);
+        }}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Create New User</DialogTitle>
+            <DialogTitle>
+              {selectedUser ? "Edit User" : "Create New User"}
+            </DialogTitle>
             <DialogDescription>
-              Add a new staff member to the system
+              {selectedUser
+                ? "Update user information"
+                : "Add a new staff member to the system"}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={createUserFormik.handleSubmit} className="space-y-4">
@@ -9051,7 +9101,9 @@ const UserManagement: React.FC = () => {
                   )}
               </div>
               <div>
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">
+                  Password {selectedUser && "(leave blank to keep current)"}
+                </Label>
                 <Input
                   id="password"
                   type="password"
@@ -9098,130 +9150,6 @@ const UserManagement: React.FC = () => {
               </Button>
               <Button type="submit" disabled={createUserFormik.isSubmitting}>
                 {createUserFormik.isSubmitting ? "Creating..." : "Create User"}
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Invite User Dialog */}
-      <Dialog open={showInviteUser} onOpenChange={setShowInviteUser}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Invite New User</DialogTitle>
-            <DialogDescription>
-              Send an email invitation to a new user
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={inviteUserFormik.handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="invite-name">Full Name</Label>
-                <Input
-                  id="invite-name"
-                  {...inviteUserFormik.getFieldProps("name")}
-                  className={
-                    inviteUserFormik.touched.name &&
-                    inviteUserFormik.errors.name
-                      ? "border-red-500"
-                      : ""
-                  }
-                />
-                {inviteUserFormik.touched.name &&
-                  inviteUserFormik.errors.name && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {inviteUserFormik.errors.name}
-                    </p>
-                  )}
-              </div>
-              <div>
-                <Label htmlFor="invite-email">Email</Label>
-                <Input
-                  id="invite-email"
-                  type="email"
-                  {...inviteUserFormik.getFieldProps("email")}
-                  className={
-                    inviteUserFormik.touched.email &&
-                    inviteUserFormik.errors.email
-                      ? "border-red-500"
-                      : ""
-                  }
-                />
-                {inviteUserFormik.touched.email &&
-                  inviteUserFormik.errors.email && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {inviteUserFormik.errors.email}
-                    </p>
-                  )}
-              </div>
-              <div>
-                <Label htmlFor="invite-username">Username</Label>
-                <Input
-                  id="invite-username"
-                  {...inviteUserFormik.getFieldProps("username")}
-                  className={
-                    inviteUserFormik.touched.username &&
-                    inviteUserFormik.errors.username
-                      ? "border-red-500"
-                      : ""
-                  }
-                />
-                {inviteUserFormik.touched.username &&
-                  inviteUserFormik.errors.username && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {inviteUserFormik.errors.username}
-                    </p>
-                  )}
-              </div>
-              <div>
-                <Label htmlFor="invite-phone_number">Phone Number</Label>
-                <Input
-                  id="invite-phone_number"
-                  {...inviteUserFormik.getFieldProps("phone_number")}
-                  className={
-                    inviteUserFormik.touched.phone_number &&
-                    inviteUserFormik.errors.phone_number
-                      ? "border-red-500"
-                      : ""
-                  }
-                />
-                {inviteUserFormik.touched.phone_number &&
-                  inviteUserFormik.errors.phone_number && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {inviteUserFormik.errors.phone_number}
-                    </p>
-                  )}
-              </div>
-              <div className="col-span-2">
-                <Label htmlFor="invite-role">Role</Label>
-                <Select
-                  value={inviteUserFormik.values.role}
-                  onValueChange={(value) =>
-                    inviteUserFormik.setFieldValue("role", value)
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="staff">Staff</SelectItem>
-                    <SelectItem value="admin">Administrator</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="flex justify-end pt-4 space-x-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setShowInviteUser(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={inviteUserFormik.isSubmitting}>
-                {inviteUserFormik.isSubmitting
-                  ? "Sending..."
-                  : "Send Invitation"}
               </Button>
             </div>
           </form>

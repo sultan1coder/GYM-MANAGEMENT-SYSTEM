@@ -20,7 +20,10 @@ interface ICreateUserPayload {
 interface IUpdateUser {
   name: string;
   email: string;
-  password: string;
+  password?: string;
+  username?: string;
+  phone_number?: string;
+  role?: string;
 }
 
 interface IUserTemplate {
@@ -122,7 +125,7 @@ export const getSingleUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
-    const { name, email, password } = req.body as Omit<IUpdateUser, "user_id">;
+    const { name, email, password, username, phone_number, role } = req.body as IUpdateUser;
     const user = await prisma.user.findFirst({
       where: {
         id: Number(userId),
@@ -137,15 +140,26 @@ export const updateUser = async (req: Request, res: Response) => {
       return;
     }
 
+    const updateData: any = {
+      name,
+      email,
+    };
+
+    // Only update password if provided
+    if (password) {
+      updateData.password = await hashPassword(password);
+    }
+
+    // Add optional fields if provided
+    if (username !== undefined) updateData.username = username;
+    if (phone_number !== undefined) updateData.phone_number = phone_number;
+    if (role !== undefined) updateData.role = role;
+
     const updateUser = await prisma.user.update({
       where: {
         id: user.id,
       },
-      data: {
-        name,
-        email,
-        password: await hashPassword(password),
-      },
+      data: updateData,
     });
 
     res.status(200).json({
@@ -175,7 +189,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     if (!user) {
       res.status(404).json({
         isSuccess: false,
-        msessage: "User not found!",
+        message: "User not found!",
       });
       return;
     }
