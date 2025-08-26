@@ -358,7 +358,15 @@ exports.Prisma.PaymentScalarFieldEnum = {
   status: 'status',
   description: 'description',
   reference: 'reference',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  lateFees: 'lateFees',
+  taxAmount: 'taxAmount',
+  processingFee: 'processingFee',
+  currency: 'currency',
+  gatewayTransactionId: 'gatewayTransactionId',
+  gatewayResponse: 'gatewayResponse',
+  retryCount: 'retryCount',
+  nextRetryDate: 'nextRetryDate'
 };
 
 exports.Prisma.InvoiceScalarFieldEnum = {
@@ -630,6 +638,117 @@ exports.Prisma.PermissionAuditScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.InstallmentPlanScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  totalAmount: 'totalAmount',
+  numberOfInstallments: 'numberOfInstallments',
+  installmentAmount: 'installmentAmount',
+  startDate: 'startDate',
+  dueDayOfMonth: 'dueDayOfMonth',
+  description: 'description',
+  status: 'status',
+  currentInstallment: 'currentInstallment',
+  nextDueDate: 'nextDueDate',
+  lastProcessedDate: 'lastProcessedDate',
+  lastError: 'lastError',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PaymentAuditLogScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  userId: 'userId',
+  memberId: 'memberId',
+  paymentId: 'paymentId',
+  details: 'details',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  metadata: 'metadata',
+  timestamp: 'timestamp'
+};
+
+exports.Prisma.PaymentComplianceCheckScalarFieldEnum = {
+  id: 'id',
+  paymentId: 'paymentId',
+  checkType: 'checkType',
+  status: 'status',
+  details: 'details',
+  timestamp: 'timestamp'
+};
+
+exports.Prisma.PaymentMethodScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  type: 'type',
+  last4: 'last4',
+  brand: 'brand',
+  expiryMonth: 'expiryMonth',
+  expiryYear: 'expiryYear',
+  isDefault: 'isDefault',
+  encryptedData: 'encryptedData',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PaymentRefundScalarFieldEnum = {
+  id: 'id',
+  paymentId: 'paymentId',
+  amount: 'amount',
+  reason: 'reason',
+  processedBy: 'processedBy',
+  status: 'status',
+  processedAt: 'processedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PaymentScheduleScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  amount: 'amount',
+  dueDate: 'dueDate',
+  description: 'description',
+  status: 'status',
+  lateFees: 'lateFees',
+  reminderSent: 'reminderSent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PaymentWebhookScalarFieldEnum = {
+  id: 'id',
+  paymentId: 'paymentId',
+  webhookType: 'webhookType',
+  payload: 'payload',
+  status: 'status',
+  attempts: 'attempts',
+  lastAttempt: 'lastAttempt',
+  nextAttempt: 'nextAttempt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RecurringPaymentScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  amount: 'amount',
+  frequency: 'frequency',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  nextPaymentDate: 'nextPaymentDate',
+  maxAttempts: 'maxAttempts',
+  retryDelay: 'retryDelay',
+  autoRetry: 'autoRetry',
+  description: 'description',
+  status: 'status',
+  attemptCount: 'attemptCount',
+  lastError: 'lastError',
+  lastProcessedDate: 'lastProcessedDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -637,6 +756,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -712,7 +835,15 @@ exports.Prisma.ModelName = {
   CustomRole: 'CustomRole',
   Permission: 'Permission',
   RoleHierarchy: 'RoleHierarchy',
-  PermissionAudit: 'PermissionAudit'
+  PermissionAudit: 'PermissionAudit',
+  InstallmentPlan: 'InstallmentPlan',
+  PaymentAuditLog: 'PaymentAuditLog',
+  PaymentComplianceCheck: 'PaymentComplianceCheck',
+  PaymentMethod: 'PaymentMethod',
+  PaymentRefund: 'PaymentRefund',
+  PaymentSchedule: 'PaymentSchedule',
+  PaymentWebhook: 'PaymentWebhook',
+  RecurringPayment: 'RecurringPayment'
 };
 
 /**

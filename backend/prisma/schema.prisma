@@ -33,6 +33,7 @@ model User {
   loginAttempts         Int                       @default(0)
   position              String?
   admin_profile         AdministrativeProfile?
+  PaymentAuditLog       PaymentAuditLog[]
   permission_audits     PermissionAudit[]
   access_logs           UserAccessLog[]
   address               UserAddress?
@@ -186,12 +187,17 @@ model Member {
   terms_accepted_at          DateTime?
   address                    Address?
   emergency_contact          EmergencyContact?
+  InstallmentPlan            InstallmentPlan[]
   invoices                   Invoice[]
   medical_info               MedicalInfo?
   attendance                 MemberAttendance[]
   check_ins                  MemberCheckIn[]
   fitness_goals              MemberFitnessGoal[]
   payments                   Payment[]
+  PaymentAuditLog            PaymentAuditLog[]
+  PaymentMethod              PaymentMethod[]
+  PaymentSchedule            PaymentSchedule[]
+  RecurringPayment           RecurringPayment[]
   Subscription               Subscription[]
 }
 
@@ -273,19 +279,34 @@ model MedicalInfo {
 }
 
 model Payment {
-  id          String   @id @default(uuid())
-  amount      Float
-  memberId    String
-  method      String
-  createdAt   DateTime @default(now())
-  status      String   @default("PENDING")
-  description String?
-  reference   String?
-  updatedAt   DateTime @default(now()) @updatedAt
-  Member      Member   @relation(fields: [memberId], references: [id])
+  id                     String                   @id @default(uuid())
+  amount                 Float
+  memberId               String
+  method                 String
+  createdAt              DateTime                 @default(now())
+  status                 String                   @default("PENDING")
+  description            String?
+  reference              String?
+  updatedAt              DateTime                 @default(now()) @updatedAt
+  lateFees               Float?                   @default(0)
+  taxAmount              Float?                   @default(0)
+  processingFee          Float?                   @default(0)
+  currency               String?                  @default("USD")
+  gatewayTransactionId   String?
+  gatewayResponse        Json?
+  retryCount             Int?                     @default(0)
+  nextRetryDate          DateTime?
+  Member                 Member                   @relation(fields: [memberId], references: [id])
+  PaymentAuditLog        PaymentAuditLog[]
+  PaymentComplianceCheck PaymentComplianceCheck[]
+  PaymentRefund          PaymentRefund[]
+  PaymentWebhook         PaymentWebhook[]
 
   @@index([memberId, status])
   @@index([status])
+  @@index([createdAt])
+  @@index([currency])
+  @@index([gatewayTransactionId])
 }
 
 model Invoice {
@@ -567,6 +588,165 @@ model PermissionAudit {
   performedBy  String?
   createdAt    DateTime @default(now())
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model InstallmentPlan {
+  id                   String    @id
+  memberId             String
+  totalAmount          Float
+  numberOfInstallments Int
+  installmentAmount    Float
+  startDate            DateTime
+  dueDayOfMonth        Int?
+  description          String?
+  status               String    @default("ACTIVE")
+  currentInstallment   Int       @default(1)
+  nextDueDate          DateTime?
+  lastProcessedDate    DateTime?
+  lastError            String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @default(now())
+  Member               Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([memberId])
+  @@index([nextDueDate])
+  @@index([status])
+}
+
+model PaymentAuditLog {
+  id        String   @id
+  action    String
+  userId    Int?
+  memberId  String?
+  paymentId String?
+  details   String
+  ipAddress String?
+  userAgent String?
+  metadata  Json?
+  timestamp DateTime @default(now())
+  Member    Member?  @relation(fields: [memberId], references: [id])
+  Payment   Payment? @relation(fields: [paymentId], references: [id])
+  User      User?    @relation(fields: [userId], references: [id])
+
+  @@index([action])
+  @@index([memberId])
+  @@index([paymentId])
+  @@index([timestamp])
+  @@index([userId])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model PaymentComplianceCheck {
+  id        String   @id
+  paymentId String
+  checkType String
+  status    String
+  details   String
+  timestamp DateTime @default(now())
+  Payment   Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@index([checkType])
+  @@index([paymentId])
+  @@index([status])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model PaymentMethod {
+  id            String   @id
+  memberId      String
+  type          String
+  last4         String
+  brand         String?
+  expiryMonth   Int?
+  expiryYear    Int?
+  isDefault     Boolean  @default(false)
+  encryptedData String
+  status        String   @default("ACTIVE")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+  Member        Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([memberId])
+  @@index([status])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model PaymentRefund {
+  id          String    @id
+  paymentId   String
+  amount      Float
+  reason      String
+  processedBy String
+  status      String    @default("PENDING")
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+  Payment     Payment   @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@index([paymentId])
+  @@index([status])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model PaymentSchedule {
+  id           String   @id
+  memberId     String
+  amount       Float
+  dueDate      DateTime
+  description  String?
+  status       String   @default("PENDING")
+  lateFees     Float?   @default(0)
+  reminderSent Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  Member       Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([dueDate])
+  @@index([memberId])
+  @@index([status])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model PaymentWebhook {
+  id          String    @id
+  paymentId   String
+  webhookType String
+  payload     Json
+  status      String    @default("PENDING")
+  attempts    Int       @default(0)
+  lastAttempt DateTime?
+  nextAttempt DateTime?
+  createdAt   DateTime  @default(now())
+  Payment     Payment   @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@index([paymentId])
+  @@index([status])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model RecurringPayment {
+  id                String    @id
+  memberId          String
+  amount            Float
+  frequency         String
+  startDate         DateTime
+  endDate           DateTime?
+  nextPaymentDate   DateTime
+  maxAttempts       Int       @default(3)
+  retryDelay        Int       @default(3)
+  autoRetry         Boolean   @default(true)
+  description       String?
+  status            String    @default("ACTIVE")
+  attemptCount      Int       @default(0)
+  lastError         String?
+  lastProcessedDate DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @default(now())
+  Member            Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([memberId])
+  @@index([nextPaymentDate])
+  @@index([status])
 }
 
 enum MemberShipType {
