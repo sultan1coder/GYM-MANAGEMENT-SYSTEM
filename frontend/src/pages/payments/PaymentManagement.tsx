@@ -99,7 +99,12 @@ const PaymentManagement = () => {
     amount: "",
     method: "",
     description: "",
+    reference: "",
   });
+
+  // Edit payment form state
+  const [editingPayment, setEditingPayment] = useState<Payment | null>(null);
+  const [showEditPayment, setShowEditPayment] = useState(false);
 
   // Statistics state
   const [stats, setStats] = useState<PaymentStats>({
@@ -172,6 +177,8 @@ const PaymentManagement = () => {
         memberId: newPayment.memberId,
         amount: parseFloat(newPayment.amount),
         method: newPayment.method,
+        description: newPayment.description || undefined,
+        reference: newPayment.reference || undefined,
       };
 
       const response = await paymentAPI.createPayment(paymentData);
@@ -183,6 +190,7 @@ const PaymentManagement = () => {
           amount: "",
           method: "",
           description: "",
+          reference: "",
         });
         fetchPayments();
         fetchStats();
@@ -194,13 +202,52 @@ const PaymentManagement = () => {
     }
   };
 
+  const handleUpdatePayment = async () => {
+    try {
+      if (!editingPayment) return;
+
+      const updateData: any = {};
+      if (editingPayment.amount) updateData.amount = editingPayment.amount;
+      if (editingPayment.method) updateData.method = editingPayment.method;
+      if (editingPayment.status) updateData.status = editingPayment.status;
+      if (editingPayment.description !== undefined)
+        updateData.description = editingPayment.description;
+      if (editingPayment.reference !== undefined)
+        updateData.reference = editingPayment.reference;
+
+      const response = await paymentAPI.updatePayment(
+        editingPayment.id,
+        updateData
+      );
+      if (response.data.isSuccess) {
+        toast.success("Payment updated successfully");
+        setShowEditPayment(false);
+        setEditingPayment(null);
+        fetchPayments();
+        fetchStats();
+      } else {
+        toast.error("Failed to update payment");
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to update payment");
+    }
+  };
+
   const handleDeletePayment = async (paymentId: string) => {
     if (confirm("Are you sure you want to delete this payment?")) {
       try {
-        // Note: Backend doesn't have delete endpoint - implement if needed
-        toast.error("Delete functionality not implemented in backend");
+        const response = await paymentAPI.deletePayment(paymentId);
+        if (response.data.isSuccess) {
+          toast.success("Payment deleted successfully");
+          fetchPayments();
+          fetchStats();
+        } else {
+          toast.error("Failed to delete payment");
+        }
       } catch (error: any) {
-        toast.error("Failed to delete payment");
+        toast.error(
+          error.response?.data?.message || "Failed to delete payment"
+        );
       }
     }
   };
@@ -253,15 +300,18 @@ const PaymentManagement = () => {
     return member?.name || "Unknown Member";
   };
 
-  const getPaymentStatusColor = (status?: string) => {
+  const getPaymentStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-      case "paid":
+      case "COMPLETED":
         return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
-      case "pending":
+      case "PENDING":
         return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
-      case "failed":
+      case "FAILED":
         return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
+      case "CANCELLED":
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
+      case "REFUNDED":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400";
       default:
         return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
     }
@@ -451,7 +501,7 @@ const PaymentManagement = () => {
                         ${payment.amount.toFixed(2)}
                       </p>
                       <Badge className={getPaymentStatusColor(payment.status)}>
-                        {payment.status || "Paid"}
+                        {payment.status}
                       </Badge>
                     </div>
                   </div>
@@ -518,9 +568,11 @@ const PaymentManagement = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Statuses</SelectItem>
-                      <SelectItem value="completed">Completed</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="failed">Failed</SelectItem>
+                      <SelectItem value="COMPLETED">Completed</SelectItem>
+                      <SelectItem value="PENDING">Pending</SelectItem>
+                      <SelectItem value="FAILED">Failed</SelectItem>
+                      <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                      <SelectItem value="REFUNDED">Refunded</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -631,7 +683,7 @@ const PaymentManagement = () => {
                             <Badge
                               className={getPaymentStatusColor(payment.status)}
                             >
-                              {payment.status || "Paid"}
+                              {payment.status}
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right">
@@ -652,7 +704,12 @@ const PaymentManagement = () => {
                                   <Eye className="w-4 h-4 mr-2" />
                                   View Details
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => {
+                                    setEditingPayment(payment);
+                                    setShowEditPayment(true);
+                                  }}
+                                >
                                   <Edit className="w-4 h-4 mr-2" />
                                   Edit Payment
                                 </DropdownMenuItem>
@@ -756,6 +813,18 @@ const PaymentManagement = () => {
                 }
               />
             </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="reference">Reference (Optional)</Label>
+              <Input
+                id="reference"
+                placeholder="Payment reference or transaction ID..."
+                value={newPayment.reference}
+                onChange={(e) =>
+                  setNewPayment({ ...newPayment, reference: e.target.value })
+                }
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button
@@ -765,6 +834,116 @@ const PaymentManagement = () => {
               Cancel
             </Button>
             <Button onClick={handleCreatePayment}>Create Payment</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Payment Modal */}
+      <Dialog open={showEditPayment} onOpenChange={setShowEditPayment}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Edit Payment</DialogTitle>
+            <DialogDescription>Update payment information</DialogDescription>
+          </DialogHeader>
+          {editingPayment && (
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="edit-amount">Amount ($)</Label>
+                <Input
+                  id="edit-amount"
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={editingPayment.amount}
+                  onChange={(e) =>
+                    setEditingPayment({
+                      ...editingPayment,
+                      amount: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="edit-method">Payment Method</Label>
+                <Select
+                  value={editingPayment.method}
+                  onValueChange={(value) =>
+                    setEditingPayment({ ...editingPayment, method: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select payment method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="credit_card">Credit Card</SelectItem>
+                    <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
+                    <SelectItem value="cash">Cash</SelectItem>
+                    <SelectItem value="check">Check</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="edit-status">Status</Label>
+                <Select
+                  value={editingPayment.status}
+                  onValueChange={(value) =>
+                    setEditingPayment({
+                      ...editingPayment,
+                      status: value as Payment["status"],
+                    })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="PENDING">Pending</SelectItem>
+                    <SelectItem value="COMPLETED">Completed</SelectItem>
+                    <SelectItem value="FAILED">Failed</SelectItem>
+                    <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                    <SelectItem value="REFUNDED">Refunded</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="edit-description">Description</Label>
+                <Input
+                  id="edit-description"
+                  placeholder="Payment description..."
+                  value={editingPayment.description || ""}
+                  onChange={(e) =>
+                    setEditingPayment({
+                      ...editingPayment,
+                      description: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="edit-reference">Reference</Label>
+                <Input
+                  id="edit-reference"
+                  placeholder="Payment reference or transaction ID..."
+                  value={editingPayment.reference || ""}
+                  onChange={(e) =>
+                    setEditingPayment({
+                      ...editingPayment,
+                      reference: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowEditPayment(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdatePayment}>Update Payment</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -813,21 +992,47 @@ const PaymentManagement = () => {
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-gray-500">
+                    Status
+                  </Label>
+                  <Badge
+                    className={getPaymentStatusColor(selectedPayment.status)}
+                  >
+                    {selectedPayment.status}
+                  </Badge>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-500">
                     Date Created
                   </Label>
                   <p className="text-sm">
                     {new Date(selectedPayment.createdAt).toLocaleString()}
                   </p>
                 </div>
-                <div>
+                {selectedPayment.description && (
+                  <div className="col-span-2">
+                    <Label className="text-sm font-medium text-gray-500">
+                      Description
+                    </Label>
+                    <p className="text-sm">{selectedPayment.description}</p>
+                  </div>
+                )}
+                {selectedPayment.reference && (
+                  <div className="col-span-2">
+                    <Label className="text-sm font-medium text-gray-500">
+                      Reference
+                    </Label>
+                    <p className="text-sm font-mono">
+                      {selectedPayment.reference}
+                    </p>
+                  </div>
+                )}
+                <div className="col-span-2">
                   <Label className="text-sm font-medium text-gray-500">
-                    Status
+                    Last Updated
                   </Label>
-                  <Badge
-                    className={getPaymentStatusColor(selectedPayment.status)}
-                  >
-                    {selectedPayment.status || "Paid"}
-                  </Badge>
+                  <p className="text-sm">
+                    {new Date(selectedPayment.updatedAt).toLocaleString()}
+                  </p>
                 </div>
               </div>
             </div>

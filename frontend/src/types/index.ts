@@ -125,9 +125,20 @@ export interface Payment {
   amount: number;
   memberId: string;
   method: string;
+  status: PaymentStatus;
+  description?: string;
+  reference?: string;
   createdAt: Date;
+  updatedAt: Date;
   Member: Member;
 }
+
+export type PaymentStatus =
+  | "PENDING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED"
+  | "REFUNDED";
 
 // Invoice Types
 export interface Invoice {

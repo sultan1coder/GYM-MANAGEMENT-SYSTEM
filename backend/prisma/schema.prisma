@@ -341,12 +341,24 @@ enum MemberShipType {
 }
 
 model Payment {
-  id        String   @id @default(uuid())
-  amount    Float
-  memberId  String
-  method    String
-  createdAt DateTime @default(now())
-  Member    Member   @relation(fields: [memberId], references: [id])
+  id          String        @id @default(uuid())
+  amount      Float
+  memberId    String
+  method      String
+  status      PaymentStatus @default(PENDING)
+  description String?
+  reference   String?       // External payment reference/transaction ID
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Member      Member        @relation(fields: [memberId], references: [id])
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
 }
 
 model Invoice {

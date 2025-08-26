@@ -426,7 +426,7 @@ export const memberAPI = {
 // Member Management API functions
 export const searchMembers = async (params: {
   searchTerm?: string;
-  status?: 'active' | 'inactive' | 'all';
+  status?: "active" | "inactive" | "all";
   membershipType?: string;
   ageMin?: number;
   ageMax?: number;
@@ -594,8 +594,23 @@ export const paymentAPI = {
   getSinglePayment: (id: string) =>
     api.get<ApiResponse<Payment>>(`${BASE_API_URL}/payments/single/${id}`),
 
-  createPayment: (data: Omit<Payment, "id" | "createdAt" | "Member">) =>
-    api.post<ApiResponse<Payment>>(`${BASE_API_URL}/payments/create`, data),
+  createPayment: (
+    data: Omit<Payment, "id" | "createdAt" | "updatedAt" | "Member" | "status">
+  ) => api.post<ApiResponse<Payment>>(`${BASE_API_URL}/payments/create`, data),
+
+  updatePayment: (
+    id: string,
+    data: Partial<Omit<Payment, "id" | "createdAt" | "updatedAt" | "Member">>
+  ) =>
+    api.put<ApiResponse<Payment>>(
+      `${BASE_API_URL}/payments/update/${id}`,
+      data
+    ),
+
+  deletePayment: (id: string) =>
+    api.delete<ApiResponse<{ message: string }>>(
+      `${BASE_API_URL}/payments/delete/${id}`
+    ),
 
   getMemberPaymentHistory: (memberId: string) =>
     api.get<ApiResponse<Payment[]>>(
