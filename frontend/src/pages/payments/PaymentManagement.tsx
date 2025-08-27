@@ -296,6 +296,8 @@ const PaymentManagement = () => {
       if (editingPayment.lateFees !== undefined)
         updateData.lateFees = editingPayment.lateFees;
 
+      console.log("Frontend Update Data:", { editingPayment, updateData });
+
       const response = await paymentAPI.updatePayment(
         editingPayment.id,
         updateData

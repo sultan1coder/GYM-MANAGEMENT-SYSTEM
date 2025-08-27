@@ -146,6 +146,8 @@ export const updatePayment = async (req: Request, res: Response) => {
     const paymentId = req.params.id;
     const updateData: IUpdatePayment = req.body;
 
+    console.log("Update Payment Request:", { paymentId, updateData });
+
     // Validate payment exists
     const existingPayment = await prisma.payment.findUnique({
       where: { id: paymentId },
@@ -173,20 +175,6 @@ export const updatePayment = async (req: Request, res: Response) => {
       updateData.status &&
       !["PENDING", "COMPLETED", "FAILED", "CANCELLED", "REFUNDED"].includes(
         updateData.status
-      )
-    ) {
-      res.status(400).json({
-        isSuccess: false,
-        message: "Invalid payment status",
-      });
-      return;
-    }
-
-    // Validate status in creation if provided
-    if (
-      status &&
-      !["PENDING", "COMPLETED", "FAILED", "CANCELLED", "REFUNDED"].includes(
-        status
       )
     ) {
       res.status(400).json({
