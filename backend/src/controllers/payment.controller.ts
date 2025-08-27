@@ -5,8 +5,15 @@ interface ICreatePayment {
   amount: number;
   memberId: string;
   method: string;
+  status?: string;
   description?: string;
   reference?: string;
+  currency?: string;
+  taxAmount?: number;
+  processingFee?: number;
+  lateFees?: number;
+  gatewayTransactionId?: string;
+  gatewayResponse?: any;
 }
 
 interface IUpdatePayment {
@@ -15,6 +22,12 @@ interface IUpdatePayment {
   status?: string;
   description?: string;
   reference?: string;
+  currency?: string;
+  taxAmount?: number;
+  processingFee?: number;
+  lateFees?: number;
+  gatewayTransactionId?: string;
+  gatewayResponse?: any;
 }
 
 interface ICreateInvoice {
@@ -25,17 +38,30 @@ interface ICreateInvoice {
 
 export const createPayment = async (req: Request, res: Response) => {
   try {
-    const { amount, memberId, method, description, reference } = req.body as ICreatePayment;
+    const {
+      amount,
+      memberId,
+      method,
+      status,
+      description,
+      reference,
+      currency,
+      taxAmount,
+      processingFee,
+      lateFees,
+      gatewayTransactionId,
+      gatewayResponse,
+    } = req.body as ICreatePayment;
 
     // Validate member exists and is active
     const member = await prisma.member.findUnique({
-      where: { id: memberId }
+      where: { id: memberId },
     });
 
     if (!member) {
       res.status(400).json({
         isSuccess: false,
-        message: "Member not found"
+        message: "Member not found",
       });
       return;
     }
@@ -44,7 +70,41 @@ export const createPayment = async (req: Request, res: Response) => {
     if (amount <= 0) {
       res.status(400).json({
         isSuccess: false,
-        message: "Payment amount must be greater than 0"
+        message: "Payment amount must be greater than 0",
+      });
+      return;
+    }
+
+    // Validate currency
+    if (currency && !["USD", "EUR", "GBP", "CAD"].includes(currency)) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Invalid currency. Supported currencies: USD, EUR, GBP, CAD",
+      });
+      return;
+    }
+
+    // Validate tax amount and processing fee
+    if (taxAmount && taxAmount < 0) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Tax amount cannot be negative",
+      });
+      return;
+    }
+
+    if (processingFee && processingFee < 0) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Processing fee cannot be negative",
+      });
+      return;
+    }
+
+    if (lateFees && lateFees < 0) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Late fees cannot be negative",
       });
       return;
     }
@@ -56,7 +116,13 @@ export const createPayment = async (req: Request, res: Response) => {
         method,
         description,
         reference,
-        status: "PENDING"
+        currency: currency || "USD",
+        taxAmount: taxAmount || 0,
+        processingFee: processingFee || 0,
+        lateFees: lateFees || 0,
+        gatewayTransactionId,
+        gatewayResponse,
+        status: status || "PENDING",
       },
       include: {
         Member: true,
@@ -82,13 +148,13 @@ export const updatePayment = async (req: Request, res: Response) => {
 
     // Validate payment exists
     const existingPayment = await prisma.payment.findUnique({
-      where: { id: paymentId }
+      where: { id: paymentId },
     });
 
     if (!existingPayment) {
       res.status(404).json({
         isSuccess: false,
-        message: "Payment not found"
+        message: "Payment not found",
       });
       return;
     }
@@ -97,16 +163,75 @@ export const updatePayment = async (req: Request, res: Response) => {
     if (updateData.amount !== undefined && updateData.amount <= 0) {
       res.status(400).json({
         isSuccess: false,
-        message: "Payment amount must be greater than 0"
+        message: "Payment amount must be greater than 0",
       });
       return;
     }
 
     // Validate status if provided
-    if (updateData.status && !["PENDING", "COMPLETED", "FAILED", "CANCELLED", "REFUNDED"].includes(updateData.status)) {
+    if (
+      updateData.status &&
+      !["PENDING", "COMPLETED", "FAILED", "CANCELLED", "REFUNDED"].includes(
+        updateData.status
+      )
+    ) {
       res.status(400).json({
         isSuccess: false,
-        message: "Invalid payment status"
+        message: "Invalid payment status",
+      });
+      return;
+    }
+
+    // Validate status in creation if provided
+    if (
+      status &&
+      !["PENDING", "COMPLETED", "FAILED", "CANCELLED", "REFUNDED"].includes(
+        status
+      )
+    ) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Invalid payment status",
+      });
+      return;
+    }
+
+    // Validate currency if provided
+    if (
+      updateData.currency &&
+      !["USD", "EUR", "GBP", "CAD"].includes(updateData.currency)
+    ) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Invalid currency. Supported currencies: USD, EUR, GBP, CAD",
+      });
+      return;
+    }
+
+    // Validate amounts if provided
+    if (updateData.taxAmount !== undefined && updateData.taxAmount < 0) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Tax amount cannot be negative",
+      });
+      return;
+    }
+
+    if (
+      updateData.processingFee !== undefined &&
+      updateData.processingFee < 0
+    ) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Processing fee cannot be negative",
+      });
+      return;
+    }
+
+    if (updateData.lateFees !== undefined && updateData.lateFees < 0) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Late fees cannot be negative",
       });
       return;
     }
@@ -137,13 +262,13 @@ export const deletePayment = async (req: Request, res: Response) => {
 
     // Validate payment exists
     const existingPayment = await prisma.payment.findUnique({
-      where: { id: paymentId }
+      where: { id: paymentId },
     });
 
     if (!existingPayment) {
       res.status(404).json({
         isSuccess: false,
-        message: "Payment not found"
+        message: "Payment not found",
       });
       return;
     }
@@ -152,18 +277,18 @@ export const deletePayment = async (req: Request, res: Response) => {
     if (existingPayment.status === "COMPLETED") {
       res.status(400).json({
         isSuccess: false,
-        message: "Cannot delete completed payments"
+        message: "Cannot delete completed payments",
       });
       return;
     }
 
     await prisma.payment.delete({
-      where: { id: paymentId }
+      where: { id: paymentId },
     });
 
     res.status(200).json({
       isSuccess: true,
-      message: "Payment deleted successfully"
+      message: "Payment deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
@@ -180,8 +305,8 @@ export const getAllPayment = async (req: Request, res: Response) => {
         Member: true,
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: "desc",
+      },
     });
 
     res.status(200).json({
@@ -244,8 +369,8 @@ export const getHistoryOfSpecificMember = async (
         Member: true,
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: "desc",
+      },
     });
 
     res.status(200).json({
@@ -266,13 +391,13 @@ export const generateInvoice = async (req: Request, res: Response) => {
 
     // Validate member exists
     const member = await prisma.member.findUnique({
-      where: { id: memberId }
+      where: { id: memberId },
     });
 
     if (!member) {
       res.status(400).json({
         isSuccess: false,
-        message: "Member not found"
+        message: "Member not found",
       });
       return;
     }
@@ -281,7 +406,7 @@ export const generateInvoice = async (req: Request, res: Response) => {
     if (amount <= 0) {
       res.status(400).json({
         isSuccess: false,
-        message: "Invoice amount must be greater than 0"
+        message: "Invoice amount must be greater than 0",
       });
       return;
     }
@@ -314,49 +439,49 @@ export const getReports = async (req: Request, res: Response) => {
     // Get total revenue
     const totalRevenue = await prisma.payment.aggregate({
       where: {
-        status: "COMPLETED"
+        status: "COMPLETED",
       },
       _sum: {
-        amount: true
-      }
+        amount: true,
+      },
     });
 
     // Get payment counts by status
     const paymentCounts = await prisma.payment.groupBy({
-      by: ['status'],
+      by: ["status"],
       _count: {
-        status: true
-      }
+        status: true,
+      },
     });
 
     // Get monthly revenue for current year
     const currentYear = new Date().getFullYear();
     const monthlyRevenue = await prisma.payment.groupBy({
-      by: ['createdAt'],
+      by: ["createdAt"],
       where: {
         status: "COMPLETED",
         createdAt: {
           gte: new Date(currentYear, 0, 1),
-          lt: new Date(currentYear + 1, 0, 1)
-        }
+          lt: new Date(currentYear + 1, 0, 1),
+        },
       },
       _sum: {
-        amount: true
-      }
+        amount: true,
+      },
     });
 
     // Get payment method distribution
     const methodDistribution = await prisma.payment.groupBy({
-      by: ['method'],
+      by: ["method"],
       where: {
-        status: "COMPLETED"
+        status: "COMPLETED",
       },
       _sum: {
-        amount: true
+        amount: true,
       },
       _count: {
-        method: true
-      }
+        method: true,
+      },
     });
 
     res.status(200).json({
@@ -365,8 +490,8 @@ export const getReports = async (req: Request, res: Response) => {
         totalRevenue: totalRevenue._sum.amount || 0,
         paymentCounts,
         monthlyRevenue,
-        methodDistribution
-      }
+        methodDistribution,
+      },
     });
   } catch (error) {
     res.status(500).json({
