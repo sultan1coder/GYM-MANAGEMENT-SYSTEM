@@ -185,6 +185,223 @@ export const router = createBrowserRouter([
               </ProtectedRoute>
             ),
           },
+          // User Management Routes
+          {
+            path: "users",
+            children: [
+              {
+                index: true,
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <UserManagement />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: "new",
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <UserManagement />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: "approvals",
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <UserManagement />
+                  </ProtectedRoute>
+                ),
+              },
+            ],
+          },
+          // Equipment Management Routes
+          {
+            path: "equipment",
+            children: [
+              {
+                index: true,
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <EquipmentManager />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: "new",
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <EquipmentManager />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: "maintenance",
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <EquipmentManager />
+                  </ProtectedRoute>
+                ),
+              },
+            ],
+          },
+          // Payment Management Routes
+          {
+            path: "payments",
+            children: [
+              {
+                index: true,
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <PaymentManagement />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: "new",
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <PaymentManagement />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: "pending",
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <PaymentManagement />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: "reports",
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <PaymentManagement />
+                  </ProtectedRoute>
+                ),
+              },
+            ],
+          },
+          // Member Management Routes
+          {
+            path: "members",
+            children: [
+              {
+                index: true,
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <MemberManagement />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: "new",
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <MemberManagement />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: "expiring",
+                element: (
+                  <ProtectedRoute requireAdmin>
+                    <MemberManagement />
+                  </ProtectedRoute>
+                ),
+              },
+            ],
+          },
+          // System Management Routes
+          {
+            path: "settings",
+            element: (
+              <ProtectedRoute requireAdmin>
+                <div className="container mx-auto p-6">
+                  <h1 className="text-3xl font-bold mb-6">System Settings</h1>
+                  <p className="text-gray-600">
+                    System configuration and preferences will be implemented
+                    here.
+                  </p>
+                </div>
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "health",
+            element: (
+              <ProtectedRoute requireAdmin>
+                <div className="container mx-auto p-6">
+                  <h1 className="text-3xl font-bold mb-6">System Health</h1>
+                  <p className="text-gray-600">
+                    System health monitoring will be implemented here.
+                  </p>
+                </div>
+              </ProtectedRoute>
+            ),
+          },
+          // Analytics and Reports Routes
+          {
+            path: "analytics",
+            element: (
+              <ProtectedRoute requireAdmin>
+                <div className="container mx-auto p-6">
+                  <h1 className="text-3xl font-bold mb-6">
+                    Analytics Dashboard
+                  </h1>
+                  <p className="text-gray-600">
+                    Comprehensive gym performance analytics will be implemented
+                    here.
+                  </p>
+                </div>
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "reports",
+            element: (
+              <ProtectedRoute requireAdmin>
+                <div className="container mx-auto p-6">
+                  <h1 className="text-3xl font-bold mb-6">Custom Reports</h1>
+                  <p className="text-gray-600">
+                    Custom report generation will be implemented here.
+                  </p>
+                </div>
+              </ProtectedRoute>
+            ),
+          },
+          // Communications Routes
+          {
+            path: "communications",
+            element: (
+              <ProtectedRoute requireAdmin>
+                <div className="container mx-auto p-6">
+                  <h1 className="text-3xl font-bold mb-6">
+                    Member Communications
+                  </h1>
+                  <p className="text-gray-600">
+                    Member communication tools will be implemented here.
+                  </p>
+                </div>
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "notifications",
+            element: (
+              <ProtectedRoute requireAdmin>
+                <div className="container mx-auto p-6">
+                  <h1 className="text-3xl font-bold mb-6">
+                    Notification Center
+                  </h1>
+                  <p className="text-gray-600">
+                    System notification management will be implemented here.
+                  </p>
+                </div>
+              </ProtectedRoute>
+            ),
+          },
         ],
       },
       {
