@@ -1177,14 +1177,26 @@ const PaymentManagement = () => {
 
       {/* Create Payment Modal */}
       <Dialog open={showCreatePayment} onOpenChange={setShowCreatePayment}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] flex flex-col">
+          <DialogHeader className="flex-shrink-0">
             <DialogTitle>Create New Payment</DialogTitle>
             <DialogDescription>
               Record a new payment transaction for a gym member
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 overflow-y-auto flex-1 pr-2 custom-scrollbar">
+            {/* Scroll Indicator */}
+            <div className="sticky top-0 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-2">
+              <div className="flex items-center justify-center text-xs text-blue-700 dark:text-blue-300">
+                <span className="mr-2">📜</span>
+                <span className="font-medium">
+                  Scroll down to see all payment fields
+                </span>
+                <span className="ml-2">•</span>
+                <span>Use mouse wheel or scrollbar</span>
+              </div>
+            </div>
+
             <div className="grid gap-2">
               <Label htmlFor="member">Member</Label>
               <Select
@@ -1425,27 +1437,57 @@ const PaymentManagement = () => {
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowCreatePayment(false)}
-            >
-              Cancel
-            </Button>
-            <Button onClick={handleCreatePayment}>Create Payment</Button>
+          <DialogFooter className="flex-shrink-0 pt-4 border-t bg-background">
+            <div className="flex items-center justify-between w-full">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const modalContent =
+                    document.querySelector(".overflow-y-auto");
+                  if (modalContent) {
+                    modalContent.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+                className="text-xs"
+              >
+                ⬆️ Scroll to Top
+              </Button>
+              <div className="flex space-x-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowCreatePayment(false)}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleCreatePayment}>Create Payment</Button>
+              </div>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Edit Payment Modal */}
       <Dialog open={showEditPayment} onOpenChange={setShowEditPayment}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] flex flex-col">
+          <DialogHeader className="flex-shrink-0">
             <DialogTitle>Edit Payment</DialogTitle>
             <DialogDescription>Update payment information</DialogDescription>
           </DialogHeader>
           {editingPayment && (
-            <div className="grid gap-4 py-4">
+            <div className="grid gap-4 py-4 overflow-y-auto flex-1 pr-2 custom-scrollbar">
+              {/* Scroll Indicator */}
+              <div className="sticky top-0 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-2">
+                <div className="flex items-center justify-center text-xs text-green-700 dark:text-green-300">
+                  <span className="mr-2">📝</span>
+                  <span className="font-medium">
+                    Scroll down to see all editable fields
+                  </span>
+                  <span className="ml-2">•</span>
+                  <span>Use mouse wheel or scrollbar</span>
+                </div>
+              </div>
+
               <div className="grid gap-2">
                 <Label htmlFor="edit-amount">Amount ($)</Label>
                 <Input
@@ -1691,11 +1733,32 @@ const PaymentManagement = () => {
               </div>
             </div>
           )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowEditPayment(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleUpdatePayment}>Update Payment</Button>
+          <DialogFooter className="flex-shrink-0 pt-4 border-t bg-background">
+            <div className="flex items-center justify-between w-full">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const modalContent =
+                    document.querySelector(".overflow-y-auto");
+                  if (modalContent) {
+                    modalContent.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+                className="text-xs"
+              >
+                ⬆️ Scroll to Top
+              </Button>
+              <div className="flex space-x-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowEditPayment(false)}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleUpdatePayment}>Update Payment</Button>
+              </div>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
