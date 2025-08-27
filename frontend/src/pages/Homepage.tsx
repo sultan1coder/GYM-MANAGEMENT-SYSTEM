@@ -8,23 +8,35 @@ import {
   Star,
   ChevronRight,
   Play,
+  Camera,
+  Heart,
+  Target,
+  Zap,
 } from "lucide-react";
 
 const Homepage = () => {
   return (
     <div className="space-y-20">
-      {/* Hero Section */}
+      {/* Hero Section with Background Image */}
       <section className="relative pt-20 pb-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10"></div>
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20"></div>
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`,
+            filter: "brightness(0.7)",
+          }}
+        ></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-8">
-            <h1 className="text-5xl md:text-7xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-5xl md:text-7xl font-bold text-white drop-shadow-lg">
               Transform Your
-              <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                 Fitness Journey
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto drop-shadow-lg">
               State-of-the-art equipment, expert trainers, and a community that
               motivates you to reach your goals.
             </p>
@@ -36,10 +48,123 @@ const Homepage = () => {
                 Start Your Journey
                 <ChevronRight className="h-5 w-5" />
               </Link>
-              <button className="px-8 py-4 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:border-blue-600 hover:text-blue-600 transition-all flex items-center justify-center gap-2">
+              <button className="px-8 py-4 border-2 border-white text-white rounded-xl hover:bg-white hover:text-blue-600 transition-all flex items-center justify-center gap-2">
                 <Play className="h-5 w-5" />
                 Watch Tour
               </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Fitness Gallery Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-4 mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white">
+              Experience Our World-Class Facility
+            </h2>
+            <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+              Take a virtual tour of our state-of-the-art gym and see what makes
+              us different
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Cardio Zone */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <img
+                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Cardio Zone"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="text-2xl font-bold mb-2">Cardio Zone</h3>
+                <p className="text-blue-200">
+                  Latest treadmills, ellipticals, and rowing machines
+                </p>
+              </div>
+            </div>
+
+            {/* Strength Training */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <img
+                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Strength Training"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="text-2xl font-bold mb-2">Strength Training</h3>
+                <p className="text-blue-200">
+                  Comprehensive free weights and machines
+                </p>
+              </div>
+            </div>
+
+            {/* Functional Training */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <img
+                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Functional Training"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="text-2xl font-bold mb-2">Functional Training</h3>
+                <p className="text-blue-200">
+                  TRX, kettlebells, and mobility equipment
+                </p>
+              </div>
+            </div>
+
+            {/* Yoga & Stretching */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <img
+                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Yoga & Stretching"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="text-2xl font-bold mb-2">Yoga & Stretching</h3>
+                <p className="text-blue-200">
+                  Dedicated space for flexibility and recovery
+                </p>
+              </div>
+            </div>
+
+            {/* Group Classes */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <img
+                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Group Classes"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="text-2xl font-bold mb-2">Group Classes</h3>
+                <p className="text-blue-200">
+                  High-energy group fitness sessions
+                </p>
+              </div>
+            </div>
+
+            {/* Recovery Zone */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <img
+                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Recovery Zone"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="text-2xl font-bold mb-2">Recovery Zone</h3>
+                <p className="text-blue-200">
+                  Sauna, massage chairs, and stretching areas
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -103,9 +228,16 @@ const Homepage = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Stats Section with Background Image */}
+      <section className="py-20 relative overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`,
+            filter: "brightness(0.3)",
+          }}
+        ></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 text-center text-white">
             {[
               { number: "5000+", label: "Happy Members" },
@@ -124,6 +256,66 @@ const Homepage = () => {
         </div>
       </section>
 
+      {/* Fitness Motivation Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white">
+                Your Fitness Journey Starts Here
+              </h2>
+              <p className="text-xl text-slate-600 dark:text-slate-300">
+                Join a community of fitness enthusiasts who are committed to
+                helping you achieve your goals. Our expert trainers and
+                state-of-the-art facilities provide the perfect environment for
+                your transformation.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center gap-3">
+                  <Heart className="h-6 w-6 text-red-500" />
+                  <span className="text-slate-700 dark:text-slate-300">
+                    Health First
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Target className="h-6 w-6 text-blue-500" />
+                  <span className="text-slate-700 dark:text-slate-300">
+                    Goal Oriented
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Zap className="h-6 w-6 text-yellow-500" />
+                  <span className="text-slate-700 dark:text-slate-300">
+                    High Energy
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Users className="h-6 w-6 text-green-500" />
+                  <span className="text-slate-700 dark:text-slate-300">
+                    Community
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Fitness Motivation"
+                className="rounded-2xl shadow-2xl"
+              />
+              <div className="absolute -bottom-6 -left-6 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600">5000+</div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400">
+                    Active Members
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -138,32 +330,53 @@ const Homepage = () => {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              {
-                name: "Sarah Johnson",
-                role: "Fitness Enthusiast",
-                content:
-                  "The trainers here are amazing! They helped me achieve my fitness goals faster than I ever thought possible.",
-                rating: 5,
-              },
+                              {
+                  name: "David Johnson",
+                  role: "Fitness Enthusiast",
+                  content:
+                    "The trainers here are amazing! They helped me achieve my fitness goals faster than I ever thought possible.",
+                  rating: 5,
+                  image:
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+                },
               {
                 name: "Mike Chen",
                 role: "Bodybuilder",
                 content:
                   "Best gym equipment in the city. The facility is always clean and well-maintained.",
                 rating: 5,
+                image:
+                  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
               },
-              {
-                name: "Emma Davis",
-                role: "Yoga Instructor",
-                content:
-                  "Great community and atmosphere. I love the variety of classes and equipment available.",
-                rating: 5,
-              },
+                              {
+                  name: "Alex Davis",
+                  role: "Yoga Instructor",
+                  content:
+                    "Great community and atmosphere. I love the variety of classes and equipment available.",
+                  rating: 5,
+                  image:
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+                },
             ].map((testimonial, index) => (
               <div
                 key={index}
-                className="p-8 bg-white dark:bg-slate-800 rounded-2xl shadow-lg"
+                className="p-8 bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
               >
+                <div className="flex items-center gap-4 mb-6">
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    className="w-16 h-16 rounded-full object-cover"
+                  />
+                  <div>
+                    <div className="font-semibold text-slate-900 dark:text-white">
+                      {testimonial.name}
+                    </div>
+                    <div className="text-slate-500 dark:text-slate-400">
+                      {testimonial.role}
+                    </div>
+                  </div>
+                </div>
                 <div className="flex gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star
@@ -172,17 +385,9 @@ const Homepage = () => {
                     />
                   ))}
                 </div>
-                <p className="text-slate-600 dark:text-slate-300 mb-6 italic">
+                <p className="text-slate-600 dark:text-slate-300 italic">
                   "{testimonial.content}"
                 </p>
-                <div>
-                  <div className="font-semibold text-slate-900 dark:text-white">
-                    {testimonial.name}
-                  </div>
-                  <div className="text-slate-500 dark:text-slate-400">
-                    {testimonial.role}
-                  </div>
-                </div>
               </div>
             ))}
           </div>
