@@ -105,10 +105,8 @@ const ProfileSettings = () => {
                       className="object-cover w-32 h-32 border-4 rounded-full border-slate-200 dark:border-slate-600"
                     />
                   ) : (
-                    <div className="flex items-center justify-center w-32 h-32 text-4xl font-bold text-white border-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 border-slate-200 dark:border-slate-600">
-                      {user.name?.[0]?.toUpperCase() || (
-                        <User className="w-12 h-12" />
-                      )}
+                    <div className="flex items-center justify-center w-32 h-32 border-4 rounded-full bg-slate-100 dark:bg-slate-700 border-slate-200 dark:border-slate-600">
+                      <User className="w-12 h-12 text-slate-400 dark:text-slate-500" />
                     </div>
                   )}
                 </div>

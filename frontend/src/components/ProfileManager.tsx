@@ -163,19 +163,21 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   className="w-28 h-28 rounded-full object-cover border-4 border-slate-200 dark:border-slate-600 shadow-lg"
                 />
               ) : (
-                <div className="w-28 h-28 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white text-3xl font-bold border-4 border-slate-200 dark:border-slate-600 shadow-lg">
-                  {user?.name?.[0]?.toUpperCase() || <User className="h-10 w-10" />}
+                <div className="w-28 h-28 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center border-4 border-slate-200 dark:border-slate-600 shadow-lg">
+                  <User className="h-12 w-12 text-slate-400 dark:text-slate-500" />
                 </div>
               )}
-              <div className="absolute -bottom-2 -right-2 bg-green-500 text-white p-1 rounded-full border-2 border-white">
-                <CheckCircle className="h-4 w-4" />
-              </div>
+              {user?.profile_picture && (
+                <div className="absolute -bottom-2 -right-2 bg-green-500 text-white p-1 rounded-full border-2 border-white">
+                  <CheckCircle className="h-4 w-4" />
+                </div>
+              )}
             </div>
             <p className="text-lg font-semibold text-slate-900 dark:text-white mt-3">
               {user?.name}
             </p>
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              Current Profile Picture
+              {user?.profile_picture ? 'Current Profile Picture' : 'No Profile Picture Set'}
             </p>
           </div>
 
@@ -319,23 +321,7 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
             </div>
           </div>
 
-          {/* Implementation Note */}
-          <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-4 border border-amber-200 dark:border-amber-700">
-            <div className="flex items-start gap-3">
-              <div className="p-2 bg-amber-100 dark:bg-amber-800 rounded-lg">
-                <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div>
-                <p className="text-sm text-amber-700 dark:text-amber-300 font-medium">
-                  Development Mode
-                </p>
-                <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
-                  Currently using placeholder images. In production, integrate with AWS S3, 
-                  Cloudinary, or similar cloud storage service for actual file uploads.
-                </p>
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

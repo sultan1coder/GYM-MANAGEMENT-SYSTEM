@@ -112,7 +112,7 @@ const DigitalMembershipCard: React.FC<DigitalMembershipCardProps> = ({
 
               {/* Member Photo and Info */}
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white text-xl font-bold">
+                <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
                   {member.profilePicture ? (
                     <img
                       src={member.profilePicture}
@@ -120,7 +120,7 @@ const DigitalMembershipCard: React.FC<DigitalMembershipCardProps> = ({
                       className="w-16 h-16 rounded-full object-cover"
                     />
                   ) : (
-                    member.name[0]?.toUpperCase()
+                    <User className="h-8 w-8 text-slate-400 dark:text-slate-500" />
                   )}
                 </div>
                 <div className="flex-1">

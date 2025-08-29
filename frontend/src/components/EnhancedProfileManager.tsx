@@ -673,10 +673,8 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       className="w-28 h-28 rounded-full object-cover border-4 border-slate-200 dark:border-slate-600 shadow-lg"
                     />
                   ) : (
-                    <div className="w-28 h-28 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white text-3xl font-bold border-4 border-slate-200 dark:border-slate-600 shadow-lg">
-                      {user?.name?.[0]?.toUpperCase() || (
-                        <User className="h-10 w-10" />
-                      )}
+                    <div className="w-28 h-28 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center border-4 border-slate-200 dark:border-slate-600 shadow-lg">
+                      <User className="h-10 w-10 text-slate-400 dark:text-slate-500" />
                     </div>
                   )}
                   <div className="absolute -bottom-2 -right-2 bg-green-500 text-white p-1 rounded-full border-2 border-white">

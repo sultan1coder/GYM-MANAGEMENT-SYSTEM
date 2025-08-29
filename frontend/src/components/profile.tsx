@@ -64,8 +64,8 @@ const Profile = () => {
                 className="w-[42px] h-[42px] rounded-full object-cover border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
               />
             ) : (
-              <div className="w-[42px] h-[42px] flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
-                {user.name?.[0]?.toUpperCase() || <User className="h-5 w-5" />}
+              <div className="w-[42px] h-[42px] flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
+                <User className="h-5 w-5 text-slate-400 dark:text-slate-500" />
               </div>
             )}
             
@@ -87,8 +87,8 @@ const Profile = () => {
                   className="w-16 h-16 rounded-full object-cover border-2 border-slate-200 dark:border-slate-600"
                 />
               ) : (
-                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xl font-bold border-2 border-slate-200 dark:border-slate-600">
-                  {user.name?.[0]?.toUpperCase() || <User className="h-6 w-6" />}
+                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600">
+                  <User className="h-6 w-6 text-slate-400 dark:text-slate-500" />
                 </div>
               )}
               <div className="flex-1">
