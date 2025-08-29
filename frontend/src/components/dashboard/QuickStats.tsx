@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Users,
@@ -13,12 +7,11 @@ import {
   Dumbbell,
   CreditCard,
   TrendingUp,
-  Zap,
   AlertTriangle,
   CheckCircle,
   Clock,
-  Activity,
 } from "lucide-react";
+import { useMemberStats } from "../providers/MemberStatsProvider";
 
 interface QuickStatsProps {
   stats: {
@@ -36,279 +29,207 @@ interface QuickStatsProps {
 }
 
 const QuickStats: React.FC<QuickStatsProps> = ({ stats }) => {
+  // Use consolidated member stats provider for additional data
+  const { stats: memberStats } = useMemberStats();
+
   const getSystemHealthColor = (health: string) => {
     switch (health) {
       case "excellent":
-        return "text-green-600 dark:text-green-400";
+        return "text-green-600 bg-green-50";
       case "good":
-        return "text-blue-600 dark:text-blue-400";
+        return "text-blue-600 bg-blue-50";
       case "warning":
-        return "text-yellow-600 dark:text-yellow-400";
+        return "text-yellow-600 bg-yellow-50";
       case "critical":
-        return "text-red-600 dark:text-red-400";
+        return "text-red-600 bg-red-50";
       default:
-        return "text-gray-600 dark:text-gray-400";
+        return "text-gray-600 bg-gray-50";
     }
   };
 
   const getSystemHealthIcon = (health: string) => {
     switch (health) {
       case "excellent":
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
+        return <CheckCircle className="h-5 w-5" />;
       case "good":
-        return <Activity className="h-4 w-4 text-blue-600" />;
+        return <CheckCircle className="h-5 w-5" />;
       case "warning":
-        return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
+        return <AlertTriangle className="h-5 w-5" />;
       case "critical":
-        return <AlertTriangle className="h-4 w-4 text-red-600" />;
+        return <AlertTriangle className="h-5 w-5" />;
       default:
-        return <Activity className="h-4 w-4 text-gray-600" />;
-    }
-  };
-
-  const getSystemHealthDescription = (health: string) => {
-    switch (health) {
-      case "excellent":
-        return "All systems operational";
-      case "good":
-        return "Minor issues detected";
-      case "warning":
-        return "Attention required";
-      case "critical":
-        return "Immediate action needed";
-      default:
-        return "Status unknown";
+        return <CheckCircle className="h-5 w-5" />;
     }
   };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {/* Total Users */}
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-          <Users className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{stats.totalUsers}</div>
-          <p className="text-xs text-muted-foreground">
-            Admin & Staff accounts
-          </p>
-          <div className="mt-2">
-            <Badge variant="outline" className="text-xs">
-              Active
-            </Badge>
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center space-x-2">
+            <Users className="h-8 w-8 text-blue-600" />
+            <div>
+              <p className="text-sm font-medium text-gray-600">Total Users</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.totalUsers}
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Total Members */}
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Members</CardTitle>
-          <UserCheck className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{stats.totalMembers}</div>
-          <p className="text-xs text-muted-foreground">Active gym members</p>
-          <div className="mt-2 flex items-center space-x-2">
-            <Badge variant="outline" className="text-xs">
-              {stats.activeMemberships} Active
-            </Badge>
-            {stats.expiringMemberships > 0 && (
-              <Badge
-                variant="secondary"
-                className="text-xs text-yellow-700 bg-yellow-100"
-              >
-                {stats.expiringMemberships} Expiring
-              </Badge>
-            )}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center space-x-2">
+            <UserCheck className="h-8 w-8 text-green-600" />
+            <div>
+              <p className="text-sm font-medium text-gray-600">Total Members</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.totalMembers}
+              </p>
+              {memberStats && (
+                <p className="text-xs text-gray-500">
+                  {memberStats.activeMembers} active •{" "}
+                  {memberStats.inactiveMembers} inactive
+                </p>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Today's Revenue */}
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Today's Revenue</CardTitle>
-          <TrendingUp className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-            ${stats.todayRevenue.toFixed(2)}
+      {/* Total Equipment */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center space-x-2">
+            <Dumbbell className="h-8 w-8 text-purple-600" />
+            <div>
+              <p className="text-sm font-medium text-gray-600">
+                Total Equipment
+              </p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.totalEquipment}
+              </p>
+              {stats.maintenanceAlerts > 0 && (
+                <Badge variant="destructive" className="mt-1">
+                  {stats.maintenanceAlerts} needs attention
+                </Badge>
+              )}
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground">Daily earnings</p>
-          <div className="mt-2 flex items-center space-x-2">
-            <Badge variant="outline" className="text-xs">
-              {stats.totalPayments} Payments
-            </Badge>
-            {stats.pendingPayments > 0 && (
-              <Badge
-                variant="secondary"
-                className="text-xs text-yellow-700 bg-yellow-100"
-              >
-                {stats.pendingPayments} Pending
-              </Badge>
-            )}
+        </CardContent>
+      </Card>
+
+      {/* Total Payments */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center space-x-2">
+            <CreditCard className="h-8 w-8 text-orange-600" />
+            <div>
+              <p className="text-sm font-medium text-gray-600">
+                Total Payments
+              </p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.totalPayments}
+              </p>
+              {stats.pendingPayments > 0 && (
+                <Badge variant="secondary" className="mt-1">
+                  {stats.pendingPayments} pending
+                </Badge>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
 
       {/* System Health */}
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">System Health</CardTitle>
-          {getSystemHealthIcon(stats.systemHealth)}
-        </CardHeader>
-        <CardContent>
-          <div
-            className={`text-2xl font-bold capitalize ${getSystemHealthColor(
-              stats.systemHealth
-            )}`}
-          >
-            {stats.systemHealth}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            {getSystemHealthDescription(stats.systemHealth)}
-          </p>
-          <div className="mt-2">
-            <Badge
-              variant="outline"
-              className={`text-xs ${getSystemHealthColor(stats.systemHealth)}`}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center space-x-2">
+            <div
+              className={`p-2 rounded-lg ${getSystemHealthColor(
+                stats.systemHealth
+              )}`}
             >
-              {stats.maintenanceAlerts > 0
-                ? `${stats.maintenanceAlerts} Alerts`
-                : "All Clear"}
-            </Badge>
+              {getSystemHealthIcon(stats.systemHealth)}
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-600">System Health</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.systemHealth.charAt(0).toUpperCase() +
+                  stats.systemHealth.slice(1)}
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Equipment Status */}
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            Equipment Status
-          </CardTitle>
-          <Dumbbell className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{stats.totalEquipment}</div>
-          <p className="text-xs text-muted-foreground">Total equipment items</p>
-          <div className="mt-2">
-            <Badge variant="outline" className="text-xs">
-              Operational
-            </Badge>
-            {stats.maintenanceAlerts > 0 && (
-              <Badge
-                variant="secondary"
-                className="text-xs text-yellow-700 bg-yellow-100 ml-2"
-              >
-                {stats.maintenanceAlerts} Maintenance
-              </Badge>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Payment Overview */}
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            Payment Overview
-          </CardTitle>
-          <CreditCard className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{stats.totalPayments}</div>
-          <p className="text-xs text-muted-foreground">Total transactions</p>
-          <div className="mt-2 flex items-center space-x-2">
-            <Badge variant="outline" className="text-xs">
-              ${stats.todayRevenue.toFixed(2)} Today
-            </Badge>
-            {stats.pendingPayments > 0 && (
-              <Badge
-                variant="secondary"
-                className="text-xs text-yellow-700 bg-yellow-100"
-              >
-                <Clock className="w-3 h-3 mr-1" />
-                {stats.pendingPayments} Pending
-              </Badge>
-            )}
+      {/* Today's Revenue */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center space-x-2">
+            <TrendingUp className="h-8 w-8 text-green-600" />
+            <div>
+              <p className="text-sm font-medium text-gray-600">
+                Today's Revenue
+              </p>
+              <p className="text-2xl font-bold text-gray-900">
+                ${stats.todayRevenue.toLocaleString()}
+              </p>
+              {memberStats &&
+                memberStats.revenueByMonth &&
+                memberStats.revenueByMonth.length > 0 && (
+                  <p className="text-xs text-gray-500">
+                    Monthly: $
+                    {memberStats.revenueByMonth[
+                      memberStats.revenueByMonth.length - 1
+                    ]?.toLocaleString() || 0}
+                  </p>
+                )}
+            </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Active Memberships */}
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            Active Memberships
-          </CardTitle>
-          <UserCheck className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-            {stats.activeMemberships}
-          </div>
-          <p className="text-xs text-muted-foreground">Current memberships</p>
-          <div className="mt-2 flex items-center space-x-2">
-            <Badge variant="outline" className="text-xs">
-              {((stats.activeMemberships / stats.totalMembers) * 100).toFixed(
-                1
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="h-8 w-8 text-green-600" />
+            <div>
+              <p className="text-sm font-medium text-gray-600">
+                Active Memberships
+              </p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.activeMemberships}
+              </p>
+              {memberStats && (
+                <p className="text-xs text-gray-500">
+                  {memberStats.growthRate}% growth this month
+                </p>
               )}
-              % Active
-            </Badge>
-            {stats.expiringMemberships > 0 && (
-              <Badge
-                variant="secondary"
-                className="text-xs text-yellow-700 bg-yellow-100"
-              >
-                <Clock className="w-3 h-3 mr-1" />
-                {stats.expiringMemberships} Expiring
-              </Badge>
-            )}
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Quick Actions Summary */}
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Quick Actions</CardTitle>
-          <Zap className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-            Ready
-          </div>
-          <p className="text-xs text-muted-foreground">
-            All systems accessible
-          </p>
-          <div className="mt-2 space-y-1">
-            <div className="flex items-center justify-between text-xs">
-              <span>Users:</span>
-              <Badge variant="outline" className="text-xs">
-                Manage
-              </Badge>
-            </div>
-            <div className="flex items-center justify-between text-xs">
-              <span>Equipment:</span>
-              <Badge variant="outline" className="text-xs">
-                Monitor
-              </Badge>
-            </div>
-            <div className="flex items-center justify-between text-xs">
-              <span>Payments:</span>
-              <Badge variant="outline" className="text-xs">
-                Process
-              </Badge>
-            </div>
-            <div className="flex items-center justify-between text-xs">
-              <span>Members:</span>
-              <Badge variant="outline" className="text-xs">
-                Support
-              </Badge>
+      {/* Expiring Memberships */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center space-x-2">
+            <Clock className="h-8 w-8 text-yellow-600" />
+            <div>
+              <p className="text-sm font-medium text-gray-600">Expiring Soon</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.expiringMemberships}
+              </p>
+              {stats.expiringMemberships > 0 && (
+                <Badge variant="secondary" className="mt-1">
+                  Requires attention
+                </Badge>
+              )}
             </div>
           </div>
         </CardContent>

@@ -44,18 +44,22 @@ import {
 import MemberList from "../../components/MemberList";
 import SimpleMemberDisplay from "../../components/SimpleMemberDisplay";
 import { Member } from "../../types/members/memberAll";
-import { useMemberRemove, useMemberStats } from "../../hooks/member";
+import { useMemberRemove } from "../../hooks/member";
 import { searchMembers, bulkImportMembers } from "../../services/api";
+import { useMemberStats } from "../../components/providers/MemberStatsProvider";
 import toast from "react-hot-toast";
 
 const MemberManagement: React.FC = () => {
   const navigate = useNavigate();
   const { handleRemove, isLoading: isDeleting } = useMemberRemove();
+
+  // Use consolidated member stats provider
   const {
     stats,
     isLoading: statsLoading,
     refetch: refetchStats,
   } = useMemberStats();
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showBulkImportDialog, setShowBulkImportDialog] = useState(false);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
@@ -433,7 +437,7 @@ const MemberManagement: React.FC = () => {
         </Card>
       )}
 
-      {/* Real-time Statistics Cards */}
+      {/* Real-time Statistics Cards - Using Consolidated Provider */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardContent className="pt-6">
@@ -476,7 +480,7 @@ const MemberManagement: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {statsLoading ? "Loading..." : stats?.pendingVerification || 0}
+              {statsLoading ? "Loading..." : stats?.inactiveMembers || 0}
             </div>
             <p className="text-xs text-muted-foreground">
               Members awaiting email verification
@@ -493,28 +497,14 @@ const MemberManagement: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {statsLoading ? "Loading..." : stats?.growthRate || "0%"}
+              {statsLoading ? "Loading..." : `${stats?.growthRate || "0"}%`}
             </div>
             <p className="text-xs text-muted-foreground">Monthly growth rate</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Loading State for Stats */}
-      {statsLoading && (
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-center space-x-2">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-              <span className="text-sm text-gray-600">
-                Loading member statistics...
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Additional Statistics */}
+      {/* Additional Statistics - Using Consolidated Provider */}
       {stats && !statsLoading && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card>
@@ -584,20 +574,20 @@ const MemberManagement: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {stats.membershipDistribution &&
-              stats.membershipDistribution.length > 0 ? (
+              {stats.membershipTypes ? (
                 <div className="space-y-2">
-                  {stats.membershipDistribution.map((dist, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center"
-                    >
-                      <span className="text-sm">{dist.type}</span>
-                      <span className="text-sm font-medium">
-                        {dist.count} ({dist.percentage})
-                      </span>
-                    </div>
-                  ))}
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Monthly</span>
+                    <span className="text-sm font-medium">
+                      {stats.membershipTypes.monthly} members
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Daily</span>
+                    <span className="text-sm font-medium">
+                      {stats.membershipTypes.daily} members
+                    </span>
+                  </div>
                 </div>
               ) : (
                 <div className="text-center py-4">

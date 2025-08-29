@@ -238,7 +238,7 @@ const MemberList: React.FC<MemberListProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Header with Stats */}
+      {/* Header with Actions */}
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
@@ -255,58 +255,6 @@ const MemberList: React.FC<MemberListProps> = ({
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">
-                {members?.length || 0}
-              </div>
-              <div className="text-sm text-gray-600">Total Members</div>
-            </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">
-                {members?.filter((m) => m.email_verified).length || 0}
-              </div>
-              <div className="text-sm text-gray-600">Active Members</div>
-            </div>
-            <div className="text-center p-4 bg-yellow-50 rounded-lg">
-              <div className="text-2xl font-bold text-yellow-600">
-                {members?.filter((m) => m.membershiptype === "MONTHLY")
-                  .length || 0}
-              </div>
-              <div className="text-sm text-gray-600">Monthly Members</div>
-            </div>
-            <div className="text-center p-4 bg-purple-50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600">
-                {members?.filter((m) => m.membershiptype === "DAILY").length ||
-                  0}
-              </div>
-              <div className="text-sm text-gray-600">Daily Members</div>
-            </div>
-          </div>
-
-          {/* Additional Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-            <div className="text-center p-3 bg-orange-50 rounded-lg">
-              <div className="text-lg font-bold text-orange-600">
-                {members?.filter((m) => m.address).length || 0}
-              </div>
-              <div className="text-xs text-gray-600">With Address</div>
-            </div>
-            <div className="text-center p-3 bg-indigo-50 rounded-lg">
-              <div className="text-lg font-bold text-indigo-600">
-                {members?.filter((m) => m.emergency_contact).length || 0}
-              </div>
-              <div className="text-xs text-gray-600">Emergency Contact</div>
-            </div>
-            <div className="text-center p-3 bg-pink-50 rounded-lg">
-              <div className="text-lg font-bold text-pink-600">
-                {members?.filter((m) => m.medical_info).length || 0}
-              </div>
-              <div className="text-xs text-gray-600">Medical Info</div>
-            </div>
-          </div>
-        </CardContent>
       </Card>
 
       {/* Search and Filters */}
