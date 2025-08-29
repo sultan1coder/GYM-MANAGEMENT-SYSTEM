@@ -33,7 +33,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({ actions }) => {
           >
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
-                {React.createElement(action.icon as any, {
+                {React.cloneElement(action.icon as React.ReactElement, {
                   className: "h-4 w-4 text-blue-600",
                 })}
               </div>

@@ -152,7 +152,9 @@ const ActivityFeed: React.FC = () => {
             >
               {/* Activity Icon */}
               <div className={`p-2 rounded-lg ${activity.bgColor}`}>
-                <activity.icon className={`h-4 w-4 ${activity.color}`} />
+                {React.createElement(activity.icon, {
+                  className: `h-4 w-4 ${activity.color}`,
+                })}
               </div>
 
               {/* Activity Content */}

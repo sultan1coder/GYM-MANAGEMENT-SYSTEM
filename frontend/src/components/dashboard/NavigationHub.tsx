@@ -76,10 +76,11 @@ const NavigationHub: React.FC = () => {
     },
   ];
 
-  const filteredItems = navigationItems.filter((item) =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.category.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredItems = navigationItems.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleNavigate = (path: string) => {
@@ -114,7 +115,9 @@ const NavigationHub: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
-                    <item.icon className="h-4 w-4 text-blue-600" />
+                    {React.createElement(item.icon, {
+                      className: "h-4 w-4 text-blue-600",
+                    })}
                   </div>
                   <div>
                     <h4 className="font-medium text-sm group-hover:text-blue-600 transition-colors">

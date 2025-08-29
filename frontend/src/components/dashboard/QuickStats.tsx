@@ -62,9 +62,12 @@ const QuickStats: React.FC<QuickStatsProps> = ({ stats, memberStats }) => {
         <CardContent>
           <div className="text-2xl font-bold">{stats.totalMembers}</div>
           <p className="text-xs text-muted-foreground">
-            +{memberStats?.growthRate?.toFixed(1) || "0"}% from last month
+            +{memberStats?.growthRate || "0"}% from last month
           </p>
-          <Progress value={memberStats?.growthRate || 0} className="mt-2" />
+          <Progress
+            value={parseFloat(memberStats?.growthRate || "0")}
+            className="mt-2"
+          />
         </CardContent>
       </Card>
 
@@ -79,9 +82,13 @@ const QuickStats: React.FC<QuickStatsProps> = ({ stats, memberStats }) => {
           <p className="text-xs text-muted-foreground">
             {memberStats?.inactiveMembers || 0} inactive members
           </p>
-          <Progress 
-            value={stats.totalMembers > 0 ? (stats.activeMembers / stats.totalMembers) * 100 : 0} 
-            className="mt-2" 
+          <Progress
+            value={
+              stats.totalMembers > 0
+                ? (stats.activeMembers / stats.totalMembers) * 100
+                : 0
+            }
+            className="mt-2"
           />
         </CardContent>
       </Card>
@@ -95,11 +102,15 @@ const QuickStats: React.FC<QuickStatsProps> = ({ stats, memberStats }) => {
         <CardContent>
           <div className="text-2xl font-bold">{stats.newMembers}</div>
           <p className="text-xs text-muted-foreground">
-            {memberStats?.recentRegistrations?.length || 0} recent registrations
+            {memberStats?.recentRegistrations || 0} recent registrations
           </p>
-          <Progress 
-            value={stats.totalMembers > 0 ? (stats.newMembers / stats.totalMembers) * 100 : 0} 
-            className="mt-2" 
+          <Progress
+            value={
+              stats.totalMembers > 0
+                ? (stats.newMembers / stats.totalMembers) * 100
+                : 0
+            }
+            className="mt-2"
           />
         </CardContent>
       </Card>
@@ -119,9 +130,7 @@ const QuickStats: React.FC<QuickStatsProps> = ({ stats, memberStats }) => {
           <p className="text-xs text-muted-foreground mt-2">
             Uptime: {stats.uptime}
           </p>
-          <div className="mt-2">
-            {getSystemHealthIcon(stats.systemStatus)}
-          </div>
+          <div className="mt-2">{getSystemHealthIcon(stats.systemStatus)}</div>
         </CardContent>
       </Card>
     </div>

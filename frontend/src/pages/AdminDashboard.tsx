@@ -104,11 +104,7 @@ const AdminDashboard: React.FC = () => {
                 ] || "0.00"}
               </div>
               <p className="text-xs text-muted-foreground">
-                +
-                {typeof memberStats?.growthRate === "number"
-                  ? memberStats.growthRate.toFixed(1)
-                  : "0"}
-                % from last month
+                +{memberStats?.growthRate || "0"}% from last month
               </p>
             </CardContent>
           </Card>
