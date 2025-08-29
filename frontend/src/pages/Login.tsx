@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Users, UserCircle, ArrowRight, Dumbbell, Building2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Users,
+  UserCircle,
+  ArrowRight,
+  Dumbbell,
+  Building2,
+} from "lucide-react";
 
 const Login: React.FC = () => {
-  const [selectedRole, setSelectedRole] = useState<"staff" | "member" | null>(null);
+  const [selectedRole, setSelectedRole] = useState<"staff" | "member" | null>(
+    null
+  );
+  const navigate = useNavigate();
 
   const handleRoleSelect = (role: "staff" | "member") => {
     setSelectedRole(role);
@@ -11,9 +20,11 @@ const Login: React.FC = () => {
 
   const handleContinue = () => {
     if (selectedRole === "staff") {
-      window.location.href = "/users/login";
+      // Navigate to staff login form
+      navigate("/staff/login");
     } else if (selectedRole === "member") {
-      window.location.href = "/members/login";
+      // Navigate to member login form
+      navigate("/member/login");
     }
   };
 
@@ -45,18 +56,20 @@ const Login: React.FC = () => {
             onClick={() => handleRoleSelect("staff")}
           >
             <div className="text-center">
-              <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 transition-colors ${
-                selectedRole === "staff" 
-                  ? "bg-blue-100 text-blue-600" 
-                  : "bg-gray-100 text-gray-600"
-              }`}>
+              <div
+                className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 transition-colors ${
+                  selectedRole === "staff"
+                    ? "bg-blue-100 text-blue-600"
+                    : "bg-gray-100 text-gray-600"
+                }`}
+              >
                 <UserCircle className="w-8 h-8" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
                 Staff & Admin
               </h2>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                Access the administrative portal for managing gym operations, 
+                Access the administrative portal for managing gym operations,
                 members, equipment, and system settings.
               </p>
               <div className="space-y-3 text-sm text-gray-500">
@@ -74,12 +87,20 @@ const Login: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Selection Indicator */}
             {selectedRole === "staff" && (
               <div className="absolute top-4 right-4 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             )}
@@ -95,18 +116,20 @@ const Login: React.FC = () => {
             onClick={() => handleRoleSelect("member")}
           >
             <div className="text-center">
-              <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 transition-colors ${
-                selectedRole === "member" 
-                  ? "bg-green-100 text-green-600" 
-                  : "bg-gray-100 text-gray-600"
-              }`}>
+              <div
+                className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 transition-colors ${
+                  selectedRole === "member"
+                    ? "bg-green-100 text-green-600"
+                    : "bg-gray-100 text-gray-600"
+                }`}
+              >
                 <Users className="w-8 h-8" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
                 Gym Members
               </h2>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                Access your personal member portal to view membership details, 
+                Access your personal member portal to view membership details,
                 track workouts, and manage your profile.
               </p>
               <div className="space-y-3 text-sm text-gray-500">
@@ -124,12 +147,20 @@ const Login: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Selection Indicator */}
             {selectedRole === "member" && (
               <div className="absolute top-4 right-4 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             )}
@@ -152,14 +183,14 @@ const Login: React.FC = () => {
         {/* Additional Links */}
         <div className="text-center mt-12 space-y-4">
           <div className="flex justify-center gap-6 text-sm">
-            <Link 
-              to="/users/register" 
+            <Link
+              to="/users/register"
               className="text-blue-600 hover:text-blue-800 transition-colors"
             >
               Staff Registration
             </Link>
-            <Link 
-              to="/members/register" 
+            <Link
+              to="/members/register"
               className="text-green-600 hover:text-green-800 transition-colors"
             >
               Member Registration

@@ -5,9 +5,12 @@ import { Toaster } from "react-hot-toast";
 
 // Pages
 import Login from "./pages/Login";
+import StaffLogin from "./pages/StaffLogin";
+import MemberLogin from "./pages/MemberLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserManagement from "./pages/users/UserManagement";
 import MemberManagement from "./pages/members/MemberManagement";
+import MemberDashboard from "./pages/members/MemberDashboard";
 import ProfileSettings from "./pages/ProfileSettings";
 import EquipmentManagement from "./pages/equipments/EquipmentManagement";
 import PaymentManagement from "./pages/payments/PaymentManagement";
@@ -40,11 +43,21 @@ function App() {
                   <Route path="/" element={<Login />} />
                   <Route path="/login" element={<Login />} />
 
-                  {/* User Routes */}
-                  <Route path="/users/login" element={<Login />} />
+                  {/* Staff/Admin Login */}
+                  <Route path="/staff/login" element={<StaffLogin />} />
 
-                  {/* Member Routes */}
-                  <Route path="/members/login" element={<Login />} />
+                  {/* Member Login */}
+                  <Route path="/member/login" element={<MemberLogin />} />
+
+                  {/* Member Dashboard */}
+                  <Route
+                    path="/members/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <MemberDashboard />
+                      </ProtectedRoute>
+                    }
+                  />
 
                   {/* Protected Routes */}
                   <Route

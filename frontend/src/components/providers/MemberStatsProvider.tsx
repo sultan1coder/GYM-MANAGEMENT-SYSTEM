@@ -75,16 +75,23 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
       setIsLoading(true);
       setError(null);
 
-      console.log("Fetching member statistics...");
+      console.log("🚀 Starting to fetch member statistics...");
 
       // Fetch members data
+      console.log("📡 Calling memberAPI.getAllMembers()...");
       const membersResponse = await memberAPI.getAllMembers();
-      console.log("Members response:", membersResponse);
+      console.log("📥 Members response received:", membersResponse);
+
       if (!membersResponse.data.isSuccess) {
+        console.error(
+          "❌ Members API call failed:",
+          membersResponse.data.message
+        );
         throw new Error("Failed to fetch members data");
       }
-      const members = membersResponse.data.members || [];
-      console.log("Members data:", members.length, "members found");
+
+      const members = membersResponse.data.data || [];
+      console.log("✅ Members data loaded:", members.length, "members found");
 
       // Fetch subscription plans
       let plans: any[] = [];
@@ -100,12 +107,12 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
 
       // Calculate statistics
       const totalMembers = members.length;
-      const activeMembers = members.filter((m) => m.email_verified).length;
+      const activeMembers = members.filter((m: any) => m.email_verified).length;
       const inactiveMembers = totalMembers - activeMembers;
 
       // Calculate new members this month
       const currentMonth = new Date();
-      const newMembersThisMonth = members.filter((m) => {
+      const newMembersThisMonth = members.filter((m: any) => {
         const joinDate = new Date(m.createdAt);
         return (
           joinDate.getMonth() === currentMonth.getMonth() &&
@@ -120,7 +127,8 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
       const averageAge =
         totalMembers > 0
           ? Math.round(
-              members.reduce((sum, m) => sum + m.age, 0) / totalMembers
+              members.reduce((sum: number, m: any) => sum + m.age, 0) /
+                totalMembers
             )
           : 0;
 
@@ -133,17 +141,19 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
 
       // Membership types
       const membershipTypes = {
-        monthly: members.filter((m) => m.membershiptype === "MONTHLY").length,
-        daily: members.filter((m) => m.membershiptype === "DAILY").length,
+        monthly: members.filter((m: any) => m.membershiptype === "MONTHLY")
+          .length,
+        daily: members.filter((m: any) => m.membershiptype === "DAILY").length,
       };
 
       // Top membership plans
-      const topMembershipPlans = plans.map((plan) => ({
+      const topMembershipPlans = plans.map((plan: any) => ({
         name: plan.name,
-        count: members.filter((m) => m.membershiptype === "MONTHLY").length,
+        count: members.filter((m: any) => m.membershiptype === "MONTHLY")
+          .length,
         revenue:
           plan.price *
-          members.filter((m) => m.membershiptype === "MONTHLY").length,
+          members.filter((m: any) => m.membershiptype === "MONTHLY").length,
       }));
 
       // Monthly growth (last 12 months)
@@ -160,27 +170,33 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
 
       // Top cities (if address data exists)
       const topCities = members
-        .filter((m) => m.address)
-        .reduce((acc, member) => {
-          const cityKey = `${member.address?.city || "Unknown"}, ${
-            member.address?.state || "Unknown"
-          }`;
-          const existing = acc.find(
-            (c) =>
-              c.city === member.address?.city &&
-              c.state === member.address?.state
-          );
-          if (existing) {
-            existing.count++;
-          } else {
-            acc.push({
-              city: member.address?.city || "Unknown",
-              state: member.address?.state || "Unknown",
-              count: 1,
-            });
-          }
-          return acc;
-        }, [] as Array<{ city: string; state: string; count: number }>)
+        .filter((m: any) => m.address)
+        .reduce(
+          (
+            acc: Array<{ city: string; state: string; count: number }>,
+            member: any
+          ) => {
+            const cityKey = `${member.address?.city || "Unknown"}, ${
+              member.address?.state || "Unknown"
+            }`;
+            const existing = acc.find(
+              (c) =>
+                c.city === member.address?.city &&
+                c.state === member.address?.state
+            );
+            if (existing) {
+              existing.count++;
+            } else {
+              acc.push({
+                city: member.address?.city || "Unknown",
+                state: member.address?.state || "Unknown",
+                count: 1,
+              });
+            }
+            return acc;
+          },
+          [] as Array<{ city: string; state: string; count: number }>
+        )
         .sort((a, b) => b.count - a.count)
         .slice(0, 5);
 
@@ -188,7 +204,7 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
       const lastWeek = new Date();
       lastWeek.setDate(lastWeek.getDate() - 7);
       const recentRegistrations = members.filter(
-        (m) => new Date(m.createdAt) >= lastWeek
+        (m: any) => new Date(m.createdAt) >= lastWeek
       ).length;
 
       // Growth rate (month over month)
@@ -235,9 +251,19 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
     const checkAuthAndFetch = () => {
       const token =
         localStorage.getItem("token") || localStorage.getItem("memberToken");
+
+      console.log("🔐 Checking authentication...");
+      console.log("Token exists:", !!token);
+      console.log(
+        "Token value:",
+        token ? token.substring(0, 20) + "..." : "None"
+      );
+
       if (token) {
+        console.log("✅ User authenticated, fetching stats...");
         fetchMemberStats();
       } else {
+        console.log("❌ User not authenticated, showing auth required");
         // User not authenticated, set loading to false and show auth required
         setIsLoading(false);
         setError("Authentication required");
@@ -249,6 +275,11 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
 
     // Listen for storage changes (when user logs in/out)
     const handleStorageChange = (e: StorageEvent) => {
+      console.log(
+        "🔄 Storage changed:",
+        e.key,
+        e.newValue ? "updated" : "removed"
+      );
       if (e.key === "token" || e.key === "memberToken") {
         checkAuthAndFetch();
       }
@@ -256,6 +287,7 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
 
     // Listen for custom login event
     const handleLogin = () => {
+      console.log("🔑 Login event received");
       checkAuthAndFetch();
     };
 

@@ -42,7 +42,7 @@ export const getAllMembers = async (req: Request, res: Response) => {
     res.status(200).json({
       isSuccess: true,
       message: "Successfully fetched all members",
-      members: members, // Changed from 'data' to 'members' to match frontend expectation
+      data: members, // Changed back to 'data' to match frontend ApiResponse<T> type
     });
   } catch (error) {
     console.log(error);
