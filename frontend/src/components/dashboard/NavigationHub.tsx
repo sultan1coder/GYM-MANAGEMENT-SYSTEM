@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,7 @@ import {
 
 const NavigationHub: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   const navigationItems = [
     {
@@ -84,7 +86,7 @@ const NavigationHub: React.FC = () => {
   );
 
   const handleNavigate = (path: string) => {
-    window.location.href = path;
+    navigate(path);
   };
 
   return (

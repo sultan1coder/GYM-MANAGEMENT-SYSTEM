@@ -21,6 +21,14 @@ import ReportManagement from "./pages/reports/ReportManagement";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
+// New Admin Pages
+import UsersPage from "./pages/admin/UsersPage";
+import MembersPage from "./pages/admin/MembersPage";
+import EquipmentPage from "./pages/admin/EquipmentPage";
+import PaymentsPage from "./pages/admin/PaymentsPage";
+import ReportsPage from "./pages/admin/ReportsPage";
+import SettingsPage from "./pages/admin/SettingsPage";
+
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
@@ -72,17 +80,50 @@ function App() {
                               element={<AdminDashboard />}
                             />
                             <Route path="/users" element={<UserManagement />} />
+                            <Route path="/users/new" element={<UsersPage />} />
+                            <Route
+                              path="/users/approvals"
+                              element={<UsersPage />}
+                            />
                             <Route
                               path="/members"
                               element={<MemberManagement />}
+                            />
+                            <Route
+                              path="/members/new"
+                              element={<MembersPage />}
+                            />
+                            <Route
+                              path="/members/expiring"
+                              element={<MembersPage />}
                             />
                             <Route
                               path="/equipments"
                               element={<EquipmentManagement />}
                             />
                             <Route
+                              path="/equipment"
+                              element={<EquipmentPage />}
+                            />
+                            <Route
+                              path="/equipment/new"
+                              element={<EquipmentPage />}
+                            />
+                            <Route
+                              path="/equipment/maintenance"
+                              element={<EquipmentPage />}
+                            />
+                            <Route
                               path="/payments"
                               element={<PaymentManagement />}
+                            />
+                            <Route
+                              path="/payments/new"
+                              element={<PaymentsPage />}
+                            />
+                            <Route
+                              path="/payments/pending"
+                              element={<PaymentsPage />}
                             />
                             <Route
                               path="/subscriptions"
@@ -100,7 +141,36 @@ function App() {
                               path="/reports"
                               element={<ReportManagement />}
                             />
+                            <Route
+                              path="/reports/members"
+                              element={<ReportsPage />}
+                            />
+                            <Route
+                              path="/reports/financial"
+                              element={<ReportsPage />}
+                            />
+                            <Route path="/export" element={<ReportsPage />} />
                             <Route path="/settings" element={<Settings />} />
+                            <Route
+                              path="/admin/settings"
+                              element={<SettingsPage />}
+                            />
+                            <Route
+                              path="/admin/health"
+                              element={<SettingsPage />}
+                            />
+                            <Route
+                              path="/admin/backup"
+                              element={<SettingsPage />}
+                            />
+                            <Route
+                              path="/admin/permissions"
+                              element={<SettingsPage />}
+                            />
+                            <Route
+                              path="/admin/logs"
+                              element={<SettingsPage />}
+                            />
                           </Routes>
                         </AdminRoute>
                       </ProtectedRoute>

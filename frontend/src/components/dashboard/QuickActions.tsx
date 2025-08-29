@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,10 +15,11 @@ interface QuickActionsProps {
 
 const QuickActions: React.FC<QuickActionsProps> = ({ actions }) => {
   const { toggleFavorite } = useQuickActions();
+  const navigate = useNavigate();
 
   const handleActionClick = (action: QuickAction) => {
-    // Navigate to the action path
-    window.location.href = action.path;
+    // Navigate to the action path using React Router
+    navigate(action.path);
   };
 
   return (
