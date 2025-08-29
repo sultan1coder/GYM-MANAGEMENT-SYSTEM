@@ -51,6 +51,15 @@ export const loginMemberSlice = createSlice({
     clearError: (state) => {
       state.error = "";
     },
+    updateProfilePicture: (state, action) => {
+      if (state.data.member) {
+        state.data.member.profile_picture = action.payload;
+        // Update localStorage
+        try {
+          localStorage.setItem("memberData", JSON.stringify(state.data));
+        } catch {}
+      }
+    },
   },
 
   extraReducers(builder) {
@@ -87,4 +96,5 @@ export const loginMemberSlice = createSlice({
   },
 });
 
-export const { logout, clearError } = loginMemberSlice.actions;
+export const { logout, clearError, updateProfilePicture } =
+  loginMemberSlice.actions;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Button } from "../components/ui/button";
@@ -28,6 +28,15 @@ const ProfileSettings = () => {
   const [showProfileManager, setShowProfileManager] = useState(false);
   const [userType, setUserType] = useState<"staff" | "member">("staff");
   const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone_number: "",
+    age: 18,
+    role: "",
+    membershiptype: "",
+  });
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const loginState = useSelector((state: RootState) => state.loginSlice);
   const memberLoginState = useSelector(
@@ -46,15 +55,46 @@ const ProfileSettings = () => {
     ? loginState.data.isSuccess
     : memberLoginState.data.isSuccess;
 
+  // Initialize form data when user data changes
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        phone_number: user.phone_number || "",
+        age: (user as any).age || 18,
+        role: (user as any).role || "",
+        membershiptype: (user as any).membershiptype || "",
+      });
+    }
+  }, [user]);
+
   const openProfileManager = (type: "staff" | "member") => {
     setUserType(type);
     setShowProfileManager(true);
   };
 
-  const handleSaveChanges = () => {
-    // TODO: Implement actual profile update logic
-    toast.success("Profile updated successfully!");
-    setIsEditing(false);
+  const handleInputChange = (field: string, value: string | number) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSaveChanges = async () => {
+    if (!user) return;
+
+    setIsUpdating(true);
+    try {
+      // TODO: Implement actual profile update API call
+      // For now, just show success message
+      toast.success("Profile updated successfully!");
+      setIsEditing(false);
+    } catch (error) {
+      toast.error("Failed to update profile");
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   if (!isLoggedIn || !user) {
@@ -154,7 +194,10 @@ const ProfileSettings = () => {
                     </Label>
                     <Input
                       id="name"
-                      defaultValue={user.name}
+                      value={formData.name}
+                      onChange={(e) =>
+                        handleInputChange("name", e.target.value)
+                      }
                       disabled={!isEditing}
                       className="disabled:opacity-50"
                     />
@@ -168,7 +211,10 @@ const ProfileSettings = () => {
                     <Input
                       id="email"
                       type="email"
-                      defaultValue={user.email}
+                      value={formData.email}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
                       disabled={!isEditing}
                       className="disabled:opacity-50"
                     />
@@ -181,7 +227,10 @@ const ProfileSettings = () => {
                     </Label>
                     <Input
                       id="phone"
-                      defaultValue={user.phone_number || "Not provided"}
+                      value={formData.phone_number || ""}
+                      onChange={(e) =>
+                        handleInputChange("phone_number", e.target.value)
+                      }
                       disabled={!isEditing}
                       className="disabled:opacity-50"
                     />
@@ -196,10 +245,12 @@ const ProfileSettings = () => {
                       <Input
                         id="age"
                         type="number"
-                        defaultValue={
-                          isMemberUser && "age" in user
-                            ? user.age?.toString()
-                            : ""
+                        value={formData.age.toString()}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "age",
+                            parseInt(e.target.value) || 18
+                          )
                         }
                         disabled={!isEditing}
                         className="disabled:opacity-50"
@@ -215,9 +266,7 @@ const ProfileSettings = () => {
                       </Label>
                       <Input
                         id="role"
-                        defaultValue={
-                          isStaffUser && "role" in user ? user.role : ""
-                        }
+                        value={formData.role}
                         disabled
                         className="disabled:opacity-50"
                       />
@@ -235,11 +284,7 @@ const ProfileSettings = () => {
                       </Label>
                       <Input
                         id="membership"
-                        defaultValue={
-                          isMemberUser && "membershiptype" in user
-                            ? user.membershiptype
-                            : ""
-                        }
+                        value={formData.membershiptype}
                         disabled
                         className="disabled:opacity-50"
                       />
@@ -249,12 +294,24 @@ const ProfileSettings = () => {
 
                 {isEditing && (
                   <div className="flex gap-2 pt-4">
-                    <Button onClick={handleSaveChanges} className="flex-1">
-                      Save Changes
+                    <Button
+                      onClick={handleSaveChanges}
+                      disabled={isUpdating}
+                      className="flex-1"
+                    >
+                      {isUpdating ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                          Saving...
+                        </>
+                      ) : (
+                        "Save Changes"
+                      )}
                     </Button>
                     <Button
                       variant="outline"
                       onClick={() => setIsEditing(false)}
+                      disabled={isUpdating}
                       className="flex-1"
                     >
                       Cancel
@@ -283,7 +340,15 @@ const ProfileSettings = () => {
                       Update your account password
                     </p>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      toast.info(
+                        "Password change functionality will be implemented soon"
+                      )
+                    }
+                  >
                     Change
                   </Button>
                 </div>
@@ -295,7 +360,15 @@ const ProfileSettings = () => {
                       Add an extra layer of security
                     </p>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      toast.info(
+                        "Two-factor authentication will be implemented soon"
+                      )
+                    }
+                  >
                     Enable
                   </Button>
                 </div>

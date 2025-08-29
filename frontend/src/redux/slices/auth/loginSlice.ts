@@ -45,6 +45,16 @@ export const loginSlice = createSlice({
       localStorage.removeItem("user");
       localStorage.removeItem("token");
     },
+    updateProfilePicture: (state, action) => {
+      if (state.data.user) {
+        state.data.user.profile_picture = action.payload;
+        // Update localStorage
+        try {
+          localStorage.setItem("userData", JSON.stringify(state.data));
+          localStorage.setItem("user", JSON.stringify(state.data.user));
+        } catch {}
+      }
+    },
   },
 
   extraReducers(builder) {
@@ -78,4 +88,4 @@ export const loginSlice = createSlice({
   },
 });
 
-export const { logout } = loginSlice.actions;
+export const { logout, updateProfilePicture } = loginSlice.actions;

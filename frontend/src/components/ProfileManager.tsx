@@ -1,10 +1,22 @@
 import { useState, useRef, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
+import { AppDispatch } from "../redux/store";
 import { Button } from "./ui/button";
-import { Camera, Upload, X, User, Image, Trash2, CheckCircle, AlertCircle } from "lucide-react";
+import {
+  Camera,
+  Upload,
+  X,
+  User,
+  Image,
+  Trash2,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
 import { toast } from "react-hot-toast";
 import { userAPI, memberAPI } from "../services/api";
+import { updateProfilePicture as updateUserProfilePicture } from "../redux/slices/auth/loginSlice";
+import { updateProfilePicture as updateMemberProfilePicture } from "../redux/slices/members/loginSlice";
 
 interface ProfileManagerProps {
   onClose: () => void;
@@ -17,14 +29,16 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
-  const loginState = useSelector((state: RootState) => 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const loginState = useSelector((state: RootState) =>
     userType === "staff" ? state.loginSlice : state.loginMemberSlice
   );
-  
-  const user = userType === "staff" 
-    ? (loginState.data as any).user 
-    : (loginState.data as any).member;
+
+  const user =
+    userType === "staff"
+      ? (loginState.data as any).user
+      : (loginState.data as any).member;
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -35,19 +49,19 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
   const processFile = (file: File) => {
     // Validate file type
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file');
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
       return;
     }
-    
+
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('File size must be less than 5MB');
+      toast.error("File size must be less than 5MB");
       return;
     }
 
     setSelectedFile(file);
-    
+
     // Create preview URL
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
@@ -66,7 +80,7 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       processFile(files[0]);
@@ -77,32 +91,57 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
     if (!selectedFile || !user) return;
 
     setIsUploading(true);
-    
+
     try {
       // Upload profile picture using the real API
       if (userType === "staff") {
-        const response = await userAPI.uploadProfilePicture(user.id, selectedFile);
+        const response = await userAPI.uploadProfilePicture(
+          user.id,
+          selectedFile
+        );
         // Update user state with new profile picture URL
         if (response.data.isSuccess) {
-          // You can dispatch an action here to update the Redux store
-          // dispatch(updateUserProfilePicture(response.data.user.profile_picture));
+          const newProfilePictureUrl = response.data.user.profile_picture;
+          dispatch(updateUserProfilePicture(newProfilePictureUrl));
+          // Update localStorage
+          try {
+            const currentUserData = JSON.parse(
+              localStorage.getItem("userData") || "{}"
+            );
+            currentUserData.user.profile_picture = newProfilePictureUrl;
+            localStorage.setItem("userData", JSON.stringify(currentUserData));
+            localStorage.setItem("user", JSON.stringify(currentUserData.user));
+          } catch {}
         }
       } else {
         // For members, use the real upload API
-        const response = await memberAPI.uploadProfilePicture(user.id, selectedFile);
+        const response = await memberAPI.uploadProfilePicture(
+          user.id,
+          selectedFile
+        );
         // Update member state with new profile picture URL
         if (response.data.isSuccess) {
-          // You can dispatch an action here to update the Redux store
-          // dispatch(updateMemberProfilePicture(response.data.member.profile_picture));
+          const newProfilePictureUrl = response.data.member.profile_picture;
+          dispatch(updateMemberProfilePicture(newProfilePictureUrl));
+          // Update localStorage
+          try {
+            const currentMemberData = JSON.parse(
+              localStorage.getItem("memberData") || "{}"
+            );
+            currentMemberData.member.profile_picture = newProfilePictureUrl;
+            localStorage.setItem(
+              "memberData",
+              JSON.stringify(currentMemberData)
+            );
+          } catch {}
         }
       }
-      
-      toast.success('Profile picture updated successfully!');
+
+      toast.success("Profile picture updated successfully!");
       onClose();
-      
     } catch (error) {
-      toast.error('Failed to upload profile picture');
-      console.error('Upload error:', error);
+      toast.error("Failed to upload profile picture");
+      console.error("Upload error:", error);
     } finally {
       setIsUploading(false);
     }
@@ -112,7 +151,7 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
     setSelectedFile(null);
     setPreviewUrl(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -121,11 +160,11 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   return (
@@ -140,7 +179,9 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               </div>
               <div>
                 <h2 className="text-xl font-bold">Update Profile Picture</h2>
-                <p className="text-blue-100 text-sm">Choose a new profile image</p>
+                <p className="text-blue-100 text-sm">
+                  Choose a new profile image
+                </p>
               </div>
             </div>
             <button
@@ -177,7 +218,9 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               {user?.name}
             </p>
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              {user?.profile_picture ? 'Current Profile Picture' : 'No Profile Picture Set'}
+              {user?.profile_picture
+                ? "Current Profile Picture"
+                : "No Profile Picture Set"}
             </p>
           </div>
 
@@ -190,13 +233,13 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               onChange={handleFileSelect}
               className="hidden"
             />
-            
+
             {/* Drag & Drop Zone */}
             <div
               className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200 ${
                 isDragOver
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                  : "border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500"
               }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -204,24 +247,30 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
             >
               {!selectedFile ? (
                 <div className="space-y-4">
-                  <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-                    isDragOver 
-                      ? 'bg-blue-100 dark:bg-blue-800' 
-                      : 'bg-slate-100 dark:bg-slate-700'
-                  }`}>
-                    <Image className={`h-8 w-8 transition-colors ${
-                      isDragOver ? 'text-blue-600' : 'text-slate-500'
-                    }`} />
+                  <div
+                    className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
+                      isDragOver
+                        ? "bg-blue-100 dark:bg-blue-800"
+                        : "bg-slate-100 dark:bg-slate-700"
+                    }`}
+                  >
+                    <Image
+                      className={`h-8 w-8 transition-colors ${
+                        isDragOver ? "text-blue-600" : "text-slate-500"
+                      }`}
+                    />
                   </div>
-                  
+
                   <div>
                     <p className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                      {isDragOver ? 'Drop your image here' : 'Upload New Picture'}
+                      {isDragOver
+                        ? "Drop your image here"
+                        : "Upload New Picture"}
                     </p>
                     <p className="text-slate-600 dark:text-slate-400 mb-4">
                       Drag and drop an image here, or click to browse
                     </p>
-                    
+
                     <Button
                       onClick={openFileDialog}
                       variant="outline"
@@ -245,16 +294,17 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       <Image className="h-3 w-3" />
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <p className="font-medium text-slate-900 dark:text-white">
                       {selectedFile.name}
                     </p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">
-                      {formatFileSize(selectedFile.size)} • {selectedFile.type.split('/')[1].toUpperCase()}
+                      {formatFileSize(selectedFile.size)} •{" "}
+                      {selectedFile.type.split("/")[1].toUpperCase()}
                     </p>
                   </div>
-                  
+
                   <div className="flex gap-3">
                     <Button
                       onClick={handleRemovePicture}
@@ -320,8 +370,6 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               </div>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
