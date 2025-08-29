@@ -74,7 +74,7 @@ export const createInstallmentPlan = async (plan: InstallmentPlan) => {
     return installmentPlan;
   } catch (error) {
     console.error('Failed to create installment plan:', error);
-    throw error);
+    throw error;
   }
 };
 

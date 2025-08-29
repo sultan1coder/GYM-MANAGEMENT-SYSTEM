@@ -1,0 +1,19 @@
+import { Request, Response } from "express";
+export declare const createUser: (req: Request, res: Response) => Promise<void>;
+export declare const getAllUsers: (req: Request, res: Response) => Promise<void>;
+export declare const getSingleUser: (req: Request, res: Response) => Promise<void>;
+export declare const updateUser: (req: Request, res: Response) => Promise<void>;
+export declare const deleteUser: (req: Request, res: Response) => Promise<void>;
+export declare const updateProfilePicture: (req: Request, res: Response) => Promise<void>;
+export declare const createUserByAdmin: (req: Request, res: Response) => Promise<void>;
+export declare const bulkImportUsers: (req: Request, res: Response) => Promise<void>;
+export declare const getUserTemplates: (req: Request, res: Response) => Promise<void>;
+export declare const inviteUser: (req: Request, res: Response) => Promise<void>;
+export declare const resendInvitation: (req: Request, res: Response) => Promise<void>;
+export declare const searchUsers: (req: Request, res: Response) => Promise<void>;
+export declare const updateUserStatus: (req: Request, res: Response) => Promise<void>;
+export declare const getUserActivity: (req: Request, res: Response) => Promise<void>;
+export declare const bulkUpdateUserRoles: (req: Request, res: Response) => Promise<void>;
+export declare const updateUserProfile: (req: Request, res: Response) => Promise<void>;
+export declare const getUserProfile: (req: Request, res: Response) => Promise<void>;
+//# sourceMappingURL=user.controller.d.ts.map
