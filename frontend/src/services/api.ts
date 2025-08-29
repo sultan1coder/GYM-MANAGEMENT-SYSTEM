@@ -58,6 +58,16 @@ export const userAPI = {
       profile_picture: profilePictureUrl,
     }),
 
+  uploadProfilePicture: (id: number, file: File) => {
+    const formData = new FormData();
+    formData.append('profile_picture', file);
+    return api.post<ApiResponse<User>>(`${BASE_API_URL}/users/upload-profile-picture/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
+
   deleteUser: (id: number) =>
     api.delete<ApiResponse<User>>(`${BASE_API_URL}/users/delete/${id}`),
 
@@ -408,6 +418,16 @@ export const memberAPI = {
         profile_picture: profilePictureUrl,
       }
     ),
+
+  uploadProfilePicture: (id: string, file: File) => {
+    const formData = new FormData();
+    formData.append('profile_picture', file);
+    return api.post<ApiResponse<Member>>(`${BASE_API_URL}/members/upload-profile-picture/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
 
   deleteMember: (id: string) =>
     api.delete<ApiResponse<Member>>(`${BASE_API_URL}/members/delete/${id}`),

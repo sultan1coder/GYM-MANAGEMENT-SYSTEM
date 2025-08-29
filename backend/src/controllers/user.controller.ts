@@ -265,6 +265,60 @@ export const updateProfilePicture = async (req: Request, res: Response) => {
   }
 };
 
+export const uploadProfilePicture = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    
+    if (!req.file) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Profile picture file is required!",
+      });
+      return;
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: Number(userId),
+      },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "User not found!",
+      });
+      return;
+    }
+
+    // Generate the file URL
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const profilePictureUrl = `${baseUrl}/uploads/${req.file.filename}`;
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        profile_picture: profilePictureUrl,
+      },
+    });
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "Profile picture successfully uploaded and updated",
+      user: updatedUser,
+      profile_picture: profilePictureUrl,
+    });
+  } catch (error) {
+    console.log("Error: " + error);
+    res.status(500).json({
+      isSuccess: false,
+      message: "Server error!",
+    });
+  }
+};
+
 export const createUserByAdmin = async (req: Request, res: Response) => {
   try {
     const { name, email, password, username, phone_number, role } =

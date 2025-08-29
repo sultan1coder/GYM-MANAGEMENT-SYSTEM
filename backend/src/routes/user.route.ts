@@ -5,6 +5,7 @@ import {
   getSingleUser,
   updateUser,
   updateProfilePicture,
+  uploadProfilePicture,
   createUserByAdmin,
   bulkImportUsers,
   getUserTemplates,
@@ -23,8 +24,8 @@ import path from "path";
 
 const router = Router();
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
+// Configure multer for CSV/Excel file uploads
+const csvStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
   },
@@ -37,8 +38,8 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({
-  storage: storage,
+const csvUpload = multer({
+  storage: csvStorage,
   fileFilter: (req, file, cb) => {
     const allowedTypes = [".csv", ".xlsx", ".xls"];
     const fileExtension = path.extname(file.originalname).toLowerCase();
@@ -53,11 +54,41 @@ const upload = multer({
   },
 });
 
+// Configure multer for image uploads
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      "profile-" + file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    );
+  },
+});
+
+const imageUpload = multer({
+  storage: imageStorage,
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Invalid file type. Only image files are allowed."));
+    }
+  },
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+});
+
 // Existing routes
 router.get("/list", protect, getAllUsers);
 router.get("/single/:id", protect, getSingleUser);
 router.put("/update/:id", protect, updateUser);
 router.put("/profile-picture/:id", protect, updateProfilePicture);
+router.post("/upload-profile-picture/:id", protect, imageUpload.single("profile_picture"), uploadProfilePicture);
 router.delete("/delete/:id", protect, adminRoute, deleteUser);
 
 // New admin-only routes
@@ -66,7 +97,7 @@ router.post(
   "/bulk-import",
   protect,
   adminRoute,
-  upload.single("file"),
+  csvUpload.single("file"),
   bulkImportUsers
 );
 router.get("/templates", protect, adminRoute, getUserTemplates);

@@ -423,6 +423,60 @@ export const updateMemberProfilePicture = async (req: Request, res: Response) =>
   }
 };
 
+export const uploadMemberProfilePicture = async (req: Request, res: Response) => {
+  try {
+    const memberId = req.params.id;
+    
+    if (!req.file) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Profile picture file is required!",
+      });
+      return;
+    }
+
+    const member = await prisma.member.findFirst({
+      where: {
+        id: memberId,
+      },
+    });
+
+    if (!member) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "Member not found!",
+      });
+      return;
+    }
+
+    // Generate the file URL
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const profilePictureUrl = `${baseUrl}/uploads/${req.file.filename}`;
+
+    const updatedMember = await prisma.member.update({
+      where: {
+        id: member.id,
+      },
+      data: {
+        profile_picture: profilePictureUrl,
+      },
+    });
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "Profile picture successfully uploaded and updated",
+      member: updatedMember,
+      profile_picture: profilePictureUrl,
+    });
+  } catch (error) {
+    console.log("Error: " + error);
+    res.status(500).json({
+      isSuccess: false,
+      message: "Server error!",
+    });
+  }
+};
+
 // Bulk import members from CSV/Excel
 export const bulkImportMembers = async (req: Request, res: Response) => {
   try {

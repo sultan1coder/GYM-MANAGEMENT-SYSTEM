@@ -79,27 +79,26 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
     setIsUploading(true);
     
     try {
-      // For now, we'll simulate uploading to a cloud service
-      // In a real application, you would upload to AWS S3, Cloudinary, etc.
-      
-      // Simulate file upload delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Generate a mock URL (in real app, this would be the actual uploaded file URL)
-      const mockImageUrl = `https://via.placeholder.com/400x400/6366f1/ffffff?text=${encodeURIComponent(user.name)}`;
-      
-      // Update profile picture in database
+      // Upload profile picture using the real API
       if (userType === "staff") {
-        await userAPI.updateProfilePicture(user.id, mockImageUrl);
+        const response = await userAPI.uploadProfilePicture(user.id, selectedFile);
+        // Update user state with new profile picture URL
+        if (response.data.isSuccess) {
+          // You can dispatch an action here to update the Redux store
+          // dispatch(updateUserProfilePicture(response.data.user.profile_picture));
+        }
       } else {
-        await memberAPI.updateProfilePicture(user.id, mockImageUrl);
+        // For members, use the real upload API
+        const response = await memberAPI.uploadProfilePicture(user.id, selectedFile);
+        // Update member state with new profile picture URL
+        if (response.data.isSuccess) {
+          // You can dispatch an action here to update the Redux store
+          // dispatch(updateMemberProfilePicture(response.data.member.profile_picture));
+        }
       }
       
       toast.success('Profile picture updated successfully!');
       onClose();
-      
-      // TODO: Update user state with new profile picture URL
-      // This would typically involve dispatching an action to update the Redux store
       
     } catch (error) {
       toast.error('Failed to upload profile picture');
