@@ -27,7 +27,7 @@ import { toast } from "react-hot-toast";
 import {
   updateUserBasicProfile,
   changeUserPassword,
-  enableTwoFactorAuth,
+
 } from "../services/api";
 import { memberAPI } from "../services/api";
 
@@ -163,9 +163,9 @@ const ProfileSettings = () => {
 
       let response;
       if (isStaffUser) {
-        response = await updateUserBasicProfile(user.id, updateData);
+        response = await updateUserBasicProfile(user.id as number, updateData);
       } else {
-        response = await memberAPI.updateBasicProfile(user.id, updateData);
+        response = await memberAPI.updateBasicProfile(user.id as string, updateData);
       }
 
       if (response?.data.isSuccess) {
@@ -200,12 +200,12 @@ const ProfileSettings = () => {
     try {
       let response;
       if (isStaffUser) {
-        response = await changeUserPassword(user.id, {
+        response = await changeUserPassword(user.id as number, {
           currentPassword: passwordData.currentPassword,
           newPassword: passwordData.newPassword,
         });
       } else {
-        response = await memberAPI.changePassword(user.id, {
+        response = await memberAPI.changePassword(user.id as string, {
           currentPassword: passwordData.currentPassword,
           newPassword: passwordData.newPassword,
         });
@@ -520,7 +520,7 @@ const ProfileSettings = () => {
                     variant="outline"
                     size="sm"
                     onClick={() =>
-                      toast.info(
+                      toast.success(
                         "Two-factor authentication will be implemented soon"
                       )
                     }

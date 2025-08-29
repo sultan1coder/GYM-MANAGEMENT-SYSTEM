@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Users,
   UserCheck,
@@ -35,7 +34,7 @@ export interface QuickAction {
     | "system"
     | "reports"
     | "settings";
-  action: () => void;
+  path: string;
   status?: "active" | "warning" | "error";
   count?: number;
   priority?: "high" | "medium" | "low";
@@ -72,12 +71,7 @@ interface QuickActionsProviderProps {
 export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
   children,
 }) => {
-  const navigate = useNavigate();
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-
-  const handleNavigate = (path: string) => {
-    navigate(path);
-  };
 
   const quickActions: QuickAction[] = [
     // User Management
@@ -87,7 +81,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Create new admin or staff account",
       icon: <Users className="w-6 h-6" />,
       category: "users",
-      action: () => handleNavigate("/admin/users/new"),
+      path: "/admin/users/new",
       status: "active",
       priority: "medium",
       isFavorite: true,
@@ -99,7 +93,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "View and edit user accounts",
       icon: <Eye className="w-6 h-6" />,
       category: "users",
-      action: () => handleNavigate("/admin/users"),
+      path: "/admin/users",
       status: "active",
       priority: "high",
       isFavorite: true,
@@ -112,7 +106,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Review user registration requests",
       icon: <Clock className="w-6 h-6" />,
       category: "users",
-      action: () => handleNavigate("/admin/users/approvals"),
+      path: "/admin/users/approvals",
       status: "warning",
       priority: "high",
       isFavorite: false,
@@ -127,7 +121,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Register new gym equipment",
       icon: <Plus className="w-6 h-6" />,
       category: "equipment",
-      action: () => handleNavigate("/admin/equipment/new"),
+      path: "/admin/equipment/new",
       status: "active",
       priority: "medium",
       isFavorite: true,
@@ -139,7 +133,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Monitor equipment health",
       icon: <Dumbbell className="w-6 h-6" />,
       category: "equipment",
-      action: () => handleNavigate("/admin/equipment"),
+      path: "/admin/equipment",
       status: "active",
       priority: "high",
       isFavorite: true,
@@ -152,7 +146,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Equipment requiring attention",
       icon: <AlertTriangle className="w-6 h-6" />,
       category: "equipment",
-      action: () => handleNavigate("/admin/equipment/maintenance"),
+      path: "/admin/equipment/maintenance",
       status: "warning",
       priority: "high",
       isFavorite: true,
@@ -167,7 +161,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Record new payment transaction",
       icon: <Plus className="w-6 h-6" />,
       category: "payments",
-      action: () => handleNavigate("/admin/payments/new"),
+      path: "/admin/payments/new",
       status: "active",
       priority: "high",
       isFavorite: true,
@@ -179,7 +173,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "View all payment records",
       icon: <CreditCard className="w-6 h-6" />,
       category: "payments",
-      action: () => handleNavigate("/admin/payments"),
+      path: "/admin/payments",
       status: "active",
       priority: "high",
       isFavorite: true,
@@ -192,7 +186,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Review pending transactions",
       icon: <Clock className="w-6 h-6" />,
       category: "payments",
-      action: () => handleNavigate("/admin/payments/pending"),
+      path: "/admin/payments/pending",
       status: "warning",
       priority: "medium",
       isFavorite: false,
@@ -207,7 +201,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Register new gym member",
       icon: <Plus className="w-6 h-6" />,
       category: "members",
-      action: () => handleNavigate("/admin/members/new"),
+      path: "/admin/members/new",
       status: "active",
       priority: "high",
       isFavorite: true,
@@ -219,7 +213,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Manage all members",
       icon: <UserCheck className="w-6 h-6" />,
       category: "members",
-      action: () => handleNavigate("/admin/members"),
+      path: "/admin/members",
       status: "active",
       priority: "high",
       isFavorite: true,
@@ -232,7 +226,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Memberships ending soon",
       icon: <Calendar className="w-6 h-6" />,
       category: "members",
-      action: () => handleNavigate("/admin/members/expiring"),
+      path: "/admin/members/expiring",
       status: "warning",
       priority: "medium",
       isFavorite: false,
@@ -247,7 +241,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Generate member analytics",
       icon: <BarChart3 className="w-6 h-6" />,
       category: "reports",
-      action: () => handleNavigate("/admin/reports/members"),
+      path: "/admin/reports/members",
       status: "active",
       priority: "medium",
       isFavorite: true,
@@ -259,7 +253,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "View revenue and payment reports",
       icon: <FileText className="w-6 h-6" />,
       category: "reports",
-      action: () => handleNavigate("/admin/reports/financial"),
+      path: "/admin/reports/financial",
       status: "active",
       priority: "high",
       isFavorite: true,
@@ -271,7 +265,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Export data to CSV/Excel",
       icon: <Download className="w-6 h-6" />,
       category: "reports",
-      action: () => handleNavigate("/admin/export"),
+      path: "/admin/export",
       status: "active",
       priority: "low",
       isFavorite: false,
@@ -285,7 +279,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Configure gym system",
       icon: <Settings className="w-6 h-6" />,
       category: "settings",
-      action: () => handleNavigate("/admin/settings"),
+      path: "/admin/settings",
       status: "active",
       priority: "low",
       isFavorite: false,
@@ -297,7 +291,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Monitor system performance",
       icon: <Database className="w-6 h-6" />,
       category: "system",
-      action: () => handleNavigate("/admin/health"),
+      path: "/admin/health",
       status: "active",
       priority: "medium",
       isFavorite: true,
@@ -309,7 +303,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "System backup operations",
       icon: <Database className="w-6 h-6" />,
       category: "system",
-      action: () => handleNavigate("/admin/backup"),
+      path: "/admin/backup",
       status: "active",
       priority: "medium",
       isFavorite: false,
@@ -321,7 +315,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "Manage user roles and permissions",
       icon: <Shield className="w-6 h-6" />,
       category: "settings",
-      action: () => handleNavigate("/admin/permissions"),
+      path: "/admin/permissions",
       status: "active",
       priority: "high",
       isFavorite: true,
@@ -333,7 +327,7 @@ export const QuickActionsProvider: React.FC<QuickActionsProviderProps> = ({
       description: "View system activity logs",
       icon: <Activity className="w-6 h-6" />,
       category: "system",
-      action: () => handleNavigate("/admin/logs"),
+      path: "/admin/logs",
       status: "active",
       priority: "low",
       isFavorite: false,

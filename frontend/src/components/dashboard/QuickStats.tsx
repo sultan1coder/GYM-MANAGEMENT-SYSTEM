@@ -1,236 +1,126 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   Users,
   UserCheck,
-  Dumbbell,
-  CreditCard,
   TrendingUp,
   AlertTriangle,
   CheckCircle,
   Clock,
+  Activity,
 } from "lucide-react";
-import { useMemberStats } from "../providers/MemberStatsProvider";
 
 interface QuickStatsProps {
   stats: {
-    totalUsers: number;
     totalMembers: number;
-    totalEquipment: number;
-    totalPayments: number;
-    pendingPayments: number;
-    systemHealth: "excellent" | "good" | "warning" | "critical";
-    todayRevenue: number;
-    activeMemberships: number;
-    maintenanceAlerts: number;
-    expiringMemberships: number;
+    activeMembers: number;
+    newMembers: number;
+    expiringMembers: number;
+    systemStatus: string;
+    uptime: string;
   };
+  memberStats: any;
 }
 
-const QuickStats: React.FC<QuickStatsProps> = ({ stats }) => {
-  // Use consolidated member stats provider for additional data
-  const { stats: memberStats } = useMemberStats();
-
-  const getSystemHealthColor = (health: string) => {
-    switch (health) {
-      case "excellent":
-        return "text-green-600 bg-green-50";
-      case "good":
-        return "text-blue-600 bg-blue-50";
+const QuickStats: React.FC<QuickStatsProps> = ({ stats, memberStats }) => {
+  const getSystemHealthColor = (status: string) => {
+    switch (status) {
+      case "healthy":
+        return "bg-green-100 text-green-800";
       case "warning":
-        return "text-yellow-600 bg-yellow-50";
+        return "bg-yellow-100 text-yellow-800";
       case "critical":
-        return "text-red-600 bg-red-50";
+        return "bg-red-100 text-red-800";
       default:
-        return "text-gray-600 bg-gray-50";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
-  const getSystemHealthIcon = (health: string) => {
-    switch (health) {
-      case "excellent":
-        return <CheckCircle className="h-5 w-5" />;
-      case "good":
-        return <CheckCircle className="h-5 w-5" />;
+  const getSystemHealthIcon = (status: string) => {
+    switch (status) {
+      case "healthy":
+        return <CheckCircle className="h-5 w-5 text-green-600" />;
       case "warning":
-        return <AlertTriangle className="h-5 w-5" />;
+        return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
       case "critical":
-        return <AlertTriangle className="h-5 w-5" />;
+        return <AlertTriangle className="h-5 w-5 text-red-600" />;
       default:
-        return <CheckCircle className="h-5 w-5" />;
+        return <Clock className="h-5 w-5 text-gray-600" />;
     }
   };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {/* Total Users */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2">
-            <Users className="h-8 w-8 text-blue-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Users</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {stats.totalUsers}
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Total Members */}
       <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2">
-            <UserCheck className="h-8 w-8 text-green-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Members</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {stats.totalMembers}
-              </p>
-              {memberStats && (
-                <p className="text-xs text-gray-500">
-                  {memberStats.activeMembers} active •{" "}
-                  {memberStats.inactiveMembers} inactive
-                </p>
-              )}
-            </div>
-          </div>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Members</CardTitle>
+          <Users className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{stats.totalMembers}</div>
+          <p className="text-xs text-muted-foreground">
+            +{memberStats?.growthRate?.toFixed(1) || "0"}% from last month
+          </p>
+          <Progress value={memberStats?.growthRate || 0} className="mt-2" />
         </CardContent>
       </Card>
 
-      {/* Total Equipment */}
+      {/* Active Members */}
       <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2">
-            <Dumbbell className="h-8 w-8 text-purple-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600">
-                Total Equipment
-              </p>
-              <p className="text-2xl font-bold text-gray-900">
-                {stats.totalEquipment}
-              </p>
-              {stats.maintenanceAlerts > 0 && (
-                <Badge variant="destructive" className="mt-1">
-                  {stats.maintenanceAlerts} needs attention
-                </Badge>
-              )}
-            </div>
-          </div>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Active Members</CardTitle>
+          <UserCheck className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{stats.activeMembers}</div>
+          <p className="text-xs text-muted-foreground">
+            {memberStats?.inactiveMembers || 0} inactive members
+          </p>
+          <Progress 
+            value={stats.totalMembers > 0 ? (stats.activeMembers / stats.totalMembers) * 100 : 0} 
+            className="mt-2" 
+          />
         </CardContent>
       </Card>
 
-      {/* Total Payments */}
+      {/* New Members This Month */}
       <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2">
-            <CreditCard className="h-8 w-8 text-orange-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600">
-                Total Payments
-              </p>
-              <p className="text-2xl font-bold text-gray-900">
-                {stats.totalPayments}
-              </p>
-              {stats.pendingPayments > 0 && (
-                <Badge variant="secondary" className="mt-1">
-                  {stats.pendingPayments} pending
-                </Badge>
-              )}
-            </div>
-          </div>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">New This Month</CardTitle>
+          <TrendingUp className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{stats.newMembers}</div>
+          <p className="text-xs text-muted-foreground">
+            {memberStats?.recentRegistrations?.length || 0} recent registrations
+          </p>
+          <Progress 
+            value={stats.totalMembers > 0 ? (stats.newMembers / stats.totalMembers) * 100 : 0} 
+            className="mt-2" 
+          />
         </CardContent>
       </Card>
 
       {/* System Health */}
       <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2">
-            <div
-              className={`p-2 rounded-lg ${getSystemHealthColor(
-                stats.systemHealth
-              )}`}
-            >
-              {getSystemHealthIcon(stats.systemHealth)}
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-600">System Health</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {stats.systemHealth.charAt(0).toUpperCase() +
-                  stats.systemHealth.slice(1)}
-              </p>
-            </div>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">System Status</CardTitle>
+          <Activity className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">
+            <Badge className={getSystemHealthColor(stats.systemStatus)}>
+              {stats.systemStatus}
+            </Badge>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Today's Revenue */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2">
-            <TrendingUp className="h-8 w-8 text-green-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600">
-                Today's Revenue
-              </p>
-              <p className="text-2xl font-bold text-gray-900">
-                ${stats.todayRevenue.toLocaleString()}
-              </p>
-              {memberStats &&
-                memberStats.revenueByMonth &&
-                memberStats.revenueByMonth.length > 0 && (
-                  <p className="text-xs text-gray-500">
-                    Monthly: $
-                    {memberStats.revenueByMonth[
-                      memberStats.revenueByMonth.length - 1
-                    ]?.toLocaleString() || 0}
-                  </p>
-                )}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Active Memberships */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2">
-            <CheckCircle className="h-8 w-8 text-green-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600">
-                Active Memberships
-              </p>
-              <p className="text-2xl font-bold text-gray-900">
-                {stats.activeMemberships}
-              </p>
-              {memberStats && (
-                <p className="text-xs text-gray-500">
-                  {memberStats.growthRate}% growth this month
-                </p>
-              )}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Expiring Memberships */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2">
-            <Clock className="h-8 w-8 text-yellow-600" />
-            <div>
-              <p className="text-sm font-medium text-gray-600">Expiring Soon</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {stats.expiringMemberships}
-              </p>
-              {stats.expiringMemberships > 0 && (
-                <Badge variant="secondary" className="mt-1">
-                  Requires attention
-                </Badge>
-              )}
-            </div>
+          <p className="text-xs text-muted-foreground mt-2">
+            Uptime: {stats.uptime}
+          </p>
+          <div className="mt-2">
+            {getSystemHealthIcon(stats.systemStatus)}
           </div>
         </CardContent>
       </Card>

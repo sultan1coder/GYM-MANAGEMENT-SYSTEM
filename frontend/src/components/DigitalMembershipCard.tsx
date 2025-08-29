@@ -8,6 +8,7 @@ import {
   Phone,
   Mail,
   Download,
+  User,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";

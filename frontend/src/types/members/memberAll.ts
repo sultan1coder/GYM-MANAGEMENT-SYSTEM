@@ -1,3 +1,5 @@
+import { MembershipType, Payment, Invoice, Subscription } from '../index';
+
 export interface IGetMembersResponse {
   message: string;
   members: Member[];
@@ -34,7 +36,7 @@ export interface Member {
   password: string;
   age: number;
   profile_picture?: string;
-  membershiptype: MemberShipType;
+  membershiptype: MembershipType;
   
   // Address Information
   address?: Address;
