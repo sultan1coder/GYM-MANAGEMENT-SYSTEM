@@ -24,7 +24,7 @@ export const registerMemberFn = createAsyncThunk(
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(
-          error.response?.data.messaga || DEFAULT_ERROR_MESSAGE
+          error.response?.data?.message || DEFAULT_ERROR_MESSAGE
         );
       }
 
@@ -60,3 +60,5 @@ export const registerMemberSlice = createSlice({
     });
   },
 });
+
+export default registerMemberSlice.reducer;

@@ -17,6 +17,34 @@ import {
 const Homepage = () => {
   return (
     <div className="space-y-20">
+      {/* Navigation Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-md">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-3">
+              <Dumbbell className="w-8 h-8 text-blue-600" />
+              <span className="text-xl font-bold text-gray-900">
+                BILKHAYR GYM
+              </span>
+            </div>
+            <nav className="flex items-center gap-6">
+              <Link
+                to="/portal"
+                className="font-medium text-gray-600 transition-colors hover:text-blue-600"
+              >
+                Access Portal
+              </Link>
+              <Link
+                to="/member/register"
+                className="px-4 py-2 font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
+              >
+                Join Now
+              </Link>
+            </nav>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section with Background Image */}
       <section className="relative pt-20 pb-32 overflow-hidden">
         {/* Background Image with Overlay */}
@@ -409,13 +437,13 @@ const Homepage = () => {
               </p>
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
                 <Link
-                  to="/members/register"
+                  to="/member/register"
                   className="px-8 py-4 font-semibold text-blue-600 transition-all bg-white rounded-xl hover:bg-gray-100"
                 >
                   Become a Member
                 </Link>
                 <Link
-                  to="/auth/login"
+                  to="/staff/login"
                   className="px-8 py-4 text-white transition-all border-2 border-white rounded-xl hover:bg-white hover:text-blue-600"
                 >
                   Staff Portal

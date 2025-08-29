@@ -23,6 +23,8 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { toast } from "react-hot-toast";
+import { registerFn } from "../redux/slices/auth/registerSlice";
+import { AppDispatch } from "../redux/store";
 
 const StaffRegistration: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -39,7 +41,7 @@ const StaffRegistration: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -98,19 +100,22 @@ const StaffRegistration: React.FC = () => {
 
     setIsLoading(true);
     try {
-      // TODO: Implement staff registration API call
-      // const result = await dispatch(registerStaff(formData) as any);
+      // Prepare data for API call (remove confirmPassword as it's not needed by backend)
+      const { confirmPassword, ...apiData } = formData;
 
-      // For now, simulate success
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const result = await dispatch(registerFn(apiData) as any);
 
-      toast.success(
-        "Staff registration successful! Please wait for admin approval."
-      );
-      navigate("/staff/login");
-    } catch (error) {
-      toast.error("Registration failed. Please try again.");
+      if (result.payload?.isSuccess) {
+        toast.success(
+          "Staff registration successful! Please wait for admin approval."
+        );
+        navigate("/staff/login");
+      } else {
+        toast.error(result.payload?.message || "Registration failed");
+      }
+    } catch (error: any) {
       console.error("Registration error:", error);
+      toast.error(error?.message || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
     }

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Search, Edit, Trash2, Eye } from "lucide-react";
 
 const UsersPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleAddNewUser = () => {
+    navigate("/staff/register");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -19,7 +26,7 @@ const UsersPage: React.FC = () => {
               Manage admin and staff accounts
             </p>
           </div>
-          <Button>
+          <Button onClick={handleAddNewUser}>
             <Plus className="h-4 w-4 mr-2" />
             Add New User
           </Button>

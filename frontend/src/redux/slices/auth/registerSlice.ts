@@ -16,12 +16,12 @@ export const registerFn = createAsyncThunk(
   "users/register",
   async (data: IRegisterBody, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${BASE_API_URL}/users/register`, data);
+      const response = await axios.post(`${BASE_API_URL}/auth/register`, data);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(
-          error.response?.data.messaga || DEFAULT_ERROR_MESSAGE
+          error.response?.data?.message || DEFAULT_ERROR_MESSAGE
         );
       }
 
@@ -31,7 +31,7 @@ export const registerFn = createAsyncThunk(
 );
 
 export const registerSlice = createSlice({
-  name: "login slice",
+  name: "register slice",
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -57,3 +57,5 @@ export const registerSlice = createSlice({
     });
   },
 });
+
+export default registerSlice.reducer;

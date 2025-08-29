@@ -20,6 +20,7 @@ import WorkoutManagement from "./pages/workouts/WorkoutManagement";
 import ReportManagement from "./pages/reports/ReportManagement";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import Homepage from "./pages/Homepage";
 
 // New Admin Pages
 import UsersPage from "./pages/admin/UsersPage";
@@ -52,7 +53,9 @@ function App() {
               <div className="min-h-screen bg-gray-50">
                 <Routes>
                   {/* Public Routes */}
-                  <Route path="/" element={<Login />} />
+                  <Route path="/" element={<Homepage />} />
+                  <Route path="/home" element={<Homepage />} />
+                  <Route path="/portal" element={<Login />} />
                   <Route path="/login" element={<Login />} />
 
                   {/* Staff/Admin Login */}

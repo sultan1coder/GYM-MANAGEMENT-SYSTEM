@@ -1,204 +1,186 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { useNavigate, Link } from "react-router-dom";
 import {
+  Building2,
   Users,
-  UserCircle,
   ArrowRight,
   Dumbbell,
-  Building2,
+  Sparkles,
+  Shield,
+  Heart,
 } from "lucide-react";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 
 const Login: React.FC = () => {
-  const [selectedRole, setSelectedRole] = useState<"staff" | "member" | null>(
-    null
-  );
   const navigate = useNavigate();
 
-  const handleRoleSelect = (role: "staff" | "member") => {
-    setSelectedRole(role);
-  };
-
-  const handleContinue = () => {
-    if (selectedRole === "staff") {
-      // Navigate to staff login form
+  const handlePortalSelection = (portalType: "staff" | "member") => {
+    if (portalType === "staff") {
       navigate("/staff/login");
-    } else if (selectedRole === "member") {
-      // Navigate to member login form
+    } else {
       navigate("/member/login");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Background Decorations */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-indigo-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-blue-300/10 to-indigo-300/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="max-w-4xl w-full space-y-12 relative z-10">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full mb-6">
-            <Dumbbell className="w-10 h-10" />
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-3xl mb-8 shadow-2xl transform hover:scale-105 transition-transform duration-300">
+            <Dumbbell className="w-12 h-12" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-6xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
             Gym Management System
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Choose your login type to access the appropriate portal
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Choose your portal to access the gym management system. Staff and
+            administrators can manage operations, while members can track their
+            fitness journey.
           </p>
-        </div>
-
-        {/* Login Options */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* Staff/Admin Login */}
-          <div
-            className={`relative p-8 bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 cursor-pointer hover:shadow-xl ${
-              selectedRole === "staff"
-                ? "border-blue-500 shadow-blue-100"
-                : "border-gray-200 hover:border-blue-300"
-            }`}
-            onClick={() => handleRoleSelect("staff")}
-          >
-            <div className="text-center">
-              <div
-                className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 transition-colors ${
-                  selectedRole === "staff"
-                    ? "bg-blue-100 text-blue-600"
-                    : "bg-gray-100 text-gray-600"
-                }`}
-              >
-                <UserCircle className="w-8 h-8" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                Staff & Admin
-              </h2>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Access the administrative portal for managing gym operations,
-                members, equipment, and system settings.
-              </p>
-              <div className="space-y-3 text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <Building2 className="w-4 h-4" />
-                  <span>Gym Management</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4" />
-                  <span>Member Management</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Dumbbell className="w-4 h-4" />
-                  <span>Equipment Control</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Selection Indicator */}
-            {selectedRole === "staff" && (
-              <div className="absolute top-4 right-4 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                <svg
-                  className="w-4 h-4 text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-          </div>
-
-          {/* Member Login */}
-          <div
-            className={`relative p-8 bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 cursor-pointer hover:shadow-xl ${
-              selectedRole === "member"
-                ? "border-green-500 shadow-green-100"
-                : "border-gray-200 hover:border-green-300"
-            }`}
-            onClick={() => handleRoleSelect("member")}
-          >
-            <div className="text-center">
-              <div
-                className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 transition-colors ${
-                  selectedRole === "member"
-                    ? "bg-green-100 text-green-600"
-                    : "bg-gray-100 text-gray-600"
-                }`}
-              >
-                <Users className="w-8 h-8" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                Gym Members
-              </h2>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Access your personal member portal to view membership details,
-                track workouts, and manage your profile.
-              </p>
-              <div className="space-y-3 text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <Dumbbell className="w-4 h-4" />
-                  <span>Workout Tracking</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4" />
-                  <span>Profile Management</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Building2 className="w-4 h-4" />
-                  <span>Membership Status</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Selection Indicator */}
-            {selectedRole === "member" && (
-              <div className="absolute top-4 right-4 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                <svg
-                  className="w-4 h-4 text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Continue Button */}
-        {selectedRole && (
-          <div className="text-center mt-8">
-            <button
-              onClick={handleContinue}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+          <div className="mt-6">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 hover:underline"
             >
-              Continue to {selectedRole === "staff" ? "Staff" : "Member"} Login
-              <ArrowRight className="w-5 h-5" />
-            </button>
+              ← Back to Homepage
+            </Link>
           </div>
-        )}
+        </div>
 
-        {/* Additional Links */}
-        <div className="text-center mt-12 space-y-4">
-          <div className="flex justify-center gap-6 text-sm">
+        {/* Portal Selection Cards */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Staff & Admin Portal */}
+          <Card
+            className="shadow-2xl border-0 bg-white/90 backdrop-blur-md transform hover:scale-105 transition-all duration-500 hover:shadow-3xl group cursor-pointer"
+            onClick={() => handlePortalSelection("staff")}
+          >
+            <CardHeader className="text-center pb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl mb-6 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110">
+                <Building2 className="w-10 h-10" />
+              </div>
+              <CardTitle className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-3">
+                <Sparkles className="w-7 h-7 text-blue-600" />
+                Staff & Admin Portal
+                <Sparkles className="w-7 h-7 text-blue-600" />
+              </CardTitle>
+              <p className="text-gray-600 mt-3 text-lg">
+                Administrative access to manage gym operations
+              </p>
+            </CardHeader>
+            <CardContent className="p-8 text-center">
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Shield className="w-5 h-5 text-blue-600" />
+                  <span>Manage members and staff</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Shield className="w-5 h-5 text-blue-600" />
+                  <span>Equipment and facility management</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Shield className="w-5 h-5 text-blue-600" />
+                  <span>Payment and subscription tracking</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Shield className="w-5 h-5 text-blue-600" />
+                  <span>Reports and analytics</span>
+                </div>
+              </div>
+
+              <Button className="w-full h-14 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xl rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
+                <span>Access Staff Portal</span>
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Member Portal */}
+          <Card
+            className="shadow-2xl border-0 bg-white/90 backdrop-blur-md transform hover:scale-105 transition-all duration-500 hover:shadow-3xl group cursor-pointer"
+            onClick={() => handlePortalSelection("member")}
+          >
+            <CardHeader className="text-center pb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl mb-6 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110">
+                <Users className="w-10 h-10" />
+              </div>
+              <CardTitle className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-3">
+                <Heart className="w-7 h-7 text-green-600" />
+                Member Portal
+                <Heart className="w-7 h-7 text-green-600" />
+              </CardTitle>
+              <p className="text-gray-600 mt-3 text-lg">
+                Personal access to track your fitness journey
+              </p>
+            </CardHeader>
+            <CardContent className="p-8 text-center">
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Heart className="w-5 h-5 text-green-600" />
+                  <span>View membership details</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Heart className="w-5 h-5 text-green-600" />
+                  <span>Track workout progress</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Heart className="w-5 h-5 text-green-600" />
+                  <span>Manage payments and renewals</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Heart className="w-5 h-5 text-green-600" />
+                  <span>Book classes and sessions</span>
+                </div>
+              </div>
+
+              <Button className="w-full h-14 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold text-xl rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
+                <span>Access Member Portal</span>
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Registration Links */}
+        <div className="text-center space-y-4">
+          <div className="flex items-center justify-center gap-8">
             <Link
               to="/staff/register"
-              className="text-blue-600 hover:text-blue-800 transition-colors"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-lg transition-colors duration-200 hover:underline group"
             >
-              Staff Registration
+              <Building2 className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+              Create Staff Account
             </Link>
+            <span className="text-gray-400 text-xl">|</span>
             <Link
               to="/member/register"
-              className="text-green-600 hover:text-green-800 transition-colors"
+              className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold text-lg transition-colors duration-200 hover:underline group"
             >
-              Member Registration
+              <Users className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+              Join as Member
             </Link>
           </div>
-          <div className="text-gray-500 text-sm">
-            Need help? Contact your gym administrator
-          </div>
+        </div>
+
+        {/* Footer Info */}
+        <div className="text-center text-sm text-gray-500 space-y-2">
+          <p>
+            Professional gym management solution for modern fitness facilities
+          </p>
+          <p>© 2024 Gym Management System. All rights reserved.</p>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Search, Edit, Trash2, Eye, UserCheck } from "lucide-react";
 
 const MembersPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleAddNewMember = () => {
+    navigate("/member/register");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -19,7 +26,7 @@ const MembersPage: React.FC = () => {
               Manage gym members and memberships
             </p>
           </div>
-          <Button>
+          <Button onClick={handleAddNewMember}>
             <Plus className="h-4 w-4 mr-2" />
             Add New Member
           </Button>

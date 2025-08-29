@@ -25,6 +25,8 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { toast } from "react-hot-toast";
+import { registerMemberFn } from "../redux/slices/members/registerSlice";
+import { AppDispatch } from "../redux/store";
 
 const MemberRegistration: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -42,7 +44,7 @@ const MemberRegistration: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -123,19 +125,28 @@ const MemberRegistration: React.FC = () => {
 
     setIsLoading(true);
     try {
-      // TODO: Implement member registration API call
-      // const result = await dispatch(registerMember(formData) as any);
+      // Prepare data for API call (remove confirmPassword and terms_accepted as they're not needed by backend)
+      const { confirmPassword, terms_accepted, ...apiData } = formData;
 
-      // For now, simulate success
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Convert age to number as required by backend
+      const memberData = {
+        ...apiData,
+        age: parseInt(apiData.age),
+      };
 
-      toast.success(
-        "Member registration successful! Please check your email for verification."
-      );
-      navigate("/member/login");
-    } catch (error) {
-      toast.error("Registration failed. Please try again.");
+      const result = await dispatch(registerMemberFn(memberData) as any);
+
+      if (result.payload?.isSuccess) {
+        toast.success(
+          "Member registration successful! Please check your email for verification."
+        );
+        navigate("/member/login");
+      } else {
+        toast.error(result.payload?.message || "Registration failed");
+      }
+    } catch (error: any) {
       console.error("Registration error:", error);
+      toast.error(error?.message || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -257,7 +268,7 @@ const MemberRegistration: React.FC = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="Enter your email address"
-                      className="h-12 text-base border-gray-300 focus:border-green-500 focus:ring-green-500"
+                      className="h-12 text-base border-gray-300 focus:border-green-500 focus:ring-blue-500"
                     />
                   </div>
 

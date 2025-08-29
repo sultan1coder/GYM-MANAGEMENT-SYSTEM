@@ -1,8 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginMemberFn } from "../redux/slices/members/loginSlice";
-import { Users, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import {
+  Users,
+  ArrowLeft,
+  Eye,
+  EyeOff,
+  Mail,
+  Shield,
+  CheckCircle,
+  Heart,
+  Sparkles,
+  Dumbbell,
+} from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {
@@ -12,17 +22,18 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { toast } from "react-hot-toast";
+import { loginMemberFn } from "../redux/slices/members/loginSlice";
+import { AppDispatch } from "../redux/store";
 
 const MemberLogin: React.FC = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,69 +52,88 @@ const MemberLogin: React.FC = () => {
     }
 
     setIsLoading(true);
-
     try {
       const result = await dispatch(loginMemberFn(formData) as any);
 
       if (result.payload?.isSuccess) {
-        toast.success("Login successful!");
-        navigate("/members/dashboard");
+        toast.success("Welcome back! Ready to crush your fitness goals? 💪");
+        navigate("/member/dashboard");
       } else {
         toast.error(result.payload?.message || "Login failed");
       }
-    } catch (error) {
-      toast.error("An error occurred during login");
+    } catch (error: any) {
       console.error("Login error:", error);
+      toast.error(error?.message || "Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Background Decorations */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-green-400/20 to-emerald-400/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-emerald-400/20 to-teal-400/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-green-300/10 to-emerald-300/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="max-w-md w-full space-y-8 relative z-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-600 text-white rounded-full mb-4">
-            <Users className="w-8 h-8" />
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl mb-6 shadow-2xl transform hover:scale-105 transition-transform duration-300">
+            <Users className="w-10 h-10" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Member Login
-          </h1>
-          <p className="text-gray-600">Access your personal member portal</p>
+          <h2 className="text-4xl font-bold text-gray-900 mb-3 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+            Member Portal
+          </h2>
+          <p className="text-lg text-gray-600 max-w-sm mx-auto">
+            Access your personal dashboard and track your fitness journey
+          </p>
         </div>
 
         {/* Login Form */}
-        <Card className="shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-center">Sign In</CardTitle>
+        <Card className="shadow-2xl border-0 bg-white/90 backdrop-blur-md transform hover:scale-105 transition-all duration-300">
+          <CardHeader className="text-center pb-6">
+            <CardTitle className="text-2xl font-bold text-gray-900 flex items-center justify-center gap-2">
+              <Sparkles className="w-6 h-6 text-green-600" />
+              Welcome Back
+              <Sparkles className="w-6 h-6 text-green-600" />
+            </CardTitle>
+            <p className="text-gray-600 mt-2">Sign in to your member account</p>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
+          <CardContent className="p-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Email Field */}
+              <div className="space-y-2">
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="flex items-center gap-2 text-sm font-semibold text-gray-700"
                 >
+                  <Mail className="w-4 h-4 text-green-600" />
                   Email Address
                 </label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full"
-                />
+                <div className="relative">
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter your email address"
+                    className="h-12 text-base border-gray-300 focus:border-green-500 focus:ring-green-500 pr-4 transition-all duration-300 hover:border-green-400"
+                  />
+                </div>
               </div>
 
-              <div>
+              {/* Password Field */}
+              <div className="space-y-2">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="flex items-center gap-2 text-sm font-semibold text-gray-700"
                 >
+                  <Shield className="w-4 h-4 text-green-600" />
                   Password
                 </label>
                 <div className="relative">
@@ -111,60 +141,106 @@ const MemberLogin: React.FC = () => {
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    required
                     value={formData.password}
                     onChange={handleInputChange}
-                    required
-                    className="w-full pr-10"
+                    placeholder="Enter your password"
+                    className="h-12 text-base border-gray-300 focus:border-green-500 focus:ring-green-500 pr-12 transition-all duration-300 hover:border-green-400"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-green-600 transition-colors duration-200"
                   >
                     {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
+                      <EyeOff className="w-5 h-5" />
                     ) : (
-                      <Eye className="w-4 h-4" />
+                      <Eye className="w-5 h-5" />
                     )}
                   </button>
                 </div>
               </div>
 
+              {/* Remember Me & Forgot Password */}
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300 rounded transition-all duration-200 group-hover:border-green-400"
+                  />
+                  <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors duration-200">
+                    Remember me
+                  </span>
+                </label>
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-green-600 hover:text-green-700 font-medium transition-colors duration-200 hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+
+              {/* Submit Button */}
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-green-600 hover:bg-green-700"
+                className="w-full h-12 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:transform-none disabled:opacity-70"
               >
-                {isLoading ? "Signing In..." : "Sign In"}
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Signing In...
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5" />
+                    Sign In
+                  </div>
+                )}
               </Button>
             </form>
 
-            {/* Registration Link */}
-            <div className="mt-4 text-center">
-              <p className="text-sm text-gray-600">
-                Don't have an account?{" "}
-                <Link
-                  to="/member/register"
-                  className="font-medium text-green-600 hover:text-green-800"
-                >
-                  Register here
-                </Link>
-              </p>
+            {/* Divider */}
+            <div className="relative my-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">
+                  New to the gym?
+                </span>
+              </div>
             </div>
 
-            {/* Back Button */}
-            <div className="mt-6 text-center">
+            {/* Registration Link */}
+            <div className="text-center">
               <Link
-                to="/"
-                className="inline-flex items-center gap-2 text-green-600 hover:text-green-800 transition-colors"
+                to="/member/register"
+                className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold transition-colors duration-200 hover:underline"
               >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Portal Selection
+                <Users className="w-4 h-4" />
+                Join Our Community
               </Link>
             </div>
           </CardContent>
         </Card>
+
+        {/* Back to Portal Selection */}
+        <div className="text-center">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors font-medium group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-200" />
+            Back to Portal Selection
+          </Link>
+        </div>
+
+        {/* Footer Info */}
+        <div className="text-center text-xs text-gray-500 space-y-1">
+          <p>Your fitness journey starts here</p>
+          <p>© 2024 Gym Management System</p>
+        </div>
       </div>
     </div>
   );
