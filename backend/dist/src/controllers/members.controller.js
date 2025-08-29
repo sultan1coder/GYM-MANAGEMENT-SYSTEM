@@ -9,11 +9,33 @@ const prisma_1 = __importDefault(require("../lib/prisma"));
 const auth_1 = require("../utils/auth");
 const getAllMembers = async (req, res) => {
     try {
-        const members = await prisma_1.default.member.findMany();
+        const members = await prisma_1.default.member.findMany({
+            include: {
+                address: true,
+                emergency_contact: true,
+                medical_info: true,
+                attendance: {
+                    orderBy: { date: 'desc' },
+                    take: 5,
+                },
+                payments: {
+                    orderBy: { createdAt: 'desc' },
+                    take: 5,
+                },
+                Subscription: {
+                    include: {
+                        plan: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
         res.status(200).json({
             isSuccess: true,
             message: "Successfully fetched all members",
-            data: members,
+            members: members,
         });
     }
     catch (error) {
@@ -86,6 +108,19 @@ const searchMembers = async (req, res) => {
                     address: true,
                     emergency_contact: true,
                     medical_info: true,
+                    attendance: {
+                        orderBy: { date: 'desc' },
+                        take: 5,
+                    },
+                    payments: {
+                        orderBy: { createdAt: 'desc' },
+                        take: 5,
+                    },
+                    Subscription: {
+                        include: {
+                            plan: true,
+                        },
+                    },
                 },
             }),
             prisma_1.default.member.count({ where: whereClause }),
@@ -121,6 +156,31 @@ const getSingleMember = async (req, res) => {
             where: {
                 id: memberId,
             },
+            include: {
+                address: true,
+                emergency_contact: true,
+                medical_info: true,
+                attendance: {
+                    orderBy: { date: 'desc' },
+                    take: 10,
+                },
+                payments: {
+                    orderBy: { createdAt: 'desc' },
+                    take: 10,
+                },
+                Subscription: {
+                    include: {
+                        plan: true,
+                    },
+                },
+                fitness_goals: {
+                    orderBy: { createdAt: 'desc' },
+                },
+                check_ins: {
+                    orderBy: { checkInTime: 'desc' },
+                    take: 10,
+                },
+            },
         });
         if (!member) {
             res.status(404).json({
@@ -132,7 +192,7 @@ const getSingleMember = async (req, res) => {
         res.status(200).json({
             isSuccess: true,
             message: "Successfully fetched a member",
-            data: member,
+            member: member,
         });
     }
     catch (error) {

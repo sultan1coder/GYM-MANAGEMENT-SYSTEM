@@ -1,7 +1,7 @@
 export interface RecurringPaymentConfig {
     memberId: string;
     amount: number;
-    frequency: 'daily' | 'weekly' | 'monthly' | 'yearly';
+    frequency: "daily" | "weekly" | "monthly" | "yearly";
     startDate: Date;
     endDate?: Date;
     maxAttempts?: number;

@@ -15,11 +15,34 @@ interface IUpdateMember {
 
 export const getAllMembers = async (req: Request, res: Response) => {
   try {
-    const members = await prisma.member.findMany();
+    const members = await prisma.member.findMany({
+      include: {
+        address: true,
+        emergency_contact: true,
+        medical_info: true,
+        attendance: {
+          orderBy: { date: "desc" },
+          take: 5, // Get last 5 attendance records
+        },
+        payments: {
+          orderBy: { createdAt: "desc" },
+          take: 5, // Get last 5 payments
+        },
+        Subscription: {
+          include: {
+            plan: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
     res.status(200).json({
       isSuccess: true,
       message: "Successfully fetched all members",
-      data: members,
+      members: members, // Changed from 'data' to 'members' to match frontend expectation
     });
   } catch (error) {
     console.log(error);
@@ -119,6 +142,19 @@ export const searchMembers = async (req: Request, res: Response) => {
           address: true,
           emergency_contact: true,
           medical_info: true,
+          attendance: {
+            orderBy: { date: "desc" },
+            take: 5,
+          },
+          payments: {
+            orderBy: { createdAt: "desc" },
+            take: 5,
+          },
+          Subscription: {
+            include: {
+              plan: true,
+            },
+          },
         },
       }),
       prisma.member.count({ where: whereClause }),
@@ -155,6 +191,31 @@ export const getSingleMember = async (req: Request, res: Response) => {
       where: {
         id: memberId,
       },
+      include: {
+        address: true,
+        emergency_contact: true,
+        medical_info: true,
+        attendance: {
+          orderBy: { date: "desc" },
+          take: 10,
+        },
+        payments: {
+          orderBy: { createdAt: "desc" },
+          take: 10,
+        },
+        Subscription: {
+          include: {
+            plan: true,
+          },
+        },
+        fitness_goals: {
+          orderBy: { createdAt: "desc" },
+        },
+        check_ins: {
+          orderBy: { checkInTime: "desc" },
+          take: 10,
+        },
+      },
     });
 
     if (!member) {
@@ -168,7 +229,7 @@ export const getSingleMember = async (req: Request, res: Response) => {
     res.status(200).json({
       isSuccess: true,
       message: "Successfully fetched a member",
-      data: member,
+      member: member, // Changed from 'data' to 'member' to match frontend expectation
     });
   } catch (error) {
     console.error("Get single member error:", error);

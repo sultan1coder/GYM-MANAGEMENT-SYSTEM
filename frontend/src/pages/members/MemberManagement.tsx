@@ -483,28 +483,19 @@ const MemberManagement: React.FC = () => {
             </p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Top Cities</CardTitle>
-            <MapPin className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">
+              Membership Growth
+            </CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {statsLoading
-                ? "Loading..."
-                : stats?.topCities && stats.topCities.length > 0
-                ? stats.topCities[0]?.count || 0
-                : 0}
+              {statsLoading ? "Loading..." : stats?.growthRate || "0%"}
             </div>
-            <p className="text-xs text-muted-foreground">
-              {statsLoading
-                ? "Loading..."
-                : stats?.topCities && stats.topCities.length > 0
-                ? `${stats.topCities[0]?.city || "Unknown"}, ${
-                    stats.topCities[0]?.state || "Unknown"
-                  }`
-                : "No city data available"}
-            </p>
+            <p className="text-xs text-muted-foreground">Monthly growth rate</p>
           </CardContent>
         </Card>
       </div>
@@ -525,7 +516,7 @@ const MemberManagement: React.FC = () => {
 
       {/* Additional Statistics */}
       {stats && !statsLoading && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -582,6 +573,39 @@ const MemberManagement: React.FC = () => {
                   </span>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5" />
+                Membership Distribution
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {stats.membershipDistribution &&
+              stats.membershipDistribution.length > 0 ? (
+                <div className="space-y-2">
+                  {stats.membershipDistribution.map((dist, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center"
+                    >
+                      <span className="text-sm">{dist.type}</span>
+                      <span className="text-sm font-medium">
+                        {dist.count} ({dist.percentage})
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-4">
+                  <p className="text-sm text-gray-500">
+                    No membership data available yet
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

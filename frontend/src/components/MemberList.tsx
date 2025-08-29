@@ -1,16 +1,22 @@
-import React, { useState, useMemo } from 'react';
-import { useMemberGetAll } from '../hooks/member';
-import { Member } from '../types/members/memberAll';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { 
-  Search, 
-  Download, 
-  Trash2, 
-  Edit, 
+import React, { useState, useMemo } from "react";
+import { useMemberGetAll } from "../hooks/member";
+import { Member } from "../types/members/memberAll";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import {
+  Search,
+  Download,
+  Trash2,
+  Edit,
   Eye,
   Users,
   Calendar,
@@ -18,9 +24,9 @@ import {
   Mail,
   MapPin,
   Heart,
-  AlertTriangle
-} from 'lucide-react';
-import Spinner from './Spinner';
+  AlertTriangle,
+} from "lucide-react";
+import Spinner from "./Spinner";
 
 interface MemberListProps {
   showActions?: boolean;
@@ -33,17 +39,17 @@ const MemberList: React.FC<MemberListProps> = ({
   showActions = true,
   onMemberSelect,
   onMemberEdit,
-  onMemberDelete
+  onMemberDelete,
 }) => {
   const { members, isLoading, error, refetch } = useMemberGetAll();
-  
+
   // State for search and filtering
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [membershipFilter, setMembershipFilter] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<string>('name');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [membershipFilter, setMembershipFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -54,47 +60,54 @@ const MemberList: React.FC<MemberListProps> = ({
 
     // Search filter
     if (searchTerm) {
-      filtered = filtered.filter(member =>
-        member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        member.phone_number?.includes(searchTerm) ||
-        member.address?.city?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        member.address?.state?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (member) =>
+          member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          member.phone_number?.includes(searchTerm) ||
+          member.address?.city
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          member.address?.state
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase())
       );
     }
 
     // Status filter
-    if (statusFilter !== 'all') {
-      if (statusFilter === 'active') {
-        filtered = filtered.filter(member => member.email_verified);
-      } else if (statusFilter === 'inactive') {
-        filtered = filtered.filter(member => !member.email_verified);
+    if (statusFilter !== "all") {
+      if (statusFilter === "active") {
+        filtered = filtered.filter((member) => member.email_verified);
+      } else if (statusFilter === "inactive") {
+        filtered = filtered.filter((member) => !member.email_verified);
       }
     }
 
     // Membership filter
-    if (membershipFilter !== 'all') {
-      filtered = filtered.filter(member => member.membershiptype === membershipFilter);
+    if (membershipFilter !== "all") {
+      filtered = filtered.filter(
+        (member) => member.membershiptype === membershipFilter
+      );
     }
 
     // Sorting
     filtered.sort((a, b) => {
       let aValue: any, bValue: any;
-      
+
       switch (sortBy) {
-        case 'name':
+        case "name":
           aValue = a.name;
           bValue = b.name;
           break;
-        case 'email':
+        case "email":
           aValue = a.email;
           bValue = b.email;
           break;
-        case 'age':
+        case "age":
           aValue = a.age;
           bValue = b.age;
           break;
-        case 'createdAt':
+        case "createdAt":
           aValue = new Date(a.createdAt);
           bValue = new Date(b.createdAt);
           break;
@@ -103,7 +116,7 @@ const MemberList: React.FC<MemberListProps> = ({
           bValue = b.name;
       }
 
-      if (sortOrder === 'asc') {
+      if (sortOrder === "asc") {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
@@ -122,33 +135,54 @@ const MemberList: React.FC<MemberListProps> = ({
 
   // Export functionality
   const exportToCSV = () => {
-    const headers = ['Name', 'Email', 'Phone', 'Age', 'Membership Type', 'Status', 'City', 'State'];
+    const headers = [
+      "Name",
+      "Email",
+      "Phone",
+      "Age",
+      "Membership Type",
+      "Status",
+      "City",
+      "State",
+      "Join Date",
+      "Emergency Contact",
+      "Has Medical Info",
+    ];
     const csvContent = [
-      headers.join(','),
-      ...filteredMembers.map(member => [
-        member.name,
-        member.email,
-        member.phone_number || '',
-        member.age,
-        member.membershiptype,
-        member.email_verified ? 'Active' : 'Inactive',
-        member.address?.city || '',
-        member.address?.state || ''
-      ].join(','))
-    ].join('\n');
+      headers.join(","),
+      ...filteredMembers.map((member) =>
+        [
+          member.name,
+          member.email,
+          member.phone_number || "",
+          member.age,
+          member.membershiptype,
+          member.email_verified ? "Active" : "Inactive",
+          member.address?.city || "",
+          member.address?.state || "",
+          new Date(member.createdAt).toLocaleDateString(),
+          member.emergency_contact
+            ? `${member.emergency_contact.name} (${member.emergency_contact.relationship})`
+            : "",
+          member.medical_info ? "Yes" : "No",
+        ].join(",")
+      ),
+    ].join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const blob = new Blob([csvContent], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `members-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `members-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     window.URL.revokeObjectURL(url);
   };
 
   // Bulk actions
-  const [selectedMembers, setSelectedMembers] = useState<Set<string>>(new Set());
-  
+  const [selectedMembers, setSelectedMembers] = useState<Set<string>>(
+    new Set()
+  );
+
   const toggleMemberSelection = (memberId: string) => {
     const newSelected = new Set(selectedMembers);
     if (newSelected.has(memberId)) {
@@ -163,15 +197,15 @@ const MemberList: React.FC<MemberListProps> = ({
     if (selectedMembers.size === paginatedMembers.length) {
       setSelectedMembers(new Set());
     } else {
-      setSelectedMembers(new Set(paginatedMembers.map(m => m.id)));
+      setSelectedMembers(new Set(paginatedMembers.map((m) => m.id)));
     }
   };
 
   const bulkDelete = () => {
     if (selectedMembers.size > 0 && onMemberDelete) {
       // In a real app, you'd show a confirmation dialog
-      selectedMembers.forEach(id => {
-        const member = members.find(m => m.id === id);
+      selectedMembers.forEach((id) => {
+        const member = members.find((m) => m.id === id);
         if (member) onMemberDelete(member);
       });
       setSelectedMembers(new Set());
@@ -217,35 +251,59 @@ const MemberList: React.FC<MemberListProps> = ({
                 <Download className="h-4 w-4 mr-2" />
                 Export CSV
               </Button>
-              <Button onClick={refetch}>
-                Refresh
-              </Button>
+              <Button onClick={refetch}>Refresh</Button>
             </div>
           </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{members?.length || 0}</div>
+              <div className="text-2xl font-bold text-blue-600">
+                {members?.length || 0}
+              </div>
               <div className="text-sm text-gray-600">Total Members</div>
             </div>
             <div className="text-center p-4 bg-green-50 rounded-lg">
               <div className="text-2xl font-bold text-green-600">
-                {members?.filter(m => m.email_verified).length || 0}
+                {members?.filter((m) => m.email_verified).length || 0}
               </div>
               <div className="text-sm text-gray-600">Active Members</div>
             </div>
             <div className="text-center p-4 bg-yellow-50 rounded-lg">
               <div className="text-2xl font-bold text-yellow-600">
-                {members?.filter(m => m.membershiptype === 'MONTHLY').length || 0}
+                {members?.filter((m) => m.membershiptype === "MONTHLY")
+                  .length || 0}
               </div>
               <div className="text-sm text-gray-600">Monthly Members</div>
             </div>
             <div className="text-center p-4 bg-purple-50 rounded-lg">
               <div className="text-2xl font-bold text-purple-600">
-                {members?.filter(m => m.membershiptype === 'DAILY').length || 0}
+                {members?.filter((m) => m.membershiptype === "DAILY").length ||
+                  0}
               </div>
               <div className="text-sm text-gray-600">Daily Members</div>
+            </div>
+          </div>
+
+          {/* Additional Statistics */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div className="text-center p-3 bg-orange-50 rounded-lg">
+              <div className="text-lg font-bold text-orange-600">
+                {members?.filter((m) => m.address).length || 0}
+              </div>
+              <div className="text-xs text-gray-600">With Address</div>
+            </div>
+            <div className="text-center p-3 bg-indigo-50 rounded-lg">
+              <div className="text-lg font-bold text-indigo-600">
+                {members?.filter((m) => m.emergency_contact).length || 0}
+              </div>
+              <div className="text-xs text-gray-600">Emergency Contact</div>
+            </div>
+            <div className="text-center p-3 bg-pink-50 rounded-lg">
+              <div className="text-lg font-bold text-pink-600">
+                {members?.filter((m) => m.medical_info).length || 0}
+              </div>
+              <div className="text-xs text-gray-600">Medical Info</div>
             </div>
           </div>
         </CardContent>
@@ -264,7 +322,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 className="pl-10"
               />
             </div>
-            
+
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger>
                 <SelectValue placeholder="Status" />
@@ -276,7 +334,10 @@ const MemberList: React.FC<MemberListProps> = ({
               </SelectContent>
             </Select>
 
-            <Select value={membershipFilter} onValueChange={setMembershipFilter}>
+            <Select
+              value={membershipFilter}
+              onValueChange={setMembershipFilter}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Membership" />
               </SelectTrigger>
@@ -301,9 +362,9 @@ const MemberList: React.FC<MemberListProps> = ({
 
             <Button
               variant="outline"
-              onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
             >
-              {sortOrder === 'asc' ? '↑' : '↓'} Sort
+              {sortOrder === "asc" ? "↑" : "↓"} Sort
             </Button>
           </div>
         </CardContent>
@@ -319,7 +380,9 @@ const MemberList: React.FC<MemberListProps> = ({
               </span>
               <div className="flex gap-2">
                 <Button variant="outline" onClick={selectAllMembers}>
-                  {selectedMembers.size === paginatedMembers.length ? 'Deselect All' : 'Select All'}
+                  {selectedMembers.size === paginatedMembers.length
+                    ? "Deselect All"
+                    : "Select All"}
                 </Button>
                 <Button variant="destructive" onClick={bulkDelete}>
                   <Trash2 className="h-4 w-4 mr-2" />
@@ -347,7 +410,9 @@ const MemberList: React.FC<MemberListProps> = ({
                 <div
                   key={member.id}
                   className={`p-4 border rounded-lg hover:bg-gray-50 transition-colors ${
-                    selectedMembers.has(member.id) ? 'bg-blue-50 border-blue-200' : ''
+                    selectedMembers.has(member.id)
+                      ? "bg-blue-50 border-blue-200"
+                      : ""
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -360,18 +425,24 @@ const MemberList: React.FC<MemberListProps> = ({
                           className="h-4 w-4 text-blue-600"
                         />
                       )}
-                      
+
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-semibold text-lg">{member.name}</h3>
-                          <Badge variant={member.email_verified ? "default" : "secondary"}>
-                            {member.email_verified ? 'Active' : 'Inactive'}
+                          <h3 className="font-semibold text-lg">
+                            {member.name}
+                          </h3>
+                          <Badge
+                            variant={
+                              member.email_verified ? "default" : "secondary"
+                            }
+                          >
+                            {member.email_verified ? "Active" : "Inactive"}
                           </Badge>
                           <Badge variant="outline">
                             {member.membershiptype}
                           </Badge>
                         </div>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-600">
                           <div className="flex items-center gap-2">
                             <Mail className="h-4 w-4" />
@@ -395,16 +466,74 @@ const MemberList: React.FC<MemberListProps> = ({
                           )}
                         </div>
 
+                        {/* Additional Member Information */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-gray-500 mt-2">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">Join Date:</span>
+                            {new Date(member.createdAt).toLocaleDateString()}
+                          </div>
+                          {member.emergency_contact && (
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">Emergency:</span>
+                              {member.emergency_contact.name} (
+                              {member.emergency_contact.relationship})
+                            </div>
+                          )}
+                          {member.Subscription &&
+                            member.Subscription.length > 0 && (
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium">Plan:</span>
+                                {member.Subscription[0]?.plan?.name || "Active"}
+                              </div>
+                            )}
+                        </div>
+
                         {/* Medical Info Preview */}
                         {member.medical_info && (
                           <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
                             <Heart className="h-3 w-3" />
-                            <span>Goals: {member.medical_info.fitness_goals.slice(0, 2).join(', ')}</span>
-                            {member.medical_info.health_conditions.length > 0 && (
-                              <span>• Conditions: {member.medical_info.health_conditions.slice(0, 2).join(', ')}</span>
-                            )}
+                            <span>
+                              Goals:{" "}
+                              {member.medical_info.fitness_goals
+                                ?.slice(0, 2)
+                                .join(", ") || "Not specified"}
+                            </span>
+                            {member.medical_info.health_conditions &&
+                              member.medical_info.health_conditions.length >
+                                0 && (
+                                <span>
+                                  • Conditions:{" "}
+                                  {member.medical_info.health_conditions
+                                    .slice(0, 2)
+                                    .join(", ")}
+                                </span>
+                              )}
                           </div>
                         )}
+
+                        {/* Recent Activity Preview */}
+                        {(member.attendance && member.attendance.length > 0) ||
+                        (member.payments && member.payments.length > 0) ? (
+                          <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                            <span className="font-medium">
+                              Recent Activity:
+                            </span>
+                            {member.attendance &&
+                              member.attendance.length > 0 && (
+                                <span>
+                                  Last visit:{" "}
+                                  {new Date(
+                                    member.attendance[0].date
+                                  ).toLocaleDateString()}
+                                </span>
+                              )}
+                            {member.payments && member.payments.length > 0 && (
+                              <span>
+                                • Last payment: ${member.payments[0].amount}
+                              </span>
+                            )}
+                          </div>
+                        ) : null}
                       </div>
                     </div>
 
@@ -453,11 +582,11 @@ const MemberList: React.FC<MemberListProps> = ({
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-600">
-                Showing {((currentPage - 1) * itemsPerPage) + 1} to{' '}
-                {Math.min(currentPage * itemsPerPage, filteredMembers.length)} of{' '}
-                {filteredMembers.length} members
+                Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                {Math.min(currentPage * itemsPerPage, filteredMembers.length)}{" "}
+                of {filteredMembers.length} members
               </div>
-              
+
               <div className="flex gap-2">
                 <Button
                   variant="outline"
@@ -473,7 +602,7 @@ const MemberList: React.FC<MemberListProps> = ({
                 >
                   Previous
                 </Button>
-                
+
                 <div className="flex gap-1">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let pageNum;
@@ -486,11 +615,13 @@ const MemberList: React.FC<MemberListProps> = ({
                     } else {
                       pageNum = currentPage - 2 + i;
                     }
-                    
+
                     return (
                       <Button
                         key={pageNum}
-                        variant={currentPage === pageNum ? "default" : "outline"}
+                        variant={
+                          currentPage === pageNum ? "default" : "outline"
+                        }
                         size="sm"
                         onClick={() => setCurrentPage(pageNum)}
                       >
@@ -499,7 +630,7 @@ const MemberList: React.FC<MemberListProps> = ({
                     );
                   })}
                 </div>
-                
+
                 <Button
                   variant="outline"
                   onClick={() => setCurrentPage(currentPage + 1)}

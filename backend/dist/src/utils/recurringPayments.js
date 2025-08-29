@@ -20,7 +20,7 @@ const createRecurringPayment = async (config) => {
                 retryDelay: config.retryDelay || 3,
                 autoRetry: config.autoRetry !== false,
                 description: config.description,
-                status: 'ACTIVE',
+                status: "ACTIVE",
                 nextPaymentDate: calculateNextPaymentDate(config.startDate, config.frequency),
             },
         });
@@ -28,7 +28,7 @@ const createRecurringPayment = async (config) => {
         return recurringPayment;
     }
     catch (error) {
-        console.error('Failed to create recurring payment:', error);
+        console.error("Failed to create recurring payment:", error);
         throw error;
     }
 };
@@ -45,7 +45,7 @@ const createInstallmentPlan = async (plan) => {
                 startDate: plan.startDate,
                 dueDayOfMonth: plan.dueDayOfMonth,
                 description: plan.description,
-                status: 'ACTIVE',
+                status: "ACTIVE",
                 currentInstallment: 1,
                 nextDueDate: calculateInstallmentDueDate(plan.startDate, plan.dueDayOfMonth),
             },
@@ -54,7 +54,7 @@ const createInstallmentPlan = async (plan) => {
         return installmentPlan;
     }
     catch (error) {
-        console.error('Failed to create installment plan:', error);
+        console.error("Failed to create installment plan:", error);
         throw error;
     }
 };
@@ -64,7 +64,7 @@ const processRecurringPayments = async () => {
         const today = new Date();
         const duePayments = await prisma_1.default.recurringPayment.findMany({
             where: {
-                status: 'ACTIVE',
+                status: "ACTIVE",
                 nextPaymentDate: {
                     lte: today,
                 },
@@ -83,10 +83,11 @@ const processRecurringPayments = async () => {
                     data: {
                         amount: recurringPayment.amount,
                         memberId: recurringPayment.memberId,
-                        method: 'RECURRING',
-                        description: recurringPayment.description || `Recurring payment - ${recurringPayment.frequency}`,
+                        method: "RECURRING",
+                        description: recurringPayment.description ||
+                            `Recurring payment - ${recurringPayment.frequency}`,
                         reference: `REC-${recurringPayment.id}`,
-                        status: 'PENDING',
+                        status: "PENDING",
                     },
                 });
                 await prisma_1.default.recurringPayment.update({
@@ -101,12 +102,12 @@ const processRecurringPayments = async () => {
             }
             catch (error) {
                 console.error(`Failed to process recurring payment ${recurringPayment.id}:`, error);
-                await handleFailedRecurringPayment(recurringPayment, error instanceof Error ? error.message : 'Unknown error');
+                await handleFailedRecurringPayment(recurringPayment, error instanceof Error ? error.message : "Unknown error");
             }
         }
     }
     catch (error) {
-        console.error('Error processing recurring payments:', error);
+        console.error("Error processing recurring payments:", error);
         throw error;
     }
 };
@@ -116,7 +117,7 @@ const processInstallmentPayments = async () => {
         const today = new Date();
         const dueInstallments = await prisma_1.default.installmentPlan.findMany({
             where: {
-                status: 'ACTIVE',
+                status: "ACTIVE",
                 nextDueDate: {
                     lte: today,
                 },
@@ -132,19 +133,22 @@ const processInstallmentPayments = async () => {
                     data: {
                         amount: installmentPlan.installmentAmount,
                         memberId: installmentPlan.memberId,
-                        method: 'INSTALLMENT',
+                        method: "INSTALLMENT",
                         description: `Installment ${installmentPlan.currentInstallment} of ${installmentPlan.numberOfInstallments}`,
                         reference: `INST-${installmentPlan.id}-${installmentPlan.currentInstallment}`,
-                        status: 'PENDING',
+                        status: "PENDING",
                     },
                 });
-                const isLastInstallment = installmentPlan.currentInstallment >= installmentPlan.numberOfInstallments;
+                const isLastInstallment = installmentPlan.currentInstallment >=
+                    installmentPlan.numberOfInstallments;
                 await prisma_1.default.installmentPlan.update({
                     where: { id: installmentPlan.id },
                     data: {
                         currentInstallment: installmentPlan.currentInstallment + 1,
-                        nextDueDate: isLastInstallment ? null : calculateInstallmentDueDate(installmentPlan.nextDueDate || new Date(), installmentPlan.dueDayOfMonth || undefined),
-                        status: isLastInstallment ? 'COMPLETED' : 'ACTIVE',
+                        nextDueDate: isLastInstallment
+                            ? null
+                            : calculateInstallmentDueDate(installmentPlan.nextDueDate || new Date(), installmentPlan.dueDayOfMonth || undefined),
+                        status: isLastInstallment ? "COMPLETED" : "ACTIVE",
                         lastProcessedDate: today,
                     },
                 });
@@ -152,12 +156,12 @@ const processInstallmentPayments = async () => {
             }
             catch (error) {
                 console.error(`Failed to process installment ${installmentPlan.id}:`, error);
-                await handleFailedInstallment(installmentPlan, error instanceof Error ? error.message : 'Unknown error');
+                await handleFailedInstallment(installmentPlan, error instanceof Error ? error.message : "Unknown error");
             }
         }
     }
     catch (error) {
-        console.error('Error processing installment payments:', error);
+        console.error("Error processing installment payments:", error);
         throw error;
     }
 };
@@ -170,7 +174,7 @@ const handleFailedRecurringPayment = async (recurringPayment, errorMessage) => {
             await prisma_1.default.recurringPayment.update({
                 where: { id: recurringPayment.id },
                 data: {
-                    status: 'FAILED',
+                    status: "FAILED",
                     attemptCount,
                     lastError: errorMessage,
                 },
@@ -191,7 +195,7 @@ const handleFailedRecurringPayment = async (recurringPayment, errorMessage) => {
         }
     }
     catch (error) {
-        console.error('Error handling failed recurring payment:', error);
+        console.error("Error handling failed recurring payment:", error);
     }
 };
 const handleFailedInstallment = async (installmentPlan, errorMessage) => {
@@ -199,30 +203,31 @@ const handleFailedInstallment = async (installmentPlan, errorMessage) => {
         await prisma_1.default.installmentPlan.update({
             where: { id: installmentPlan.id },
             data: {
-                status: 'OVERDUE',
+                status: "OVERDUE",
                 lastError: errorMessage,
             },
         });
-        const daysOverdue = Math.ceil((new Date().getTime() - installmentPlan.nextDueDate.getTime()) / (1000 * 60 * 60 * 24));
+        const daysOverdue = Math.ceil((new Date().getTime() - installmentPlan.nextDueDate.getTime()) /
+            (1000 * 60 * 60 * 24));
         await (0, paymentNotifications_1.sendPaymentReminder)(installmentPlan.Member, installmentPlan.installmentAmount, installmentPlan.nextDueDate, daysOverdue);
     }
     catch (error) {
-        console.error('Error handling failed installment:', error);
+        console.error("Error handling failed installment:", error);
     }
 };
 const calculateNextPaymentDate = (currentDate, frequency) => {
     const nextDate = new Date(currentDate);
     switch (frequency) {
-        case 'daily':
+        case "daily":
             nextDate.setDate(nextDate.getDate() + 1);
             break;
-        case 'weekly':
+        case "weekly":
             nextDate.setDate(nextDate.getDate() + 7);
             break;
-        case 'monthly':
+        case "monthly":
             nextDate.setMonth(nextDate.getMonth() + 1);
             break;
-        case 'yearly':
+        case "yearly":
             nextDate.setFullYear(nextDate.getFullYear() + 1);
             break;
         default:
@@ -248,12 +253,12 @@ const pauseRecurringPayment = async (recurringPaymentId) => {
     try {
         await prisma_1.default.recurringPayment.update({
             where: { id: recurringPaymentId },
-            data: { status: 'PAUSED' },
+            data: { status: "PAUSED" },
         });
         console.log(`Recurring payment paused: ${recurringPaymentId}`);
     }
     catch (error) {
-        console.error('Failed to pause recurring payment:', error);
+        console.error("Failed to pause recurring payment:", error);
         throw error;
     }
 };
@@ -264,19 +269,19 @@ const resumeRecurringPayment = async (recurringPaymentId) => {
             where: { id: recurringPaymentId },
         });
         if (!recurringPayment) {
-            throw new Error('Recurring payment not found');
+            throw new Error("Recurring payment not found");
         }
         await prisma_1.default.recurringPayment.update({
             where: { id: recurringPaymentId },
             data: {
-                status: 'ACTIVE',
+                status: "ACTIVE",
                 nextPaymentDate: calculateNextPaymentDate(new Date(), recurringPayment.frequency),
             },
         });
         console.log(`Recurring payment resumed: ${recurringPaymentId}`);
     }
     catch (error) {
-        console.error('Failed to resume recurring payment:', error);
+        console.error("Failed to resume recurring payment:", error);
         throw error;
     }
 };
@@ -285,12 +290,12 @@ const cancelRecurringPayment = async (recurringPaymentId) => {
     try {
         await prisma_1.default.recurringPayment.update({
             where: { id: recurringPaymentId },
-            data: { status: 'CANCELLED' },
+            data: { status: "CANCELLED" },
         });
         console.log(`Recurring payment cancelled: ${recurringPaymentId}`);
     }
     catch (error) {
-        console.error('Failed to cancel recurring payment:', error);
+        console.error("Failed to cancel recurring payment:", error);
         throw error;
     }
 };

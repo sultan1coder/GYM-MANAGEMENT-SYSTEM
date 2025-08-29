@@ -20,8 +20,12 @@ export const useMemberGetAll = () => {
         `${BASE_API_URL}/members/list`
       );
       if (response.status === 200) {
-        const data: IGetMembersResponse = response.data;
-        setMembers(data.members);
+        const data = response.data;
+        if (data.isSuccess && data.members) {
+          setMembers(data.members);
+        } else {
+          throw new Error(data.message || "Failed to fetch members");
+        }
       } else {
         throw Error(response.statusText);
       }
@@ -86,8 +90,12 @@ export const useMemberGetSingle = (id: string) => {
           `${BASE_API_URL}/members/single/${id}`
         );
         if (response.status === 200) {
-          const data: IGetMemberSingle = response.data;
-          setMember(data.member);
+          const data = response.data;
+          if (data.isSuccess && data.member) {
+            setMember(data.member);
+          } else {
+            throw new Error(data.message || "Failed to fetch member");
+          }
         } else {
           throw Error(response.statusText);
         }
@@ -99,7 +107,7 @@ export const useMemberGetSingle = (id: string) => {
       }
     };
     fetchMembers();
-  }, []);
+  }, [id]);
   return { isLoading, error, member };
 };
 
