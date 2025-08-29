@@ -11,12 +11,17 @@
   },
   "dependencies": {
     "@prisma/client": "^5.7.1",
+    "@types/nodemailer": "^7.0.1",
+    "@types/xlsx": "^0.0.35",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.5",
     "prisma": "^5.7.1",
+    "xlsx": "^0.18.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {

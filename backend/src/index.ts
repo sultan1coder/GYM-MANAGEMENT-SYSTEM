@@ -2,6 +2,14 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 
+// Import routes
+import authRoutes from "./routes/auth.route";
+import userRoutes from "./routes/user.route";
+import memberRoutes from "./routes/members.route";
+import paymentRoutes from "./routes/payment.route";
+import equipmentRoutes from "./routes/equipment.route";
+import subscriptionRoutes from "./routes/subscription.route";
+
 dotenv.config();
 
 const app = express();
@@ -16,8 +24,6 @@ const corsOptions = {
 app.use(express.json());
 app.use(cors(corsOptions));
 
-
-
 // Basic API endpoint
 app.get("/api", (_req, res) => {
   res.json({
@@ -27,30 +33,13 @@ app.get("/api", (_req, res) => {
   });
 });
 
-// Placeholder endpoints for future implementation
-app.get("/api/auth", (_req, res) => {
-  res.json({ message: "Auth endpoints will be implemented here" });
-});
-
-app.get("/api/users", (_req, res) => {
-  res.json({ message: "User management endpoints will be implemented here" });
-});
-
-app.get("/api/members", (_req, res) => {
-  res.json({ message: "Member management endpoints will be implemented here" });
-});
-
-app.get("/api/payments", (_req, res) => {
-  res.json({ message: "Payment management endpoints will be implemented here" });
-});
-
-app.get("/api/equipments", (_req, res) => {
-  res.json({ message: "Equipment management endpoints will be implemented here" });
-});
-
-app.get("/api/subscriptions", (_req, res) => {
-  res.json({ message: "Subscription management endpoints will be implemented here" });
-});
+// Use routes
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/members", memberRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/equipments", equipmentRoutes);
+app.use("/api/subscriptions", subscriptionRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
