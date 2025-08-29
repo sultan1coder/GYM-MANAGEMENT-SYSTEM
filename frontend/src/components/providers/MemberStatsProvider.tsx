@@ -75,13 +75,28 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
       setIsLoading(true);
       setError(null);
 
+      console.log("Fetching member statistics...");
+
       // Fetch members data
       const membersResponse = await memberAPI.getAllMembers();
+      console.log("Members response:", membersResponse);
+      if (!membersResponse.data.isSuccess) {
+        throw new Error("Failed to fetch members data");
+      }
       const members = membersResponse.data.members || [];
+      console.log("Members data:", members.length, "members found");
 
       // Fetch subscription plans
-      const plansResponse = await subscriptionAPI.getAllPlans();
-      const plans = plansResponse.data.data || [];
+      let plans: any[] = [];
+      try {
+        const plansResponse = await subscriptionAPI.getAllPlans();
+        if (plansResponse.data.isSuccess) {
+          plans = plansResponse.data.data || [];
+        }
+      } catch (error) {
+        console.warn("Failed to fetch subscription plans, using empty array");
+        plans = [];
+      }
 
       // Calculate statistics
       const totalMembers = members.length;
@@ -204,6 +219,7 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
         growthRate,
       };
 
+      console.log("Calculated member stats:", memberStats);
       setStats(memberStats);
     } catch (error) {
       console.error("Failed to fetch member statistics:", error);
@@ -215,7 +231,42 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
   };
 
   useEffect(() => {
-    fetchMemberStats();
+    // Check if user is authenticated before making API calls
+    const checkAuthAndFetch = () => {
+      const token =
+        localStorage.getItem("token") || localStorage.getItem("memberToken");
+      if (token) {
+        fetchMemberStats();
+      } else {
+        // User not authenticated, set loading to false and show auth required
+        setIsLoading(false);
+        setError("Authentication required");
+      }
+    };
+
+    // Add a small delay to ensure authentication state is properly set
+    const timer = setTimeout(checkAuthAndFetch, 100);
+
+    // Listen for storage changes (when user logs in/out)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "token" || e.key === "memberToken") {
+        checkAuthAndFetch();
+      }
+    };
+
+    // Listen for custom login event
+    const handleLogin = () => {
+      checkAuthAndFetch();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("userLogin", handleLogin);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("userLogin", handleLogin);
+    };
   }, []);
 
   const refetch = async () => {

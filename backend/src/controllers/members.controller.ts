@@ -775,25 +775,7 @@ export const getMemberStats = async (req: Request, res: Response) => {
     });
 
     // Get inactive members (email not verified)
-    const inactiveMembers = await prisma.member.count({
-      where: {
-        email_verified: false,
-      },
-    });
-
-    // Get top cities from address data
-    const topCities = await prisma.address.groupBy({
-      by: ["city", "state"],
-      _count: {
-        city: true,
-      },
-      orderBy: {
-        _count: {
-          city: "desc",
-        },
-      },
-      take: 5,
-    });
+    const inactiveMembers = totalMembers - activeMembers;
 
     // Get membership type distribution
     const membershipDistribution = await prisma.member.groupBy({
@@ -814,24 +796,37 @@ export const getMemberStats = async (req: Request, res: Response) => {
       },
     });
 
-    // Get monthly growth (last 6 months)
+    // Get monthly growth (last 6 months) - simplified approach
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-    const monthlyGrowth = await prisma.member.groupBy({
-      by: ["createdAt"],
-      _count: {
-        createdAt: true,
-      },
+    const monthlyGrowthData = await prisma.member.findMany({
       where: {
         createdAt: {
           gte: sixMonthsAgo,
         },
       },
-      orderBy: {
-        createdAt: "asc",
+      select: {
+        createdAt: true,
       },
     });
+
+    // Process monthly growth data
+    const monthlyGrowth = [];
+    for (let i = 0; i < 6; i++) {
+      const month = new Date();
+      month.setMonth(month.getMonth() - i);
+      const monthKey = month.toISOString().slice(0, 7); // YYYY-MM format
+
+      const count = monthlyGrowthData.filter(
+        (m) => m.createdAt.toISOString().slice(0, 7) === monthKey
+      ).length;
+
+      monthlyGrowth.unshift({
+        month: monthKey,
+        count: count,
+      });
+    }
 
     // Calculate growth rate
     const currentMonth = new Date();
@@ -872,6 +867,42 @@ export const getMemberStats = async (req: Request, res: Response) => {
       },
     });
 
+    // Get top cities from address data - simplified approach
+    const addresses = await prisma.address.findMany({
+      select: {
+        city: true,
+        state: true,
+      },
+    });
+
+    // Process top cities manually
+    const cityCounts: { [key: string]: number } = {};
+    addresses.forEach((addr) => {
+      const cityKey = `${addr.city || "Unknown"}, ${addr.state || "Unknown"}`;
+      cityCounts[cityKey] = (cityCounts[cityKey] || 0) + 1;
+    });
+
+    const topCities = Object.entries(cityCounts)
+      .map(([cityState, count]) => {
+        const [city, state] = cityState.split(", ");
+        return { city, state, count };
+      })
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
+    // Calculate average age
+    const membersWithAge = await prisma.member.findMany({
+      select: { age: true },
+    });
+
+    const averageAge =
+      membersWithAge.length > 0
+        ? (
+            membersWithAge.reduce((sum, m) => sum + m.age, 0) /
+            membersWithAge.length
+          ).toFixed(1)
+        : "0";
+
     const stats = {
       totalMembers,
       activeMembers,
@@ -880,10 +911,13 @@ export const getMemberStats = async (req: Request, res: Response) => {
       membershipDistribution: membershipDistribution.map((item) => ({
         type: item.membershiptype,
         count: item._count?.membershiptype || 0,
-        percentage: (
-          ((item._count?.membershiptype || 0) / totalMembers) *
-          100
-        ).toFixed(1),
+        percentage:
+          totalMembers > 0
+            ? (
+                ((item._count?.membershiptype || 0) / totalMembers) *
+                100
+              ).toFixed(1)
+            : "0",
       })),
       ageDistribution: {
         under18: ageDistribution
@@ -902,26 +936,11 @@ export const getMemberStats = async (req: Request, res: Response) => {
           .filter((item) => item.age > 50)
           .reduce((sum, item) => sum + (item._count?.age || 0), 0),
       },
-      monthlyGrowth: monthlyGrowth.map((item) => ({
-        month: item.createdAt.toISOString().slice(0, 7), // YYYY-MM format
-        count: item._count?.createdAt || 0,
-      })),
+      monthlyGrowth,
       growthRate: growthRate.toFixed(1),
-      topCities: topCities.map((item) => ({
-        city: item.city || "Unknown",
-        state: item.state || "Unknown",
-        count: item._count?.city || 0,
-      })),
+      topCities,
       recentRegistrations,
-      averageAge:
-        ageDistribution.length > 0
-          ? (
-              ageDistribution.reduce(
-                (sum, item) => sum + item.age * (item._count?.age || 0),
-                0
-              ) / totalMembers
-            ).toFixed(1)
-          : 0,
+      averageAge,
     };
 
     res.status(200).json({
@@ -933,7 +952,7 @@ export const getMemberStats = async (req: Request, res: Response) => {
     console.error("Get member stats error:", error);
     res.status(500).json({
       isSuccess: false,
-      message: defaultErrorMessage,
+      message: "Failed to load member statistics",
     });
   }
 };
