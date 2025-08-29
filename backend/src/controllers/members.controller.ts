@@ -53,21 +53,23 @@ export const searchMembers = async (req: Request, res: Response) => {
     // Search term filter (name, email, phone)
     if (searchTerm) {
       whereClause.OR = [
-        { name: { contains: searchTerm as string, mode: 'insensitive' } },
-        { email: { contains: searchTerm as string, mode: 'insensitive' } },
-        { phone_number: { contains: searchTerm as string, mode: 'insensitive' } },
+        { name: { contains: searchTerm as string, mode: "insensitive" } },
+        { email: { contains: searchTerm as string, mode: "insensitive" } },
+        {
+          phone_number: { contains: searchTerm as string, mode: "insensitive" },
+        },
       ];
     }
 
     // Status filter - now using email_verified field
-    if (status === 'active') {
+    if (status === "active") {
       whereClause.email_verified = true;
-    } else if (status === 'inactive') {
+    } else if (status === "inactive") {
       whereClause.email_verified = false;
     }
 
     // Membership type filter
-    if (membershipType && membershipType !== 'all') {
+    if (membershipType && membershipType !== "all") {
       whereClause.membershiptype = membershipType;
     }
 
@@ -81,15 +83,25 @@ export const searchMembers = async (req: Request, res: Response) => {
     // Date range filter (registration date)
     if (dateRangeStart || dateRangeEnd) {
       whereClause.createdAt = {};
-      if (dateRangeStart) whereClause.createdAt.gte = new Date(dateRangeStart as string);
-      if (dateRangeEnd) whereClause.createdAt.lte = new Date(dateRangeEnd as string);
+      if (dateRangeStart)
+        whereClause.createdAt.gte = new Date(dateRangeStart as string);
+      if (dateRangeEnd)
+        whereClause.createdAt.lte = new Date(dateRangeEnd as string);
     }
 
     // Location filter - now using address relation
     if (city || state) {
       whereClause.address = {};
-      if (city) whereClause.address.city = { contains: city as string, mode: 'insensitive' };
-      if (state) whereClause.address.state = { contains: state as string, mode: 'insensitive' };
+      if (city)
+        whereClause.address.city = {
+          contains: city as string,
+          mode: "insensitive",
+        };
+      if (state)
+        whereClause.address.state = {
+          contains: state as string,
+          mode: "insensitive",
+        };
     }
 
     // Pagination
@@ -102,7 +114,7 @@ export const searchMembers = async (req: Request, res: Response) => {
         where: whereClause,
         skip,
         take,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         include: {
           address: true,
           emergency_contact: true,
@@ -234,7 +246,7 @@ export const registerMember = async (req: Request, res: Response) => {
 export const loginMember = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    
+
     // Validate required fields
     if (!email || !password) {
       res.status(400).json({
@@ -270,7 +282,7 @@ export const loginMember = async (req: Request, res: Response) => {
 
     // Generate token
     const token = generateToken({ id: member.id, role: "member" });
-    
+
     res.status(200).json({
       isSuccess: true,
       message: "Login successful",
@@ -373,7 +385,10 @@ export const deleteMember = async (req: Request, res: Response) => {
   }
 };
 
-export const updateMemberProfilePicture = async (req: Request, res: Response) => {
+export const updateMemberProfilePicture = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const memberId = req.params.id;
     const { profile_picture } = req.body;
@@ -423,10 +438,13 @@ export const updateMemberProfilePicture = async (req: Request, res: Response) =>
   }
 };
 
-export const uploadMemberProfilePicture = async (req: Request, res: Response) => {
+export const uploadMemberProfilePicture = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const memberId = req.params.id;
-    
+
     if (!req.file) {
       res.status(400).json({
         isSuccess: false,
@@ -450,7 +468,7 @@ export const uploadMemberProfilePicture = async (req: Request, res: Response) =>
     }
 
     // Generate the file URL
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
     const profilePictureUrl = `${baseUrl}/uploads/${req.file.filename}`;
 
     const updatedMember = await prisma.member.update({
@@ -489,25 +507,25 @@ export const bulkImportMembers = async (req: Request, res: Response) => {
     }
 
     const filePath = req.file.path;
-    const fileExtension = req.file.originalname.split('.').pop()?.toLowerCase();
+    const fileExtension = req.file.originalname.split(".").pop()?.toLowerCase();
 
     let membersData: any[] = [];
 
     // Parse file based on extension
-    if (fileExtension === 'csv') {
-      const csv = require('csv-parser');
-      const fs = require('fs');
-      
+    if (fileExtension === "csv") {
+      const csv = require("csv-parser");
+      const fs = require("fs");
+
       membersData = await new Promise((resolve, reject) => {
         const results: any[] = [];
         fs.createReadStream(filePath)
           .pipe(csv())
-          .on('data', (data: any) => results.push(data))
-          .on('end', () => resolve(results))
-          .on('error', reject);
+          .on("data", (data: any) => results.push(data))
+          .on("end", () => resolve(results))
+          .on("error", reject);
       });
-    } else if (['xlsx', 'xls'].includes(fileExtension || '')) {
-      const XLSX = require('xlsx');
+    } else if (["xlsx", "xls"].includes(fileExtension || "")) {
+      const XLSX = require("xlsx");
       const workbook = XLSX.readFile(filePath);
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
@@ -541,10 +559,17 @@ export const bulkImportMembers = async (req: Request, res: Response) => {
 
       try {
         // Validate required fields
-        if (!row.name || !row.email || !row.phone_number || !row.age || !row.membershiptype) {
+        if (
+          !row.name ||
+          !row.email ||
+          !row.phone_number ||
+          !row.age ||
+          !row.membershiptype
+        ) {
           results.errors.push({
             row: rowNumber,
-            error: "Missing required fields (name, email, phone_number, age, membershiptype)",
+            error:
+              "Missing required fields (name, email, phone_number, age, membershiptype)",
             data: row,
           });
           continue;
@@ -573,7 +598,7 @@ export const bulkImportMembers = async (req: Request, res: Response) => {
         }
 
         // Validate membership type
-        if (!['MONTHLY', 'DAILY'].includes(row.membershiptype.toUpperCase())) {
+        if (!["MONTHLY", "DAILY"].includes(row.membershiptype.toUpperCase())) {
           results.errors.push({
             row: rowNumber,
             error: "Invalid membership type (must be MONTHLY or DAILY)",
@@ -603,27 +628,35 @@ export const bulkImportMembers = async (req: Request, res: Response) => {
             email: row.email.toLowerCase().trim(),
             phone_number: row.phone_number.trim(),
             age: age,
-            membershiptype: row.membershiptype.toUpperCase() as "MONTHLY" | "DAILY",
-            password: await hashPassword('defaultPassword123'), // Default password
+            membershiptype: row.membershiptype.toUpperCase() as
+              | "MONTHLY"
+              | "DAILY",
+            password: await hashPassword("defaultPassword123"), // Default password
             terms_accepted: true,
             email_verified: false,
-            address: row.street || row.city || row.state ? {
-              create: {
-                street: row.street || '',
-                city: row.city || '',
-                state: row.state || '',
-                zipCode: row.zipCode || row.postalCode || '',
-                country: row.country || 'USA',
-              }
-            } : undefined,
-            emergency_contact: row.emergencyName || row.emergencyPhone ? {
-              create: {
-                name: row.emergencyName || '',
-                relationship: row.emergencyRelationship || 'Family',
-                phone: row.emergencyPhone || '',
-                email: row.emergencyEmail || '',
-              }
-            } : undefined,
+            address:
+              row.street || row.city || row.state
+                ? {
+                    create: {
+                      street: row.street || "",
+                      city: row.city || "",
+                      state: row.state || "",
+                      zipCode: row.zipCode || row.postalCode || "",
+                      country: row.country || "USA",
+                    },
+                  }
+                : undefined,
+            emergency_contact:
+              row.emergencyName || row.emergencyPhone
+                ? {
+                    create: {
+                      name: row.emergencyName || "",
+                      relationship: row.emergencyRelationship || "Family",
+                      phone: row.emergencyPhone || "",
+                      email: row.emergencyEmail || "",
+                    },
+                  }
+                : undefined,
           },
         });
 
@@ -641,7 +674,7 @@ export const bulkImportMembers = async (req: Request, res: Response) => {
     }
 
     // Clean up uploaded file
-    const fs = require('fs');
+    const fs = require("fs");
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
@@ -689,13 +722,13 @@ export const getMemberStats = async (req: Request, res: Response) => {
 
     // Get top cities from address data
     const topCities = await prisma.address.groupBy({
-      by: ['city', 'state'],
+      by: ["city", "state"],
       _count: {
         city: true,
       },
       orderBy: {
         _count: {
-          city: 'desc',
+          city: "desc",
         },
       },
       take: 5,
@@ -703,7 +736,7 @@ export const getMemberStats = async (req: Request, res: Response) => {
 
     // Get membership type distribution
     const membershipDistribution = await prisma.member.groupBy({
-      by: ['membershiptype'],
+      by: ["membershiptype"],
       _count: {
         membershiptype: true,
       },
@@ -711,12 +744,12 @@ export const getMemberStats = async (req: Request, res: Response) => {
 
     // Get age distribution
     const ageDistribution = await prisma.member.groupBy({
-      by: ['age'],
+      by: ["age"],
       _count: {
         age: true,
       },
       orderBy: {
-        age: 'asc',
+        age: "asc",
       },
     });
 
@@ -725,7 +758,7 @@ export const getMemberStats = async (req: Request, res: Response) => {
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
     const monthlyGrowth = await prisma.member.groupBy({
-      by: ['createdAt'],
+      by: ["createdAt"],
       _count: {
         createdAt: true,
       },
@@ -735,7 +768,7 @@ export const getMemberStats = async (req: Request, res: Response) => {
         },
       },
       orderBy: {
-        createdAt: 'asc',
+        createdAt: "asc",
       },
     });
 
@@ -761,9 +794,10 @@ export const getMemberStats = async (req: Request, res: Response) => {
       },
     });
 
-    const growthRate = lastMonthMembers > 0 
-      ? ((currentMonthMembers - lastMonthMembers) / lastMonthMembers) * 100 
-      : 0;
+    const growthRate =
+      lastMonthMembers > 0
+        ? ((currentMonthMembers - lastMonthMembers) / lastMonthMembers) * 100
+        : 0;
 
     // Get recent registrations (last 7 days)
     const lastWeek = new Date();
@@ -782,32 +816,51 @@ export const getMemberStats = async (req: Request, res: Response) => {
       activeMembers,
       pendingVerification,
       inactiveMembers,
-      membershipDistribution: membershipDistribution.map(item => ({
+      membershipDistribution: membershipDistribution.map((item) => ({
         type: item.membershiptype,
         count: item._count?.membershiptype || 0,
-        percentage: ((item._count?.membershiptype || 0) / totalMembers * 100).toFixed(1),
+        percentage: (
+          ((item._count?.membershiptype || 0) / totalMembers) *
+          100
+        ).toFixed(1),
       })),
       ageDistribution: {
-        under18: ageDistribution.filter(item => item.age < 18).reduce((sum, item) => sum + (item._count?.age || 0), 0),
-        age18to25: ageDistribution.filter(item => item.age >= 18 && item.age <= 25).reduce((sum, item) => sum + (item._count?.age || 0), 0),
-        age26to35: ageDistribution.filter(item => item.age >= 26 && item.age <= 35).reduce((sum, item) => sum + (item._count?.age || 0), 0),
-        age36to50: ageDistribution.filter(item => item.age >= 36 && item.age <= 50).reduce((sum, item) => sum + (item._count?.age || 0), 0),
-        over50: ageDistribution.filter(item => item.age > 50).reduce((sum, item) => sum + (item._count?.age || 0), 0),
+        under18: ageDistribution
+          .filter((item) => item.age < 18)
+          .reduce((sum, item) => sum + (item._count?.age || 0), 0),
+        age18to25: ageDistribution
+          .filter((item) => item.age >= 18 && item.age <= 25)
+          .reduce((sum, item) => sum + (item._count?.age || 0), 0),
+        age26to35: ageDistribution
+          .filter((item) => item.age >= 26 && item.age <= 35)
+          .reduce((sum, item) => sum + (item._count?.age || 0), 0),
+        age36to50: ageDistribution
+          .filter((item) => item.age >= 36 && item.age <= 50)
+          .reduce((sum, item) => sum + (item._count?.age || 0), 0),
+        over50: ageDistribution
+          .filter((item) => item.age > 50)
+          .reduce((sum, item) => sum + (item._count?.age || 0), 0),
       },
-      monthlyGrowth: monthlyGrowth.map(item => ({
+      monthlyGrowth: monthlyGrowth.map((item) => ({
         month: item.createdAt.toISOString().slice(0, 7), // YYYY-MM format
         count: item._count?.createdAt || 0,
       })),
       growthRate: growthRate.toFixed(1),
-      topCities: topCities.map(item => ({
-        city: item.city || 'Unknown',
-        state: item.state || 'Unknown',
+      topCities: topCities.map((item) => ({
+        city: item.city || "Unknown",
+        state: item.state || "Unknown",
         count: item._count?.city || 0,
       })),
       recentRegistrations,
-      averageAge: ageDistribution.length > 0 
-        ? (ageDistribution.reduce((sum, item) => sum + (item.age * (item._count?.age || 0)), 0) / totalMembers).toFixed(1)
-        : 0,
+      averageAge:
+        ageDistribution.length > 0
+          ? (
+              ageDistribution.reduce(
+                (sum, item) => sum + item.age * (item._count?.age || 0),
+                0
+              ) / totalMembers
+            ).toFixed(1)
+          : 0,
     };
 
     res.status(200).json({
@@ -820,6 +873,147 @@ export const getMemberStats = async (req: Request, res: Response) => {
     res.status(500).json({
       isSuccess: false,
       message: defaultErrorMessage,
+    });
+  }
+};
+
+// Update member basic profile information
+export const updateMemberBasicProfile = async (req: Request, res: Response) => {
+  try {
+    const memberId = req.params.id;
+    const { name, email, phone_number, age, membershiptype } = req.body;
+
+    // Validate required fields
+    if (!name || !email) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Name and email are required!",
+      });
+      return;
+    }
+
+    // Check if member exists
+    const existingMember = await prisma.member.findUnique({
+      where: { id: memberId },
+    });
+
+    if (!existingMember) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "Member not found!",
+      });
+      return;
+    }
+
+    // Check if email is already taken by another member
+    if (email !== existingMember.email) {
+      const emailExists = await prisma.member.findUnique({
+        where: { email },
+      });
+
+      if (emailExists) {
+        res.status(400).json({
+          isSuccess: false,
+          message: "Email is already taken!",
+        });
+        return;
+      }
+    }
+
+    // Update member
+    const updatedMember = await prisma.member.update({
+      where: { id: memberId },
+      data: {
+        name,
+        email,
+        phone_number: phone_number || null,
+        age: age || existingMember.age,
+        membershiptype: membershiptype || existingMember.membershiptype,
+      },
+    });
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "Profile updated successfully!",
+      member: updatedMember,
+    });
+  } catch (error) {
+    res.status(500).json({
+      isSuccess: false,
+      message: defaultErrorMessage,
+      error: JSON.stringify(error),
+    });
+  }
+};
+
+// Change member password
+export const changeMemberPassword = async (req: Request, res: Response) => {
+  try {
+    const memberId = req.params.id;
+    const { currentPassword, newPassword } = req.body;
+
+    // Validate required fields
+    if (!currentPassword || !newPassword) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Current password and new password are required!",
+      });
+      return;
+    }
+
+    // Validate new password strength
+    if (newPassword.length < 6) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "New password must be at least 6 characters long!",
+      });
+      return;
+    }
+
+    // Get member with current password
+    const member = await prisma.member.findUnique({
+      where: { id: memberId },
+    });
+
+    if (!member) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "Member not found!",
+      });
+      return;
+    }
+
+    // Verify current password
+    const isCurrentPasswordValid = await comparePassword(
+      currentPassword,
+      member.password
+    );
+    if (!isCurrentPasswordValid) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Current password is incorrect!",
+      });
+      return;
+    }
+
+    // Hash new password
+    const hashedNewPassword = await hashPassword(newPassword);
+
+    // Update password
+    await prisma.member.update({
+      where: { id: memberId },
+      data: { password: hashedNewPassword },
+    });
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "Password changed successfully!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      isSuccess: false,
+      message: defaultErrorMessage,
+      error: JSON.stringify(error),
     });
   }
 };

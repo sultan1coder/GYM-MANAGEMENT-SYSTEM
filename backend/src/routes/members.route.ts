@@ -11,6 +11,8 @@ import {
   searchMembers,
   getMemberStats,
   bulkImportMembers,
+  updateMemberBasicProfile,
+  changeMemberPassword,
 } from "../controllers/members.controller";
 import {
   subscribeMember,
@@ -61,7 +63,11 @@ const imageStorage = multer.diskStorage({
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(
       null,
-      "profile-" + file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+      "profile-" +
+        file.fieldname +
+        "-" +
+        uniqueSuffix +
+        path.extname(file.originalname)
     );
   },
 });
@@ -69,7 +75,13 @@ const imageStorage = multer.diskStorage({
 const imageUpload = multer({
   storage: imageStorage,
   fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
@@ -88,7 +100,12 @@ router.post("/register", registerMember);
 router.get("/single/:id", protect, getSingleMember);
 router.put("/update/:id", protect, updateMember);
 router.put("/profile-picture/:id", protect, updateMemberProfilePicture);
-router.post("/upload-profile-picture/:id", protect, imageUpload.single("profile_picture"), uploadMemberProfilePicture);
+router.post(
+  "/upload-profile-picture/:id",
+  protect,
+  imageUpload.single("profile_picture"),
+  uploadMemberProfilePicture
+);
 router.delete("/delete/:id", protect, deleteMember);
 router.post("/:id/subscribe", protect, subscribeMember);
 router.post("/:id/unsubscribe", protect, unsubscribeMember);
@@ -96,6 +113,15 @@ router.post("/:id/unsubscribe", protect, unsubscribeMember);
 // New advanced routes
 router.get("/search", protect, searchMembers);
 router.get("/stats", protect, getMemberStats);
-router.post("/bulk-import", protect, csvUpload.single("file"), bulkImportMembers);
+router.post(
+  "/bulk-import",
+  protect,
+  csvUpload.single("file"),
+  bulkImportMembers
+);
+
+// New member profile management routes
+router.put("/basic-profile/:id", protect, updateMemberBasicProfile);
+router.put("/change-password/:id", protect, changeMemberPassword);
 
 export default router;

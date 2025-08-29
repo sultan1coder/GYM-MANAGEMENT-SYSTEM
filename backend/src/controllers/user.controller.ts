@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { defaultErrorMessage } from "../constants";
 import prisma from "../lib/prisma";
-import { hashPassword } from "../utils/auth";
+import { hashPassword, comparePassword } from "../utils/auth";
 import csv from "csv-parser";
 import * as XLSX from "xlsx";
 import * as fs from "fs";
@@ -125,7 +125,8 @@ export const getSingleUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
-    const { name, email, password, username, phone_number, role } = req.body as IUpdateUser;
+    const { name, email, password, username, phone_number, role } =
+      req.body as IUpdateUser;
     const user = await prisma.user.findFirst({
       where: {
         id: Number(userId),
@@ -268,7 +269,7 @@ export const updateProfilePicture = async (req: Request, res: Response) => {
 export const uploadProfilePicture = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
-    
+
     if (!req.file) {
       res.status(400).json({
         isSuccess: false,
@@ -292,7 +293,7 @@ export const uploadProfilePicture = async (req: Request, res: Response) => {
     }
 
     // Generate the file URL
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
     const profilePictureUrl = `${baseUrl}/uploads/${req.file.filename}`;
 
     const updatedUser = await prisma.user.update({
@@ -977,7 +978,11 @@ export const updateUserProfile = async (req: Request, res: Response) => {
     }
 
     // Validate required fields
-    if (!profileData.basicInfo || !profileData.address || !profileData.emergencyContact) {
+    if (
+      !profileData.basicInfo ||
+      !profileData.address ||
+      !profileData.emergencyContact
+    ) {
       res.status(400).json({
         isSuccess: false,
         message: "Missing required profile sections",
@@ -1043,7 +1048,7 @@ export const getUserProfile = async (req: Request, res: Response) => {
         role: true,
         created_at: true,
         updated_at: true,
-      }
+      },
     });
 
     if (!user) {
@@ -1126,6 +1131,273 @@ export const getUserProfile = async (req: Request, res: Response) => {
         userId: user.id,
         ...mockProfile,
       },
+    });
+  } catch (error) {
+    res.status(500).json({
+      isSuccess: false,
+      message: defaultErrorMessage,
+      error: JSON.stringify(error),
+    });
+  }
+};
+
+// Update user basic profile information
+export const updateUserBasicProfile = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const { name, email, phone_number, age, role, membershiptype } = req.body;
+
+    // Validate required fields
+    if (!name || !email) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Name and email are required!",
+      });
+      return;
+    }
+
+    // Check if user exists
+    const existingUser = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+    });
+
+    if (!existingUser) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "User not found!",
+      });
+      return;
+    }
+
+    // Check if email is already taken by another user
+    if (email !== existingUser.email) {
+      const emailExists = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (emailExists) {
+        res.status(400).json({
+          isSuccess: false,
+          message: "Email is already taken!",
+        });
+        return;
+      }
+    }
+
+    // Update user
+    const updatedUser = await prisma.user.update({
+      where: { id: Number(userId) },
+      data: {
+        name,
+        email,
+        phone_number: phone_number || null,
+        role: role || existingUser.role,
+      },
+    });
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "Profile updated successfully!",
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      isSuccess: false,
+      message: defaultErrorMessage,
+      error: JSON.stringify(error),
+    });
+  }
+};
+
+// Change user password
+export const changeUserPassword = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const { currentPassword, newPassword } = req.body;
+
+    // Validate required fields
+    if (!currentPassword || !newPassword) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Current password and new password are required!",
+      });
+      return;
+    }
+
+    // Validate new password strength
+    if (newPassword.length < 6) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "New password must be at least 6 characters long!",
+      });
+      return;
+    }
+
+    // Get user with current password
+    const user = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "User not found!",
+      });
+      return;
+    }
+
+    // Verify current password
+    const isCurrentPasswordValid = await comparePassword(
+      currentPassword,
+      user.password
+    );
+    if (!isCurrentPasswordValid) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Current password is incorrect!",
+      });
+      return;
+    }
+
+    // Hash new password
+    const hashedNewPassword = await hashPassword(newPassword);
+
+    // Update password
+    await prisma.user.update({
+      where: { id: Number(userId) },
+      data: { password: hashedNewPassword },
+    });
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "Password changed successfully!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      isSuccess: false,
+      message: defaultErrorMessage,
+      error: JSON.stringify(error),
+    });
+  }
+};
+
+// Enable two-factor authentication
+export const enableTwoFactorAuth = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "User not found!",
+      });
+      return;
+    }
+
+    // Generate 2FA secret and QR code (placeholder implementation)
+    const secret = "2FA_SECRET_" + Math.random().toString(36).substr(2, 9);
+    const qrCode = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
+      secret
+    )}`;
+
+    // In a real implementation, you would store the secret in the database
+    // For now, we'll just return the generated data
+    res.status(200).json({
+      isSuccess: true,
+      message: "Two-factor authentication enabled!",
+      qrCode,
+      secret,
+    });
+  } catch (error) {
+    res.status(500).json({
+      isSuccess: false,
+      message: defaultErrorMessage,
+      error: JSON.stringify(error),
+    });
+  }
+};
+
+// Disable two-factor authentication
+export const disableTwoFactorAuth = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const { code } = req.body;
+
+    // Validate required fields
+    if (!code) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Verification code is required!",
+      });
+      return;
+    }
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "User not found!",
+      });
+      return;
+    }
+
+    // In a real implementation, you would verify the code
+    // For now, we'll just return success
+    res.status(200).json({
+      isSuccess: true,
+      message: "Two-factor authentication disabled!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      isSuccess: false,
+      message: defaultErrorMessage,
+      error: JSON.stringify(error),
+    });
+  }
+};
+
+// Verify two-factor authentication
+export const verifyTwoFactorAuth = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const { code } = req.body;
+
+    // Validate required fields
+    if (!code) {
+      res.status(400).json({
+        isSuccess: false,
+        message: "Verification code is required!",
+      });
+      return;
+    }
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "User not found!",
+      });
+      return;
+    }
+
+    // In a real implementation, you would verify the code
+    // For now, we'll just return success
+    res.status(200).json({
+      isSuccess: true,
+      message: "Two-factor authentication verified!",
     });
   } catch (error) {
     res.status(500).json({

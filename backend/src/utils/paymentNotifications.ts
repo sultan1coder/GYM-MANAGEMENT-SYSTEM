@@ -1,5 +1,48 @@
 import nodemailer from "nodemailer";
-import { Payment, Member, Invoice } from "@prisma/client";
+import prisma from "../lib/prisma";
+
+// Define types based on our Prisma schema
+type Payment = {
+  id: string;
+  amount: number;
+  memberId: string;
+  method: string;
+  createdAt: Date;
+  status: string;
+  description?: string;
+  reference?: string;
+  Member: {
+    name: string;
+    email: string;
+    password: string;
+    phone_number: string | null;
+    id: string;
+    age: number;
+    membershiptype: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+};
+
+type Member = {
+  name: string;
+  email: string;
+  password: string;
+  phone_number: string | null;
+  id: string;
+  age: number;
+  membershiptype: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type Invoice = {
+  id: string;
+  memberId: string;
+  amount: number;
+  details: string;
+  createdAt: Date;
+};
 
 // Email configuration
 const emailConfig = {

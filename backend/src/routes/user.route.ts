@@ -17,6 +17,11 @@ import {
   bulkUpdateUserRoles,
   updateUserProfile,
   getUserProfile,
+  updateUserBasicProfile,
+  changeUserPassword,
+  enableTwoFactorAuth,
+  disableTwoFactorAuth,
+  verifyTwoFactorAuth,
 } from "../controllers/user.controller";
 import { protect, adminRoute } from "../../middlewares/auth.middleware";
 import multer from "multer";
@@ -63,7 +68,11 @@ const imageStorage = multer.diskStorage({
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(
       null,
-      "profile-" + file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+      "profile-" +
+        file.fieldname +
+        "-" +
+        uniqueSuffix +
+        path.extname(file.originalname)
     );
   },
 });
@@ -71,7 +80,13 @@ const imageStorage = multer.diskStorage({
 const imageUpload = multer({
   storage: imageStorage,
   fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
@@ -88,7 +103,12 @@ router.get("/list", protect, getAllUsers);
 router.get("/single/:id", protect, getSingleUser);
 router.put("/update/:id", protect, updateUser);
 router.put("/profile-picture/:id", protect, updateProfilePicture);
-router.post("/upload-profile-picture/:id", protect, imageUpload.single("profile_picture"), uploadProfilePicture);
+router.post(
+  "/upload-profile-picture/:id",
+  protect,
+  imageUpload.single("profile_picture"),
+  uploadProfilePicture
+);
 router.delete("/delete/:id", protect, adminRoute, deleteUser);
 
 // New admin-only routes
@@ -113,5 +133,16 @@ router.post("/bulk-update-roles", protect, adminRoute, bulkUpdateUserRoles);
 // Profile management routes
 router.get("/profile/:id", protect, getUserProfile);
 router.put("/profile/:id", protect, updateUserProfile);
+
+// Basic profile update route
+router.put("/basic-profile/:id", protect, updateUserBasicProfile);
+
+// Password change route
+router.put("/change-password/:id", protect, changeUserPassword);
+
+// Two-factor authentication routes
+router.post("/2fa/enable/:id", protect, enableTwoFactorAuth);
+router.post("/2fa/disable/:id", protect, disableTwoFactorAuth);
+router.post("/2fa/verify/:id", protect, verifyTwoFactorAuth);
 
 export default router;

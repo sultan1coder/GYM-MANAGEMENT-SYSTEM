@@ -60,12 +60,16 @@ export const userAPI = {
 
   uploadProfilePicture: (id: number, file: File) => {
     const formData = new FormData();
-    formData.append('profile_picture', file);
-    return api.post<ApiResponse<User>>(`${BASE_API_URL}/users/upload-profile-picture/${id}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    formData.append("profile_picture", file);
+    return api.post<ApiResponse<User>>(
+      `${BASE_API_URL}/users/upload-profile-picture/${id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
   },
 
   deleteUser: (id: number) =>
@@ -392,6 +396,56 @@ export const updateUserProfile = async (
   return response.data;
 };
 
+// Simple profile update for basic information
+export const updateUserBasicProfile = async (
+  userId: number,
+  basicData: {
+    name: string;
+    email: string;
+    phone_number?: string;
+    age?: number;
+    role?: string;
+    membershiptype?: string;
+  }
+) => api.put<ApiResponse<User>>(`/users/basic-profile/${userId}`, basicData);
+
+// Password change functionality
+export const changeUserPassword = async (
+  userId: number,
+  passwordData: {
+    currentPassword: string;
+    newPassword: string;
+  }
+) =>
+  api.put<ApiResponse<{ message: string }>>(
+    `/users/change-password/${userId}`,
+    passwordData
+  );
+
+// Two-factor authentication
+export const enableTwoFactorAuth = async (userId: number) =>
+  api.post<ApiResponse<{ qrCode: string; secret: string }>>(
+    `/users/2fa/enable/${userId}`
+  );
+
+export const disableTwoFactorAuth = async (
+  userId: number,
+  data: { code: string }
+) =>
+  api.post<ApiResponse<{ message: string }>>(
+    `/users/2fa/disable/${userId}`,
+    data
+  );
+
+export const verifyTwoFactorAuth = async (
+  userId: number,
+  data: { code: string }
+) =>
+  api.post<ApiResponse<{ message: string }>>(
+    `/users/2fa/verify/${userId}`,
+    data
+  );
+
 // Member Management API
 export const memberAPI = {
   // Member Authentication
@@ -421,13 +475,46 @@ export const memberAPI = {
 
   uploadProfilePicture: (id: string, file: File) => {
     const formData = new FormData();
-    formData.append('profile_picture', file);
-    return api.post<ApiResponse<Member>>(`${BASE_API_URL}/members/upload-profile-picture/${id}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    formData.append("profile_picture", file);
+    return api.post<ApiResponse<Member>>(
+      `${BASE_API_URL}/members/upload-profile-picture/${id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
   },
+
+  // Member profile update
+  updateBasicProfile: (
+    id: string,
+    basicData: {
+      name: string;
+      email: string;
+      phone_number?: string;
+      age?: number;
+      membershiptype?: string;
+    }
+  ) =>
+    api.put<ApiResponse<Member>>(
+      `${BASE_API_URL}/members/basic-profile/${id}`,
+      basicData
+    ),
+
+  // Member password change
+  changePassword: (
+    id: string,
+    passwordData: {
+      currentPassword: string;
+      newPassword: string;
+    }
+  ) =>
+    api.put<ApiResponse<{ message: string }>>(
+      `${BASE_API_URL}/members/change-password/${id}`,
+      passwordData
+    ),
 
   deleteMember: (id: string) =>
     api.delete<ApiResponse<Member>>(`${BASE_API_URL}/members/delete/${id}`),

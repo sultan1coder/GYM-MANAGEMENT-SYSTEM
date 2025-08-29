@@ -19,10 +19,17 @@ import {
   Calendar,
   Shield,
   Users,
+  X,
 } from "lucide-react";
 import ProfileManager from "../components/ProfileManager";
 import { isAdmin, isStaff, isMember } from "../utils/auth";
 import { toast } from "react-hot-toast";
+import {
+  updateUserBasicProfile,
+  changeUserPassword,
+  enableTwoFactorAuth,
+} from "../services/api";
+import { memberAPI } from "../services/api";
 
 const ProfileSettings = () => {
   const [showProfileManager, setShowProfileManager] = useState(false);
@@ -37,6 +44,16 @@ const ProfileSettings = () => {
     membershiptype: "",
   });
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
 
   const loginState = useSelector((state: RootState) => state.loginSlice);
   const memberLoginState = useSelector(
@@ -74,26 +91,141 @@ const ProfileSettings = () => {
     setShowProfileManager(true);
   };
 
+  const validateForm = () => {
+    const errors: Record<string, string> = {};
+
+    // Name validation
+    if (!formData.name.trim()) {
+      errors.name = "Name is required";
+    } else if (formData.name.trim().length < 2) {
+      errors.name = "Name must be at least 2 characters long";
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email.trim())) {
+      errors.email = "Please enter a valid email address";
+    }
+
+    // Phone validation (optional but if provided, must be valid)
+    if (formData.phone_number && formData.phone_number.trim()) {
+      const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+      if (!phoneRegex.test(formData.phone_number.replace(/[\s\-\(\)]/g, ""))) {
+        errors.phone_number = "Please enter a valid phone number";
+      }
+    }
+
+    // Age validation for members
+    if (isMemberUser && formData.age) {
+      if (formData.age < 13 || formData.age > 120) {
+        errors.age = "Age must be between 13 and 120";
+      }
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleInputChange = (field: string, value: string | number) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
+
+    // Clear validation error when user starts typing
+    if (validationErrors[field]) {
+      setValidationErrors((prev) => ({ ...prev, [field]: "" }));
+    }
   };
 
   const handleSaveChanges = async () => {
     if (!user) return;
 
+    // Validate form before submitting
+    if (!validateForm()) {
+      toast.error("Please fix the validation errors");
+      return;
+    }
+
     setIsUpdating(true);
     try {
-      // TODO: Implement actual profile update API call
-      // For now, just show success message
-      toast.success("Profile updated successfully!");
-      setIsEditing(false);
-    } catch (error) {
-      toast.error("Failed to update profile");
+      // Prepare update data
+      const updateData = {
+        name: formData.name,
+        email: formData.email,
+        phone_number: formData.phone_number || undefined,
+        age: isMemberUser ? formData.age : undefined,
+        role: isStaffUser ? formData.role : undefined,
+        membershiptype: isMemberUser ? formData.membershiptype : undefined,
+      };
+
+      let response;
+      if (isStaffUser) {
+        response = await updateUserBasicProfile(user.id, updateData);
+      } else {
+        response = await memberAPI.updateBasicProfile(user.id, updateData);
+      }
+
+      if (response?.data.isSuccess) {
+        toast.success("Profile updated successfully!");
+        setIsEditing(false);
+        // TODO: Update Redux store with new user data
+      } else {
+        toast.error(response?.data.message || "Failed to update profile");
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to update profile");
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const handlePasswordChange = async () => {
+    if (!user) return;
+
+    // Validate passwords
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      toast.error("New passwords do not match!");
+      return;
+    }
+
+    if (passwordData.newPassword.length < 6) {
+      toast.error("New password must be at least 6 characters long!");
+      return;
+    }
+
+    setIsChangingPassword(true);
+    try {
+      let response;
+      if (isStaffUser) {
+        response = await changeUserPassword(user.id, {
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword,
+        });
+      } else {
+        response = await memberAPI.changePassword(user.id, {
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword,
+        });
+      }
+
+      if (response?.data.isSuccess) {
+        toast.success("Password changed successfully!");
+        setShowPasswordChange(false);
+        setPasswordData({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+      } else {
+        toast.error(response?.data.message || "Failed to change password");
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to change password");
+    } finally {
+      setIsChangingPassword(false);
     }
   };
 
@@ -199,8 +331,15 @@ const ProfileSettings = () => {
                         handleInputChange("name", e.target.value)
                       }
                       disabled={!isEditing}
-                      className="disabled:opacity-50"
+                      className={`disabled:opacity-50 ${
+                        validationErrors.name ? "border-red-500" : ""
+                      }`}
                     />
+                    {validationErrors.name && (
+                      <p className="text-sm text-red-500 mt-1">
+                        {validationErrors.name}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -216,8 +355,15 @@ const ProfileSettings = () => {
                         handleInputChange("email", e.target.value)
                       }
                       disabled={!isEditing}
-                      className="disabled:opacity-50"
+                      className={`disabled:opacity-50 ${
+                        validationErrors.email ? "border-red-500" : ""
+                      }`}
                     />
+                    {validationErrors.email && (
+                      <p className="text-sm text-red-500 mt-1">
+                        {validationErrors.email}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -232,8 +378,15 @@ const ProfileSettings = () => {
                         handleInputChange("phone_number", e.target.value)
                       }
                       disabled={!isEditing}
-                      className="disabled:opacity-50"
+                      className={`disabled:opacity-50 ${
+                        validationErrors.phone_number ? "border-red-500" : ""
+                      }`}
                     />
+                    {validationErrors.phone_number && (
+                      <p className="text-sm text-red-500 mt-1">
+                        {validationErrors.phone_number}
+                      </p>
+                    )}
                   </div>
 
                   {isMemberUser && (
@@ -253,8 +406,15 @@ const ProfileSettings = () => {
                           )
                         }
                         disabled={!isEditing}
-                        className="disabled:opacity-50"
+                        className={`disabled:opacity-50 ${
+                          validationErrors.age ? "border-red-500" : ""
+                        }`}
                       />
+                      {validationErrors.age && (
+                        <p className="text-sm text-red-500 mt-1">
+                          {validationErrors.age}
+                        </p>
+                      )}
                     </div>
                   )}
 
@@ -343,11 +503,7 @@ const ProfileSettings = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() =>
-                      toast.info(
-                        "Password change functionality will be implemented soon"
-                      )
-                    }
+                    onClick={() => setShowPasswordChange(true)}
                   >
                     Change
                   </Button>
@@ -384,6 +540,100 @@ const ProfileSettings = () => {
           onClose={() => setShowProfileManager(false)}
           userType={userType}
         />
+      )}
+
+      {/* Password Change Modal */}
+      {showPasswordChange && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                Change Password
+              </h3>
+              <button
+                onClick={() => setShowPasswordChange(false)}
+                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5 text-slate-500" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="currentPassword">Current Password</Label>
+                <Input
+                  id="currentPassword"
+                  type="password"
+                  value={passwordData.currentPassword}
+                  onChange={(e) =>
+                    setPasswordData((prev) => ({
+                      ...prev,
+                      currentPassword: e.target.value,
+                    }))
+                  }
+                  placeholder="Enter current password"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="newPassword">New Password</Label>
+                <Input
+                  id="newPassword"
+                  type="password"
+                  value={passwordData.newPassword}
+                  onChange={(e) =>
+                    setPasswordData((prev) => ({
+                      ...prev,
+                      newPassword: e.target.value,
+                    }))
+                  }
+                  placeholder="Enter new password"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  value={passwordData.confirmPassword}
+                  onChange={(e) =>
+                    setPasswordData((prev) => ({
+                      ...prev,
+                      confirmPassword: e.target.value,
+                    }))
+                  }
+                  placeholder="Confirm new password"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={handlePasswordChange}
+                  disabled={isChangingPassword}
+                  className="flex-1"
+                >
+                  {isChangingPassword ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                      Changing...
+                    </>
+                  ) : (
+                    "Change Password"
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowPasswordChange(false)}
+                  disabled={isChangingPassword}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

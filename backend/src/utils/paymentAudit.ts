@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../lib/prisma";
 
 export interface AuditLogEntry {
   action: string;
-  userId?: string;
+  userId?: number;
   memberId?: string;
   paymentId?: string;
   details: string;
@@ -24,19 +22,20 @@ export interface ComplianceCheck {
 // Log payment activity for audit purposes
 export const logPaymentActivity = async (entry: AuditLogEntry) => {
   try {
-    await prisma.paymentAuditLog.create({
-      data: {
-        action: entry.action,
-        userId: entry.userId,
-        memberId: entry.memberId,
-        paymentId: entry.paymentId,
-        details: entry.details,
-        ipAddress: entry.ipAddress,
-        userAgent: entry.userAgent,
-        metadata: entry.metadata,
-        timestamp: new Date(),
-      },
-    });
+    const data: any = {
+      action: entry.action,
+      details: entry.details,
+      timestamp: new Date(),
+    };
+
+    if (entry.userId) data.userId = entry.userId;
+    if (entry.memberId) data.memberId = entry.memberId;
+    if (entry.paymentId) data.paymentId = entry.paymentId;
+    if (entry.ipAddress) data.ipAddress = entry.ipAddress;
+    if (entry.userAgent) data.userAgent = entry.userAgent;
+    if (entry.metadata) data.metadata = entry.metadata;
+
+    await prisma.paymentAuditLog.create({ data });
 
     console.log(`Payment audit log created: ${entry.action}`);
   } catch (error) {
@@ -48,7 +47,7 @@ export const logPaymentActivity = async (entry: AuditLogEntry) => {
 // Log payment creation
 export const logPaymentCreation = async (
   payment: any,
-  userId: string,
+  userId: number,
   ipAddress?: string,
   userAgent?: string
 ) => {
@@ -71,7 +70,7 @@ export const logPaymentCreation = async (
 // Log payment update
 export const logPaymentUpdate = async (
   paymentId: string,
-  userId: string,
+  userId: number,
   changes: Record<string, any>,
   ipAddress?: string,
   userAgent?: string
@@ -92,7 +91,7 @@ export const logPaymentUpdate = async (
 // Log payment deletion
 export const logPaymentDeletion = async (
   paymentId: string,
-  userId: string,
+  userId: number,
   reason: string,
   ipAddress?: string,
   userAgent?: string
@@ -111,7 +110,7 @@ export const logPaymentDeletion = async (
 // Log payment status change
 export const logPaymentStatusChange = async (
   paymentId: string,
-  userId: string,
+  userId: number,
   oldStatus: string,
   newStatus: string,
   reason?: string,
@@ -138,7 +137,7 @@ export const logPaymentStatusChange = async (
 // Log payment access
 export const logPaymentAccess = async (
   paymentId: string,
-  userId: string,
+  userId: number,
   accessType: "VIEW" | "EXPORT" | "REPORT",
   ipAddress?: string,
   userAgent?: string
@@ -180,7 +179,7 @@ export const logFailedPaymentAttempt = async (
 // Log successful payment
 export const logSuccessfulPayment = async (
   payment: any,
-  userId: string,
+  userId: number,
   ipAddress?: string,
   userAgent?: string
 ) => {
@@ -203,7 +202,7 @@ export const logSuccessfulPayment = async (
 // Log refund
 export const logRefund = async (
   paymentId: string,
-  userId: string,
+  userId: number,
   amount: number,
   reason: string,
   ipAddress?: string,
@@ -226,7 +225,7 @@ export const logRefund = async (
 // Log recurring payment creation
 export const logRecurringPaymentCreation = async (
   recurringPayment: any,
-  userId: string,
+  userId: number,
   ipAddress?: string,
   userAgent?: string
 ) => {
@@ -248,7 +247,7 @@ export const logRecurringPaymentCreation = async (
 // Log installment plan creation
 export const logInstallmentPlanCreation = async (
   installmentPlan: any,
-  userId: string,
+  userId: number,
   ipAddress?: string,
   userAgent?: string
 ) => {
@@ -272,10 +271,11 @@ export const createComplianceCheck = async (check: ComplianceCheck) => {
   try {
     await prisma.paymentComplianceCheck.create({
       data: {
+        id: `comp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         paymentId: check.paymentId,
         checkType: check.checkType,
         status: check.status,
-        details: check.details,
+        details: check.checkType,
         timestamp: check.timestamp,
       },
     });
@@ -332,7 +332,7 @@ export const getMemberPaymentAuditTrail = async (
 };
 
 // Get audit trail for a specific user
-export const getUserPaymentAuditTrail = async (userId: string, limit = 100) => {
+export const getUserPaymentAuditTrail = async (userId: number, limit = 100) => {
   try {
     const auditTrail = await prisma.paymentAuditLog.findMany({
       where: { userId },
