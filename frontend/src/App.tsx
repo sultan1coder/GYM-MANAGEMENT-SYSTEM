@@ -29,6 +29,10 @@ import PaymentsPage from "./pages/admin/PaymentsPage";
 import ReportsPage from "./pages/admin/ReportsPage";
 import SettingsPage from "./pages/admin/SettingsPage";
 
+// Registration Pages
+import StaffRegistration from "./pages/StaffRegistration";
+import MemberRegistration from "./pages/MemberRegistration";
+
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
@@ -53,9 +57,17 @@ function App() {
 
                   {/* Staff/Admin Login */}
                   <Route path="/staff/login" element={<StaffLogin />} />
+                  <Route
+                    path="/staff/register"
+                    element={<StaffRegistration />}
+                  />
 
                   {/* Member Login */}
                   <Route path="/member/login" element={<MemberLogin />} />
+                  <Route
+                    path="/member/register"
+                    element={<MemberRegistration />}
+                  />
 
                   {/* Member Dashboard */}
                   <Route

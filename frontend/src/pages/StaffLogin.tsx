@@ -140,6 +140,19 @@ const StaffLogin: React.FC = () => {
               </Button>
             </form>
 
+            {/* Registration Link */}
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600">
+                Don't have an account?{" "}
+                <Link
+                  to="/staff/register"
+                  className="font-medium text-blue-600 hover:text-blue-800"
+                >
+                  Register here
+                </Link>
+              </p>
+            </div>
+
             {/* Back Button */}
             <div className="mt-6 text-center">
               <Link

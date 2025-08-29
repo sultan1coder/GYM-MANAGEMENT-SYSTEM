@@ -140,6 +140,19 @@ const MemberLogin: React.FC = () => {
               </Button>
             </form>
 
+            {/* Registration Link */}
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600">
+                Don't have an account?{" "}
+                <Link
+                  to="/member/register"
+                  className="font-medium text-green-600 hover:text-green-800"
+                >
+                  Register here
+                </Link>
+              </p>
+            </div>
+
             {/* Back Button */}
             <div className="mt-6 text-center">
               <Link

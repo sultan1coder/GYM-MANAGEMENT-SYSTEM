@@ -184,13 +184,13 @@ const Login: React.FC = () => {
         <div className="text-center mt-12 space-y-4">
           <div className="flex justify-center gap-6 text-sm">
             <Link
-              to="/users/register"
+              to="/staff/register"
               className="text-blue-600 hover:text-blue-800 transition-colors"
             >
               Staff Registration
             </Link>
             <Link
-              to="/members/register"
+              to="/member/register"
               className="text-green-600 hover:text-green-800 transition-colors"
             >
               Member Registration
