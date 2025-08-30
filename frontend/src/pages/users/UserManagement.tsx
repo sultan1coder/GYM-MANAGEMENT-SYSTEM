@@ -19,6 +19,20 @@ import {
 } from "lucide-react";
 import { updateUserStatus, searchUsers, userAPI } from "@/services/api";
 import { useUserGetAll } from "@/hooks/user";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface SearchFilters {
   searchTerm: string;
@@ -74,6 +88,27 @@ const UserManagement: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
+
+  // Form state
+  const [createFormData, setCreateFormData] = useState({
+    name: "",
+    email: "",
+    username: "",
+    phone_number: "",
+    password: "",
+    role: "staff",
+  });
+
+  const [editFormData, setEditFormData] = useState({
+    name: "",
+    email: "",
+    username: "",
+    phone_number: "",
+    role: "staff",
+  });
+
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Search and filters
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({
@@ -195,10 +230,128 @@ const UserManagement: React.FC = () => {
     setFilteredUsers(typedUsers);
   };
 
+  // Form validation
+  const validateForm = (data: any, isCreate: boolean = false) => {
+    const errors: Record<string, string> = {};
+
+    if (!data.name.trim()) {
+      errors.name = "Name is required";
+    }
+
+    if (!data.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+
+    if (!data.username.trim()) {
+      errors.username = "Username is required";
+    }
+
+    if (!data.phone_number.trim()) {
+      errors.phone_number = "Phone number is required";
+    }
+
+    if (isCreate && !data.password.trim()) {
+      errors.password = "Password is required";
+    } else if (isCreate && data.password.length < 6) {
+      errors.password = "Password must be at least 6 characters";
+    }
+
+    if (!data.role) {
+      errors.role = "Role is required";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Form input change handlers
+  const handleCreateFormChange = (field: string, value: string) => {
+    setCreateFormData((prev) => ({ ...prev, [field]: value }));
+    if (formErrors[field]) {
+      setFormErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  const handleEditFormChange = (field: string, value: string) => {
+    setEditFormData((prev) => ({ ...prev, [field]: value }));
+    if (formErrors[field]) {
+      setFormErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  // Create user
+  const handleCreateUser = async () => {
+    if (!validateForm(createFormData, true)) return;
+
+    setIsSubmitting(true);
+    try {
+      const response = await userAPI.createUser(createFormData);
+      if (response.isSuccess) {
+        toast.success("User created successfully!");
+        setShowCreateUser(false);
+        setCreateFormData({
+          name: "",
+          email: "",
+          username: "",
+          phone_number: "",
+          password: "",
+          role: "staff",
+        });
+        refetch();
+      } else {
+        toast.error(response.message || "Failed to create user");
+      }
+    } catch (error) {
+      toast.error("Failed to create user");
+      console.error("Create user error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Update user
+  const handleUpdateUser = async () => {
+    if (!validateForm(editFormData, false)) return;
+
+    setIsSubmitting(true);
+    try {
+      const response = await userAPI.updateUser(editingUser.id, editFormData);
+      if (response.isSuccess) {
+        toast.success("User updated successfully!");
+        setIsEditing(false);
+        setEditingUser(null);
+        setEditFormData({
+          name: "",
+          email: "",
+          username: "",
+          phone_number: "",
+          role: "staff",
+        });
+        refetch();
+      } else {
+        toast.error(response.message || "Failed to update user");
+      }
+    } catch (error) {
+      toast.error("Failed to update user");
+      console.error("Update user error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   // User action handlers
   const handleEditUser = (user: any) => {
     setSelectedUser(user);
     setEditingUser(user);
+    setEditFormData({
+      name: user.name || "",
+      email: user.email || "",
+      username: user.username || "",
+      phone_number: user.phone_number || "",
+      role: user.role || "staff",
+    });
     setIsEditing(true);
   };
 
@@ -427,6 +580,266 @@ const UserManagement: React.FC = () => {
             </Button>
           </div>
         </div>
+
+        {/* Create User Dialog */}
+        <Dialog open={showCreateUser} onOpenChange={setShowCreateUser}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Create New User</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="create-name">Full Name</Label>
+                <Input
+                  id="create-name"
+                  value={createFormData.name}
+                  onChange={(e) =>
+                    handleCreateFormChange("name", e.target.value)
+                  }
+                  placeholder="Enter full name"
+                  className={formErrors.name ? "border-red-500" : ""}
+                />
+                {formErrors.name && (
+                  <p className="text-sm text-red-500 mt-1">{formErrors.name}</p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="create-email">Email</Label>
+                <Input
+                  id="create-email"
+                  type="email"
+                  value={createFormData.email}
+                  onChange={(e) =>
+                    handleCreateFormChange("email", e.target.value)
+                  }
+                  placeholder="Enter email address"
+                  className={formErrors.email ? "border-red-500" : ""}
+                />
+                {formErrors.email && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {formErrors.email}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="create-username">Username</Label>
+                <Input
+                  id="create-username"
+                  value={createFormData.username}
+                  onChange={(e) =>
+                    handleCreateFormChange("username", e.target.value)
+                  }
+                  placeholder="Enter username"
+                  className={formErrors.username ? "border-red-500" : ""}
+                />
+                {formErrors.username && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {formErrors.username}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="create-phone">Phone Number</Label>
+                <Input
+                  id="create-phone"
+                  value={createFormData.phone_number}
+                  onChange={(e) =>
+                    handleCreateFormChange("phone_number", e.target.value)
+                  }
+                  placeholder="Enter phone number"
+                  className={formErrors.phone_number ? "border-red-500" : ""}
+                />
+                {formErrors.phone_number && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {formErrors.phone_number}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="create-password">Password</Label>
+                <Input
+                  id="create-password"
+                  type="password"
+                  value={createFormData.password}
+                  onChange={(e) =>
+                    handleCreateFormChange("password", e.target.value)
+                  }
+                  placeholder="Enter password"
+                  className={formErrors.password ? "border-red-500" : ""}
+                />
+                {formErrors.password && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {formErrors.password}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="create-role">Role</Label>
+                <Select
+                  value={createFormData.role}
+                  onValueChange={(value) =>
+                    handleCreateFormChange("role", value)
+                  }
+                >
+                  <SelectTrigger
+                    className={formErrors.role ? "border-red-500" : ""}
+                  >
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="staff">Staff</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+                {formErrors.role && (
+                  <p className="text-sm text-red-500 mt-1">{formErrors.role}</p>
+                )}
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={handleCreateUser}
+                  disabled={isSubmitting}
+                  className="flex-1"
+                >
+                  {isSubmitting ? "Creating..." : "Create User"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowCreateUser(false)}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Edit User Dialog */}
+        <Dialog open={isEditing} onOpenChange={setIsEditing}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Edit User</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="edit-name">Full Name</Label>
+                <Input
+                  id="edit-name"
+                  value={editFormData.name}
+                  onChange={(e) => handleEditFormChange("name", e.target.value)}
+                  placeholder="Enter full name"
+                  className={formErrors.name ? "border-red-500" : ""}
+                />
+                {formErrors.name && (
+                  <p className="text-sm text-red-500 mt-1">{formErrors.name}</p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="edit-email">Email</Label>
+                <Input
+                  id="edit-email"
+                  type="email"
+                  value={editFormData.email}
+                  onChange={(e) =>
+                    handleEditFormChange("email", e.target.value)
+                  }
+                  placeholder="Enter email address"
+                  className={formErrors.email ? "border-red-500" : ""}
+                />
+                {formErrors.email && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {formErrors.email}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="edit-username">Username</Label>
+                <Input
+                  id="edit-username"
+                  value={editFormData.username}
+                  onChange={(e) =>
+                    handleEditFormChange("username", e.target.value)
+                  }
+                  placeholder="Enter username"
+                  className={formErrors.username ? "border-red-500" : ""}
+                />
+                {formErrors.username && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {formErrors.username}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="edit-phone">Phone Number</Label>
+                <Input
+                  id="edit-phone"
+                  value={editFormData.phone_number}
+                  onChange={(e) =>
+                    handleEditFormChange("phone_number", e.target.value)
+                  }
+                  placeholder="Enter phone number"
+                  className={formErrors.phone_number ? "border-red-500" : ""}
+                />
+                {formErrors.phone_number && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {formErrors.phone_number}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="edit-role">Role</Label>
+                <Select
+                  value={editFormData.role}
+                  onValueChange={(value) => handleEditFormChange("role", value)}
+                >
+                  <SelectTrigger
+                    className={formErrors.role ? "border-red-500" : ""}
+                  >
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="staff">Staff</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+                {formErrors.role && (
+                  <p className="text-sm text-red-500 mt-1">{formErrors.role}</p>
+                )}
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={handleUpdateUser}
+                  disabled={isSubmitting}
+                  className="flex-1"
+                >
+                  {isSubmitting ? "Updating..." : "Update User"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditingUser(null);
+                  }}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Quick Stats */}
         {userAnalytics && (

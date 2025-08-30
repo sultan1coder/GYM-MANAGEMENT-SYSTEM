@@ -50,6 +50,15 @@ export const userAPI = {
   getSingleUser: (id: number) =>
     api.get<ApiResponse<User>>(`${BASE_API_URL}/users/single/${id}`),
 
+  createUser: (data: {
+    name: string;
+    email: string;
+    username: string;
+    phone_number: string;
+    password: string;
+    role: string;
+  }) => api.post<ApiResponse<User>>(`${BASE_API_URL}/users/create`, data),
+
   updateUser: (id: number, data: Partial<User>) =>
     api.put<ApiResponse<User>>(`${BASE_API_URL}/users/update/${id}`, data),
 
@@ -140,13 +149,16 @@ export const createUserByAdmin = async (userData: {
   password: string;
   role: string;
 }) => {
-  const response = await api.post<ApiResponse<User>>(`/users/create`, userData);
+  const response = await api.post<ApiResponse<User>>(
+    `${BASE_API_URL}/users/create`,
+    userData
+  );
   return response.data;
 };
 
 export const bulkImportUsers = async (formData: FormData) => {
   const response = await api.post<ApiResponse<User[]>>(
-    `/users/bulk-import`,
+    `${BASE_API_URL}/users/bulk-import`,
     formData,
     {
       headers: {
@@ -158,7 +170,9 @@ export const bulkImportUsers = async (formData: FormData) => {
 };
 
 export const getUserTemplates = async () => {
-  const response = await api.get<ApiResponse<User[]>>(`/users/templates`);
+  const response = await api.get<ApiResponse<User[]>>(
+    `${BASE_API_URL}/users/templates`
+  );
   return response.data;
 };
 
@@ -169,13 +183,16 @@ export const inviteUser = async (userData: {
   phone_number: string;
   role: string;
 }) => {
-  const response = await api.post<ApiResponse<User>>(`/users/invite`, userData);
+  const response = await api.post<ApiResponse<User>>(
+    `${BASE_API_URL}/users/invite`,
+    userData
+  );
   return response.data;
 };
 
 export const resendInvitation = async (userId: number) => {
   const response = await api.post<ApiResponse<User>>(
-    `/users/resend-invitation/${userId}`
+    `${BASE_API_URL}/users/resend-invitation/${userId}`
   );
   return response.data;
 };
@@ -201,19 +218,22 @@ export const searchUsers = async (params: {
         pages: number;
       };
     }>
-  >(`/users/search`, { params });
+  >(`${BASE_API_URL}/users/search`, { params });
   return response.data;
 };
 
 export const updateUserStatus = async (userId: number, isActive: boolean) => {
-  const response = await api.put<ApiResponse<User>>(`/users/status/${userId}`, {
-    isActive,
-  });
+  const response = await api.put<ApiResponse<User>>(
+    `${BASE_API_URL}/users/status/${userId}`,
+    {
+      isActive,
+    }
+  );
   return response.data;
 };
 
 export const getUserActivity = async (userId: number) => {
-  const response = await api.get<
+  const response = await api.post<
     ApiResponse<{
       userId: number;
       userName: string;
@@ -225,7 +245,7 @@ export const getUserActivity = async (userId: number) => {
       lastActivity: string;
       accountAge: number;
     }>
-  >(`/users/activity/${userId}`);
+  >(`${BASE_API_URL}/users/activity/${userId}`);
   return response.data;
 };
 
