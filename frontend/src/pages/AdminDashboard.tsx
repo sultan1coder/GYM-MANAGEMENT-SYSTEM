@@ -19,6 +19,7 @@ import ActivityFeed from "../components/dashboard/ActivityFeed";
 import NavigationHub from "../components/dashboard/NavigationHub";
 import AdministrativeFeatures from "../components/AdministrativeFeatures";
 import AdvancedAnalyticsDashboard from "../components/AdvancedAnalyticsDashboard";
+import SystemManagementTools from "../components/SystemManagementTools";
 
 // Providers
 import { useMemberStats } from "../components/providers/MemberStatsProvider";
@@ -94,6 +95,9 @@ const AdminDashboard: React.FC = () => {
 
         {/* Advanced Analytics Dashboard */}
         <AdvancedAnalyticsDashboard />
+
+        {/* System Management Tools */}
+        <SystemManagementTools />
 
         {/* Bottom Row - Additional Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
