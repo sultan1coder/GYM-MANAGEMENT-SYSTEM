@@ -21,6 +21,7 @@ import AdministrativeFeatures from "../components/AdministrativeFeatures";
 import AdvancedAnalyticsDashboard from "../components/AdvancedAnalyticsDashboard";
 import SystemManagementTools from "../components/SystemManagementTools";
 import CommunicationNotifications from "../components/CommunicationNotifications";
+import AdminProfileManagement from "../components/AdminProfileManagement";
 
 // Providers
 import { useMemberStats } from "../components/providers/MemberStatsProvider";
@@ -102,6 +103,9 @@ const AdminDashboard: React.FC = () => {
 
         {/* Communication & Notifications */}
         <CommunicationNotifications />
+
+        {/* Admin Profile Management */}
+        <AdminProfileManagement />
 
         {/* Bottom Row - Additional Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
