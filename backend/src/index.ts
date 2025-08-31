@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 // Serve static files from uploads directory
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static("uploads"));
 
 // Basic API endpoint
 app.get("/api", (_req, res) => {

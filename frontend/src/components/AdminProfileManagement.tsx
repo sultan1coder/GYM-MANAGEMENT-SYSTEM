@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "react-hot-toast";
+import { api } from "@/services/api";
 import {
   User,
   Settings,
@@ -40,44 +41,121 @@ import {
   Unlock,
   CheckCircle,
   AlertTriangle,
+  Download,
+  Trash2,
+  AlertCircle,
+  Database,
+  Wifi,
+  WifiOff,
 } from "lucide-react";
+
+// Enhanced Types
+interface ProfileData {
+  id: string;
+  personal: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    dateOfBirth: string;
+    gender: string;
+    address: string;
+    bio: string;
+    avatar: string;
+    emailVerified: boolean;
+    phoneVerified: boolean;
+  };
+  professional: {
+    role: string;
+    department: string;
+    employeeId: string;
+    hireDate: string;
+    supervisor: string;
+    skills: string[];
+    certifications: string[];
+    performanceRating: number;
+  };
+  preferences: {
+    language: string;
+    timezone: string;
+    dateFormat: string;
+    timeFormat: string;
+    theme: string;
+    notifications: {
+      email: boolean;
+      push: boolean;
+      sms: boolean;
+      marketing: boolean;
+    };
+    privacy: {
+      profileVisibility: string;
+      activitySharing: boolean;
+      dataAnalytics: boolean;
+    };
+  };
+  security: {
+    lastPasswordChange: string;
+    lastLogin: string;
+    loginHistory: Array<{
+      id: string;
+      date: string;
+      ip: string;
+      device: string;
+      location: string;
+      success: boolean;
+    }>;
+    twoFactorEnabled: boolean;
+    sessionTimeout: number;
+    failedLoginAttempts: number;
+    accountLocked: boolean;
+    securityQuestions: Array<{
+      question: string;
+      answer: string;
+    }>;
+  };
+  system: {
+    profileCompletion: number;
+    lastSync: string;
+    dataVersion: string;
+    connectionStatus: "connected" | "disconnected" | "error";
+  };
+}
 
 const AdminProfileManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<
+    "connected" | "disconnected" | "error"
+  >("disconnected");
 
-  // Profile state
-  const [profileData, setProfileData] = useState({
+  // Enhanced Profile state
+  const [profileData, setProfileData] = useState<ProfileData>({
+    id: "",
     personal: {
-      firstName: "John",
-      lastName: "Admin",
-      email: "admin@fitlifegym.com",
-      phone: "+1 (555) 123-4567",
-      dateOfBirth: "1985-03-15",
-      gender: "male",
-      address: "123 Fitness Street, Gym City, GC 12345",
-      bio: "Experienced gym administrator with 8+ years in fitness management. Passionate about creating exceptional member experiences and optimizing gym operations.",
-      avatar: "/avatars/admin-avatar.jpg",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      dateOfBirth: "",
+      gender: "",
+      address: "",
+      bio: "",
+      avatar: "",
+      emailVerified: false,
+      phoneVerified: false,
     },
     professional: {
-      role: "Gym Administrator",
-      department: "Management",
-      employeeId: "ADM001",
-      hireDate: "2020-01-15",
-      supervisor: "Sarah Johnson",
-      skills: [
-        "Gym Management",
-        "Member Relations",
-        "Financial Planning",
-        "Staff Training",
-      ],
-      certifications: [
-        "Fitness Management Certification",
-        "CPR/AED Certified",
-        "First Aid Certified",
-      ],
+      role: "",
+      department: "",
+      employeeId: "",
+      hireDate: "",
+      supervisor: "",
+      skills: [],
+      certifications: [],
+      performanceRating: 0,
     },
     preferences: {
       language: "en",
@@ -98,64 +176,88 @@ const AdminProfileManagement: React.FC = () => {
       },
     },
     security: {
-      lastPasswordChange: "2024-01-01",
-      lastLogin: "2024-01-15 16:30:00",
-      loginHistory: [
-        {
-          date: "2024-01-15 16:30:00",
-          ip: "192.168.1.100",
-          device: "Chrome on Windows",
-          location: "Gym Office",
-        },
-        {
-          date: "2024-01-15 09:15:00",
-          ip: "192.168.1.100",
-          device: "Chrome on Windows",
-          location: "Gym Office",
-        },
-        {
-          date: "2024-01-14 17:45:00",
-          ip: "192.168.1.100",
-          device: "Chrome on Windows",
-          location: "Gym Office",
-        },
-      ],
-      twoFactorEnabled: true,
+      lastPasswordChange: "",
+      lastLogin: "",
+      loginHistory: [],
+      twoFactorEnabled: false,
       sessionTimeout: 30,
+      failedLoginAttempts: 0,
+      accountLocked: false,
+      securityQuestions: [],
+    },
+    system: {
+      profileCompletion: 0,
+      lastSync: "",
+      dataVersion: "",
+      connectionStatus: "disconnected",
     },
   });
 
   // Form state for editing
   const [editForm, setEditForm] = useState({
-    firstName: profileData.personal.firstName,
-    lastName: profileData.personal.lastName,
-    email: profileData.personal.email,
-    phone: profileData.personal.phone,
-    address: profileData.personal.address,
-    bio: profileData.personal.bio,
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    bio: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
+    securityQuestion1: "",
+    securityAnswer1: "",
+    securityQuestion2: "",
+    securityAnswer2: "",
   });
 
-  // Event handlers
-  const handleEditProfile = () => {
-    setIsEditing(true);
-    setEditForm({
-      firstName: profileData.personal.firstName,
-      lastName: profileData.personal.lastName,
-      email: profileData.personal.email,
-      phone: profileData.personal.phone,
-      address: profileData.personal.address,
-      bio: profileData.personal.bio,
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
+  // Database connectivity check
+  const checkDatabaseConnection = async () => {
+    try {
+      setConnectionStatus("connecting");
+      const response = await api.get("/admin/profile/health");
+      if (response.status === 200) {
+        setConnectionStatus("connected");
+        toast.success("Database connected successfully!");
+      } else {
+        setConnectionStatus("error");
+        toast.error("Database connection failed");
+      }
+    } catch (error) {
+      setConnectionStatus("error");
+      toast.error("Database connection error");
+      console.error("Database connection error:", error);
+    }
   };
 
+  // Load profile data from database
+  const loadProfileData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.get("/admin/profile");
+      if (response.data) {
+        setProfileData(response.data);
+        // Update edit form with current data
+        setEditForm((prev) => ({
+          ...prev,
+          firstName: response.data.personal.firstName,
+          lastName: response.data.personal.lastName,
+          email: response.data.personal.email,
+          phone: response.data.personal.phone,
+          address: response.data.personal.address,
+          bio: response.data.personal.bio,
+        }));
+        toast.success("Profile loaded successfully!");
+      }
+    } catch (error) {
+      toast.error("Failed to load profile data");
+      console.error("Profile load error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Save profile to database
   const handleSaveProfile = async () => {
-    // Validate form
     if (
       !editForm.firstName.trim() ||
       !editForm.lastName.trim() ||
@@ -165,48 +267,40 @@ const AdminProfileManagement: React.FC = () => {
       return;
     }
 
-    if (
-      editForm.newPassword &&
-      editForm.newPassword !== editForm.confirmPassword
-    ) {
-      toast.error("New passwords do not match");
-      return;
+    try {
+      setIsLoading(true);
+      const updateData = {
+        personal: {
+          firstName: editForm.firstName,
+          lastName: editForm.lastName,
+          email: editForm.email,
+          phone: editForm.phone,
+          address: editForm.address,
+          bio: editForm.bio,
+        },
+      };
+
+      const response = await api.put("/admin/profile", updateData);
+      if (response.data) {
+        setProfileData((prev) => ({
+          ...prev,
+          personal: {
+            ...prev.personal,
+            ...updateData.personal,
+          },
+        }));
+        setIsEditing(false);
+        toast.success("Profile updated successfully!");
+      }
+    } catch (error) {
+      toast.error("Failed to update profile");
+      console.error("Profile update error:", error);
+    } finally {
+      setIsLoading(false);
     }
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Update profile data
-    setProfileData((prev) => ({
-      ...prev,
-      personal: {
-        ...prev.personal,
-        firstName: editForm.firstName,
-        lastName: editForm.lastName,
-        email: editForm.email,
-        phone: editForm.phone,
-        address: editForm.address,
-        bio: editForm.bio,
-      },
-    }));
-
-    setIsEditing(false);
-    toast.success("Profile updated successfully!");
   };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-  };
-
-  const handleLogout = async () => {
-    // Simulate logout process
-    toast.success("Logging out...");
-    // Here you would typically clear auth tokens and redirect to login
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 1000);
-  };
-
+  // Change password in database
   const handlePasswordChange = async () => {
     if (
       !editForm.currentPassword ||
@@ -227,28 +321,165 @@ const AdminProfileManagement: React.FC = () => {
       return;
     }
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      setIsLoading(true);
+      const response = await api.put("/admin/profile/password", {
+        currentPassword: editForm.currentPassword,
+        newPassword: editForm.newPassword,
+      });
 
-    toast.success("Password changed successfully!");
-    setEditForm((prev) => ({
-      ...prev,
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    }));
-  };
-
-  const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      // Here you would typically upload the file to your server
-      toast.success("Avatar updated successfully!");
+      if (response.data) {
+        toast.success("Password changed successfully!");
+        setEditForm((prev) => ({
+          ...prev,
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        }));
+      }
+    } catch (error) {
+      toast.error("Failed to change password");
+      console.error("Password change error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  // Upload avatar to database
+  const handleAvatarUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      const response = await api.post("/admin/profile/avatar", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data?.avatarUrl) {
+        setProfileData((prev) => ({
+          ...prev,
+          personal: {
+            ...prev.personal,
+            avatar: response.data.avatarUrl,
+          },
+        }));
+        toast.success("Avatar updated successfully!");
+      }
+    } catch (error) {
+      toast.error("Failed to upload avatar");
+      console.error("Avatar upload error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Export profile data
+  const handleExportData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.get("/admin/profile/export", {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "profile-data.json");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Profile data exported successfully!");
+    } catch (error) {
+      toast.error("Failed to export profile data");
+      console.error("Export error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Delete account
+  const handleDeleteAccount = async () => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete your account? This action cannot be undone."
+      )
+    ) {
+      try {
+        setIsLoading(true);
+        await api.delete("/admin/profile");
+        toast.success("Account deleted successfully!");
+        // Redirect to login
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1000);
+      } catch (error) {
+        toast.error("Failed to delete account");
+        console.error("Account deletion error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  // Initialize component
+  useEffect(() => {
+    checkDatabaseConnection();
+    loadProfileData();
+  }, []);
+
+  // Calculate profile completion percentage
+  const calculateProfileCompletion = () => {
+    const fields = [
+      profileData.personal.firstName,
+      profileData.personal.lastName,
+      profileData.personal.email,
+      profileData.personal.phone,
+      profileData.personal.address,
+      profileData.personal.bio,
+      profileData.professional.role,
+      profileData.professional.department,
+    ];
+
+    const filledFields = fields.filter(
+      (field) => field && field.trim() !== ""
+    ).length;
+    return Math.round((filledFields / fields.length) * 100);
+  };
+
+  const getConnectionStatusIcon = () => {
+    switch (connectionStatus) {
+      case "connected":
+        return <Wifi className="w-4 h-4 text-green-600" />;
+      case "disconnected":
+        return <WifiOff className="w-4 h-4 text-gray-600" />;
+      case "error":
+        return <AlertCircle className="w-4 h-4 text-red-600" />;
+      default:
+        return <Database className="w-4 h-4 text-gray-600" />;
+    }
+  };
+
+  const getConnectionStatusColor = () => {
+    switch (connectionStatus) {
+      case "connected":
+        return "bg-green-100 text-green-800";
+      case "disconnected":
+        return "bg-gray-100 text-gray-800";
+      case "error":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
   };
 
   return (
@@ -263,12 +494,63 @@ const AdminProfileManagement: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={handleLogout}>
-            <LogOut className="h-4 w-4 mr-2" />
+          {/* Database Connection Status */}
+          <Badge className={getConnectionStatusColor()}>
+            {getConnectionStatusIcon()}
+            <span className="ml-2">
+              {connectionStatus === "connected"
+                ? "Connected"
+                : connectionStatus === "disconnected"
+                ? "Disconnected"
+                : "Error"}
+            </span>
+          </Badge>
+
+          <Button
+            variant="outline"
+            onClick={handleExportData}
+            disabled={isLoading}
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export Data
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={handleDeleteAccount}
+            disabled={isLoading}
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            Delete Account
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={() => (window.location.href = "/login")}
+          >
+            <LogOut className="w-4 h-4 mr-2" />
             Logout
           </Button>
         </div>
       </div>
+
+      {/* Profile Completion Progress */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center justify-between mb-2">
+            <Label className="text-sm font-medium">Profile Completion</Label>
+            <span className="text-sm text-gray-600">
+              {calculateProfileCompletion()}%
+            </span>
+          </div>
+          <div className="w-full h-2 bg-gray-200 rounded-full">
+            <div
+              className="h-2 transition-all duration-300 bg-blue-600 rounded-full"
+              style={{ width: `${calculateProfileCompletion()}%` }}
+            ></div>
+          </div>
+        </CardContent>
+      </Card>
 
       <Tabs
         value={activeTab}
@@ -277,50 +559,55 @@ const AdminProfileManagement: React.FC = () => {
       >
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="profile" className="flex items-center gap-2">
-            <User className="h-4 w-4" />
+            <User className="w-4 h-4" />
             Profile
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
+            <Settings className="w-4 h-4" />
             Settings
           </TabsTrigger>
           <TabsTrigger value="security" className="flex items-center gap-2">
-            <Shield className="h-4 w-4" />
+            <Shield className="w-4 h-4" />
             Security
           </TabsTrigger>
           <TabsTrigger value="preferences" className="flex items-center gap-2">
-            <Palette className="h-4 w-4" />
+            <Palette className="w-4 h-4" />
             Preferences
           </TabsTrigger>
         </TabsList>
 
         {/* Profile Tab */}
         <TabsContent value="profile" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             {/* Profile Overview */}
             <div className="lg:col-span-1">
               <Card>
                 <CardHeader className="text-center">
-                  <div className="relative mx-auto w-32 h-32 mb-4">
+                  <div className="relative w-32 h-32 mx-auto mb-4">
                     <Avatar className="w-32 h-32">
                       <AvatarImage
                         src={profileData.personal.avatar}
                         alt="Admin Avatar"
                       />
                       <AvatarFallback className="text-4xl">
-                        {getInitials(
-                          profileData.personal.firstName,
-                          profileData.personal.lastName
-                        )}
+                        {profileData.personal.firstName &&
+                        profileData.personal.lastName
+                          ? `${profileData.personal.firstName.charAt(
+                              0
+                            )}${profileData.personal.lastName.charAt(
+                              0
+                            )}`.toUpperCase()
+                          : "AD"}
                       </AvatarFallback>
                     </Avatar>
-                    <label className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-lg cursor-pointer hover:bg-gray-50">
-                      <Camera className="h-4 w-4 text-gray-600" />
+                    <label className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-lg cursor-pointer hover:bg-gray-50">
+                      <Camera className="w-4 h-4 text-gray-600" />
                       <input
                         type="file"
                         className="hidden"
                         accept="image/*"
                         onChange={handleAvatarUpload}
+                        disabled={isLoading}
                       />
                     </label>
                   </div>
@@ -334,32 +621,56 @@ const AdminProfileManagement: React.FC = () => {
                   <Badge variant="secondary" className="mt-2">
                     {profileData.professional.employeeId}
                   </Badge>
+
+                  {/* Verification Status */}
+                  <div className="mt-3 space-y-2">
+                    <div className="flex items-center justify-center gap-2">
+                      <Mail className="w-4 h-4" />
+                      <span className="text-sm">
+                        {profileData.personal.emailVerified
+                          ? "✓ Verified"
+                          : "✗ Not Verified"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-center gap-2">
+                      <Phone className="w-4 h-4" />
+                      <span className="text-sm">
+                        {profileData.personal.phoneVerified
+                          ? "✓ Verified"
+                          : "✗ Not Verified"}
+                      </span>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="text-center">
-                    <Button onClick={handleEditProfile} className="w-full">
-                      <Edit className="h-4 w-4 mr-2" />
+                    <Button
+                      onClick={() => setIsEditing(true)}
+                      className="w-full"
+                      disabled={isLoading}
+                    >
+                      <Edit className="w-4 h-4 mr-2" />
                       Edit Profile
                     </Button>
                   </div>
                   <Separator />
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-sm">
-                      <Mail className="h-4 w-4 text-gray-500" />
+                      <Mail className="w-4 h-4 text-gray-500" />
                       <span>{profileData.personal.email}</span>
                     </div>
                     <div className="flex items-center gap-3 text-sm">
-                      <Phone className="h-4 w-4 text-gray-500" />
+                      <Phone className="w-4 h-4 text-gray-500" />
                       <span>{profileData.personal.phone}</span>
                     </div>
                     <div className="flex items-center gap-3 text-sm">
-                      <MapPin className="h-4 w-4 text-gray-500" />
+                      <MapPin className="w-4 h-4 text-gray-500" />
                       <span className="truncate">
                         {profileData.personal.address}
                       </span>
                     </div>
                     <div className="flex items-center gap-3 text-sm">
-                      <Calendar className="h-4 w-4 text-gray-500" />
+                      <Calendar className="w-4 h-4 text-gray-500" />
                       <span>Hired: {profileData.professional.hireDate}</span>
                     </div>
                   </div>
@@ -376,7 +687,7 @@ const AdminProfileManagement: React.FC = () => {
                 <CardContent>
                   {isEditing ? (
                     <div className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                           <Label htmlFor="firstName">First Name *</Label>
                           <Input
@@ -388,6 +699,7 @@ const AdminProfileManagement: React.FC = () => {
                                 firstName: e.target.value,
                               }))
                             }
+                            disabled={isLoading}
                           />
                         </div>
                         <div>
@@ -401,6 +713,7 @@ const AdminProfileManagement: React.FC = () => {
                                 lastName: e.target.value,
                               }))
                             }
+                            disabled={isLoading}
                           />
                         </div>
                       </div>
@@ -416,6 +729,7 @@ const AdminProfileManagement: React.FC = () => {
                               email: e.target.value,
                             }))
                           }
+                          disabled={isLoading}
                         />
                       </div>
                       <div>
@@ -429,6 +743,7 @@ const AdminProfileManagement: React.FC = () => {
                               phone: e.target.value,
                             }))
                           }
+                          disabled={isLoading}
                         />
                       </div>
                       <div>
@@ -442,6 +757,7 @@ const AdminProfileManagement: React.FC = () => {
                               address: e.target.value,
                             }))
                           }
+                          disabled={isLoading}
                         />
                       </div>
                       <div>
@@ -456,14 +772,31 @@ const AdminProfileManagement: React.FC = () => {
                             }))
                           }
                           rows={4}
+                          disabled={isLoading}
                         />
                       </div>
                       <div className="flex items-center gap-3">
-                        <Button onClick={handleSaveProfile}>
-                          <Save className="h-4 w-4 mr-2" />
-                          Save Changes
+                        <Button
+                          onClick={handleSaveProfile}
+                          disabled={isLoading}
+                        >
+                          {isLoading ? (
+                            <>
+                              <div className="w-4 h-4 mr-2 border-b-2 border-white rounded-full animate-spin"></div>
+                              Saving...
+                            </>
+                          ) : (
+                            <>
+                              <Save className="w-4 h-4 mr-2" />
+                              Save Changes
+                            </>
+                          )}
                         </Button>
-                        <Button variant="outline" onClick={handleCancelEdit}>
+                        <Button
+                          variant="outline"
+                          onClick={() => setIsEditing(false)}
+                          disabled={isLoading}
+                        >
                           Cancel
                         </Button>
                       </div>
@@ -474,7 +807,9 @@ const AdminProfileManagement: React.FC = () => {
                         <Label className="text-sm font-medium text-gray-500">
                           Bio
                         </Label>
-                        <p className="mt-1">{profileData.personal.bio}</p>
+                        <p className="mt-1">
+                          {profileData.personal.bio || "No bio added yet."}
+                        </p>
                       </div>
                       <Separator />
                       <div>
@@ -482,12 +817,18 @@ const AdminProfileManagement: React.FC = () => {
                           Skills
                         </Label>
                         <div className="flex flex-wrap gap-2 mt-2">
-                          {profileData.professional.skills.map(
-                            (skill, index) => (
-                              <Badge key={index} variant="outline">
-                                {skill}
-                              </Badge>
+                          {profileData.professional.skills.length > 0 ? (
+                            profileData.professional.skills.map(
+                              (skill, index) => (
+                                <Badge key={index} variant="outline">
+                                  {skill}
+                                </Badge>
+                              )
                             )
+                          ) : (
+                            <p className="text-sm text-gray-500">
+                              No skills added yet.
+                            </p>
                           )}
                         </div>
                       </div>
@@ -496,13 +837,20 @@ const AdminProfileManagement: React.FC = () => {
                           Certifications
                         </Label>
                         <div className="flex flex-wrap gap-2 mt-2">
-                          {profileData.professional.certifications.map(
-                            (cert, index) => (
-                              <Badge key={index} variant="secondary">
-                                <CheckCircle className="h-3 w-3 mr-1" />
-                                {cert}
-                              </Badge>
+                          {profileData.professional.certifications.length >
+                          0 ? (
+                            profileData.professional.certifications.map(
+                              (cert, index) => (
+                                <Badge key={index} variant="secondary">
+                                  <CheckCircle className="w-3 h-3 mr-1" />
+                                  {cert}
+                                </Badge>
+                              )
                             )
+                          ) : (
+                            <p className="text-sm text-gray-500">
+                              No certifications added yet.
+                            </p>
                           )}
                         </div>
                       </div>
@@ -526,8 +874,8 @@ const AdminProfileManagement: React.FC = () => {
                   Account Status
                 </Label>
                 <div className="flex items-center gap-2 mt-2">
-                  <Badge className="bg-green-100 text-green-800">
-                    <CheckCircle className="h-3 w-3 mr-1" />
+                  <Badge className="text-green-800 bg-green-100">
+                    <CheckCircle className="w-3 h-3 mr-1" />
                     Active
                   </Badge>
                   <span className="text-sm text-gray-600">
@@ -554,18 +902,40 @@ const AdminProfileManagement: React.FC = () => {
                   </div>
                 </div>
               </div>
+              <Separator />
+              <div>
+                <Label className="text-sm font-medium text-gray-500">
+                  System Information
+                </Label>
+                <div className="mt-2 space-y-2 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span>Last Sync:</span>
+                    <span>{profileData.system.lastSync || "Never"}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Data Version:</span>
+                    <span>{profileData.system.dataVersion || "Unknown"}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Database Status:</span>
+                    <Badge className={getConnectionStatusColor()}>
+                      {connectionStatus}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Security Tab */}
         <TabsContent value="security" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {/* Password Change */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Key className="h-5 w-5" />
+                  <Key className="w-5 h-5" />
                   Change Password
                 </CardTitle>
               </CardHeader>
@@ -583,18 +953,19 @@ const AdminProfileManagement: React.FC = () => {
                           currentPassword: e.target.value,
                         }))
                       }
+                      disabled={isLoading}
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="absolute right-0 top-0 h-full px-3"
+                      className="absolute top-0 right-0 h-full px-3"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
+                        <EyeOff className="w-4 h-4" />
                       ) : (
-                        <Eye className="h-4 w-4" />
+                        <Eye className="w-4 h-4" />
                       )}
                     </Button>
                   </div>
@@ -611,6 +982,7 @@ const AdminProfileManagement: React.FC = () => {
                         newPassword: e.target.value,
                       }))
                     }
+                    disabled={isLoading}
                   />
                 </div>
                 <div>
@@ -626,27 +998,41 @@ const AdminProfileManagement: React.FC = () => {
                           confirmPassword: e.target.value,
                         }))
                       }
+                      disabled={isLoading}
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="absolute right-0 top-0 h-full px-3"
+                      className="absolute top-0 right-0 h-full px-3"
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
                     >
                       {showConfirmPassword ? (
-                        <EyeOff className="h-4 w-4" />
+                        <EyeOff className="w-4 h-4" />
                       ) : (
-                        <Eye className="h-4 w-4" />
+                        <Eye className="w-4 h-4" />
                       )}
                     </Button>
                   </div>
                 </div>
-                <Button onClick={handlePasswordChange} className="w-full">
-                  <Lock className="h-4 w-4 mr-2" />
-                  Change Password
+                <Button
+                  onClick={handlePasswordChange}
+                  className="w-full"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-4 h-4 mr-2 border-b-2 border-white rounded-full animate-spin"></div>
+                      Changing...
+                    </>
+                  ) : (
+                    <>
+                      <Lock className="w-4 h-4 mr-2" />
+                      Change Password
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -655,7 +1041,7 @@ const AdminProfileManagement: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5" />
+                  <Shield className="w-5 h-5" />
                   Security Settings
                 </CardTitle>
               </CardHeader>
@@ -694,6 +1080,19 @@ const AdminProfileManagement: React.FC = () => {
                     {profileData.security.sessionTimeout} minutes
                   </span>
                 </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-sm font-medium">
+                      Failed Login Attempts
+                    </Label>
+                    <p className="text-xs text-gray-600">
+                      Recent failed attempts
+                    </p>
+                  </div>
+                  <span className="text-sm font-medium">
+                    {profileData.security.failedLoginAttempts}
+                  </span>
+                </div>
                 <Separator />
                 <div>
                   <Label className="text-sm font-medium text-gray-500">
@@ -715,6 +1114,11 @@ const AdminProfileManagement: React.FC = () => {
                           </div>
                         </div>
                       ))}
+                    {profileData.security.loginHistory.length === 0 && (
+                      <p className="text-xs text-gray-500">
+                        No login history available.
+                      </p>
+                    )}
                   </div>
                 </div>
               </CardContent>
@@ -724,12 +1128,12 @@ const AdminProfileManagement: React.FC = () => {
 
         {/* Preferences Tab */}
         <TabsContent value="preferences" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {/* Display Preferences */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Palette className="h-5 w-5" />
+                  <Palette className="w-5 h-5" />
                   Display Preferences
                 </CardTitle>
               </CardHeader>
@@ -780,7 +1184,7 @@ const AdminProfileManagement: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Bell className="h-5 w-5" />
+                  <Bell className="w-5 h-5" />
                   Notification Preferences
                 </CardTitle>
               </CardHeader>
