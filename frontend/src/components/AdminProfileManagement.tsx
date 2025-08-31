@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "react-hot-toast";
-import { api } from "@/services/api";
+import api from "@/lib/axios";
 import {
   User,
   Settings,
