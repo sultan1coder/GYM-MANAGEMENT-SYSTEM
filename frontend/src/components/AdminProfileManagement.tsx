@@ -210,22 +210,33 @@ const AdminProfileManagement: React.FC = () => {
     securityAnswer2: "",
   });
 
+  // Get current user ID from localStorage
+  const getCurrentUserId = () => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const user = JSON.parse(userData);
+      return user.id;
+    }
+    return null;
+  };
+
   // Database connectivity check
   const checkDatabaseConnection = async () => {
     try {
       setConnectionStatus("connecting");
-      const response = await api.get("/admin/profile/health");
+      // Use a simple health check endpoint that exists
+      const response = await api.get("/api");
       if (response.status === 200) {
         setConnectionStatus("connected");
-        toast.success("Database connected successfully!");
+        toast.success("Backend connected successfully!");
       } else {
         setConnectionStatus("error");
-        toast.error("Database connection failed");
+        toast.error("Backend connection failed");
       }
     } catch (error) {
       setConnectionStatus("error");
-      toast.error("Database connection error");
-      console.error("Database connection error:", error);
+      toast.error("Backend connection error");
+      console.error("Backend connection error:", error);
     }
   };
 
@@ -233,24 +244,183 @@ const AdminProfileManagement: React.FC = () => {
   const loadProfileData = async () => {
     try {
       setIsLoading(true);
-      const response = await api.get("/admin/profile");
-      if (response.data) {
-        setProfileData(response.data);
+      const userId = getCurrentUserId();
+      if (!userId) {
+        toast.error("User not authenticated");
+        return;
+      }
+
+      const response = await api.get(`/api/users/profile/${userId}`);
+      if (response.data?.data) {
+        const userData = response.data.data;
+        // Transform the backend data to match our frontend structure
+        const transformedData = {
+          id: userData.userId || userId,
+          personal: {
+            firstName: userData.basicInfo?.name?.split(" ")[0] || "",
+            lastName:
+              userData.basicInfo?.name?.split(" ").slice(1).join(" ") || "",
+            email: userData.basicInfo?.email || "",
+            phone: userData.basicInfo?.phone_number || "",
+            dateOfBirth: userData.basicInfo?.dateOfBirth || "",
+            gender: userData.basicInfo?.gender || "",
+            address: userData.address?.street
+              ? `${userData.address.street}, ${userData.address.city}, ${userData.address.state}`
+              : "",
+            bio: userData.basicInfo?.bio || "",
+            avatar: "",
+            emailVerified: true,
+            phoneVerified: true,
+          },
+          professional: {
+            role: "Admin",
+            department: "Administration",
+            employeeId: userId.toString(),
+            hireDate: new Date().toISOString().split("T")[0],
+            supervisor: "System",
+            skills: [],
+            certifications: [],
+            performanceRating: 5,
+          },
+          preferences: {
+            language: userData.preferences?.language || "en",
+            timezone: userData.preferences?.timezone || "UTC-5",
+            dateFormat: userData.preferences?.dateFormat || "MM/DD/YYYY",
+            timeFormat: userData.preferences?.timeFormat || "12-hour",
+            theme: userData.preferences?.theme || "light",
+            notifications: {
+              email: userData.notificationSettings?.email?.loginAlerts || true,
+              push: userData.notificationSettings?.push?.loginAlerts || true,
+              sms: userData.notificationSettings?.sms?.loginAlerts || false,
+              marketing:
+                userData.notificationSettings?.email?.marketingEmails || false,
+            },
+            privacy: {
+              profileVisibility:
+                userData.privacySettings?.profileVisibility || "staff",
+              activitySharing:
+                userData.privacySettings?.activitySharing || false,
+              dataAnalytics: userData.privacySettings?.dataAnalytics || true,
+            },
+          },
+          security: {
+            lastPasswordChange: "",
+            lastLogin: new Date().toISOString(),
+            loginHistory: [],
+            twoFactorEnabled: false,
+            sessionTimeout: 30,
+            failedLoginAttempts: 0,
+            accountLocked: false,
+            securityQuestions: [],
+          },
+          system: {
+            profileCompletion: 0,
+            lastSync: new Date().toISOString(),
+            dataVersion: "1.0.0",
+            connectionStatus: "connected",
+          },
+        };
+
+        setProfileData(transformedData);
+
         // Update edit form with current data
         setEditForm((prev) => ({
           ...prev,
-          firstName: response.data.personal.firstName,
-          lastName: response.data.personal.lastName,
-          email: response.data.personal.email,
-          phone: response.data.personal.phone,
-          address: response.data.personal.address,
-          bio: response.data.personal.bio,
+          firstName: transformedData.personal.firstName,
+          lastName: transformedData.personal.lastName,
+          email: transformedData.personal.email,
+          phone: transformedData.personal.phone,
+          address: transformedData.personal.address,
+          bio: transformedData.personal.bio,
         }));
         toast.success("Profile loaded successfully!");
       }
     } catch (error) {
-      toast.error("Failed to load profile data");
       console.error("Profile load error:", error);
+      // If profile endpoint fails, try to get basic user info
+      try {
+        const userId = getCurrentUserId();
+        if (userId) {
+          const userResponse = await api.get(`/api/users/single/${userId}`);
+          if (userResponse.data?.data) {
+            const user = userResponse.data.data;
+            const basicData = {
+              id: userId,
+              personal: {
+                firstName: user.name?.split(" ")[0] || "",
+                lastName: user.name?.split(" ").slice(1).join(" ") || "",
+                email: user.email || "",
+                phone: user.phone_number || "",
+                dateOfBirth: "",
+                gender: "",
+                address: "",
+                bio: "",
+                avatar: user.profile_picture || "",
+                emailVerified: true,
+                phoneVerified: true,
+              },
+              professional: {
+                role: user.role || "Admin",
+                department: "Administration",
+                employeeId: userId.toString(),
+                hireDate: new Date().toISOString().split("T")[0],
+                supervisor: "System",
+                skills: [],
+                certifications: [],
+                performanceRating: 5,
+              },
+              preferences: {
+                language: "en",
+                timezone: "UTC-5",
+                dateFormat: "MM/DD/YYYY",
+                timeFormat: "12-hour",
+                theme: "light",
+                notifications: {
+                  email: true,
+                  push: true,
+                  sms: false,
+                  marketing: false,
+                },
+                privacy: {
+                  profileVisibility: "staff",
+                  activitySharing: false,
+                  dataAnalytics: true,
+                },
+              },
+              security: {
+                lastPasswordChange: "",
+                lastLogin: new Date().toISOString(),
+                loginHistory: [],
+                twoFactorEnabled: false,
+                sessionTimeout: 30,
+                failedLoginAttempts: 0,
+                accountLocked: false,
+                securityQuestions: [],
+              },
+              system: {
+                profileCompletion: 0,
+                lastSync: new Date().toISOString(),
+                dataVersion: "1.0.0",
+                connectionStatus: "connected",
+              },
+            };
+            setProfileData(basicData);
+            setEditForm((prev) => ({
+              ...prev,
+              firstName: basicData.personal.firstName,
+              lastName: basicData.personal.lastName,
+              email: basicData.personal.email,
+              phone: basicData.personal.phone,
+              address: basicData.personal.address,
+              bio: basicData.personal.bio,
+            }));
+            toast.success("Basic profile loaded successfully!");
+          }
+        }
+      } catch (fallbackError) {
+        toast.error("Failed to load profile data");
+        console.error("Fallback profile load error:", fallbackError);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -269,24 +439,35 @@ const AdminProfileManagement: React.FC = () => {
 
     try {
       setIsLoading(true);
+      const userId = getCurrentUserId();
+      if (!userId) {
+        toast.error("User not authenticated");
+        return;
+      }
+
       const updateData = {
-        personal: {
-          firstName: editForm.firstName,
-          lastName: editForm.lastName,
-          email: editForm.email,
-          phone: editForm.phone,
-          address: editForm.address,
+        basicInfo: {
+          name: `${editForm.firstName} ${editForm.lastName}`.trim(),
+          phone_number: editForm.phone,
           bio: editForm.bio,
         },
       };
 
-      const response = await api.put("/admin/profile", updateData);
-      if (response.data) {
+      const response = await api.put(
+        `/api/users/basic-profile/${userId}`,
+        updateData
+      );
+      if (response.data?.data) {
         setProfileData((prev) => ({
           ...prev,
           personal: {
             ...prev.personal,
-            ...updateData.personal,
+            firstName: editForm.firstName,
+            lastName: editForm.lastName,
+            email: editForm.email,
+            phone: editForm.phone,
+            address: editForm.address,
+            bio: editForm.bio,
           },
         }));
         setIsEditing(false);
@@ -323,12 +504,18 @@ const AdminProfileManagement: React.FC = () => {
 
     try {
       setIsLoading(true);
-      const response = await api.put("/admin/profile/password", {
+      const userId = getCurrentUserId();
+      if (!userId) {
+        toast.error("User not authenticated");
+        return;
+      }
+
+      const response = await api.put(`/api/users/change-password/${userId}`, {
         currentPassword: editForm.currentPassword,
         newPassword: editForm.newPassword,
       });
 
-      if (response.data) {
+      if (response.data?.data) {
         toast.success("Password changed successfully!");
         setEditForm((prev) => ({
           ...prev,
@@ -354,21 +541,31 @@ const AdminProfileManagement: React.FC = () => {
 
     try {
       setIsLoading(true);
+      const userId = getCurrentUserId();
+      if (!userId) {
+        toast.error("User not authenticated");
+        return;
+      }
+
       const formData = new FormData();
-      formData.append("avatar", file);
+      formData.append("profile_picture", file);
 
-      const response = await api.post("/admin/profile/avatar", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await api.post(
+        `/api/users/upload-profile-picture/${userId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-      if (response.data?.avatarUrl) {
+      if (response.data?.data?.profile_picture) {
         setProfileData((prev) => ({
           ...prev,
           personal: {
             ...prev.personal,
-            avatar: response.data.avatarUrl,
+            avatar: response.data.data.profile_picture,
           },
         }));
         toast.success("Avatar updated successfully!");
@@ -385,11 +582,17 @@ const AdminProfileManagement: React.FC = () => {
   const handleExportData = async () => {
     try {
       setIsLoading(true);
-      const response = await api.get("/admin/profile/export", {
-        responseType: "blob",
-      });
+      // Since there's no export endpoint, we'll export the current profile data
+      const exportData = {
+        profileData,
+        exportDate: new Date().toISOString(),
+        exportVersion: "1.0.0",
+      };
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+        type: "application/json",
+      });
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", "profile-data.json");
@@ -416,8 +619,17 @@ const AdminProfileManagement: React.FC = () => {
     ) {
       try {
         setIsLoading(true);
-        await api.delete("/admin/profile");
+        const userId = getCurrentUserId();
+        if (!userId) {
+          toast.error("User not authenticated");
+          return;
+        }
+
+        await api.delete(`/api/users/delete/${userId}`);
         toast.success("Account deleted successfully!");
+        // Clear local storage
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         // Redirect to login
         setTimeout(() => {
           window.location.href = "/login";
@@ -494,15 +706,15 @@ const AdminProfileManagement: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {/* Database Connection Status */}
+          {/* Backend Connection Status */}
           <Badge className={getConnectionStatusColor()}>
             {getConnectionStatusIcon()}
             <span className="ml-2">
               {connectionStatus === "connected"
-                ? "Connected"
+                ? "Backend Connected"
                 : connectionStatus === "disconnected"
-                ? "Disconnected"
-                : "Error"}
+                ? "Backend Disconnected"
+                : "Backend Error"}
             </span>
           </Badge>
 
@@ -917,7 +1129,7 @@ const AdminProfileManagement: React.FC = () => {
                     <span>{profileData.system.dataVersion || "Unknown"}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>Database Status:</span>
+                    <span>Backend Status:</span>
                     <Badge className={getConnectionStatusColor()}>
                       {connectionStatus}
                     </Badge>
