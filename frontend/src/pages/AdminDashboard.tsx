@@ -29,6 +29,7 @@ import AdminProfileManagement from "../components/AdminProfileManagement";
 import QuickAddModal from "../components/modals/QuickAddModal";
 import { ExportManager } from "../utils/exportUtils";
 import { useWebSocket } from "../components/providers/WebSocketProvider";
+import config from "../config/environment";
 
 // Providers
 import { useMemberStats } from "../components/providers/MemberStatsProvider";
@@ -39,7 +40,12 @@ const AdminDashboard: React.FC = () => {
   const { stats: memberStats, refetch: refetchMemberStats } = useMemberStats();
   const { systemHealth, refetch: refetchSystemHealth } = useSystemHealth();
   const { quickActions } = useQuickActions();
-  const { isConnected } = useWebSocket();
+
+  // Only use WebSocket if enabled
+  const webSocketHook = config.FEATURES.WEBSOCKET_ENABLED
+    ? useWebSocket()
+    : { isConnected: false };
+  const { isConnected } = webSocketHook;
 
   // New state for enhanced features
   const [showQuickAddModal, setShowQuickAddModal] = useState(false);
@@ -89,11 +95,18 @@ const AdminDashboard: React.FC = () => {
 
   // Real-time updates effect
   useEffect(() => {
-    if (isConnected) {
-      // Auto-refresh every 5 minutes when connected
+    if (config.FEATURES.WEBSOCKET_ENABLED && isConnected) {
+      // Auto-refresh every 5 minutes when WebSocket is connected
       const interval = setInterval(() => {
         handleRefreshDashboard();
-      }, 5 * 60 * 1000);
+      }, config.INTERVALS.DASHBOARD_REFRESH);
+
+      return () => clearInterval(interval);
+    } else if (config.FEATURES.REAL_TIME_UPDATES) {
+      // Fallback: Auto-refresh every 2 minutes when WebSocket is disabled
+      const interval = setInterval(() => {
+        handleRefreshDashboard();
+      }, 2 * 60 * 1000);
 
       return () => clearInterval(interval);
     }
@@ -115,11 +128,19 @@ const AdminDashboard: React.FC = () => {
               <div className="flex items-center gap-2">
                 <div
                   className={`w-2 h-2 rounded-full ${
-                    isConnected ? "bg-green-500" : "bg-red-500"
+                    config.FEATURES.WEBSOCKET_ENABLED
+                      ? isConnected
+                        ? "bg-green-500"
+                        : "bg-red-500"
+                      : "bg-blue-500"
                   }`}
                 />
                 <span className="text-xs text-gray-500">
-                  {isConnected ? "Live" : "Offline"}
+                  {config.FEATURES.WEBSOCKET_ENABLED
+                    ? isConnected
+                      ? "Live"
+                      : "Offline"
+                    : "Auto-refresh"}
                 </span>
               </div>
             </div>

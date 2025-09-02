@@ -780,3 +780,88 @@ export const subscriptionAPI = {
       `${BASE_API_URL}/subscriptions/delete/${id}`
     ),
 };
+
+// Attendance Management API
+export const attendanceAPI = {
+  // Check-in/Check-out
+  checkInMember: (
+    memberId: string,
+    data?: { location?: string; notes?: string }
+  ) =>
+    api.post<ApiResponse<any>>(
+      `${BASE_API_URL}/attendance/checkin/${memberId}`,
+      data
+    ),
+
+  checkOutMember: (memberId: string, data?: { notes?: string }) =>
+    api.post<ApiResponse<any>>(
+      `${BASE_API_URL}/attendance/checkout/${memberId}`,
+      data
+    ),
+
+  // Attendance data
+  getTodayAttendance: () =>
+    api.get<ApiResponse<any>>(`${BASE_API_URL}/attendance/today`),
+
+  getAttendanceStats: (period?: string) =>
+    api.get<ApiResponse<any>>(`${BASE_API_URL}/attendance/stats`, {
+      params: period ? { period } : {},
+    }),
+
+  getCurrentlyCheckedIn: () =>
+    api.get<ApiResponse<any>>(`${BASE_API_URL}/attendance/current`),
+
+  getMemberAttendanceHistory: (
+    memberId: string,
+    page?: number,
+    limit?: number
+  ) =>
+    api.get<ApiResponse<any>>(
+      `${BASE_API_URL}/attendance/history/${memberId}`,
+      {
+        params: { page, limit },
+      }
+    ),
+};
+
+// Fitness Goals Management API
+export const fitnessAPI = {
+  // Fitness goals
+  getMemberGoals: (memberId: string) =>
+    api.get<ApiResponse<any>>(`${BASE_API_URL}/fitness/goals/${memberId}`),
+
+  createGoal: (
+    memberId: string,
+    data: {
+      goalType: string;
+      targetValue: number;
+      unit: string;
+      targetDate?: string;
+      notes?: string;
+    }
+  ) =>
+    api.post<ApiResponse<any>>(
+      `${BASE_API_URL}/fitness/goals/${memberId}`,
+      data
+    ),
+
+  updateGoalProgress: (
+    goalId: string,
+    data: {
+      currentValue: number;
+      notes?: string;
+    }
+  ) =>
+    api.put<ApiResponse<any>>(
+      `${BASE_API_URL}/fitness/goals/progress/${goalId}`,
+      data
+    ),
+
+  deleteGoal: (goalId: string) =>
+    api.delete<ApiResponse<any>>(`${BASE_API_URL}/fitness/goals/${goalId}`),
+
+  getGoalStats: (memberId: string) =>
+    api.get<ApiResponse<any>>(
+      `${BASE_API_URL}/fitness/goals/stats/${memberId}`
+    ),
+};

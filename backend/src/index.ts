@@ -11,6 +11,8 @@ import memberRoutes from "./routes/members.route";
 import paymentRoutes from "./routes/payment.route";
 import equipmentRoutes from "./routes/equipment.route";
 import subscriptionRoutes from "./routes/subscription.route";
+import attendanceRoutes from "./routes/attendance.route";
+import fitnessRoutes from "./routes/fitness.route";
 
 dotenv.config();
 
@@ -45,6 +47,8 @@ app.use("/api/members", memberRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/equipments", equipmentRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/fitness", fitnessRoutes);
 
 // Create HTTP server
 const server = createServer(app);
@@ -61,11 +65,11 @@ server.listen(PORT, () => {
 });
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('🛑 Shutting down servers...');
+process.on("SIGTERM", () => {
+  console.log("🛑 Shutting down servers...");
   websocketServer.close();
   server.close(() => {
-    console.log('✅ Servers shut down gracefully');
+    console.log("✅ Servers shut down gracefully");
     process.exit(0);
   });
 });

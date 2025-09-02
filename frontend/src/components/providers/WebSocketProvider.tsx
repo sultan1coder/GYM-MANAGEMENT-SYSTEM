@@ -37,6 +37,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 }) => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [connectionAttempts, setConnectionAttempts] = useState(0);
   const [eventCallbacks, setEventCallbacks] = useState<
     Map<string, (data: any) => void>
   >(new Map());
@@ -56,27 +57,48 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
         ws.onopen = () => {
           setIsConnected(true);
           setSocket(ws);
+          setConnectionAttempts(0);
           console.log("🔗 WebSocket connected");
-          // Only show success toast on first connection, not on reconnects
+
+          // Show success toast only on first successful connection
+          if (connectionAttempts > 0) {
+            toast.success("Real-time updates reconnected");
+          }
         };
 
         ws.onclose = () => {
           setIsConnected(false);
           setSocket(null);
           console.log("🔌 WebSocket disconnected");
-          
-          // Attempt to reconnect after 5 seconds
-          setTimeout(() => {
-            console.log("🔄 Attempting WebSocket reconnection...");
-            connectWebSocket();
-          }, 5000);
+
+          // Only attempt reconnect if we haven't tried too many times
+          if (connectionAttempts < 5) {
+            setTimeout(() => {
+              console.log(
+                `🔄 Attempting WebSocket reconnection... (${
+                  connectionAttempts + 1
+                }/5)`
+              );
+              setConnectionAttempts((prev) => prev + 1);
+              connectWebSocket();
+            }, Math.min(5000 * (connectionAttempts + 1), 30000)); // Exponential backoff, max 30s
+          } else {
+            console.log("🚫 Max WebSocket reconnection attempts reached");
+            toast.error(
+              "Real-time updates unavailable. Dashboard will work in offline mode."
+            );
+          }
         };
 
         ws.onerror = (error) => {
           console.error("❌ WebSocket error:", error);
           setIsConnected(false);
           setSocket(null);
-          // Don't show error toast immediately - let it try to reconnect first
+
+          // Only show error toast after multiple failed attempts
+          if (connectionAttempts >= 2) {
+            toast.error("Connection issues with real-time updates");
+          }
         };
 
         return ws;

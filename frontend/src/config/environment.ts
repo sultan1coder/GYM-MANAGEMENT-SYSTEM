@@ -7,7 +7,7 @@ export const config = {
 
   // Feature flags
   FEATURES: {
-    WEBSOCKET_ENABLED: true,
+    WEBSOCKET_ENABLED: false, // Disable WebSocket for now until server is stable
     REAL_TIME_UPDATES: true,
     ADVANCED_ANALYTICS: true,
     EXPORT_FUNCTIONALITY: true,
