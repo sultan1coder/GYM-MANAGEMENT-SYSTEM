@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "@types/multer": "^2.0.0",
-    "multer": "^2.0.2"
+    "@types/ws": "^8.18.1",
+    "multer": "^2.0.2",
+    "ws": "^8.18.3"
   }
 }

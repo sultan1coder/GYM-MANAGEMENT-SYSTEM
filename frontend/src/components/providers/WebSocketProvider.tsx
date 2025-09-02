@@ -42,47 +42,76 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
   >(new Map());
 
   useEffect(() => {
-    // Initialize WebSocket connection
-    const ws = new WebSocket(config.WEBSOCKET_URL);
+    // Only try WebSocket if feature is enabled
+    if (!config.FEATURES.WEBSOCKET_ENABLED) {
+      console.log("🔌 WebSocket disabled in configuration");
+      return;
+    }
 
-    ws.onopen = () => {
-      setIsConnected(true);
-      setSocket(ws);
-      console.log("🔗 WebSocket connected");
-      toast.success("Real-time updates connected");
-    };
-
-    ws.onclose = () => {
-      setIsConnected(false);
-      setSocket(null);
-      console.log("🔌 WebSocket disconnected");
-      toast.error("Real-time updates disconnected");
-    };
-
-    ws.onerror = (error) => {
-      console.error("❌ WebSocket error:", error);
-      toast.error("Real-time connection error");
-    };
-
-    ws.onmessage = (event) => {
+    // Initialize WebSocket connection with retry logic
+    const connectWebSocket = () => {
       try {
-        const data = JSON.parse(event.data);
-        const { type, payload } = data;
+        const ws = new WebSocket(config.WEBSOCKET_URL);
 
-        // Call registered callback for this event type
-        const callback = eventCallbacks.get(type);
-        if (callback) {
-          callback(payload);
-        }
+        ws.onopen = () => {
+          setIsConnected(true);
+          setSocket(ws);
+          console.log("🔗 WebSocket connected");
+          // Only show success toast on first connection, not on reconnects
+        };
+
+        ws.onclose = () => {
+          setIsConnected(false);
+          setSocket(null);
+          console.log("🔌 WebSocket disconnected");
+          
+          // Attempt to reconnect after 5 seconds
+          setTimeout(() => {
+            console.log("🔄 Attempting WebSocket reconnection...");
+            connectWebSocket();
+          }, 5000);
+        };
+
+        ws.onerror = (error) => {
+          console.error("❌ WebSocket error:", error);
+          setIsConnected(false);
+          setSocket(null);
+          // Don't show error toast immediately - let it try to reconnect first
+        };
+
+        return ws;
       } catch (error) {
-        console.error("Error parsing WebSocket message:", error);
+        console.error("❌ Failed to create WebSocket connection:", error);
+        setIsConnected(false);
+        return null;
       }
     };
 
-    // Cleanup on unmount
-    return () => {
-      ws.close();
-    };
+    const ws = connectWebSocket();
+
+    if (ws) {
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          const { type, payload } = data;
+
+          // Call registered callback for this event type
+          const callback = eventCallbacks.get(type);
+          if (callback) {
+            callback(payload);
+          }
+        } catch (error) {
+          console.error("Error parsing WebSocket message:", error);
+        }
+      };
+
+      // Cleanup on unmount
+      return () => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.close();
+        }
+      };
+    }
   }, []);
 
   const sendMessage = (message: any) => {

@@ -1,6 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import { createServer } from "http";
+import GymWebSocketServer from "./websocket/websocket";
 
 // Import routes
 import authRoutes from "./routes/auth.route";
@@ -44,6 +46,26 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/equipments", equipmentRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Create HTTP server
+const server = createServer(app);
+
+// Initialize WebSocket server
+const websocketServer = new GymWebSocketServer(server, 4001);
+
+// Start the server
+server.listen(PORT, () => {
+  console.log(`🚀 HTTP Server is running on port ${PORT}`);
+  console.log(`🔗 WebSocket Server is running on port 4001`);
+  console.log(`🌐 API available at: http://localhost:${PORT}/api`);
+  console.log(`📡 WebSocket available at: ws://localhost:4001`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('🛑 Shutting down servers...');
+  websocketServer.close();
+  server.close(() => {
+    console.log('✅ Servers shut down gracefully');
+    process.exit(0);
+  });
 });
