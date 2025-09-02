@@ -475,6 +475,33 @@ export const memberAPI = {
   registerMember: (data: RegisterMemberBody) =>
     api.post<ApiResponse<Member>>(`${BASE_API_URL}/members/register`, data),
 
+  // Enhanced registration
+  enhancedRegisterMember: (data: any) =>
+    api.post<ApiResponse<any>>(
+      `${BASE_API_URL}/members/register-enhanced`,
+      data
+    ),
+
+  verifyEmail: (token: string) =>
+    api.get<ApiResponse<any>>(`${BASE_API_URL}/members/verify-email/${token}`),
+
+  resendVerification: (email: string) =>
+    api.post<ApiResponse<any>>(`${BASE_API_URL}/members/resend-verification`, {
+      email,
+    }),
+
+  checkEmailAvailability: (email: string) =>
+    api.get<ApiResponse<any>>(`${BASE_API_URL}/members/check-email/${email}`),
+
+  getMembershipPlans: () =>
+    api.get<ApiResponse<any>>(`${BASE_API_URL}/members/membership-plans`),
+
+  completeProfile: (memberId: string, data: any) =>
+    api.post<ApiResponse<any>>(
+      `${BASE_API_URL}/members/complete-profile/${memberId}`,
+      data
+    ),
+
   // Member CRUD
   getAllMembers: () =>
     api.get<ApiResponse<Member[]>>(`${BASE_API_URL}/members/list`),

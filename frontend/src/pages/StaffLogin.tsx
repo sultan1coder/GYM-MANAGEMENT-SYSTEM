@@ -364,56 +364,15 @@ const StaffLogin: React.FC = () => {
                 </Button>
               </form>
 
-              {/* Professional Demo Access */}
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl"></div>
-                <div className="relative p-6 border border-blue-200 rounded-xl bg-white/50">
-                  <div className="text-center mb-4">
-                    <Badge className="bg-gradient-to-r from-blue-600 to-purple-600 text-white mb-2">
-                      <Star className="w-3 h-3 mr-1" />
-                      DEMO ACCESS
-                    </Badge>
-                    <h4 className="text-sm font-bold text-gray-900 mb-1">
-                      Professional Demo Account
-                    </h4>
-                    <p className="text-xs text-gray-600">
-                      Experience the full platform capabilities
-                    </p>
-                  </div>
-
-                  <div className="bg-white/80 p-4 rounded-lg border border-gray-200 mb-4">
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-500 text-xs">EMAIL</span>
-                        <p className="font-mono font-semibold text-blue-600">
-                          admin@gym.com
-                        </p>
-                      </div>
-                      <div>
-                        <span className="text-gray-500 text-xs">PASSWORD</span>
-                        <p className="font-mono font-semibold text-blue-600">
-                          admin123
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full border-blue-300 text-blue-700 hover:bg-blue-50 font-medium"
-                    onClick={() => {
-                      setFormData({
-                        email: "admin@gym.com",
-                        password: "admin123",
-                      });
-                      toast.success("Demo credentials loaded!");
-                    }}
-                  >
-                    <Zap className="w-4 h-4 mr-2" />
-                    Load Demo Credentials
-                  </Button>
-                </div>
+              {/* Quick Access Notice */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border border-blue-200 text-center">
+                <h4 className="text-sm font-bold text-gray-900 mb-2">
+                  🚀 Professional Access Portal
+                </h4>
+                <p className="text-xs text-gray-600">
+                  Secure login to your professional dashboard with
+                  enterprise-grade authentication
+                </p>
               </div>
 
               {/* Professional Features Showcase */}

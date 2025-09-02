@@ -4,9 +4,16 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "react-hot-toast";
 import { memberAPI } from "@/services/api";
 import {
@@ -28,11 +35,9 @@ import {
   Loader2,
   UserPlus,
   Check,
-  Star,
-  Trophy,
   Crown,
-  Zap,
-  Award,
+  Trophy,
+  Camera,
   Timer,
 } from "lucide-react";
 
@@ -42,7 +47,12 @@ const MemberRegistration: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const [connectionStatus, setConnectionStatus] = useState<"checking" | "connected" | "error">("checking");
+  const [connectionStatus, setConnectionStatus] = useState<
+    "checking" | "connected" | "error"
+  >("checking");
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [profilePicturePreview, setProfilePicturePreview] =
+    useState<string>("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -112,6 +122,34 @@ const MemberRegistration: React.FC = () => {
     return "Strong";
   };
 
+  const handleProfilePictureChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Profile picture must be less than 5MB");
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select a valid image file");
+        return;
+      }
+
+      setProfilePicture(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfilePicturePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const validateForm = () => {
     const errors = {
       name: "",
@@ -136,7 +174,10 @@ const MemberRegistration: React.FC = () => {
       isValid = false;
     }
 
-    if (formData.phone_number && !/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone_number.replace(/\s/g, ''))) {
+    if (
+      formData.phone_number &&
+      !/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone_number.replace(/\s/g, ""))
+    ) {
       errors.phone_number = "Please enter a valid phone number";
       isValid = false;
     }
@@ -194,14 +235,44 @@ const MemberRegistration: React.FC = () => {
       const response = await memberAPI.registerMember(registrationData);
 
       if (response.data.isSuccess) {
-        toast.success("🎉 Welcome to BILKHAYR Premium! Your fitness journey starts now!");
+        // If profile picture is selected, upload it
+        if (profilePicture && response.data.newMember?.id) {
+          try {
+            const formData = new FormData();
+            formData.append("profile_picture", profilePicture);
+
+            await fetch(
+              `http://localhost:4000/api/members/upload-profile-picture/${response.data.newMember.id}`,
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
+
+            toast.success(
+              "🎉 Welcome to BILKHAYR Premium! Your account has been created with profile picture!"
+            );
+          } catch (uploadError) {
+            console.error("Profile picture upload error:", uploadError);
+            toast.success(
+              "🎉 Welcome to BILKHAYR Premium! Your account has been created. You can add a profile picture later."
+            );
+          }
+        } else {
+          toast.success(
+            "🎉 Welcome to BILKHAYR Premium! Your account has been created successfully."
+          );
+        }
+
         navigate("/member/login");
       } else {
         toast.error(response.data.message || "Registration failed");
       }
     } catch (error: any) {
       console.error("Registration error:", error);
-      const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
+      const errorMessage =
+        error.response?.data?.message ||
+        "Registration failed. Please try again.";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -209,9 +280,9 @@ const MemberRegistration: React.FC = () => {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (formErrors[field as keyof typeof formErrors]) {
-      setFormErrors(prev => ({ ...prev, [field]: "" }));
+      setFormErrors((prev) => ({ ...prev, [field]: "" }));
     }
   };
 
@@ -285,7 +356,9 @@ const MemberRegistration: React.FC = () => {
               </div>
               <div>
                 <span className="text-xl font-bold text-white">BILKHAYR</span>
-                <span className="block text-xs text-emerald-200 -mt-1">PREMIUM FITNESS</span>
+                <span className="block text-xs text-emerald-200 -mt-1">
+                  PREMIUM FITNESS
+                </span>
               </div>
             </Link>
             <div className="flex items-center gap-4">
@@ -315,43 +388,84 @@ const MemberRegistration: React.FC = () => {
                   PREMIUM MEMBERSHIP
                 </Badge>
               </div>
-              
+
               <div className="mx-auto mb-6 w-24 h-24 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 rounded-full flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-full blur opacity-50 animate-pulse"></div>
                 <Heart className="w-12 h-12 text-white relative z-10" />
               </div>
-              
+
               <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
                 Transform Your Life
               </h1>
               <p className="text-gray-600 text-sm">
-                Join the premium fitness revolution at
-                <br />
-                <span className="font-bold text-emerald-600">BILKHAYR Premium Fitness</span>
+                Join the premium fitness revolution at BILKHAYR Premium Fitness
               </p>
             </CardHeader>
 
             <CardContent className="space-y-6">
               <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Profile Picture Upload */}
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="relative">
+                    <Avatar className="w-24 h-24 border-4 border-emerald-200">
+                      <AvatarImage src={profilePicturePreview} alt="Profile" />
+                      <AvatarFallback className="bg-gradient-to-br from-emerald-100 to-cyan-100 text-emerald-600 text-xl">
+                        {formData.name ? (
+                          formData.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .toUpperCase()
+                        ) : (
+                          <User className="w-8 h-8" />
+                        )}
+                      </AvatarFallback>
+                    </Avatar>
+                    <label className="absolute bottom-0 right-0 bg-emerald-600 hover:bg-emerald-700 text-white p-2 rounded-full cursor-pointer transition-colors shadow-lg">
+                      <Camera className="w-4 h-4" />
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleProfilePictureChange}
+                        disabled={isLoading}
+                      />
+                    </label>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-600">
+                      Add your profile photo
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Max 5MB • JPG, PNG, GIF
+                    </p>
+                  </div>
+                </div>
+
                 {/* Personal Information */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2 border-b pb-2">
                     <User className="w-5 h-5 text-emerald-600" />
                     Personal Information
                   </h3>
-                  
+
                   {/* Full Name */}
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="name"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Full Name *
                     </Label>
                     <div className="relative group">
                       <Input
                         id="name"
                         value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
                         className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
-                          formErrors.name ? 'border-red-500' : 'border-gray-200'
+                          formErrors.name ? "border-red-500" : "border-gray-200"
                         }`}
                         placeholder="Enter your full name"
                         disabled={isLoading}
@@ -367,7 +481,10 @@ const MemberRegistration: React.FC = () => {
 
                   {/* Email */}
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="email"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Email Address *
                     </Label>
                     <div className="relative group">
@@ -375,9 +492,13 @@ const MemberRegistration: React.FC = () => {
                         id="email"
                         type="email"
                         value={formData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("email", e.target.value)
+                        }
                         className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
-                          formErrors.email ? 'border-red-500' : 'border-gray-200'
+                          formErrors.email
+                            ? "border-red-500"
+                            : "border-gray-200"
                         }`}
                         placeholder="your.email@example.com"
                         disabled={isLoading}
@@ -397,16 +518,23 @@ const MemberRegistration: React.FC = () => {
                   <div className="grid grid-cols-2 gap-4">
                     {/* Phone Number */}
                     <div className="space-y-2">
-                      <Label htmlFor="phone_number" className="text-sm font-semibold text-gray-700">
+                      <Label
+                        htmlFor="phone_number"
+                        className="text-sm font-semibold text-gray-700"
+                      >
                         Phone Number
                       </Label>
                       <div className="relative group">
                         <Input
                           id="phone_number"
                           value={formData.phone_number}
-                          onChange={(e) => handleInputChange("phone_number", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("phone_number", e.target.value)
+                          }
                           className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
-                            formErrors.phone_number ? 'border-red-500' : 'border-gray-200'
+                            formErrors.phone_number
+                              ? "border-red-500"
+                              : "border-gray-200"
                           }`}
                           placeholder="Phone"
                           disabled={isLoading}
@@ -425,7 +553,10 @@ const MemberRegistration: React.FC = () => {
 
                     {/* Age */}
                     <div className="space-y-2">
-                      <Label htmlFor="age" className="text-sm font-semibold text-gray-700">
+                      <Label
+                        htmlFor="age"
+                        className="text-sm font-semibold text-gray-700"
+                      >
                         Age *
                       </Label>
                       <div className="relative group">
@@ -433,9 +564,13 @@ const MemberRegistration: React.FC = () => {
                           id="age"
                           type="number"
                           value={formData.age}
-                          onChange={(e) => handleInputChange("age", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("age", e.target.value)
+                          }
                           className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
-                            formErrors.age ? 'border-red-500' : 'border-gray-200'
+                            formErrors.age
+                              ? "border-red-500"
+                              : "border-gray-200"
                           }`}
                           placeholder="Age"
                           min="16"
@@ -467,16 +602,18 @@ const MemberRegistration: React.FC = () => {
                     <Label className="text-sm font-semibold text-gray-700">
                       Choose Your Premium Experience *
                     </Label>
-                    
+
                     <div className="grid gap-3">
                       {/* Monthly Premium */}
-                      <div 
+                      <div
                         className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
-                          formData.membershiptype === "MONTHLY" 
-                            ? 'border-emerald-500 bg-emerald-50' 
-                            : 'border-gray-200 hover:border-emerald-300 hover:bg-emerald-25'
+                          formData.membershiptype === "MONTHLY"
+                            ? "border-emerald-500 bg-emerald-50"
+                            : "border-gray-200 hover:border-emerald-300 hover:bg-emerald-25"
                         }`}
-                        onClick={() => handleInputChange("membershiptype", "MONTHLY")}
+                        onClick={() =>
+                          handleInputChange("membershiptype", "MONTHLY")
+                        }
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
@@ -484,19 +621,25 @@ const MemberRegistration: React.FC = () => {
                               <Trophy className="w-5 h-5 text-white" />
                             </div>
                             <div>
-                              <p className="font-bold text-gray-900">Premium Monthly</p>
-                              <p className="text-sm text-gray-600">Unlimited access to everything</p>
+                              <p className="font-bold text-gray-900">
+                                Premium Monthly
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                Unlimited access to everything
+                              </p>
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold text-emerald-600 text-lg">$89</p>
+                            <p className="font-bold text-emerald-600 text-lg">
+                              $89
+                            </p>
                             <p className="text-xs text-gray-500">/month</p>
                           </div>
                         </div>
                         {formData.membershiptype === "MONTHLY" && (
                           <div className="absolute -top-2 -right-2">
                             <Badge className="bg-emerald-600 text-white">
-                              <Star className="w-3 h-3 mr-1" />
+                              <CheckCircle className="w-3 h-3 mr-1" />
                               SELECTED
                             </Badge>
                           </div>
@@ -504,13 +647,15 @@ const MemberRegistration: React.FC = () => {
                       </div>
 
                       {/* Daily Pass */}
-                      <div 
+                      <div
                         className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
-                          formData.membershiptype === "DAILY" 
-                            ? 'border-cyan-500 bg-cyan-50' 
-                            : 'border-gray-200 hover:border-cyan-300 hover:bg-cyan-25'
+                          formData.membershiptype === "DAILY"
+                            ? "border-cyan-500 bg-cyan-50"
+                            : "border-gray-200 hover:border-cyan-300 hover:bg-cyan-25"
                         }`}
-                        onClick={() => handleInputChange("membershiptype", "DAILY")}
+                        onClick={() =>
+                          handleInputChange("membershiptype", "DAILY")
+                        }
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
@@ -518,19 +663,25 @@ const MemberRegistration: React.FC = () => {
                               <Timer className="w-5 h-5 text-white" />
                             </div>
                             <div>
-                              <p className="font-bold text-gray-900">Daily Pass</p>
-                              <p className="text-sm text-gray-600">Perfect for trying us out</p>
+                              <p className="font-bold text-gray-900">
+                                Daily Pass
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                Perfect for trying us out
+                              </p>
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold text-cyan-600 text-lg">$25</p>
+                            <p className="font-bold text-cyan-600 text-lg">
+                              $25
+                            </p>
                             <p className="text-xs text-gray-500">/day</p>
                           </div>
                         </div>
                         {formData.membershiptype === "DAILY" && (
                           <div className="absolute -top-2 -right-2">
                             <Badge className="bg-cyan-600 text-white">
-                              <Check className="w-3 h-3 mr-1" />
+                              <CheckCircle className="w-3 h-3 mr-1" />
                               SELECTED
                             </Badge>
                           </div>
@@ -549,7 +700,10 @@ const MemberRegistration: React.FC = () => {
 
                   {/* Password */}
                   <div className="space-y-2">
-                    <Label htmlFor="password" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="password"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Secure Password *
                     </Label>
                     <div className="relative group">
@@ -557,9 +711,13 @@ const MemberRegistration: React.FC = () => {
                         id="password"
                         type={showPassword ? "text" : "password"}
                         value={formData.password}
-                        onChange={(e) => handleInputChange("password", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("password", e.target.value)
+                        }
                         className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
-                          formErrors.password ? 'border-red-500' : 'border-gray-200'
+                          formErrors.password
+                            ? "border-red-500"
+                            : "border-gray-200"
                         }`}
                         placeholder="Create a strong password"
                         disabled={isLoading}
@@ -569,20 +727,36 @@ const MemberRegistration: React.FC = () => {
                         className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-emerald-600 transition-colors"
                         onClick={() => setShowPassword(!showPassword)}
                       >
-                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        {showPassword ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
                       </button>
                     </div>
-                    
+
                     {/* Premium Password Strength */}
                     {formData.password && (
                       <div className="space-y-3 bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-gray-700">Security Level:</span>
-                          <Badge 
-                            variant={passwordStrength < 50 ? "destructive" : passwordStrength < 75 ? "secondary" : "default"}
-                            className={passwordStrength >= 75 ? "bg-emerald-100 text-emerald-800" : ""}
+                          <span className="text-xs font-bold text-gray-700">
+                            Security Level:
+                          </span>
+                          <Badge
+                            variant={
+                              passwordStrength < 50
+                                ? "destructive"
+                                : passwordStrength < 75
+                                ? "secondary"
+                                : "default"
+                            }
+                            className={
+                              passwordStrength >= 75
+                                ? "bg-emerald-100 text-emerald-800"
+                                : ""
+                            }
                           >
-                            <Shield className="w-3 h-3 mr-1" />
+                            <Lock className="w-3 h-3 mr-1" />
                             {getPasswordStrengthText()}
                           </Badge>
                         </div>
@@ -594,25 +768,49 @@ const MemberRegistration: React.FC = () => {
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div className="flex items-center gap-1">
-                            <Check className={`w-3 h-3 ${formData.password.length >= 8 ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <Check
+                              className={`w-3 h-3 ${
+                                formData.password.length >= 8
+                                  ? "text-emerald-500"
+                                  : "text-gray-300"
+                              }`}
+                            />
                             <span>8+ characters</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check className={`w-3 h-3 ${/[A-Z]/.test(formData.password) ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <Check
+                              className={`w-3 h-3 ${
+                                /[A-Z]/.test(formData.password)
+                                  ? "text-emerald-500"
+                                  : "text-gray-300"
+                              }`}
+                            />
                             <span>Uppercase</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check className={`w-3 h-3 ${/[0-9]/.test(formData.password) ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <Check
+                              className={`w-3 h-3 ${
+                                /[0-9]/.test(formData.password)
+                                  ? "text-emerald-500"
+                                  : "text-gray-300"
+                              }`}
+                            />
                             <span>Number</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check className={`w-3 h-3 ${/[^A-Za-z0-9]/.test(formData.password) ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <Check
+                              className={`w-3 h-3 ${
+                                /[^A-Za-z0-9]/.test(formData.password)
+                                  ? "text-emerald-500"
+                                  : "text-gray-300"
+                              }`}
+                            />
                             <span>Special char</span>
                           </div>
                         </div>
                       </div>
                     )}
-                    
+
                     {formErrors.password && (
                       <p className="text-sm text-red-600 flex items-center gap-1 bg-red-50 p-2 rounded">
                         <AlertTriangle className="w-3 h-3" />
@@ -623,7 +821,10 @@ const MemberRegistration: React.FC = () => {
 
                   {/* Confirm Password */}
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="confirmPassword"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Confirm Password *
                     </Label>
                     <div className="relative group">
@@ -631,9 +832,13 @@ const MemberRegistration: React.FC = () => {
                         id="confirmPassword"
                         type={showConfirmPassword ? "text" : "password"}
                         value={formData.confirmPassword}
-                        onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("confirmPassword", e.target.value)
+                        }
                         className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
-                          formErrors.confirmPassword ? 'border-red-500' : 'border-gray-200'
+                          formErrors.confirmPassword
+                            ? "border-red-500"
+                            : "border-gray-200"
                         }`}
                         placeholder="Confirm your password"
                         disabled={isLoading}
@@ -641,9 +846,15 @@ const MemberRegistration: React.FC = () => {
                       <button
                         type="button"
                         className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-emerald-600 transition-colors"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                       >
-                        {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
                       </button>
                     </div>
                     {formErrors.confirmPassword && (
@@ -661,21 +872,28 @@ const MemberRegistration: React.FC = () => {
                     <Checkbox
                       id="terms"
                       checked={acceptTerms}
-                      onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        setAcceptTerms(checked as boolean)
+                      }
                       className="mt-1 border-2 border-gray-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
                     />
-                    <Label htmlFor="terms" className="text-sm text-gray-700 leading-6">
+                    <Label
+                      htmlFor="terms"
+                      className="text-sm text-gray-700 leading-6"
+                    >
                       I agree to the{" "}
-                      <Link to="/terms" className="text-emerald-600 hover:text-emerald-800 font-bold">
+                      <Link
+                        to="/terms"
+                        className="text-emerald-600 hover:text-emerald-800 font-bold"
+                      >
                         Premium Membership Terms
-                      </Link>
-                      ,{" "}
-                      <Link to="/privacy" className="text-emerald-600 hover:text-emerald-800 font-bold">
+                      </Link>{" "}
+                      and{" "}
+                      <Link
+                        to="/privacy"
+                        className="text-emerald-600 hover:text-emerald-800 font-bold"
+                      >
                         Privacy Policy
-                      </Link>
-                      , and{" "}
-                      <Link to="/membership-agreement" className="text-emerald-600 hover:text-emerald-800 font-bold">
-                        Membership Agreement
                       </Link>
                     </Label>
                   </div>
@@ -685,7 +903,9 @@ const MemberRegistration: React.FC = () => {
                 <Button
                   type="submit"
                   className="w-full h-14 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 text-white font-bold text-base shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300"
-                  disabled={isLoading || connectionStatus === "error" || !acceptTerms}
+                  disabled={
+                    isLoading || connectionStatus === "error" || !acceptTerms
+                  }
                 >
                   {isLoading ? (
                     <>
@@ -701,58 +921,8 @@ const MemberRegistration: React.FC = () => {
                 </Button>
               </form>
 
-              {/* Premium Member Benefits */}
-              <div className="space-y-4">
-                <h4 className="text-center text-sm font-bold text-gray-900">
-                  PREMIUM MEMBER EXCLUSIVE FEATURES
-                </h4>
-                <div className="grid grid-cols-1 gap-3">
-                  <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
-                    <div className="p-2 bg-emerald-600 rounded-lg">
-                      <Activity className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-900">AI-Powered Fitness Tracking</p>
-                      <p className="text-xs text-gray-600">Smart analytics and personalized insights</p>
-                    </div>
-                    <Badge variant="secondary" className="bg-emerald-100 text-emerald-800">NEW</Badge>
-                  </div>
-                  <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-cyan-50 to-cyan-100 rounded-xl border border-cyan-200">
-                    <div className="p-2 bg-cyan-600 rounded-lg">
-                      <Target className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-900">Goal Achievement System</p>
-                      <p className="text-xs text-gray-600">Set, track, and achieve your fitness goals</p>
-                    </div>
-                    <Badge variant="secondary" className="bg-cyan-100 text-cyan-800">PRO</Badge>
-                  </div>
-                  <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-200">
-                    <div className="p-2 bg-purple-600 rounded-lg">
-                      <CreditCard className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-900">Premium Payment Portal</p>
-                      <p className="text-xs text-gray-600">Seamless billing and subscription management</p>
-                    </div>
-                    <Badge variant="secondary" className="bg-purple-100 text-purple-800">VIP</Badge>
-                  </div>
-                </div>
-              </div>
-
-              {/* Success Guarantee */}
-              <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-xl border border-yellow-200">
-                <div className="text-center">
-                  <Award className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
-                  <h4 className="font-bold text-gray-900 mb-1">30-Day Success Guarantee</h4>
-                  <p className="text-xs text-gray-600">
-                    Not satisfied? Get a full refund within 30 days, no questions asked.
-                  </p>
-                </div>
-              </div>
-
               {/* Professional Footer */}
-              <div className="text-center space-y-4 pt-4 border-t border-gray-200">
+              <div className="text-center space-y-4 pt-6 border-t border-gray-200 mt-8">
                 <p className="text-sm text-gray-600">
                   Already a premium member?{" "}
                   <Link
@@ -763,15 +933,17 @@ const MemberRegistration: React.FC = () => {
                   </Link>
                 </p>
                 <div className="flex items-center justify-center gap-6 text-xs text-gray-500">
-                  <Link to="/staff/register" className="hover:text-emerald-600 transition-colors font-medium">
+                  <Link
+                    to="/staff/register"
+                    className="hover:text-emerald-600 transition-colors font-medium"
+                  >
                     Staff Careers
                   </Link>
                   <span>•</span>
-                  <Link to="/virtual-classes" className="hover:text-emerald-600 transition-colors font-medium">
-                    Online Classes
-                  </Link>
-                  <span>•</span>
-                  <Link to="/contact" className="hover:text-emerald-600 transition-colors font-medium">
+                  <Link
+                    to="/contact"
+                    className="hover:text-emerald-600 transition-colors font-medium"
+                  >
                     Premium Support
                   </Link>
                 </div>
@@ -784,15 +956,15 @@ const MemberRegistration: React.FC = () => {
             <div className="flex items-center justify-center gap-6">
               <div className="flex items-center gap-1">
                 <Trophy className="w-5 h-5 text-yellow-400" />
-                <span className="text-sm text-white/90 font-semibold">Award Winning</span>
+                <span className="text-sm text-white/90 font-semibold">
+                  Award Winning
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <Heart className="w-5 h-5 text-red-400" />
-                <span className="text-sm text-white/90 font-semibold">5000+ Members</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Star className="w-5 h-5 text-yellow-400" />
-                <span className="text-sm text-white/90 font-semibold">4.9/5 Rating</span>
+                <span className="text-sm text-white/90 font-semibold">
+                  5000+ Members
+                </span>
               </div>
             </div>
             <p className="text-sm text-white/70 font-medium">

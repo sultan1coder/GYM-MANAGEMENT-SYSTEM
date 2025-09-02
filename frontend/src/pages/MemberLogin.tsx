@@ -368,56 +368,15 @@ const MemberLogin: React.FC = () => {
                 </Button>
               </form>
 
-              {/* Demo Member Access */}
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 to-cyan-50 rounded-xl"></div>
-                <div className="relative p-6 border border-emerald-200 rounded-xl bg-white/50">
-                  <div className="text-center mb-4">
-                    <Badge className="bg-gradient-to-r from-emerald-600 to-cyan-600 text-white mb-2">
-                      <Star className="w-3 h-3 mr-1" />
-                      DEMO MEMBER
-                    </Badge>
-                    <h4 className="text-sm font-bold text-gray-900 mb-1">
-                      Try Our Premium Experience
-                    </h4>
-                    <p className="text-xs text-gray-600">
-                      Explore all member features with demo account
-                    </p>
-                  </div>
-
-                  <div className="bg-white/80 p-4 rounded-lg border border-gray-200 mb-4">
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-500 text-xs">EMAIL</span>
-                        <p className="font-mono font-semibold text-emerald-600">
-                          john.doe@example.com
-                        </p>
-                      </div>
-                      <div>
-                        <span className="text-gray-500 text-xs">PASSWORD</span>
-                        <p className="font-mono font-semibold text-emerald-600">
-                          member123
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full border-emerald-300 text-emerald-700 hover:bg-emerald-50 font-medium"
-                    onClick={() => {
-                      setFormData({
-                        email: "john.doe@example.com",
-                        password: "member123",
-                      });
-                      toast.success("Demo member credentials loaded!");
-                    }}
-                  >
-                    <Zap className="w-4 h-4 mr-2" />
-                    Try Demo Account
-                  </Button>
-                </div>
+              {/* Member Welcome Notice */}
+              <div className="bg-gradient-to-r from-emerald-50 to-cyan-50 p-4 rounded-xl border border-emerald-200 text-center">
+                <h4 className="text-sm font-bold text-gray-900 mb-2">
+                  💎 Premium Member Access
+                </h4>
+                <p className="text-xs text-gray-600">
+                  Access your personal fitness dashboard with advanced tracking
+                  and goal management
+                </p>
               </div>
 
               {/* Premium Member Features */}

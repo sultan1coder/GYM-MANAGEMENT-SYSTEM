@@ -4,9 +4,16 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "react-hot-toast";
 import { authAPI } from "@/services/api";
 import {
@@ -31,8 +38,8 @@ import {
   Crown,
   Award,
   Briefcase,
-  Star,
-  Zap,
+  Camera,
+  Upload,
 } from "lucide-react";
 
 const StaffRegistration: React.FC = () => {
@@ -41,7 +48,12 @@ const StaffRegistration: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const [connectionStatus, setConnectionStatus] = useState<"checking" | "connected" | "error">("checking");
+  const [connectionStatus, setConnectionStatus] = useState<
+    "checking" | "connected" | "error"
+  >("checking");
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [profilePicturePreview, setProfilePicturePreview] =
+    useState<string>("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -111,6 +123,34 @@ const StaffRegistration: React.FC = () => {
     return "Strong";
   };
 
+  const handleProfilePictureChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Profile picture must be less than 5MB");
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select a valid image file");
+        return;
+      }
+
+      setProfilePicture(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfilePicturePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const validateForm = () => {
     const errors = {
       name: "",
@@ -143,7 +183,10 @@ const StaffRegistration: React.FC = () => {
       isValid = false;
     }
 
-    if (formData.phone_number && !/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone_number.replace(/\s/g, ''))) {
+    if (
+      formData.phone_number &&
+      !/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone_number.replace(/\s/g, ""))
+    ) {
       errors.phone_number = "Please enter a valid phone number";
       isValid = false;
     }
@@ -167,7 +210,7 @@ const StaffRegistration: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -184,17 +227,45 @@ const StaffRegistration: React.FC = () => {
 
     try {
       setIsLoading(true);
+
+      // First create the user account
       const response = await authAPI.registerUser(formData);
-      
+
       if (response.data.isSuccess) {
-        toast.success("Welcome to BILKHAYR Premium! Your professional account has been created.");
+        // If profile picture is selected, upload it
+        if (profilePicture && response.data.newUser?.id) {
+          try {
+            const formData = new FormData();
+            formData.append("profile_picture", profilePicture);
+
+            await fetch(
+              `http://localhost:4000/api/users/upload-profile-picture/${response.data.newUser.id}`,
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
+
+            toast.success("Account created successfully with profile picture!");
+          } catch (uploadError) {
+            console.error("Profile picture upload error:", uploadError);
+            toast.success(
+              "Account created successfully! Profile picture upload failed, you can update it later."
+            );
+          }
+        } else {
+          toast.success("Account created successfully!");
+        }
+
         navigate("/staff/login");
       } else {
         toast.error(response.data.message || "Registration failed");
       }
     } catch (error: any) {
       console.error("Registration error:", error);
-      const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
+      const errorMessage =
+        error.response?.data?.message ||
+        "Registration failed. Please try again.";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -202,9 +273,9 @@ const StaffRegistration: React.FC = () => {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (formErrors[field as keyof typeof formErrors]) {
-      setFormErrors(prev => ({ ...prev, [field]: "" }));
+      setFormErrors((prev) => ({ ...prev, [field]: "" }));
     }
   };
 
@@ -271,7 +342,9 @@ const StaffRegistration: React.FC = () => {
               </div>
               <div>
                 <span className="text-xl font-bold text-white">BILKHAYR</span>
-                <span className="block text-xs text-blue-200 -mt-1">PREMIUM FITNESS</span>
+                <span className="block text-xs text-blue-200 -mt-1">
+                  PREMIUM FITNESS
+                </span>
               </div>
             </Link>
             <div className="flex items-center gap-4">
@@ -301,43 +374,84 @@ const StaffRegistration: React.FC = () => {
                   ELITE STAFF ACCESS
                 </Badge>
               </div>
-              
+
               <div className="mx-auto mb-6 w-20 h-20 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 rounded-full flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full blur opacity-50 animate-pulse"></div>
                 <Briefcase className="w-10 h-10 text-white relative z-10" />
               </div>
-              
+
               <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
                 Join Our Elite Team
               </h1>
               <p className="text-gray-600 text-sm">
-                Become part of the premium fitness revolution at
-                <br />
-                <span className="font-semibold text-blue-600">BILKHAYR Premium Fitness</span>
+                Register as staff to access the gym management system
               </p>
             </CardHeader>
 
-            <CardContent className="space-y-6">
+            <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Professional Identity */}
+                {/* Profile Picture Upload */}
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="relative">
+                    <Avatar className="w-24 h-24 border-4 border-gray-200">
+                      <AvatarImage src={profilePicturePreview} alt="Profile" />
+                      <AvatarFallback className="bg-gradient-to-br from-blue-100 to-purple-100 text-blue-600 text-xl">
+                        {formData.name ? (
+                          formData.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .toUpperCase()
+                        ) : (
+                          <User className="w-8 h-8" />
+                        )}
+                      </AvatarFallback>
+                    </Avatar>
+                    <label className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full cursor-pointer transition-colors shadow-lg">
+                      <Camera className="w-4 h-4" />
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleProfilePictureChange}
+                        disabled={isLoading}
+                      />
+                    </label>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-600">
+                      Upload your professional photo
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Max 5MB • JPG, PNG, GIF
+                    </p>
+                  </div>
+                </div>
+
+                {/* Personal Information */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2 border-b pb-2">
                     <User className="w-5 h-5 text-blue-600" />
                     Professional Identity
                   </h3>
-                  
+
                   {/* Full Name */}
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="name"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Full Professional Name *
                     </Label>
                     <div className="relative group">
                       <Input
                         id="name"
                         value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
                         className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
-                          formErrors.name ? 'border-red-500' : 'border-gray-200'
+                          formErrors.name ? "border-red-500" : "border-gray-200"
                         }`}
                         placeholder="Enter your full professional name"
                         disabled={isLoading}
@@ -353,16 +467,23 @@ const StaffRegistration: React.FC = () => {
 
                   {/* Username */}
                   <div className="space-y-2">
-                    <Label htmlFor="username" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="username"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Professional Username *
                     </Label>
                     <div className="relative group">
                       <Input
                         id="username"
                         value={formData.username}
-                        onChange={(e) => handleInputChange("username", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("username", e.target.value)
+                        }
                         className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
-                          formErrors.username ? 'border-red-500' : 'border-gray-200'
+                          formErrors.username
+                            ? "border-red-500"
+                            : "border-gray-200"
                         }`}
                         placeholder="Choose a unique professional username"
                         disabled={isLoading}
@@ -378,7 +499,10 @@ const StaffRegistration: React.FC = () => {
 
                   {/* Email */}
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="email"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Professional Email Address *
                     </Label>
                     <div className="relative group">
@@ -386,9 +510,13 @@ const StaffRegistration: React.FC = () => {
                         id="email"
                         type="email"
                         value={formData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("email", e.target.value)
+                        }
                         className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
-                          formErrors.email ? 'border-red-500' : 'border-gray-200'
+                          formErrors.email
+                            ? "border-red-500"
+                            : "border-gray-200"
                         }`}
                         placeholder="your.name@company.com"
                         disabled={isLoading}
@@ -407,16 +535,23 @@ const StaffRegistration: React.FC = () => {
 
                   {/* Phone Number */}
                   <div className="space-y-2">
-                    <Label htmlFor="phone_number" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="phone_number"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Professional Contact Number
                     </Label>
                     <div className="relative group">
                       <Input
                         id="phone_number"
                         value={formData.phone_number}
-                        onChange={(e) => handleInputChange("phone_number", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("phone_number", e.target.value)
+                        }
                         className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
-                          formErrors.phone_number ? 'border-red-500' : 'border-gray-200'
+                          formErrors.phone_number
+                            ? "border-red-500"
+                            : "border-gray-200"
                         }`}
                         placeholder="+1 (555) 123-4567"
                         disabled={isLoading}
@@ -435,10 +570,18 @@ const StaffRegistration: React.FC = () => {
 
                   {/* Professional Role */}
                   <div className="space-y-2">
-                    <Label htmlFor="role" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="role"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Professional Role *
                     </Label>
-                    <Select value={formData.role} onValueChange={(value) => handleInputChange("role", value)}>
+                    <Select
+                      value={formData.role}
+                      onValueChange={(value) =>
+                        handleInputChange("role", value)
+                      }
+                    >
                       <SelectTrigger className="h-12 bg-gray-50 border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
                         <SelectValue />
                       </SelectTrigger>
@@ -448,7 +591,9 @@ const StaffRegistration: React.FC = () => {
                             <Users className="w-4 h-4 text-blue-600" />
                             <div>
                               <p className="font-semibold">Staff Member</p>
-                              <p className="text-xs text-gray-500">General operations and member services</p>
+                              <p className="text-xs text-gray-500">
+                                General operations and member services
+                              </p>
                             </div>
                           </div>
                         </SelectItem>
@@ -457,7 +602,9 @@ const StaffRegistration: React.FC = () => {
                             <Crown className="w-4 h-4 text-purple-600" />
                             <div>
                               <p className="font-semibold">Fitness Manager</p>
-                              <p className="text-xs text-gray-500">Advanced management and oversight</p>
+                              <p className="text-xs text-gray-500">
+                                Advanced management and oversight
+                              </p>
                             </div>
                           </div>
                         </SelectItem>
@@ -466,7 +613,9 @@ const StaffRegistration: React.FC = () => {
                             <Award className="w-4 h-4 text-emerald-600" />
                             <div>
                               <p className="font-semibold">Personal Trainer</p>
-                              <p className="text-xs text-gray-500">Certified fitness professional</p>
+                              <p className="text-xs text-gray-500">
+                                Certified fitness professional
+                              </p>
                             </div>
                           </div>
                         </SelectItem>
@@ -474,8 +623,12 @@ const StaffRegistration: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <Settings className="w-4 h-4 text-orange-600" />
                             <div>
-                              <p className="font-semibold">Reception Specialist</p>
-                              <p className="text-xs text-gray-500">Front desk and customer service</p>
+                              <p className="font-semibold">
+                                Reception Specialist
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                Front desk and customer service
+                              </p>
                             </div>
                           </div>
                         </SelectItem>
@@ -496,7 +649,10 @@ const StaffRegistration: React.FC = () => {
 
                   {/* Password */}
                   <div className="space-y-2">
-                    <Label htmlFor="password" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="password"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Secure Password *
                     </Label>
                     <div className="relative group">
@@ -504,9 +660,13 @@ const StaffRegistration: React.FC = () => {
                         id="password"
                         type={showPassword ? "text" : "password"}
                         value={formData.password}
-                        onChange={(e) => handleInputChange("password", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("password", e.target.value)
+                        }
                         className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
-                          formErrors.password ? 'border-red-500' : 'border-gray-200'
+                          formErrors.password
+                            ? "border-red-500"
+                            : "border-gray-200"
                         }`}
                         placeholder="Create a strong professional password"
                         disabled={isLoading}
@@ -516,18 +676,34 @@ const StaffRegistration: React.FC = () => {
                         className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-blue-600 transition-colors"
                         onClick={() => setShowPassword(!showPassword)}
                       >
-                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        {showPassword ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
                       </button>
                     </div>
-                    
+
                     {/* Professional Password Strength */}
                     {formData.password && (
                       <div className="space-y-3 bg-gray-50 p-3 rounded-lg">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-semibold text-gray-700">Security Level:</span>
-                          <Badge 
-                            variant={passwordStrength < 50 ? "destructive" : passwordStrength < 75 ? "secondary" : "default"}
-                            className={passwordStrength >= 75 ? "bg-emerald-100 text-emerald-800" : ""}
+                          <span className="text-xs font-semibold text-gray-700">
+                            Security Level:
+                          </span>
+                          <Badge
+                            variant={
+                              passwordStrength < 50
+                                ? "destructive"
+                                : passwordStrength < 75
+                                ? "secondary"
+                                : "default"
+                            }
+                            className={
+                              passwordStrength >= 75
+                                ? "bg-emerald-100 text-emerald-800"
+                                : ""
+                            }
                           >
                             {getPasswordStrengthText()}
                           </Badge>
@@ -540,25 +716,49 @@ const StaffRegistration: React.FC = () => {
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div className="flex items-center gap-1">
-                            <Check className={`w-3 h-3 ${formData.password.length >= 8 ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <Check
+                              className={`w-3 h-3 ${
+                                formData.password.length >= 8
+                                  ? "text-emerald-500"
+                                  : "text-gray-300"
+                              }`}
+                            />
                             <span>8+ characters</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check className={`w-3 h-3 ${/[A-Z]/.test(formData.password) ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <Check
+                              className={`w-3 h-3 ${
+                                /[A-Z]/.test(formData.password)
+                                  ? "text-emerald-500"
+                                  : "text-gray-300"
+                              }`}
+                            />
                             <span>Uppercase letter</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check className={`w-3 h-3 ${/[0-9]/.test(formData.password) ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <Check
+                              className={`w-3 h-3 ${
+                                /[0-9]/.test(formData.password)
+                                  ? "text-emerald-500"
+                                  : "text-gray-300"
+                              }`}
+                            />
                             <span>Number</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check className={`w-3 h-3 ${/[^A-Za-z0-9]/.test(formData.password) ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <Check
+                              className={`w-3 h-3 ${
+                                /[^A-Za-z0-9]/.test(formData.password)
+                                  ? "text-emerald-500"
+                                  : "text-gray-300"
+                              }`}
+                            />
                             <span>Special character</span>
                           </div>
                         </div>
                       </div>
                     )}
-                    
+
                     {formErrors.password && (
                       <p className="text-sm text-red-600 flex items-center gap-1 bg-red-50 p-2 rounded">
                         <AlertTriangle className="w-3 h-3" />
@@ -569,7 +769,10 @@ const StaffRegistration: React.FC = () => {
 
                   {/* Confirm Password */}
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700">
+                    <Label
+                      htmlFor="confirmPassword"
+                      className="text-sm font-semibold text-gray-700"
+                    >
                       Confirm Secure Password *
                     </Label>
                     <div className="relative group">
@@ -577,9 +780,13 @@ const StaffRegistration: React.FC = () => {
                         id="confirmPassword"
                         type={showConfirmPassword ? "text" : "password"}
                         value={formData.confirmPassword}
-                        onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("confirmPassword", e.target.value)
+                        }
                         className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
-                          formErrors.confirmPassword ? 'border-red-500' : 'border-gray-200'
+                          formErrors.confirmPassword
+                            ? "border-red-500"
+                            : "border-gray-200"
                         }`}
                         placeholder="Confirm your secure password"
                         disabled={isLoading}
@@ -587,9 +794,15 @@ const StaffRegistration: React.FC = () => {
                       <button
                         type="button"
                         className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-blue-600 transition-colors"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                       >
-                        {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
                       </button>
                     </div>
                     {formErrors.confirmPassword && (
@@ -607,20 +820,34 @@ const StaffRegistration: React.FC = () => {
                     <Checkbox
                       id="terms"
                       checked={acceptTerms}
-                      onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        setAcceptTerms(checked as boolean)
+                      }
                       className="mt-1 border-2 border-gray-300 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
                     />
-                    <Label htmlFor="terms" className="text-sm text-gray-700 leading-6">
+                    <Label
+                      htmlFor="terms"
+                      className="text-sm text-gray-700 leading-6"
+                    >
                       I agree to the{" "}
-                      <Link to="/terms" className="text-blue-600 hover:text-blue-800 font-semibold">
+                      <Link
+                        to="/terms"
+                        className="text-blue-600 hover:text-blue-800 font-semibold"
+                      >
                         Professional Terms of Service
                       </Link>
                       ,{" "}
-                      <Link to="/privacy" className="text-blue-600 hover:text-blue-800 font-semibold">
+                      <Link
+                        to="/privacy"
+                        className="text-blue-600 hover:text-blue-800 font-semibold"
+                      >
                         Privacy Policy
                       </Link>
                       , and{" "}
-                      <Link to="/code-of-conduct" className="text-blue-600 hover:text-blue-800 font-semibold">
+                      <Link
+                        to="/code-of-conduct"
+                        className="text-blue-600 hover:text-blue-800 font-semibold"
+                      >
                         Staff Code of Conduct
                       </Link>
                     </Label>
@@ -631,7 +858,9 @@ const StaffRegistration: React.FC = () => {
                 <Button
                   type="submit"
                   className="w-full h-14 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white font-bold text-base shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300"
-                  disabled={isLoading || connectionStatus === "error" || !acceptTerms}
+                  disabled={
+                    isLoading || connectionStatus === "error" || !acceptTerms
+                  }
                 >
                   {isLoading ? (
                     <>
@@ -647,44 +876,8 @@ const StaffRegistration: React.FC = () => {
                 </Button>
               </form>
 
-              {/* Professional Benefits Showcase */}
-              <div className="space-y-4">
-                <h4 className="text-center text-sm font-bold text-gray-900">
-                  ELITE STAFF BENEFITS
-                </h4>
-                <div className="grid grid-cols-1 gap-3">
-                  <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200">
-                    <div className="p-2 bg-blue-600 rounded-lg">
-                      <Users className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-900">Advanced Member Management</p>
-                      <p className="text-xs text-gray-600">Full CRUD operations, analytics, and insights</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
-                    <div className="p-2 bg-emerald-600 rounded-lg">
-                      <BarChart3 className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-900">Professional Analytics Suite</p>
-                      <p className="text-xs text-gray-600">Real-time business intelligence and reporting</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-200">
-                    <div className="p-2 bg-purple-600 rounded-lg">
-                      <Activity className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-900">Live Attendance Monitoring</p>
-                      <p className="text-xs text-gray-600">Real-time check-ins and member tracking</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* Professional Footer */}
-              <div className="text-center space-y-4 pt-4 border-t border-gray-200">
+              <div className="text-center space-y-4 pt-6 border-t border-gray-200 mt-8">
                 <p className="text-sm text-gray-600">
                   Already have a professional account?{" "}
                   <Link
@@ -695,16 +888,18 @@ const StaffRegistration: React.FC = () => {
                   </Link>
                 </p>
                 <div className="flex items-center justify-center gap-6 text-xs text-gray-500">
-                  <Link to="/member/register" className="hover:text-blue-600 transition-colors font-medium">
+                  <Link
+                    to="/member/register"
+                    className="hover:text-blue-600 transition-colors font-medium"
+                  >
                     Member Registration
                   </Link>
                   <span>•</span>
-                  <Link to="/contact" className="hover:text-blue-600 transition-colors font-medium">
+                  <Link
+                    to="/contact"
+                    className="hover:text-blue-600 transition-colors font-medium"
+                  >
                     HR Support
-                  </Link>
-                  <span>•</span>
-                  <Link to="/careers" className="hover:text-blue-600 transition-colors font-medium">
-                    Career Opportunities
                   </Link>
                 </div>
               </div>
@@ -717,10 +912,6 @@ const StaffRegistration: React.FC = () => {
               <div className="flex items-center gap-1">
                 <Award className="w-4 h-4 text-yellow-400" />
                 <span className="text-xs text-white/80">Industry Leader</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Star className="w-4 h-4 text-yellow-400" />
-                <span className="text-xs text-white/80">5-Star Employer</span>
               </div>
               <div className="flex items-center gap-1">
                 <Shield className="w-4 h-4 text-blue-400" />

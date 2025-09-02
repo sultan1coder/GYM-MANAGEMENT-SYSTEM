@@ -15,6 +15,14 @@ import {
   changeMemberPassword,
 } from "../controllers/members.controller";
 import {
+  enhancedRegisterMember,
+  verifyMemberEmail,
+  resendVerificationEmail,
+  checkEmailAvailability,
+  getMembershipPlans,
+  completeProfile,
+} from "../controllers/memberRegistration.controller";
+import {
   subscribeMember,
   unsubscribeMember,
 } from "../controllers/subscription.controller";
@@ -93,10 +101,20 @@ const imageUpload = multer({
   },
 });
 
-// Existing routes
-router.get("/list", protect, getAllMembers);
+// Authentication routes
 router.post("/login", loginMember);
 router.post("/register", registerMember);
+
+// Enhanced registration routes
+router.post("/register-enhanced", enhancedRegisterMember);
+router.get("/verify-email/:token", verifyMemberEmail);
+router.post("/resend-verification", resendVerificationEmail);
+router.get("/check-email/:email", checkEmailAvailability);
+router.get("/membership-plans", getMembershipPlans);
+router.post("/complete-profile/:memberId", protect, completeProfile);
+
+// Member management routes
+router.get("/list", protect, getAllMembers);
 router.get("/single/:id", protect, getSingleMember);
 router.put("/update/:id", protect, updateMember);
 router.put("/profile-picture/:id", protect, updateMemberProfilePicture);
