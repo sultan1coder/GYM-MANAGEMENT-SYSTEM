@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 
 // Pages
 import Login from "./pages/Login";
+import Contact from "./pages/Contact";
 import StaffLogin from "./pages/StaffLogin";
 import MemberLogin from "./pages/MemberLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -57,8 +58,8 @@ function App() {
                     {/* Public Routes */}
                     <Route path="/" element={<Homepage />} />
                     <Route path="/home" element={<Homepage />} />
-                    <Route path="/portal" element={<Login />} />
-                    <Route path="/login" element={<Login />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/login" element={<StaffLogin />} />
 
                     {/* Staff/Admin Login */}
                     <Route path="/staff/login" element={<StaffLogin />} />

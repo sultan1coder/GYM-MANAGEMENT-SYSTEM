@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Dumbbell,
@@ -12,9 +13,13 @@ import {
   Heart,
   Target,
   Zap,
+  Menu,
+  X,
 } from "lucide-react";
 
 const Homepage = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="space-y-20">
       {/* Navigation Header */}
@@ -27,21 +32,83 @@ const Homepage = () => {
                 BILKHAYR GYM
               </span>
             </div>
-            <nav className="flex items-center gap-6">
+            <nav className="hidden md:flex items-center gap-6">
               <Link
-                to="/portal"
+                to="/"
                 className="font-medium text-gray-600 transition-colors hover:text-blue-600"
               >
-                Access Portal
+                Home
+              </Link>
+              <Link
+                to="/contact"
+                className="font-medium text-gray-600 transition-colors hover:text-blue-600"
+              >
+                Contact
+              </Link>
+              <Link
+                to="/login"
+                className="font-medium text-gray-600 transition-colors hover:text-blue-600"
+              >
+                Login
               </Link>
               <Link
                 to="/member/register"
                 className="px-4 py-2 font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
               >
-                Join Now
+                Get Started
               </Link>
             </nav>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                className="p-2 text-gray-600 hover:text-blue-600"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+            </div>
           </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-gray-200 bg-white">
+              <div className="px-4 py-4 space-y-3">
+                <Link
+                  to="/"
+                  className="block font-medium text-gray-600 transition-colors hover:text-blue-600"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/contact"
+                  className="block font-medium text-gray-600 transition-colors hover:text-blue-600"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+                <Link
+                  to="/login"
+                  className="block font-medium text-gray-600 transition-colors hover:text-blue-600"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/member/register"
+                  className="block w-full px-4 py-2 font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Get Started
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -70,16 +137,19 @@ const Homepage = () => {
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Link
-                to="/members/register"
+                to="/member/register"
                 className="flex items-center justify-center gap-2 px-8 py-4 text-white transition-all transform shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:from-blue-700 hover:to-purple-700 hover:scale-105"
               >
-                Start Your Journey
+                Get Started
                 <ChevronRight className="w-5 h-5" />
               </Link>
-              <button className="flex items-center justify-center gap-2 px-8 py-4 text-white transition-all border-2 border-white rounded-xl hover:bg-white hover:text-blue-600">
-                <Play className="w-5 h-5" />
-                Watch Tour
-              </button>
+              <Link
+                to="/contact"
+                className="flex items-center justify-center gap-2 px-8 py-4 text-white transition-all border-2 border-white rounded-xl hover:bg-white hover:text-blue-600"
+              >
+                Contact Us
+                <ChevronRight className="w-5 h-5" />
+              </Link>
             </div>
           </div>
         </div>
@@ -440,13 +510,13 @@ const Homepage = () => {
                   to="/member/register"
                   className="px-8 py-4 font-semibold text-blue-600 transition-all bg-white rounded-xl hover:bg-gray-100"
                 >
-                  Become a Member
+                  Get Started
                 </Link>
                 <Link
-                  to="/staff/login"
+                  to="/contact"
                   className="px-8 py-4 text-white transition-all border-2 border-white rounded-xl hover:bg-white hover:text-blue-600"
                 >
-                  Staff Portal
+                  Contact Us
                 </Link>
               </div>
             </div>
