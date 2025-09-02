@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { toast } from "react-hot-toast";
+import { navigationRoutes, validateRoute } from "@/utils/navigationRoutes";
 import {
   Search,
   Settings,
@@ -13,11 +15,36 @@ import {
   BarChart3,
   Zap,
   ArrowRight,
+  AlertTriangle,
+  CheckCircle,
 } from "lucide-react";
 
 const NavigationHub: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+
+  // Enhanced navigation with route validation
+  const handleNavigation = (path: string, title: string) => {
+    const isImplemented = validateRoute(path);
+
+    if (isImplemented) {
+      navigate(path);
+      toast.success(`Navigating to ${title}`);
+    } else {
+      toast.error(`${title} is not implemented yet`);
+    }
+  };
+
+  // Filter navigation items based on search
+  const filteredItems = navigationRoutes.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Use the enhanced navigation routes
+  const displayItems = searchQuery ? filteredItems : navigationRoutes;
 
   const navigationItems = [
     {
@@ -27,6 +54,7 @@ const NavigationHub: React.FC = () => {
       path: "/admin/users",
       category: "Administration",
       badge: "25 users",
+      isImplemented: true,
     },
     {
       title: "Member Management",
@@ -78,17 +106,6 @@ const NavigationHub: React.FC = () => {
     },
   ];
 
-  const filteredItems = navigationItems.filter(
-    (item) =>
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const handleNavigate = (path: string) => {
-    navigate(path);
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -108,41 +125,76 @@ const NavigationHub: React.FC = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {filteredItems.map((item) => (
+          {displayItems.map((item) => (
             <div
               key={item.path}
               className="group p-3 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
-              onClick={() => handleNavigate(item.path)}
+              onClick={() => handleNavigation(item.path, item.title)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
+                  <div
+                    className={`p-2 rounded-lg transition-colors ${
+                      item.isImplemented
+                        ? "bg-blue-100 group-hover:bg-blue-200"
+                        : "bg-gray-100 group-hover:bg-gray-200"
+                    }`}
+                  >
                     {React.createElement(item.icon, {
-                      className: "h-4 w-4 text-blue-600",
+                      className: `h-4 w-4 ${
+                        item.isImplemented ? "text-blue-600" : "text-gray-400"
+                      }`,
                     })}
                   </div>
                   <div>
-                    <h4 className="font-medium text-sm group-hover:text-blue-600 transition-colors">
-                      {item.title}
-                    </h4>
+                    <div className="flex items-center gap-2">
+                      <h4
+                        className={`font-medium text-sm transition-colors ${
+                          item.isImplemented
+                            ? "group-hover:text-blue-600"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        {item.title}
+                      </h4>
+                      {item.isImplemented ? (
+                        <CheckCircle className="h-3 w-3 text-green-500" />
+                      ) : (
+                        <AlertTriangle className="h-3 w-3 text-yellow-500" />
+                      )}
+                    </div>
                     <p className="text-xs text-gray-500">{item.description}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <Badge variant="outline" className="text-xs">
                         {item.category}
                       </Badge>
-                      <Badge variant="secondary" className="text-xs">
-                        {item.badge}
+                      {item.badge && (
+                        <Badge variant="secondary" className="text-xs">
+                          {item.badge}
+                        </Badge>
+                      )}
+                      <Badge
+                        variant={item.isImplemented ? "default" : "destructive"}
+                        className="text-xs"
+                      >
+                        {item.isImplemented ? "Ready" : "Coming Soon"}
                       </Badge>
                     </div>
                   </div>
                 </div>
-                <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                <ArrowRight
+                  className={`h-4 w-4 transition-colors ${
+                    item.isImplemented
+                      ? "text-gray-400 group-hover:text-blue-600"
+                      : "text-gray-300"
+                  }`}
+                />
               </div>
             </div>
           ))}
         </div>
 
-        {filteredItems.length === 0 && (
+        {displayItems.length === 0 && (
           <div className="text-center py-8 text-gray-500">
             <Search className="h-12 w-12 mx-auto mb-4 text-gray-300" />
             <p>No navigation items found</p>

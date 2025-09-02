@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,8 @@ import {
   Clock,
   Plus,
   Database,
+  Download,
+  RefreshCw,
 } from "lucide-react";
 
 // Dashboard Components
@@ -23,15 +25,26 @@ import SystemManagementTools from "../components/SystemManagementTools";
 import CommunicationNotifications from "../components/CommunicationNotifications";
 import AdminProfileManagement from "../components/AdminProfileManagement";
 
+// New Enhanced Components
+import QuickAddModal from "../components/modals/QuickAddModal";
+import { ExportManager } from "../utils/exportUtils";
+import { useWebSocket } from "../components/providers/WebSocketProvider";
+
 // Providers
 import { useMemberStats } from "../components/providers/MemberStatsProvider";
 import { useSystemHealth } from "../components/providers/SystemHealthProvider";
 import { useQuickActions } from "../components/providers/QuickActionsProvider";
 
 const AdminDashboard: React.FC = () => {
-  const { stats: memberStats } = useMemberStats();
-  const { systemHealth } = useSystemHealth();
+  const { stats: memberStats, refetch: refetchMemberStats } = useMemberStats();
+  const { systemHealth, refetch: refetchSystemHealth } = useSystemHealth();
   const { quickActions } = useQuickActions();
+  const { isConnected } = useWebSocket();
+
+  // New state for enhanced features
+  const [showQuickAddModal, setShowQuickAddModal] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(new Date());
 
   // Calculate dashboard stats from providers
   const dashboardStats = {
@@ -43,27 +56,109 @@ const AdminDashboard: React.FC = () => {
     uptime: systemHealth?.uptime || "0h 0m",
   };
 
+  // Enhanced functions
+  const handleQuickAdd = () => {
+    setShowQuickAddModal(true);
+  };
+
+  const handleRefreshDashboard = async () => {
+    setIsRefreshing(true);
+    try {
+      await Promise.all([refetchMemberStats?.(), refetchSystemHealth?.()]);
+      setLastUpdated(new Date());
+    } catch (error) {
+      console.error("Error refreshing dashboard:", error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  const handleExportDashboard = async () => {
+    const dashboardData = {
+      timestamp: new Date().toISOString(),
+      stats: dashboardStats,
+      memberStats,
+      systemHealth,
+    };
+
+    await ExportManager.exportToJSON(
+      [dashboardData],
+      `dashboard_export_${new Date().toISOString().split("T")[0]}.json`
+    );
+  };
+
+  // Real-time updates effect
+  useEffect(() => {
+    if (isConnected) {
+      // Auto-refresh every 5 minutes when connected
+      const interval = setInterval(() => {
+        handleRefreshDashboard();
+      }, 5 * 60 * 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isConnected]);
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-gray-50 p-3 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 md:space-y-6">
+        {/* Enhanced Mobile-Responsive Header */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
               Admin Dashboard
             </h1>
-            <p className="text-gray-600 mt-2">
-              Welcome back! Here's what's happening with your gym today.
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2">
+              <p className="text-gray-600 text-sm md:text-base">
+                Welcome back! Here's what's happening with your gym today.
+              </p>
+              <div className="flex items-center gap-2">
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    isConnected ? "bg-green-500" : "bg-red-500"
+                  }`}
+                />
+                <span className="text-xs text-gray-500">
+                  {isConnected ? "Live" : "Offline"}
+                </span>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400 mt-1">
+              Last updated: {lastUpdated.toLocaleTimeString()}
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm">
+
+          {/* Mobile-Responsive Action Buttons */}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleExportDashboard}
+              className="flex-1 sm:flex-none"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Export</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefreshDashboard}
+              disabled={isRefreshing}
+              className="flex-1 sm:flex-none"
+            >
+              <RefreshCw
+                className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+              />
+              <span className="hidden sm:inline">Refresh</span>
+            </Button>
+            <Button variant="outline" size="sm" className="hidden md:flex">
               <Clock className="h-4 w-4 mr-2" />
               {new Date().toLocaleDateString()}
             </Button>
-            <Button>
+            <Button onClick={handleQuickAdd} className="flex-1 sm:flex-none">
               <Plus className="h-4 w-4 mr-2" />
-              Quick Add
+              <span className="sm:hidden">Add</span>
+              <span className="hidden sm:inline">Quick Add</span>
             </Button>
           </div>
         </div>
@@ -71,10 +166,10 @@ const AdminDashboard: React.FC = () => {
         {/* Quick Stats */}
         <QuickStats stats={dashboardStats} memberStats={memberStats} />
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Mobile-Responsive Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Left Column - Quick Actions & System Health */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 md:space-y-6">
             {/* Quick Actions */}
             <QuickActions actions={quickActions} />
 
@@ -83,7 +178,7 @@ const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Right Column - Activity Feed & Navigation */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             {/* Activity Feed */}
             <ActivityFeed />
 
@@ -107,8 +202,8 @@ const AdminDashboard: React.FC = () => {
         {/* Admin Profile Management */}
         <AdminProfileManagement />
 
-        {/* Bottom Row - Additional Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Mobile-Responsive Bottom Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
@@ -188,6 +283,16 @@ const AdminDashboard: React.FC = () => {
           </Card>
         </div>
       </div>
+
+      {/* Quick Add Modal */}
+      <QuickAddModal
+        isOpen={showQuickAddModal}
+        onClose={() => setShowQuickAddModal(false)}
+        onSuccess={() => {
+          // Refresh dashboard data after successful creation
+          handleRefreshDashboard();
+        }}
+      />
     </div>
   );
 };

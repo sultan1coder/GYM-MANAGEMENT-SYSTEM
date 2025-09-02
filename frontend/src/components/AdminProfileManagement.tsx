@@ -290,6 +290,10 @@ const AdminProfileManagement: React.FC = () => {
     switch (connectionStatus) {
       case "connected":
         return <Wifi className="w-4 h-4 text-green-600" />;
+      case "connecting":
+        return (
+          <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        );
       case "disconnected":
         return <WifiOff className="w-4 h-4 text-gray-600" />;
       case "error":
@@ -303,6 +307,8 @@ const AdminProfileManagement: React.FC = () => {
     switch (connectionStatus) {
       case "connected":
         return "bg-green-100 text-green-800";
+      case "connecting":
+        return "bg-blue-100 text-blue-800";
       case "disconnected":
         return "bg-gray-100 text-gray-800";
       case "error":
@@ -329,6 +335,8 @@ const AdminProfileManagement: React.FC = () => {
             <span className="ml-2">
               {connectionStatus === "connected"
                 ? "Backend Connected"
+                : connectionStatus === "connecting"
+                ? "Connecting..."
                 : connectionStatus === "disconnected"
                 ? "Backend Disconnected"
                 : "Backend Error"}
