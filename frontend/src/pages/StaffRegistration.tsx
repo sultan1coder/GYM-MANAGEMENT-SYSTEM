@@ -1,32 +1,48 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "react-hot-toast";
+import { authAPI } from "@/services/api";
 import {
-  UserCircle,
-  ArrowLeft,
+  Dumbbell,
   Eye,
   EyeOff,
-  Building2,
-  Mail,
-  Phone,
-  User,
   Shield,
+  Lock,
+  Mail,
+  User,
+  Phone,
+  ArrowLeft,
   CheckCircle,
-  AlertCircle,
+  AlertTriangle,
+  Users,
+  Settings,
+  BarChart3,
+  Activity,
+  Loader2,
+  UserPlus,
+  Check,
+  Crown,
+  Award,
+  Briefcase,
+  Star,
+  Zap,
 } from "lucide-react";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../components/ui/card";
-import { toast } from "react-hot-toast";
-import { registerFn } from "../redux/slices/auth/registerSlice";
-import { AppDispatch } from "../redux/store";
 
 const StaffRegistration: React.FC = () => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<"checking" | "connected" | "error">("checking");
+
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -36,410 +52,685 @@ const StaffRegistration: React.FC = () => {
     confirmPassword: "",
     role: "staff",
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
-  const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const [formErrors, setFormErrors] = useState({
+    name: "",
+    username: "",
+    email: "",
+    phone_number: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
+  // Check backend connection on load
+  useEffect(() => {
+    checkBackendConnection();
+  }, []);
+
+  // Calculate password strength
+  useEffect(() => {
+    calculatePasswordStrength(formData.password);
+  }, [formData.password]);
+
+  const checkBackendConnection = async () => {
+    try {
+      setConnectionStatus("checking");
+      const response = await fetch("http://localhost:4000/api");
+      if (response.ok) {
+        setConnectionStatus("connected");
+      } else {
+        setConnectionStatus("error");
+      }
+    } catch (error) {
+      setConnectionStatus("error");
+    }
   };
 
-  const validateStep1 = () => {
-    if (!formData.name || !formData.email) {
-      toast.error("Please fill in all required fields");
-      return false;
-    }
-    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      toast.error("Please enter a valid email address");
-      return false;
-    }
-    return true;
+  const calculatePasswordStrength = (password: string) => {
+    let strength = 0;
+    if (password.length >= 8) strength += 25;
+    if (/[A-Z]/.test(password)) strength += 25;
+    if (/[0-9]/.test(password)) strength += 25;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+    setPasswordStrength(strength);
   };
 
-  const validateStep2 = () => {
-    if (!formData.password || !formData.confirmPassword) {
-      toast.error("Please fill in all password fields");
-      return false;
+  const getPasswordStrengthColor = () => {
+    if (passwordStrength < 25) return "bg-red-500";
+    if (passwordStrength < 50) return "bg-yellow-500";
+    if (passwordStrength < 75) return "bg-blue-500";
+    return "bg-emerald-500";
+  };
+
+  const getPasswordStrengthText = () => {
+    if (passwordStrength < 25) return "Weak";
+    if (passwordStrength < 50) return "Fair";
+    if (passwordStrength < 75) return "Good";
+    return "Strong";
+  };
+
+  const validateForm = () => {
+    const errors = {
+      name: "",
+      username: "",
+      email: "",
+      phone_number: "",
+      password: "",
+      confirmPassword: "",
+    };
+    let isValid = true;
+
+    if (!formData.name.trim()) {
+      errors.name = "Full name is required";
+      isValid = false;
     }
-    if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters long");
-      return false;
+
+    if (!formData.username.trim()) {
+      errors.username = "Username is required";
+      isValid = false;
+    } else if (formData.username.length < 3) {
+      errors.username = "Username must be at least 3 characters";
+      isValid = false;
     }
+
+    if (!formData.email) {
+      errors.email = "Professional email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = "Please enter a valid email address";
+      isValid = false;
+    }
+
+    if (formData.phone_number && !/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone_number.replace(/\s/g, ''))) {
+      errors.phone_number = "Please enter a valid phone number";
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      errors.password = "Secure password is required";
+      isValid = false;
+    } else if (formData.password.length < 8) {
+      errors.password = "Password must be at least 8 characters";
+      isValid = false;
+    }
+
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
-      return false;
+      errors.confirmPassword = "Passwords do not match";
+      isValid = false;
     }
-    return true;
-  };
 
-  const nextStep = () => {
-    if (currentStep === 1 && validateStep1()) {
-      setCurrentStep(2);
-    }
-  };
-
-  const prevStep = () => {
-    setCurrentStep(currentStep - 1);
+    setFormErrors(errors);
+    return isValid;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!validateStep1() || !validateStep2()) {
+    
+    if (!validateForm()) {
       return;
     }
 
-    setIsLoading(true);
+    if (!acceptTerms) {
+      toast.error("Please accept the professional terms and conditions");
+      return;
+    }
+
+    if (connectionStatus === "error") {
+      toast.error("Cannot connect to server. Please check your connection.");
+      return;
+    }
+
     try {
-      // Prepare data for API call (remove confirmPassword as it's not needed by backend)
-      const { confirmPassword, ...apiData } = formData;
-
-      const result = await dispatch(registerFn(apiData) as any);
-
-      if (result.payload?.isSuccess) {
-        toast.success(
-          "Staff registration successful! Please wait for admin approval."
-        );
+      setIsLoading(true);
+      const response = await authAPI.registerUser(formData);
+      
+      if (response.data.isSuccess) {
+        toast.success("Welcome to BILKHAYR Premium! Your professional account has been created.");
         navigate("/staff/login");
       } else {
-        toast.error(result.payload?.message || "Registration failed");
+        toast.error(response.data.message || "Registration failed");
       }
     } catch (error: any) {
       console.error("Registration error:", error);
-      toast.error(error?.message || "Registration failed. Please try again.");
+      const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const steps = [
-    { number: 1, title: "Basic Information", icon: User },
-    { number: 2, title: "Security Setup", icon: Shield },
-  ];
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (formErrors[field as keyof typeof formErrors]) {
+      setFormErrors(prev => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  const getConnectionStatusBadge = () => {
+    switch (connectionStatus) {
+      case "checking":
+        return (
+          <Badge variant="secondary" className="flex items-center gap-1">
+            <Loader2 className="w-3 h-3 animate-spin" />
+            Connecting...
+          </Badge>
+        );
+      case "connected":
+        return (
+          <Badge className="bg-emerald-100 text-emerald-800 flex items-center gap-1 border-emerald-200">
+            <CheckCircle className="w-3 h-3" />
+            Online
+          </Badge>
+        );
+      case "error":
+        return (
+          <Badge variant="destructive" className="flex items-center gap-1">
+            <AlertTriangle className="w-3 h-3" />
+            Offline
+          </Badge>
+        );
+    }
+  };
+
+  const getRoleDescription = (role: string) => {
+    switch (role) {
+      case "staff":
+        return "General staff member with standard access";
+      case "manager":
+        return "Management role with advanced permissions";
+      case "trainer":
+        return "Certified personal trainer with member access";
+      case "receptionist":
+        return "Front desk operations and member services";
+      default:
+        return "";
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl w-full space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl mb-6 shadow-lg">
-            <Building2 className="w-10 h-10" />
-          </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-3">
-            Staff Registration
-          </h2>
-          <p className="text-lg text-gray-600 max-w-md mx-auto">
-            Create a new staff account to access the administrative portal
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 relative overflow-hidden">
+      {/* Professional Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-10 left-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-10 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+      </div>
 
-        {/* Progress Steps */}
-        <div className="flex items-center justify-center space-x-4 mb-8">
-          {steps.map((step, index) => (
-            <div key={step.number} className="flex items-center">
-              <div
-                className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                  currentStep >= step.number
-                    ? "bg-blue-600 border-blue-600 text-white"
-                    : "bg-white border-gray-300 text-gray-400"
-                }`}
-              >
-                {currentStep > step.number ? (
-                  <CheckCircle className="w-5 h-5" />
-                ) : (
-                  <step.icon className="w-5 h-5" />
-                )}
+      {/* Premium Navigation */}
+      <header className="relative z-50 border-b border-white/10 bg-black/20 backdrop-blur-md">
+        <div className="px-6 mx-auto max-w-7xl">
+          <div className="flex items-center justify-between h-16">
+            <Link to="/" className="flex items-center gap-3">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg blur opacity-75"></div>
+                <div className="relative bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded-lg">
+                  <Dumbbell className="w-6 h-6 text-white" />
+                </div>
               </div>
-              {index < steps.length - 1 && (
-                <div
-                  className={`w-16 h-0.5 mx-2 ${
-                    currentStep > step.number ? "bg-blue-600" : "bg-gray-300"
-                  }`}
-                />
-              )}
+              <div>
+                <span className="text-xl font-bold text-white">BILKHAYR</span>
+                <span className="block text-xs text-blue-200 -mt-1">PREMIUM FITNESS</span>
+              </div>
+            </Link>
+            <div className="flex items-center gap-4">
+              {getConnectionStatusBadge()}
+              <Link
+                to="/staff/login"
+                className="inline-flex items-center gap-2 text-blue-300 hover:text-white transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Login
+              </Link>
             </div>
-          ))}
+          </div>
         </div>
+      </header>
 
-        {/* Step Labels */}
-        <div className="flex justify-center space-x-16 mb-8">
-          {steps.map((step) => (
-            <div
-              key={step.number}
-              className={`text-sm font-medium ${
-                currentStep >= step.number ? "text-blue-600" : "text-gray-400"
-              }`}
-            >
-              {step.title}
-            </div>
-          ))}
-        </div>
+      {/* Main Content */}
+      <div className="relative z-10 flex items-center justify-center py-16 px-4">
+        <div className="w-full max-w-lg">
+          {/* Professional Registration Card */}
+          <Card className="bg-white/95 backdrop-blur-xl border-0 shadow-2xl">
+            <CardHeader className="text-center pb-8 relative">
+              {/* Elite Staff Badge */}
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <Badge className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white font-bold px-4 py-1">
+                  <Crown className="w-3 h-3 mr-1" />
+                  ELITE STAFF ACCESS
+                </Badge>
+              </div>
+              
+              <div className="mx-auto mb-6 w-20 h-20 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 rounded-full flex items-center justify-center relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full blur opacity-50 animate-pulse"></div>
+                <Briefcase className="w-10 h-10 text-white relative z-10" />
+              </div>
+              
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
+                Join Our Elite Team
+              </h1>
+              <p className="text-gray-600 text-sm">
+                Become part of the premium fitness revolution at
+                <br />
+                <span className="font-semibold text-blue-600">BILKHAYR Premium Fitness</span>
+              </p>
+            </CardHeader>
 
-        <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
-          <CardHeader className="text-center pb-6">
-            <CardTitle className="text-2xl font-bold text-gray-900">
-              {currentStep === 1 ? "Basic Information" : "Security Setup"}
-            </CardTitle>
-            <p className="text-gray-600 mt-2">
-              {currentStep === 1
-                ? "Enter your personal and contact information"
-                : "Set up your password and account security"}
-            </p>
-          </CardHeader>
-          <CardContent className="p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {currentStep === 1 ? (
-                <>
-                  {/* Name */}
+            <CardContent className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Professional Identity */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2 border-b pb-2">
+                    <User className="w-5 h-5 text-blue-600" />
+                    Professional Identity
+                  </h3>
+                  
+                  {/* Full Name */}
                   <div className="space-y-2">
-                    <label
-                      htmlFor="name"
-                      className="flex items-center gap-2 text-sm font-semibold text-gray-700"
-                    >
-                      <User className="w-4 h-4 text-blue-600" />
-                      Full Name *
-                    </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="Enter your full name"
-                      className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                    />
+                    <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
+                      Full Professional Name *
+                    </Label>
+                    <div className="relative group">
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                          formErrors.name ? 'border-red-500' : 'border-gray-200'
+                        }`}
+                        placeholder="Enter your full professional name"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    {formErrors.name && (
+                      <p className="text-sm text-red-600 flex items-center gap-1 bg-red-50 p-2 rounded">
+                        <AlertTriangle className="w-3 h-3" />
+                        {formErrors.name}
+                      </p>
+                    )}
                   </div>
 
                   {/* Username */}
                   <div className="space-y-2">
-                    <label
-                      htmlFor="username"
-                      className="flex items-center gap-2 text-sm font-semibold text-gray-700"
-                    >
-                      <UserCircle className="w-4 h-4 text-blue-600" />
-                      Username
-                    </label>
-                    <Input
-                      id="username"
-                      name="username"
-                      type="text"
-                      value={formData.username}
-                      onChange={handleInputChange}
-                      placeholder="Choose a username (optional)"
-                      className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                    />
+                    <Label htmlFor="username" className="text-sm font-semibold text-gray-700">
+                      Professional Username *
+                    </Label>
+                    <div className="relative group">
+                      <Input
+                        id="username"
+                        value={formData.username}
+                        onChange={(e) => handleInputChange("username", e.target.value)}
+                        className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                          formErrors.username ? 'border-red-500' : 'border-gray-200'
+                        }`}
+                        placeholder="Choose a unique professional username"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    {formErrors.username && (
+                      <p className="text-sm text-red-600 flex items-center gap-1 bg-red-50 p-2 rounded">
+                        <AlertTriangle className="w-3 h-3" />
+                        {formErrors.username}
+                      </p>
+                    )}
                   </div>
 
                   {/* Email */}
                   <div className="space-y-2">
-                    <label
-                      htmlFor="email"
-                      className="flex items-center gap-2 text-sm font-semibold text-gray-700"
-                    >
-                      <Mail className="w-4 h-4 text-blue-600" />
-                      Email Address *
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder="Enter your email address"
-                      className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                    />
+                    <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+                      Professional Email Address *
+                    </Label>
+                    <div className="relative group">
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                          formErrors.email ? 'border-red-500' : 'border-gray-200'
+                        }`}
+                        placeholder="your.name@company.com"
+                        disabled={isLoading}
+                      />
+                      <div className="absolute inset-y-0 right-3 flex items-center">
+                        <Mail className="w-4 h-4 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                      </div>
+                    </div>
+                    {formErrors.email && (
+                      <p className="text-sm text-red-600 flex items-center gap-1 bg-red-50 p-2 rounded">
+                        <AlertTriangle className="w-3 h-3" />
+                        {formErrors.email}
+                      </p>
+                    )}
                   </div>
 
                   {/* Phone Number */}
                   <div className="space-y-2">
-                    <label
-                      htmlFor="phone_number"
-                      className="flex items-center gap-2 text-sm font-semibold text-gray-700"
-                    >
-                      <Phone className="w-4 h-4 text-blue-600" />
-                      Phone Number
-                    </label>
-                    <Input
-                      id="phone_number"
-                      name="phone_number"
-                      type="tel"
-                      value={formData.phone_number}
-                      onChange={handleInputChange}
-                      placeholder="Enter your phone number"
-                      className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                    />
+                    <Label htmlFor="phone_number" className="text-sm font-semibold text-gray-700">
+                      Professional Contact Number
+                    </Label>
+                    <div className="relative group">
+                      <Input
+                        id="phone_number"
+                        value={formData.phone_number}
+                        onChange={(e) => handleInputChange("phone_number", e.target.value)}
+                        className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                          formErrors.phone_number ? 'border-red-500' : 'border-gray-200'
+                        }`}
+                        placeholder="+1 (555) 123-4567"
+                        disabled={isLoading}
+                      />
+                      <div className="absolute inset-y-0 right-3 flex items-center">
+                        <Phone className="w-4 h-4 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                      </div>
+                    </div>
+                    {formErrors.phone_number && (
+                      <p className="text-sm text-red-600 flex items-center gap-1 bg-red-50 p-2 rounded">
+                        <AlertTriangle className="w-3 h-3" />
+                        {formErrors.phone_number}
+                      </p>
+                    )}
                   </div>
 
-                  {/* Role */}
+                  {/* Professional Role */}
                   <div className="space-y-2">
-                    <label
-                      htmlFor="role"
-                      className="flex items-center gap-2 text-sm font-semibold text-gray-700"
-                    >
-                      <Shield className="w-4 h-4 text-blue-600" />
-                      Role *
-                    </label>
-                    <select
-                      id="role"
-                      name="role"
-                      value={formData.role}
-                      onChange={handleInputChange}
-                      className="h-12 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
-                    >
-                      <option value="staff">Staff Member</option>
-                      <option value="admin">Administrator</option>
-                    </select>
+                    <Label htmlFor="role" className="text-sm font-semibold text-gray-700">
+                      Professional Role *
+                    </Label>
+                    <Select value={formData.role} onValueChange={(value) => handleInputChange("role", value)}>
+                      <SelectTrigger className="h-12 bg-gray-50 border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="staff">
+                          <div className="flex items-center gap-2">
+                            <Users className="w-4 h-4 text-blue-600" />
+                            <div>
+                              <p className="font-semibold">Staff Member</p>
+                              <p className="text-xs text-gray-500">General operations and member services</p>
+                            </div>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="manager">
+                          <div className="flex items-center gap-2">
+                            <Crown className="w-4 h-4 text-purple-600" />
+                            <div>
+                              <p className="font-semibold">Fitness Manager</p>
+                              <p className="text-xs text-gray-500">Advanced management and oversight</p>
+                            </div>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="trainer">
+                          <div className="flex items-center gap-2">
+                            <Award className="w-4 h-4 text-emerald-600" />
+                            <div>
+                              <p className="font-semibold">Personal Trainer</p>
+                              <p className="text-xs text-gray-500">Certified fitness professional</p>
+                            </div>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="receptionist">
+                          <div className="flex items-center gap-2">
+                            <Settings className="w-4 h-4 text-orange-600" />
+                            <div>
+                              <p className="font-semibold">Reception Specialist</p>
+                              <p className="text-xs text-gray-500">Front desk and customer service</p>
+                            </div>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-gray-600 bg-gray-50 p-2 rounded">
+                      {getRoleDescription(formData.role)}
+                    </p>
                   </div>
+                </div>
 
-                  {/* Next Button */}
-                  <Button
-                    type="button"
-                    onClick={nextStep}
-                    className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                  >
-                    Continue to Security Setup
-                  </Button>
-                </>
-              ) : (
-                <>
+                {/* Enterprise Security */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2 border-b pb-2">
+                    <Shield className="w-5 h-5 text-blue-600" />
+                    Enterprise Security
+                  </h3>
+
                   {/* Password */}
                   <div className="space-y-2">
-                    <label
-                      htmlFor="password"
-                      className="flex items-center gap-2 text-sm font-semibold text-gray-700"
-                    >
-                      <Shield className="w-4 h-4 text-blue-600" />
-                      Password *
-                    </label>
-                    <div className="relative">
+                    <Label htmlFor="password" className="text-sm font-semibold text-gray-700">
+                      Secure Password *
+                    </Label>
+                    <div className="relative group">
                       <Input
                         id="password"
-                        name="password"
                         type={showPassword ? "text" : "password"}
-                        required
                         value={formData.password}
-                        onChange={handleInputChange}
-                        placeholder="Create a strong password"
-                        className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-12"
+                        onChange={(e) => handleInputChange("password", e.target.value)}
+                        className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                          formErrors.password ? 'border-red-500' : 'border-gray-200'
+                        }`}
+                        placeholder="Create a strong professional password"
+                        disabled={isLoading}
                       />
                       <button
                         type="button"
+                        className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-blue-600 transition-colors"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-gray-700"
                       >
-                        {showPassword ? (
-                          <EyeOff className="w-5 h-5" />
-                        ) : (
-                          <Eye className="w-5 h-5" />
-                        )}
+                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                       </button>
                     </div>
-                    <p className="text-xs text-gray-500 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" />
-                      Must be at least 6 characters long
-                    </p>
+                    
+                    {/* Professional Password Strength */}
+                    {formData.password && (
+                      <div className="space-y-3 bg-gray-50 p-3 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-semibold text-gray-700">Security Level:</span>
+                          <Badge 
+                            variant={passwordStrength < 50 ? "destructive" : passwordStrength < 75 ? "secondary" : "default"}
+                            className={passwordStrength >= 75 ? "bg-emerald-100 text-emerald-800" : ""}
+                          >
+                            {getPasswordStrengthText()}
+                          </Badge>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className={`h-2 rounded-full transition-all duration-500 ${getPasswordStrengthColor()}`}
+                            style={{ width: `${passwordStrength}%` }}
+                          ></div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="flex items-center gap-1">
+                            <Check className={`w-3 h-3 ${formData.password.length >= 8 ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <span>8+ characters</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Check className={`w-3 h-3 ${/[A-Z]/.test(formData.password) ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <span>Uppercase letter</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Check className={`w-3 h-3 ${/[0-9]/.test(formData.password) ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <span>Number</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Check className={`w-3 h-3 ${/[^A-Za-z0-9]/.test(formData.password) ? 'text-emerald-500' : 'text-gray-300'}`} />
+                            <span>Special character</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {formErrors.password && (
+                      <p className="text-sm text-red-600 flex items-center gap-1 bg-red-50 p-2 rounded">
+                        <AlertTriangle className="w-3 h-3" />
+                        {formErrors.password}
+                      </p>
+                    )}
                   </div>
 
                   {/* Confirm Password */}
                   <div className="space-y-2">
-                    <label
-                      htmlFor="confirmPassword"
-                      className="flex items-center gap-2 text-sm font-semibold text-gray-700"
-                    >
-                      <Shield className="w-4 h-4 text-blue-600" />
-                      Confirm Password *
-                    </label>
-                    <div className="relative">
+                    <Label htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700">
+                      Confirm Secure Password *
+                    </Label>
+                    <div className="relative group">
                       <Input
                         id="confirmPassword"
-                        name="confirmPassword"
                         type={showConfirmPassword ? "text" : "password"}
-                        required
                         value={formData.confirmPassword}
-                        onChange={handleInputChange}
-                        placeholder="Confirm your password"
-                        className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-12"
+                        onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                        className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                          formErrors.confirmPassword ? 'border-red-500' : 'border-gray-200'
+                        }`}
+                        placeholder="Confirm your secure password"
+                        disabled={isLoading}
                       />
                       <button
                         type="button"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-gray-700"
+                        className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-blue-600 transition-colors"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       >
-                        {showConfirmPassword ? (
-                          <EyeOff className="w-5 h-5" />
-                        ) : (
-                          <Eye className="w-5 h-5" />
-                        )}
+                        {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                       </button>
                     </div>
+                    {formErrors.confirmPassword && (
+                      <p className="text-sm text-red-600 flex items-center gap-1 bg-red-50 p-2 rounded">
+                        <AlertTriangle className="w-3 h-3" />
+                        {formErrors.confirmPassword}
+                      </p>
+                    )}
                   </div>
+                </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex space-x-4 pt-4">
-                    <Button
-                      type="button"
-                      onClick={prevStep}
-                      variant="outline"
-                      className="flex-1 h-12 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold rounded-xl"
-                    >
-                      Back
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={isLoading}
-                      className="flex-1 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                    >
-                      {isLoading ? (
-                        <div className="flex items-center gap-2">
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Creating Account...
-                        </div>
-                      ) : (
-                        "Create Staff Account"
-                      )}
-                    </Button>
+                {/* Professional Terms */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border border-blue-200">
+                  <div className="flex items-start space-x-3">
+                    <Checkbox
+                      id="terms"
+                      checked={acceptTerms}
+                      onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
+                      className="mt-1 border-2 border-gray-300 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                    />
+                    <Label htmlFor="terms" className="text-sm text-gray-700 leading-6">
+                      I agree to the{" "}
+                      <Link to="/terms" className="text-blue-600 hover:text-blue-800 font-semibold">
+                        Professional Terms of Service
+                      </Link>
+                      ,{" "}
+                      <Link to="/privacy" className="text-blue-600 hover:text-blue-800 font-semibold">
+                        Privacy Policy
+                      </Link>
+                      , and{" "}
+                      <Link to="/code-of-conduct" className="text-blue-600 hover:text-blue-800 font-semibold">
+                        Staff Code of Conduct
+                      </Link>
+                    </Label>
                   </div>
-                </>
-              )}
-            </form>
+                </div>
 
-            {/* Login Link */}
-            <div className="mt-8 text-center">
-              <p className="text-sm text-gray-600">
-                Already have an account?{" "}
-                <Link
-                  to="/staff/login"
-                  className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                {/* Professional Registration Button */}
+                <Button
+                  type="submit"
+                  className="w-full h-14 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white font-bold text-base shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300"
+                  disabled={isLoading || connectionStatus === "error" || !acceptTerms}
                 >
-                  Sign in here
-                </Link>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-3 animate-spin" />
+                      Creating Professional Account...
+                    </>
+                  ) : (
+                    <>
+                      <Crown className="w-5 h-5 mr-3" />
+                      Join BILKHAYR Elite Team
+                    </>
+                  )}
+                </Button>
+              </form>
 
-        {/* Back to Portal Selection */}
-        <div className="text-center">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors font-medium"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Portal Selection
-          </Link>
+              {/* Professional Benefits Showcase */}
+              <div className="space-y-4">
+                <h4 className="text-center text-sm font-bold text-gray-900">
+                  ELITE STAFF BENEFITS
+                </h4>
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200">
+                    <div className="p-2 bg-blue-600 rounded-lg">
+                      <Users className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-gray-900">Advanced Member Management</p>
+                      <p className="text-xs text-gray-600">Full CRUD operations, analytics, and insights</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
+                    <div className="p-2 bg-emerald-600 rounded-lg">
+                      <BarChart3 className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-gray-900">Professional Analytics Suite</p>
+                      <p className="text-xs text-gray-600">Real-time business intelligence and reporting</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-200">
+                    <div className="p-2 bg-purple-600 rounded-lg">
+                      <Activity className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-gray-900">Live Attendance Monitoring</p>
+                      <p className="text-xs text-gray-600">Real-time check-ins and member tracking</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Professional Footer */}
+              <div className="text-center space-y-4 pt-4 border-t border-gray-200">
+                <p className="text-sm text-gray-600">
+                  Already have a professional account?{" "}
+                  <Link
+                    to="/staff/login"
+                    className="text-blue-600 hover:text-blue-800 font-semibold transition-colors"
+                  >
+                    Sign In Here
+                  </Link>
+                </p>
+                <div className="flex items-center justify-center gap-6 text-xs text-gray-500">
+                  <Link to="/member/register" className="hover:text-blue-600 transition-colors font-medium">
+                    Member Registration
+                  </Link>
+                  <span>•</span>
+                  <Link to="/contact" className="hover:text-blue-600 transition-colors font-medium">
+                    HR Support
+                  </Link>
+                  <span>•</span>
+                  <Link to="/careers" className="hover:text-blue-600 transition-colors font-medium">
+                    Career Opportunities
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Professional Trust Indicators */}
+          <div className="mt-8 text-center space-y-3">
+            <div className="flex items-center justify-center gap-4">
+              <div className="flex items-center gap-1">
+                <Award className="w-4 h-4 text-yellow-400" />
+                <span className="text-xs text-white/80">Industry Leader</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Star className="w-4 h-4 text-yellow-400" />
+                <span className="text-xs text-white/80">5-Star Employer</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Shield className="w-4 h-4 text-blue-400" />
+                <span className="text-xs text-white/80">Secure Platform</span>
+              </div>
+            </div>
+            <p className="text-xs text-white/60">
+              Join the elite team at the most advanced fitness platform
+            </p>
+          </div>
         </div>
       </div>
     </div>
