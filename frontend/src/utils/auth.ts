@@ -61,8 +61,22 @@ export const setUser = (user: User): void => {
 };
 
 export const getMember = (): Member | null => {
+  // First try to get from member storage
   const member = localStorage.getItem("member");
-  return member ? JSON.parse(member) : null;
+  if (member) return JSON.parse(member);
+
+  // Check for memberData if member not found
+  const memberData = localStorage.getItem("memberData");
+  if (memberData) {
+    try {
+      const parsed = JSON.parse(memberData);
+      return parsed.member || null;
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
 };
 
 export const setMember = (member: Member): void => {
@@ -86,12 +100,14 @@ export const isStaff = (): boolean => {
 };
 
 export const isMember = (): boolean => {
-  // Check for member data in localStorage
+  // Check for member token and data
+  const memberToken = localStorage.getItem("memberToken");
   const memberData = localStorage.getItem("memberData");
-  if (memberData) {
+
+  if (memberToken && memberData) {
     try {
       const parsed = JSON.parse(memberData);
-      return parsed.member && parsed.token;
+      return parsed.member && memberToken;
     } catch {
       return false;
     }

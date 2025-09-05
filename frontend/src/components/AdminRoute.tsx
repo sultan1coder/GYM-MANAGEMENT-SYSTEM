@@ -1,20 +1,16 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 import { Navigate } from "react-router-dom";
+import { getUser, isAdmin } from "../utils/auth";
 
 interface AdminRouteProps {
   children: React.ReactNode;
 }
 
 const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
-  const { data: user, loading } = useSelector((state: RootState) => state.loginSlice);
+  const user = getUser();
+  const isUserAdmin = isAdmin();
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user || !user.user || user.user.role !== "admin") {
+  if (!user || !isUserAdmin) {
     return <Navigate to="/login" replace />;
   }
 

@@ -119,7 +119,11 @@ const MemberLogin: React.FC = () => {
         toast.success(
           `Welcome back, ${response.data.member.name}! Ready to crush your goals?`
         );
-        navigate("/members/dashboard");
+
+        // Add a small delay to ensure the toast is visible
+        setTimeout(() => {
+          navigate("/members/dashboard");
+        }, 100);
       } else {
         toast.error(response.data.message || "Login failed");
       }

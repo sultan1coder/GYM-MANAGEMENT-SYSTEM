@@ -318,8 +318,8 @@ export const router = createBrowserRouter([
             path: "settings",
             element: (
               <ProtectedRoute requireAdmin>
-                <div className="container mx-auto p-6">
-                  <h1 className="text-3xl font-bold mb-6">System Settings</h1>
+                <div className="container p-6 mx-auto">
+                  <h1 className="mb-6 text-3xl font-bold">System Settings</h1>
                   <p className="text-gray-600">
                     System configuration and preferences will be implemented
                     here.
@@ -332,8 +332,8 @@ export const router = createBrowserRouter([
             path: "health",
             element: (
               <ProtectedRoute requireAdmin>
-                <div className="container mx-auto p-6">
-                  <h1 className="text-3xl font-bold mb-6">System Health</h1>
+                <div className="container p-6 mx-auto">
+                  <h1 className="mb-6 text-3xl font-bold">System Health</h1>
                   <p className="text-gray-600">
                     System health monitoring will be implemented here.
                   </p>
@@ -346,8 +346,8 @@ export const router = createBrowserRouter([
             path: "analytics",
             element: (
               <ProtectedRoute requireAdmin>
-                <div className="container mx-auto p-6">
-                  <h1 className="text-3xl font-bold mb-6">
+                <div className="container p-6 mx-auto">
+                  <h1 className="mb-6 text-3xl font-bold">
                     Analytics Dashboard
                   </h1>
                   <p className="text-gray-600">
@@ -362,8 +362,8 @@ export const router = createBrowserRouter([
             path: "reports",
             element: (
               <ProtectedRoute requireAdmin>
-                <div className="container mx-auto p-6">
-                  <h1 className="text-3xl font-bold mb-6">Custom Reports</h1>
+                <div className="container p-6 mx-auto">
+                  <h1 className="mb-6 text-3xl font-bold">Custom Reports</h1>
                   <p className="text-gray-600">
                     Custom report generation will be implemented here.
                   </p>
@@ -376,8 +376,8 @@ export const router = createBrowserRouter([
             path: "communications",
             element: (
               <ProtectedRoute requireAdmin>
-                <div className="container mx-auto p-6">
-                  <h1 className="text-3xl font-bold mb-6">
+                <div className="container p-6 mx-auto">
+                  <h1 className="mb-6 text-3xl font-bold">
                     Member Communications
                   </h1>
                   <p className="text-gray-600">
@@ -391,8 +391,8 @@ export const router = createBrowserRouter([
             path: "notifications",
             element: (
               <ProtectedRoute requireAdmin>
-                <div className="container mx-auto p-6">
-                  <h1 className="text-3xl font-bold mb-6">
+                <div className="container p-6 mx-auto">
+                  <h1 className="mb-6 text-3xl font-bold">
                     Notification Center
                   </h1>
                   <p className="text-gray-600">

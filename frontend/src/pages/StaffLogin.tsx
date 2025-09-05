@@ -115,7 +115,11 @@ const StaffLogin: React.FC = () => {
         }
 
         toast.success(`Welcome back, ${response.data.user.name}!`);
-        navigate("/admin/dashboard");
+
+        // Add a small delay to ensure the toast is visible
+        setTimeout(() => {
+          navigate("/admin/dashboard");
+        }, 100);
       } else {
         toast.error(response.data.message || "Login failed");
       }
