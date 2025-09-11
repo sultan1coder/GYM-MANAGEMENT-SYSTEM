@@ -259,6 +259,12 @@ export const MemberStatsProvider: React.FC<MemberStatsProviderProps> = ({
         token ? token.substring(0, 20) + "..." : "None"
       );
 
+      // Log additional context
+      console.log("Staff/Admin Token:", !!localStorage.getItem("token"));
+      console.log("Member Token:", !!localStorage.getItem("memberToken"));
+      console.log("Staff/Admin User Data:", !!localStorage.getItem("userData"));
+      console.log("Member User Data:", !!localStorage.getItem("memberData"));
+
       if (token) {
         console.log("✅ User authenticated, fetching stats...");
         fetchMemberStats();

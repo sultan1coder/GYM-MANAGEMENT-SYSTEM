@@ -106,6 +106,7 @@ const MemberLogin: React.FC = () => {
       const response = await memberAPI.loginMember(formData);
 
       if (response.data.isSuccess) {
+        // Store token and member data
         localStorage.setItem("memberToken", response.data.token);
         localStorage.setItem(
           "memberData",
@@ -115,6 +116,10 @@ const MemberLogin: React.FC = () => {
         if (rememberMe) {
           localStorage.setItem("rememberMember", "true");
         }
+
+        // Dispatch custom login event to trigger authentication checks
+        const loginEvent = new Event("userLogin");
+        window.dispatchEvent(loginEvent);
 
         toast.success(
           `Welcome back, ${response.data.member.name}! Ready to crush your goals?`

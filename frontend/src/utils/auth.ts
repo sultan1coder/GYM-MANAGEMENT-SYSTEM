@@ -138,3 +138,41 @@ export const canAccessStaffRoutes = (): boolean => {
 export const canAccessMemberRoutes = (): boolean => {
   return isMember();
 };
+
+export const debugAuthState = () => {
+  console.log("Authentication Debug Information:");
+
+  // Check tokens
+  const token = localStorage.getItem("token");
+  const memberToken = localStorage.getItem("memberToken");
+
+  console.log("Staff/Admin Token:", token ? "Present" : "Missing");
+  console.log("Member Token:", memberToken ? "Present" : "Missing");
+
+  // Check user data
+  const userData = localStorage.getItem("userData");
+  const memberData = localStorage.getItem("memberData");
+
+  console.log("Staff/Admin User Data:", userData ? "Present" : "Missing");
+  console.log("Member User Data:", memberData ? "Present" : "Missing");
+
+  // Parse and log user details if available
+  if (userData) {
+    try {
+      const parsedUserData = JSON.parse(userData);
+      console.log("Staff/Admin User ID:", parsedUserData.id);
+      console.log("Staff/Admin User Role:", parsedUserData.role);
+    } catch (error) {
+      console.error("Error parsing user data:", error);
+    }
+  }
+
+  if (memberData) {
+    try {
+      const parsedMemberData = JSON.parse(memberData);
+      console.log("Member ID:", parsedMemberData.id);
+    } catch (error) {
+      console.error("Error parsing member data:", error);
+    }
+  }
+};

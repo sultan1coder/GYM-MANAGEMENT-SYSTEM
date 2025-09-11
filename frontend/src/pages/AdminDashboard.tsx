@@ -1,77 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Dumbbell,
-  CreditCard,
-  UserCheck,
-  Clock,
-  Plus,
-  Database,
-  Download,
-  RefreshCw,
-} from "lucide-react";
-
-// Dashboard Components
+import Header from "../components/Header";
 import QuickStats from "../components/dashboard/QuickStats";
 import SystemHealth from "../components/dashboard/SystemHealth";
 import QuickActions from "../components/dashboard/QuickActions";
 import ActivityFeed from "../components/dashboard/ActivityFeed";
 import NavigationHub from "../components/dashboard/NavigationHub";
-import AdministrativeFeatures from "../components/AdministrativeFeatures";
-import AdvancedAnalyticsDashboard from "../components/AdvancedAnalyticsDashboard";
-import SystemManagementTools from "../components/SystemManagementTools";
-import CommunicationNotifications from "../components/CommunicationNotifications";
-import AdminProfileManagement from "../components/AdminProfileManagement";
-
-// New Enhanced Components
-import QuickAddModal from "../components/modals/QuickAddModal";
-import { ExportManager } from "../utils/exportUtils";
-import { useWebSocket } from "../components/providers/WebSocketProvider";
-import config from "../config/environment";
-
-// Providers
 import { useMemberStats } from "../components/providers/MemberStatsProvider";
 import { useSystemHealth } from "../components/providers/SystemHealthProvider";
 import { useQuickActions } from "../components/providers/QuickActionsProvider";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  RefreshCw,
+  TrendingUp,
+  Users,
+  CreditCard,
+  Dumbbell,
+  Activity,
+  AlertCircle,
+} from "lucide-react";
 
 const AdminDashboard: React.FC = () => {
-  const { stats: memberStats, refetch: refetchMemberStats } = useMemberStats();
+  const memberStats = useMemberStats();
   const { systemHealth, refetch: refetchSystemHealth } = useSystemHealth();
   const { quickActions } = useQuickActions();
 
-  // Only use WebSocket if enabled
-  const webSocketHook = config.FEATURES.WEBSOCKET_ENABLED
-    ? useWebSocket()
-    : { isConnected: false };
-  const { isConnected } = webSocketHook;
-
-  // New state for enhanced features
-  const [showQuickAddModal, setShowQuickAddModal] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [lastUpdated, setLastUpdated] = useState(new Date());
 
   // Calculate dashboard stats from providers
   const dashboardStats = {
-    totalMembers: memberStats?.totalMembers || 0,
-    activeMembers: memberStats?.activeMembers || 0,
-    newMembers: memberStats?.newMembersThisMonth || 0,
-    expiringMembers: memberStats?.membershipsExpiring || 0,
+    totalMembers: memberStats.stats?.totalMembers || 0,
+    activeMembers: memberStats.stats?.activeMembers || 0,
+    newMembers: memberStats.stats?.newMembersThisMonth || 0,
+    expiringMembers: memberStats.stats?.membershipsExpiring || 0,
     systemStatus: systemHealth?.overallStatus || "unknown",
     uptime: systemHealth?.uptime || "0h 0m",
-  };
-
-  // Enhanced functions
-  const handleQuickAdd = () => {
-    setShowQuickAddModal(true);
   };
 
   const handleRefreshDashboard = async () => {
     setIsRefreshing(true);
     try {
-      await Promise.all([refetchMemberStats?.(), refetchSystemHealth?.()]);
-      setLastUpdated(new Date());
+      await Promise.all([memberStats.refetch?.(), refetchSystemHealth?.()]);
     } catch (error) {
       console.error("Error refreshing dashboard:", error);
     } finally {
@@ -79,241 +48,247 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleExportDashboard = async () => {
-    const dashboardData = {
-      timestamp: new Date().toISOString(),
-      stats: dashboardStats,
-      memberStats,
-      systemHealth,
-    };
-
-    await ExportManager.exportToJSON(
-      [dashboardData],
-      `dashboard_export_${new Date().toISOString().split("T")[0]}.json`
-    );
-  };
-
-  // Real-time updates effect
+  // Auto-refresh every 5 minutes
   useEffect(() => {
-    if (config.FEATURES.WEBSOCKET_ENABLED && isConnected) {
-      // Auto-refresh every 5 minutes when WebSocket is connected
-      const interval = setInterval(() => {
-        handleRefreshDashboard();
-      }, config.INTERVALS.DASHBOARD_REFRESH);
+    const interval = setInterval(() => {
+      handleRefreshDashboard();
+    }, 5 * 60 * 1000);
 
-      return () => clearInterval(interval);
-    } else if (config.FEATURES.REAL_TIME_UPDATES) {
-      // Fallback: Auto-refresh every 2 minutes when WebSocket is disabled
-      const interval = setInterval(() => {
-        handleRefreshDashboard();
-      }, 2 * 60 * 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [isConnected]);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-3 md:p-6">
-      <div className="max-w-7xl mx-auto space-y-4 md:space-y-6">
-        {/* Enhanced Mobile-Responsive Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Admin Dashboard
-            </h1>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2">
-              <p className="text-gray-600 text-sm md:text-base">
-                Welcome back! Here's what's happening with your gym today.
-              </p>
-              <div className="flex items-center gap-2">
-                <div
-                  className={`w-2 h-2 rounded-full ${
-                    config.FEATURES.WEBSOCKET_ENABLED
-                      ? isConnected
-                        ? "bg-green-500"
-                        : "bg-red-500"
-                      : "bg-blue-500"
-                  }`}
-                />
-                <span className="text-xs text-gray-500">
-                  {config.FEATURES.WEBSOCKET_ENABLED
-                    ? isConnected
-                      ? "Live"
-                      : "Offline"
-                    : "Auto-refresh"}
-                </span>
-              </div>
-            </div>
-            <p className="text-xs text-gray-400 mt-1">
-              Last updated: {lastUpdated.toLocaleTimeString()}
-            </p>
-          </div>
+    <div className="min-h-screen bg-gray-50 p-4 space-y-6">
+      <Header
+        title="Admin Dashboard"
+        subtitle="Comprehensive overview of your gym management system"
+      />
 
-          {/* Mobile-Responsive Action Buttons */}
-          <div className="flex flex-wrap items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExportDashboard}
-              className="flex-1 sm:flex-none"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Export</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefreshDashboard}
-              disabled={isRefreshing}
-              className="flex-1 sm:flex-none"
-            >
-              <RefreshCw
-                className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
-              />
-              <span className="hidden sm:inline">Refresh</span>
-            </Button>
-            <Button variant="outline" size="sm" className="hidden md:flex">
-              <Clock className="h-4 w-4 mr-2" />
-              {new Date().toLocaleDateString()}
-            </Button>
-            <Button onClick={handleQuickAdd} className="flex-1 sm:flex-none">
-              <Plus className="h-4 w-4 mr-2" />
-              <span className="sm:hidden">Add</span>
-              <span className="hidden sm:inline">Quick Add</span>
-            </Button>
-          </div>
-        </div>
+      {/* Quick Stats */}
+      <QuickStats stats={dashboardStats} memberStats={memberStats.stats} />
 
-        {/* Quick Stats */}
-        <QuickStats stats={dashboardStats} memberStats={memberStats} />
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Quick Actions & System Health */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Quick Actions */}
+          <QuickActions actions={quickActions || []} />
 
-        {/* Mobile-Responsive Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-          {/* Left Column - Quick Actions & System Health */}
-          <div className="lg:col-span-2 space-y-4 md:space-y-6">
-            {/* Quick Actions */}
-            <QuickActions actions={quickActions} />
+          {/* System Health */}
+          <SystemHealth />
 
-            {/* System Health */}
-            <SystemHealth />
-          </div>
-
-          {/* Right Column - Activity Feed & Navigation */}
-          <div className="space-y-4 md:space-y-6">
-            {/* Activity Feed */}
-            <ActivityFeed />
-
-            {/* Navigation Hub */}
-            <NavigationHub />
-          </div>
-        </div>
-
-        {/* Administrative Features */}
-        <AdministrativeFeatures />
-
-        {/* Advanced Analytics Dashboard */}
-        <AdvancedAnalyticsDashboard />
-
-        {/* System Management Tools */}
-        <SystemManagementTools />
-
-        {/* Communication & Notifications */}
-        <CommunicationNotifications />
-
-        {/* Admin Profile Management */}
-        <AdminProfileManagement />
-
-        {/* Mobile-Responsive Bottom Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          {/* Financial Overview */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Revenue
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="h-5 w-5" />
+                Financial Overview
               </CardTitle>
-              <CreditCard className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
-                $
-                {memberStats?.revenueByMonth?.[
-                  memberStats.revenueByMonth.length - 1
-                ] || "0.00"}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center">
+                  <p className="text-2xl font-bold text-green-600">
+                    $
+                    {(
+                      memberStats.stats?.revenueByMonth?.slice(-1)[0] || 0
+                    ).toLocaleString()}
+                  </p>
+                  <p className="text-sm text-gray-600">Monthly Revenue</p>
+                  <p className="text-xs text-green-600 mt-1">
+                    <TrendingUp className="h-3 w-3 inline mr-1" />
+                    +12.5% from last month
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="text-2xl font-bold text-blue-600">
+                    $
+                    {(
+                      memberStats.stats?.revenueByMonth?.reduce(
+                        (a, b) => a + b,
+                        0
+                      ) || 0
+                    ).toLocaleString()}
+                  </p>
+                  <p className="text-sm text-gray-600">Annual Revenue</p>
+                  <p className="text-xs text-blue-600 mt-1">
+                    <TrendingUp className="h-3 w-3 inline mr-1" />
+                    +8.2% from last year
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="text-2xl font-bold text-purple-600">
+                    {Math.round(
+                      (memberStats.stats?.revenueByMonth?.slice(-1)[0] || 0) /
+                        (memberStats.stats?.totalMembers || 1)
+                    )}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Avg Revenue per Member
+                  </p>
+                  <p className="text-xs text-purple-600 mt-1">
+                    <TrendingUp className="h-3 w-3 inline mr-1" />
+                    +5.1% from last month
+                  </p>
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground">
-                +{memberStats?.growthRate || "0"}% from last month
-              </p>
             </CardContent>
           </Card>
 
+          {/* Equipment Status */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Active Subscriptions
-              </CardTitle>
-              <UserCheck className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {memberStats?.activeMembers || 0}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {memberStats?.membershipTypes?.monthly || 0} monthly,{" "}
-                {memberStats?.membershipTypes?.daily || 0} daily
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Dumbbell className="h-5 w-5" />
                 Equipment Status
               </CardTitle>
-              <Dumbbell className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">95%</div>
-              <p className="text-xs text-muted-foreground">
-                19 of 20 equipment operational
-              </p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <p className="text-2xl font-bold text-green-600">18</p>
+                  <p className="text-sm text-gray-600">Operational</p>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                    <div
+                      className="bg-green-600 h-2 rounded-full"
+                      style={{ width: "90%" }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                  <p className="text-2xl font-bold text-yellow-600">2</p>
+                  <p className="text-sm text-gray-600">Maintenance</p>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                    <div
+                      className="bg-yellow-600 h-2 rounded-full"
+                      style={{ width: "10%" }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-red-50 rounded-lg">
+                  <p className="text-2xl font-bold text-red-600">1</p>
+                  <p className="text-sm text-gray-600">Out of Service</p>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                    <div
+                      className="bg-red-600 h-2 rounded-full"
+                      style={{ width: "5%" }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                  <p className="text-2xl font-bold text-blue-600">21</p>
+                  <p className="text-sm text-gray-600">Total Equipment</p>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full"
+                      style={{ width: "100%" }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
+        </div>
 
+        {/* Right Column - Activity Feed & Navigation */}
+        <div className="space-y-6">
+          {/* Activity Feed */}
+          <ActivityFeed />
+
+          {/* Navigation Hub */}
+          <NavigationHub />
+
+          {/* Quick Refresh */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                System Status
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Activity className="h-5 w-5" />
+                Dashboard Controls
               </CardTitle>
-              <Database className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
-                <Badge
-                  variant={
-                    dashboardStats.systemStatus === "healthy"
-                      ? "default"
-                      : "destructive"
-                  }
+              <div className="space-y-3">
+                <Button
+                  onClick={handleRefreshDashboard}
+                  disabled={isRefreshing}
+                  className="w-full"
                 >
-                  {dashboardStats.systemStatus}
-                </Badge>
+                  <RefreshCw
+                    className={`h-4 w-4 mr-2 ${
+                      isRefreshing ? "animate-spin" : ""
+                    }`}
+                  />
+                  {isRefreshing ? "Refreshing..." : "Refresh All Data"}
+                </Button>
+
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>Last updated: {new Date().toLocaleTimeString()}</span>
+                </div>
+
+                <div className="text-xs text-gray-500">
+                  Auto-refresh every 5 minutes
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground">
-                Uptime: {dashboardStats.uptime}
-              </p>
             </CardContent>
           </Card>
         </div>
       </div>
 
-      {/* Quick Add Modal */}
-      <QuickAddModal
-        isOpen={showQuickAddModal}
-        onClose={() => setShowQuickAddModal(false)}
-        onSuccess={() => {
-          // Refresh dashboard data after successful creation
-          handleRefreshDashboard();
-        }}
-      />
+      {/* Additional Analytics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Membership Trends */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Membership Trends</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm">Monthly Memberships</span>
+                <span className="font-bold">
+                  {memberStats.stats?.membershipTypes?.monthly || 0}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm">Daily Memberships</span>
+                <span className="font-bold">
+                  {memberStats.stats?.membershipTypes?.daily || 0}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm">Expiring This Month</span>
+                <span className="font-bold text-red-600">
+                  {memberStats.stats?.membershipsExpiring || 0}
+                </span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Top Cities */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Top Member Locations</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {memberStats.stats?.topCities?.slice(0, 5).map((city, index) => (
+                <div key={index} className="flex justify-between items-center">
+                  <span className="text-sm">
+                    {city.city}, {city.state}
+                  </span>
+                  <span className="font-bold">{city.count} members</span>
+                </div>
+              )) || (
+                <p className="text-sm text-gray-500">
+                  No location data available
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

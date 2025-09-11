@@ -70,15 +70,31 @@ export const userAPI = {
   uploadProfilePicture: (id: number, file: File) => {
     const formData = new FormData();
     formData.append("profile_picture", file);
-    return api.post<ApiResponse<User>>(
-      `${BASE_API_URL}/users/upload-profile-picture/${id}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+
+    // Debug logging
+    console.log("Uploading profile picture for user ID:", id);
+    console.log("Current localStorage tokens:");
+    console.log("Staff/Admin Token:", localStorage.getItem("token"));
+    console.log("Member Token:", localStorage.getItem("memberToken"));
+
+    return api
+      .post<ApiResponse<User>>(
+        `${BASE_API_URL}/users/upload-profile-picture/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .catch((error) => {
+        console.error("Profile Picture Upload Error:", {
+          status: error.response?.status,
+          data: error.response?.data,
+          headers: error.config?.headers,
+        });
+        throw error;
+      });
   },
 
   deleteUser: (id: number) =>
