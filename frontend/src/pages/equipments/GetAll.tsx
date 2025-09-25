@@ -170,15 +170,15 @@ const GetAll = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "OPERATIONAL":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-800";
+        return "bg-green-100 text-green-800";
       case "MAINTENANCE":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800";
+        return "bg-yellow-100 text-yellow-800";
       case "OUT_OF_SERVICE":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 border-red-200 dark:border-red-800";
+        return "bg-red-100 text-red-800";
       case "RETIRED":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400 border-gray-200 dark:border-gray-800";
+        return "bg-gray-100 text-gray-800";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400 border-gray-200 dark:border-gray-800";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -311,11 +311,9 @@ const GetAll = () => {
             <p className="text-gray-600 mb-4">{error}</p>
             <Button
               onClick={handleRefresh}
-              disabled={isRefreshing}
-              className="w-full"
+              disabled={isRefreshing} className="w-full"
             >
-              <RefreshCw
-                className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+              <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
               />
               {isRefreshing ? "Retrying..." : "Try Again"}
             </Button>
@@ -326,23 +324,22 @@ const GetAll = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="mx-auto space-y-6 max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-slate-900">
               Equipment Inventory
             </h1>
-            <p className="mt-2 text-slate-600 dark:text-slate-400">
+            <p className="mt-2 text-slate-600">
               View and manage all gym equipment in your inventory
             </p>
           </div>
           <div className="flex gap-3">
             <Link to="/equipments/dashboard">
               <Button
-                variant="outline"
-                className="border-gray-300 hover:bg-gray-50"
+                variant="outline" className="border-gray-300 hover:bg-gray-50"
               >
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Equipment Dashboard
@@ -351,19 +348,16 @@ const GetAll = () => {
             <Button
               onClick={handleRefresh}
               disabled={isRefreshing}
-              variant="outline"
-              className="border-gray-300 hover:bg-gray-50"
+              variant="outline" className="border-gray-300 hover:bg-gray-50"
               title="Refresh equipment data (Ctrl+R or F5)"
             >
-              <RefreshCw
-                className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+              <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
               />
               {isRefreshing ? "Refreshing..." : "Refresh"}
             </Button>
             <Button
               onClick={() => setAutoRefresh(!autoRefresh)}
-              variant={autoRefresh ? "default" : "outline"}
-              className={`${
+              variant={autoRefresh ? "default" : "outline"} className={`${
                 autoRefresh
                   ? "bg-green-600 hover:bg-green-700"
                   : "border-gray-300 hover:bg-gray-50"
@@ -382,14 +376,13 @@ const GetAll = () => {
         </div>
 
         {/* Last Updated Info */}
-        <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400">
+        <div className="flex items-center justify-between text-sm text-slate-600">
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4" />
             <span>Last updated: {lastRefreshed.toLocaleTimeString()}</span>
             {autoRefresh && (
               <Badge
-                variant="secondary"
-                className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                variant="secondary" className="bg-green-100 text-green-800"
               >
                 Auto-refresh active
               </Badge>
@@ -510,7 +503,7 @@ const GetAll = () => {
         </div>
 
         {/* Filters and Search */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardContent className="p-6">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex-1">
@@ -519,8 +512,7 @@ const GetAll = () => {
                   <Input
                     placeholder="Search equipment by name, brand, or model..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600"
+                    onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-gray-50"
                   />
                 </div>
               </div>
@@ -528,7 +520,7 @@ const GetAll = () => {
                 value={categoryFilter}
                 onValueChange={(value: string) => setCategoryFilter(value)}
               >
-                <SelectTrigger className="w-48 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600">
+                <SelectTrigger className="w-48 border-0 bg-gray-50">
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
@@ -544,7 +536,7 @@ const GetAll = () => {
                 value={statusFilter}
                 onValueChange={(value: string) => setStatusFilter(value)}
               >
-                <SelectTrigger className="w-48 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600">
+                <SelectTrigger className="w-48 border-0 bg-gray-50">
                   <SelectValue placeholder="All Statuses" />
                 </SelectTrigger>
                 <SelectContent>
@@ -559,11 +551,9 @@ const GetAll = () => {
                 onClick={handleRefresh}
                 disabled={isRefreshing}
                 variant="outline"
-                size="sm"
-                className="border-gray-300 hover:bg-gray-50"
+                size="sm" className="border-gray-300 hover:bg-gray-50"
               >
-                <RefreshCw
-                  className={`w-4 h-4 mr-2 ${
+                <RefreshCw className={`w-4 h-4 mr-2 ${
                     isRefreshing ? "animate-spin" : ""
                   }`}
                 />
@@ -574,14 +564,14 @@ const GetAll = () => {
         </Card>
 
         {/* Equipment Table */}
-        <Card className="overflow-hidden bg-white border-0 shadow-lg dark:bg-gray-800">
-          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-700">
+        <Card className="overflow-hidden bg-white border-0 shadow-lg">
+          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+                <CardTitle className="text-xl font-semibold text-gray-900">
                   Equipment List
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400">
+                <CardDescription className="text-gray-600">
                   {filteredEquipments.length} equipment items found
                 </CardDescription>
               </div>
@@ -589,11 +579,9 @@ const GetAll = () => {
                 onClick={handleRefresh}
                 disabled={isRefreshing}
                 variant="outline"
-                size="sm"
-                className="border-gray-300 hover:bg-gray-50"
+                size="sm" className="border-gray-300 hover:bg-gray-50"
               >
-                <RefreshCw
-                  className={`w-4 h-4 mr-2 ${
+                <RefreshCw className={`w-4 h-4 mr-2 ${
                     isRefreshing ? "animate-spin" : ""
                   }`}
                 />
@@ -604,44 +592,44 @@ const GetAll = () => {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                <TableRow className="bg-gray-50">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Package className="w-4 h-4 text-gray-500" />
                       Equipment
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Activity className="w-4 h-4 text-gray-500" />
                       Status
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4 text-gray-500" />
                       Quantity
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-gray-500" />
                       Location
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <DollarSign className="w-4 h-4 text-gray-500" />
                       Cost
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-500" />
                       Purchase Date
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-right text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-right text-gray-900">
                     Actions
                   </TableHead>
                 </TableRow>
@@ -649,44 +637,40 @@ const GetAll = () => {
               <TableBody>
                 {filteredEquipments.map((equipment) => (
                   <TableRow
-                    key={equipment.id}
-                    className="transition-colors border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 dark:border-gray-700"
+                    key={equipment.id} className="transition-colors border-b border-gray-100 hover:bg-gray-50"
                   >
                     <TableCell className="px-6 py-4">
                       <div className="flex items-center space-x-4">
-                        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
+                        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200">
                           {equipment.imageUrl ? (
                             <img
                               src={equipment.imageUrl}
-                              alt={equipment.name}
-                              className="object-cover w-10 h-10 rounded-md"
+                              alt={equipment.name} className="object-cover w-10 h-10 rounded-md"
                             />
                           ) : (
-                            <Dumbbell className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                            <Dumbbell className="w-6 h-6 text-blue-600" />
                           )}
                         </div>
                         <div>
-                          <div className="font-semibold text-gray-900 dark:text-white">
+                          <div className="font-semibold text-gray-900">
                             <Link
-                              to={`/equipments/single/${equipment.id}`}
-                              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                              to={`/equipments/single/${equipment.id}`} className="hover:text-blue-600"
                             >
                               {equipment.name}
                             </Link>
                           </div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                          <div className="text-sm text-gray-600">
                             {equipment.brand}{" "}
                             {equipment.model && `• ${equipment.model}`}
                           </div>
-                          <div className="mt-1 text-xs text-gray-500 dark:text-gray-500">
+                          <div className="mt-1 text-xs text-gray-500">
                             {equipment.category} • {equipment.type}
                           </div>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell className="px-6 py-4">
-                      <Badge
-                        className={`${getStatusColor(
+                      <Badge className={`${getStatusColor(
                           equipment.status || "OPERATIONAL"
                         )} px-3 py-1 text-xs font-medium`}
                       >
@@ -702,33 +686,33 @@ const GetAll = () => {
                     <TableCell className="px-6 py-4">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2 text-sm">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             Total:
                           </span>
-                          <span className="font-medium text-gray-900 dark:text-white">
+                          <span className="font-medium text-gray-900">
                             {equipment.quantity}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 text-sm">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             Available:
                           </span>
-                          <span className="font-medium text-green-600 dark:text-green-400">
+                          <span className="font-medium text-green-600">
                             {equipment.available || equipment.quantity}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 text-sm">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             In Use:
                           </span>
-                          <span className="font-medium text-orange-600 dark:text-orange-400">
+                          <span className="font-medium text-orange-600">
                             {equipment.inUse || 0}
                           </span>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
                         <MapPin className="w-4 h-4" />
                         <span>{equipment.location || "No location"}</span>
                       </div>
@@ -736,25 +720,25 @@ const GetAll = () => {
                     <TableCell className="px-6 py-4">
                       {equipment.cost && equipment.cost > 0 ? (
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-green-600 dark:text-green-400">
+                          <span className="font-semibold text-green-600">
                             ${equipment.cost.toLocaleString()}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-gray-400 dark:text-gray-500">
+                        <span className="text-gray-400">
                           -
                         </span>
                       )}
                     </TableCell>
                     <TableCell className="px-6 py-4">
                       {equipment.purchaseDate ? (
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                        <div className="text-sm text-gray-600">
                           {new Date(
                             equipment.purchaseDate
                           ).toLocaleDateString()}
                         </div>
                       ) : (
-                        <span className="text-gray-400 dark:text-gray-500">
+                        <span className="text-gray-400">
                           -
                         </span>
                       )}
@@ -764,8 +748,7 @@ const GetAll = () => {
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
-                            size="sm"
-                            className="w-8 h-8 p-0 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            size="sm" className="w-8 h-8 p-0 hover:bg-gray-100"
                           >
                             <MoreVertical className="w-4 h-4" />
                           </Button>
@@ -777,16 +760,14 @@ const GetAll = () => {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem asChild>
                             <Link
-                              to={`/equipments/single/${equipment.id}`}
-                              className="cursor-pointer"
+                              to={`/equipments/single/${equipment.id}`} className="cursor-pointer"
                             >
                               <Eye className="w-4 h-4 mr-2 text-blue-600" />
                               View Details
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => openEditDialog(equipment)}
-                            className="cursor-pointer"
+                            onClick={() => openEditDialog(equipment)} className="cursor-pointer"
                           >
                             <Edit className="w-4 h-4 mr-2 text-green-600" />
                             Edit Equipment
@@ -795,8 +776,7 @@ const GetAll = () => {
                           <DropdownMenuItem
                             onClick={() =>
                               handleDelete(equipment.id, equipment.name)
-                            }
-                            className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-900/20"
+                            } className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50"
                           >
                             <Trash2 className="w-4 h-4 mr-2" />
                             Delete Equipment
@@ -812,15 +792,15 @@ const GetAll = () => {
         </Card>
 
         {filteredEquipments.length === 0 && (
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100">
             <CardContent className="p-16 text-center">
-              <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
-                <Dumbbell className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-blue-200">
+                <Dumbbell className="w-10 h-10 text-blue-600" />
               </div>
-              <h3 className="mb-3 text-2xl font-bold text-gray-900 dark:text-white">
+              <h3 className="mb-3 text-2xl font-bold text-gray-900">
                 No equipment found
               </h3>
-              <p className="max-w-md mx-auto mb-6 text-lg text-gray-600 dark:text-gray-400">
+              <p className="max-w-md mx-auto mb-6 text-lg text-gray-600">
                 {searchTerm ||
                 categoryFilter !== "all" ||
                 statusFilter !== "all"
@@ -831,11 +811,9 @@ const GetAll = () => {
                 <Button
                   onClick={handleRefresh}
                   disabled={isRefreshing}
-                  variant="outline"
-                  className="px-6 py-3 text-lg font-semibold border-gray-300 hover:bg-gray-50"
+                  variant="outline" className="px-6 py-3 text-lg font-semibold border-gray-300 hover:bg-gray-50"
                 >
-                  <RefreshCw
-                    className={`w-5 h-5 mr-2 ${
+                  <RefreshCw className={`w-5 h-5 mr-2 ${
                       isRefreshing ? "animate-spin" : ""
                     }`}
                   />
@@ -859,14 +837,14 @@ const GetAll = () => {
         {/* Edit Equipment Modal */}
         {showEditDialog && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl max-h-[90vh] overflow-y-auto w-full mx-4">
+            <div className="bg-white">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    <h2 className="text-xl font-semibold text-gray-900">
                       Edit Equipment
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600">
                       Update the equipment details.
                     </p>
                   </div>
@@ -876,8 +854,7 @@ const GetAll = () => {
                     onClick={() => {
                       setShowEditDialog(false);
                       resetForm();
-                    }}
-                    className="h-8 w-8 p-0"
+                    }} className="h-8 w-8 p-0"
                   >
                     <X className="h-4 w-4" />
                   </Button>

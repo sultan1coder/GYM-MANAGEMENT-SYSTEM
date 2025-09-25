@@ -158,8 +158,7 @@ const SystemHealth: React.FC = () => {
                 .filter((alert) => !alert.resolved)
                 .map((alert, index) => (
                   <div
-                    key={index}
-                    className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg"
+                    key={index} className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg"
                   >
                     <div className="flex items-center gap-2">
                       <AlertTriangle className="h-4 w-4 text-red-600" />

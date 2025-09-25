@@ -327,17 +327,16 @@ const MemberManagement: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-gray-900">
             Member Management
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
+          <p className="text-gray-600">
             Manage all gym members, view statistics, and perform bulk operations
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button
-            onClick={() => navigate("/members/register")}
-            className="flex-1 sm:flex-none"
+            onClick={() => navigate("/members/register")} className="flex-1 sm:flex-none"
           >
             <Plus className="h-4 w-4 mr-2" />
             <span className="hidden sm:inline">Add New Member</span>
@@ -345,8 +344,7 @@ const MemberManagement: React.FC = () => {
           </Button>
           <Button
             variant="outline"
-            onClick={() => setShowBulkImportDialog(true)}
-            className="flex-1 sm:flex-none"
+            onClick={() => setShowBulkImportDialog(true)} className="flex-1 sm:flex-none"
           >
             <Upload className="h-4 w-4 mr-2" />
             <span className="hidden sm:inline">Bulk Import</span>
@@ -354,8 +352,7 @@ const MemberManagement: React.FC = () => {
           </Button>
           <Button
             variant="outline"
-            onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-            className="flex-1 sm:flex-none"
+            onClick={() => setShowAdvancedSearch(!showAdvancedSearch)} className="flex-1 sm:flex-none"
           >
             <Search className="h-4 w-4 mr-2" />
             <span className="hidden sm:inline">Advanced Search</span>
@@ -363,8 +360,7 @@ const MemberManagement: React.FC = () => {
           </Button>
           <Button
             variant="outline"
-            onClick={() => navigate("/members/dashboard")}
-            className="flex-1 sm:flex-none"
+            onClick={() => navigate("/members/dashboard")} className="flex-1 sm:flex-none"
           >
             <BarChart3 className="h-4 w-4 mr-2" />
             <span className="hidden sm:inline">Dashboard</span>
@@ -380,8 +376,7 @@ const MemberManagement: React.FC = () => {
         onChange={handleFilterChange}
         onClear={handleFilterClear}
         onSearch={handleSearch}
-        searchPlaceholder="Search members..."
-        className="mb-6"
+        searchPlaceholder="Search members..." className="mb-6"
       />
 
       {/* Advanced Search Panel */}
@@ -567,24 +562,21 @@ const MemberManagement: React.FC = () => {
           <CardContent className="space-y-3">
             <Button
               variant="outline"
-              onClick={downloadTemplate}
-              className="w-full justify-start"
+              onClick={downloadTemplate} className="w-full justify-start"
             >
               <Download className="h-4 w-4 mr-2" />
               Download CSV Template
             </Button>
             <Button
               variant="outline"
-              onClick={() => navigate("/members/register")}
-              className="w-full justify-start"
+              onClick={() => navigate("/members/register")} className="w-full justify-start"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Single Member
             </Button>
             <Button
               variant="outline"
-              onClick={() => navigate("/members/dashboard")}
-              className="w-full justify-start"
+              onClick={() => navigate("/members/dashboard")} className="w-full justify-start"
             >
               <BarChart3 className="h-4 w-4 mr-2" />
               View Analytics
@@ -600,10 +592,10 @@ const MemberManagement: React.FC = () => {
             <div className="flex items-center space-x-2">
               <Users className="h-8 w-8 text-blue-600" />
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-sm font-medium text-gray-600">
                   Total Members
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-2xl font-bold text-gray-900">
                   {statsLoading ? "Loading..." : stats?.totalMembers || 0}
                 </p>
               </div>
@@ -616,10 +608,10 @@ const MemberManagement: React.FC = () => {
             <div className="flex items-center space-x-2">
               <CheckCircle className="h-8 w-8 text-green-600" />
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-sm font-medium text-gray-600">
                   Active Members
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-2xl font-bold text-gray-900">
                   {statsLoading ? "Loading..." : stats?.activeMembers || 0}
                 </p>
               </div>
@@ -629,13 +621,13 @@ const MemberManagement: React.FC = () => {
 
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
+            <CardTitle className="text-sm font-medium text-gray-900">
               Pending Verification
             </CardTitle>
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="text-2xl font-bold text-gray-900">
               {statsLoading ? "Loading..." : stats?.inactiveMembers || 0}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -646,13 +638,13 @@ const MemberManagement: React.FC = () => {
 
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
+            <CardTitle className="text-sm font-medium text-gray-900">
               Membership Growth
             </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="text-2xl font-bold text-gray-900">
               {statsLoading ? "Loading..." : `${stats?.growthRate || "0"}%`}
             </div>
             <p className="text-xs text-muted-foreground">Monthly growth rate</p>
@@ -675,8 +667,7 @@ const MemberManagement: React.FC = () => {
                 <div className="space-y-2">
                   {stats.topCities.map((city, index) => (
                     <div
-                      key={index}
-                      className="flex justify-between items-center"
+                      key={index} className="flex justify-between items-center"
                     >
                       <span className="text-sm">
                         {city?.city || "Unknown"}, {city?.state || "Unknown"}
@@ -921,8 +912,7 @@ const MemberManagement: React.FC = () => {
                 id="file"
                 type="file"
                 accept=".csv,.xlsx,.xls"
-                onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                className="mt-1"
+                onChange={(e) => setSelectedFile(e.target.files?.[0] || null)} className="mt-1"
               />
               <p className="text-sm text-gray-500 mt-1">
                 Supported formats: CSV, Excel (.xlsx, .xls). Max size: 10MB

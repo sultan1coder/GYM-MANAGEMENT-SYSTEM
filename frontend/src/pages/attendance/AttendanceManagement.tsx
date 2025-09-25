@@ -187,8 +187,7 @@ const AttendanceManagement: React.FC = () => {
             onClick={loadAttendanceData}
             disabled={isLoading}
           >
-            <RefreshCw
-              className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
             />
             Refresh
           </Button>
@@ -211,8 +210,7 @@ const AttendanceManagement: React.FC = () => {
                     <Input
                       placeholder="Search members..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 mb-2"
+                      onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 mb-2"
                     />
                   </div>
                   <Select
@@ -262,8 +260,7 @@ const AttendanceManagement: React.FC = () => {
                 </div>
                 <Button
                   onClick={handleCheckIn}
-                  disabled={isLoading}
-                  className="w-full"
+                  disabled={isLoading} className="w-full"
                 >
                   {isLoading ? (
                     <>
@@ -349,8 +346,7 @@ const AttendanceManagement: React.FC = () => {
       {/* Main Content */}
       <Tabs
         value={activeTab}
-        onValueChange={setActiveTab}
-        className="space-y-6"
+        onValueChange={setActiveTab} className="space-y-6"
       >
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -372,8 +368,7 @@ const AttendanceManagement: React.FC = () => {
                       .slice(0, 10)
                       .map((checkIn: any) => (
                         <div
-                          key={checkIn.id}
-                          className="flex items-center justify-between p-3 border rounded-lg"
+                          key={checkIn.id} className="flex items-center justify-between p-3 border rounded-lg"
                         >
                           <div className="flex items-center gap-3">
                             <Avatar className="h-10 w-10">
@@ -439,8 +434,7 @@ const AttendanceManagement: React.FC = () => {
                   <div className="space-y-3">
                     {attendanceStats.dailyStats.slice(-7).map((day: any) => (
                       <div
-                        key={day.date}
-                        className="flex items-center justify-between"
+                        key={day.date} className="flex items-center justify-between"
                       >
                         <span className="text-sm font-medium">
                           {new Date(day.date).toLocaleDateString("en-US", {
@@ -527,8 +521,7 @@ const AttendanceManagement: React.FC = () => {
                         </div>
                       </div>
                       <Button
-                        size="sm"
-                        className="w-full mt-3"
+                        size="sm" className="w-full mt-3"
                         onClick={() => handleCheckOut(checkIn.memberId)}
                         disabled={isLoading}
                       >
@@ -560,8 +553,7 @@ const AttendanceManagement: React.FC = () => {
                 <div className="space-y-3">
                   {todayAttendance.attendance.map((attendance: any) => (
                     <div
-                      key={attendance.id}
-                      className="flex items-center justify-between p-3 border rounded-lg"
+                      key={attendance.id} className="flex items-center justify-between p-3 border rounded-lg"
                     >
                       <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
@@ -631,8 +623,7 @@ const AttendanceManagement: React.FC = () => {
                 <Input
                   placeholder="Search members..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 mb-2"
+                  onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 mb-2"
                 />
               </div>
               <Select value={selectedMember} onValueChange={setSelectedMember}>
@@ -677,8 +668,7 @@ const AttendanceManagement: React.FC = () => {
             </div>
             <Button
               onClick={handleCheckIn}
-              disabled={isLoading}
-              className="w-full"
+              disabled={isLoading} className="w-full"
             >
               {isLoading ? (
                 <>

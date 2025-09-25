@@ -259,13 +259,13 @@ const PaymentDashboard = () => {
     switch (status) {
       case "completed":
       case "paid":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
+        return "bg-green-100 text-green-800";
       case "pending":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
+        return "bg-yellow-100 text-yellow-800";
       case "failed":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
+        return "bg-red-100 text-red-800";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -282,16 +282,15 @@ const PaymentDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-gray-900">
             Payment Management
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600">
             Manage gym payments and financial transactions
           </p>
         </div>
         <Button
-          onClick={() => setShowCreatePayment(true)}
-          className="bg-blue-600 hover:bg-blue-700"
+          onClick={() => setShowCreatePayment(true)} className="bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="w-4 h-4 mr-2" />
           Create Payment
@@ -374,8 +373,7 @@ const PaymentDashboard = () => {
                   id="search"
                   placeholder="Search by member name or payment ID..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  onChange={(e) => setSearchTerm(e.target.value)} className="pl-10"
                 />
               </div>
             </div>
@@ -427,8 +425,7 @@ const PaymentDashboard = () => {
 
             <Button
               variant="outline"
-              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-              className="w-full md:w-auto"
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")} className="w-full md:w-auto"
             >
               {sortOrder === "asc" ? "↑" : "↓"}
             </Button>
@@ -478,8 +475,7 @@ const PaymentDashboard = () => {
                 {filteredPayments.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={7}
-                      className="text-center py-8 text-gray-500"
+                      colSpan={7} className="text-center py-8 text-gray-500"
                     >
                       No payments found
                     </TableCell>
@@ -512,8 +508,7 @@ const PaymentDashboard = () => {
                         {new Date(payment.createdAt).toLocaleDateString()}
                       </TableCell>
                       <TableCell>
-                        <Badge
-                          className={getPaymentStatusColor(payment.status)}
+                        <Badge className={getPaymentStatusColor(payment.status)}
                         >
                           {payment.status || "Paid"}
                         </Badge>
@@ -542,8 +537,7 @@ const PaymentDashboard = () => {
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
-                              onClick={() => handleDeletePayment(payment.id)}
-                              className="text-red-600"
+                              onClick={() => handleDeletePayment(payment.id)} className="text-red-600"
                             >
                               <Trash2 className="w-4 h-4 mr-2" />
                               Delete Payment
@@ -703,8 +697,7 @@ const PaymentDashboard = () => {
                   <Label className="text-sm font-medium text-gray-500">
                     Status
                   </Label>
-                  <Badge
-                    className={getPaymentStatusColor(selectedPayment.status)}
+                  <Badge className={getPaymentStatusColor(selectedPayment.status)}
                   >
                     {selectedPayment.status || "Paid"}
                   </Badge>

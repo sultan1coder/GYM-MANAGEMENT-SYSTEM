@@ -578,7 +578,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white sticky top-0 z-10">
           <div className="flex items-center justify-between mb-4">
@@ -606,8 +606,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
               {/* Dark Mode Toggle */}
               <button
-                onClick={() => setIsDarkMode((prev) => !prev)}
-                className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+                onClick={() => setIsDarkMode((prev) => !prev)} className="p-2 hover:bg-white/20 rounded-xl transition-colors"
                 title="Toggle dark mode (Ctrl/Cmd + D)"
               >
                 {isDarkMode ? (
@@ -619,8 +618,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
               {/* Keyboard Shortcuts Help */}
               <button
-                onClick={() => setShowKeyboardShortcuts(true)}
-                className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+                onClick={() => setShowKeyboardShortcuts(true)} className="p-2 hover:bg-white/20 rounded-xl transition-colors"
                 title="Keyboard shortcuts (Ctrl/Cmd + H)"
               >
                 <Command className="h-5 w-5" />
@@ -628,8 +626,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
               {/* Close Button */}
               <button
-                onClick={onClose}
-                className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+                onClick={onClose} className="p-2 hover:bg-white/20 rounded-xl transition-colors"
                 title="Close (Esc)"
               >
                 <X className="h-5 w-5" />
@@ -650,14 +647,13 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 onKeyDown={handleSearchKeyDown}
                 onFocus={() =>
                   setShowSearchSuggestions(searchQuery.length >= 2)
-                }
-                className="pl-10 pr-4 bg-white/10 border-white/20 text-white placeholder-blue-200 focus:bg-white/20 focus:border-white/40"
+                } className="pl-10 pr-4 bg-white/10 border-white/20 text-white placeholder-blue-200 focus:bg-white/20 focus:border-white/40"
               />
             </div>
 
             {/* Search Suggestions Dropdown */}
             {showSearchSuggestions && searchSuggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-700 rounded-lg shadow-lg border border-gray-200 dark:border-slate-600 max-h-60 overflow-y-auto z-20">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white">
                 {searchSuggestions.map((suggestion, index) => (
                   <button
                     key={suggestion}
@@ -665,16 +661,15 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       setSearchQuery(suggestion);
                       setShowSearchSuggestions(false);
                       scrollToSection(suggestion);
-                    }}
-                    className={`w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors ${
+                    }} className={`w-full px-4 py-3 text-left hover:bg-gray-100${
                       index === selectedSuggestionIndex
-                        ? "bg-blue-50 dark:bg-blue-900/20"
+                        ? "bg-blue-50"
                         : ""
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <Search className="h-4 w-4 text-gray-400" />
-                      <span className="text-gray-900 dark:text-white">
+                      <span className="text-gray-900">
                         {suggestion}
                       </span>
                       {index === selectedSuggestionIndex && (
@@ -693,8 +688,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
         <div className="p-6 space-y-6">
           {/* Profile Picture Section */}
           <Card
-            id="profile-picture"
-            className={`transition-all duration-300 ${
+            id="profile-picture" className={`transition-all duration-300 ${
               focusedSection === "profile-picture"
                 ? "ring-2 ring-blue-500 shadow-lg"
                 : ""
@@ -713,19 +707,18 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   {user?.profile_picture ? (
                     <img
                       src={user.profile_picture}
-                      alt="Current Profile"
-                      className="w-28 h-28 rounded-full object-cover border-4 border-slate-200 dark:border-slate-600 shadow-lg"
+                      alt="Current Profile" className="w-28 h-28 rounded-full object-cover border-4 border-slate-200"
                     />
                   ) : (
-                    <div className="w-28 h-28 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center border-4 border-slate-200 dark:border-slate-600 shadow-lg">
-                      <User className="h-10 w-10 text-slate-400 dark:text-slate-500" />
+                    <div className="w-28 h-28 rounded-full bg-slate-100">
+                      <User className="h-10 w-10 text-slate-400" />
                     </div>
                   )}
                   <div className="absolute -bottom-2 -right-2 bg-green-500 text-white p-1 rounded-full border-2 border-white">
                     <CheckCircle className="h-4 w-4" />
                   </div>
                 </div>
-                <p className="text-lg font-semibold text-slate-900 dark:text-white mt-3">
+                <p className="text-lg font-semibold text-slate-900">
                   {user?.name}
                 </p>
               </div>
@@ -751,15 +744,13 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       const url = URL.createObjectURL(file);
                       setPreviewUrl(url);
                     }
-                  }}
-                  className="hidden"
+                  }} className="hidden"
                 />
 
-                <div
-                  className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200 ${
+                <div className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200 ${
                     isDragOver
-                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                      : "border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500"
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-slate-300"
                   }`}
                   onDragOver={(e) => {
                     e.preventDefault();
@@ -791,35 +782,32 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 >
                   {!selectedFile ? (
                     <div className="space-y-4">
-                      <div
-                        className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
+                      <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
                           isDragOver
-                            ? "bg-blue-100 dark:bg-blue-800"
-                            : "bg-slate-100 dark:bg-slate-700"
+                            ? "bg-blue-100"
+                            : "bg-slate-100"
                         }`}
                       >
-                        <Image
-                          className={`h-8 w-8 transition-colors ${
+                        <Image className={`h-8 w-8 transition-colors ${
                             isDragOver ? "text-blue-600" : "text-slate-500"
                           }`}
                         />
                       </div>
 
                       <div>
-                        <p className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                        <p className="text-lg font-semibold text-slate-900">
                           {isDragOver
                             ? "Drop your image here"
                             : "Upload New Picture"}
                         </p>
-                        <p className="text-slate-600 dark:text-slate-400 mb-4">
+                        <p className="text-slate-600">
                           Drag and drop an image here, or click to browse
                         </p>
 
                         <Button
                           onClick={() => fileInputRef.current?.click()}
                           variant="outline"
-                          size="lg"
-                          className="bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600"
+                          size="lg" className="bg-white"
                         >
                           <Upload className="h-4 w-4 mr-2" />
                           Choose Image
@@ -831,8 +819,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       <div className="relative inline-block">
                         <img
                           src={previewUrl!}
-                          alt="Preview"
-                          className="w-24 h-24 rounded-full object-cover mx-auto border-4 border-blue-200 dark:border-blue-700 shadow-lg"
+                          alt="Preview" className="w-24 h-24 rounded-full object-cover mx-auto border-4 border-blue-200"
                         />
                         <div className="absolute -top-2 -right-2 bg-blue-500 text-white p-1 rounded-full border-2 border-white">
                           <Image className="h-3 w-3" />
@@ -840,10 +827,10 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       </div>
 
                       <div className="space-y-2">
-                        <p className="font-medium text-slate-900 dark:text-white">
+                        <p className="font-medium text-slate-900">
                           {selectedFile.name}
                         </p>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                        <p className="text-sm text-slate-600">
                           {(selectedFile.size / 1024 / 1024).toFixed(2)} MB •{" "}
                           {selectedFile.type.split("/")[1].toUpperCase()}
                         </p>
@@ -858,8 +845,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                               fileInputRef.current.value = "";
                           }}
                           variant="outline"
-                          size="sm"
-                          className="flex-1 border-red-200 text-red-600 hover:bg-red-50 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/20"
+                          size="sm" className="flex-1 border-red-200 text-red-600 hover:bg-red-50"
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
                           Remove
@@ -897,8 +883,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                             }
                           }}
                           disabled={isUploading}
-                          size="sm"
-                          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg"
+                          size="sm" className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg"
                         >
                           {isUploading ? (
                             <>
@@ -922,8 +907,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
           {/* Password Management Section */}
           <Card
-            id="password-management"
-            className={`transition-all duration-300 ${
+            id="password-management" className={`transition-all duration-300 ${
               focusedSection === "password-management"
                 ? "ring-2 ring-blue-500 shadow-lg"
                 : ""
@@ -950,8 +934,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                     <Button
                       type="button"
                       variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                      size="sm" className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                       onClick={() =>
                         setShowPasswords((prev) => ({
                           ...prev,
@@ -981,8 +964,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                     <Button
                       type="button"
                       variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                      size="sm" className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                       onClick={() =>
                         setShowPasswords((prev) => ({
                           ...prev,
@@ -1013,8 +995,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   <Button
                     type="button"
                     variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                    size="sm" className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                     onClick={() =>
                       setShowPasswords((prev) => ({
                         ...prev,
@@ -1037,9 +1018,8 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   <Label>Password Strength</Label>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-slate-200 dark:bg-slate-700 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.color}`}
+                      <div className="flex-1 bg-slate-200">
+                        <div className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.color}`}
                           style={{
                             width: `${(passwordStrength.score / 6) * 100}%`,
                           }}
@@ -1048,7 +1028,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       <Badge variant="outline">{passwordStrength.label}</Badge>
                     </div>
                     {passwordStrength.feedback.length > 0 && (
-                      <div className="text-sm text-slate-600 dark:text-slate-400">
+                      <div className="text-sm text-slate-600">
                         <p className="font-medium mb-1">
                           To improve your password:
                         </p>
@@ -1091,8 +1071,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   !currentPassword ||
                   !newPassword ||
                   !confirmPassword
-                }
-                className="w-full"
+                } className="w-full"
               >
                 {isChangingPassword ? (
                   <>
@@ -1111,8 +1090,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
           {/* Two-Factor Authentication Section */}
           <Card
-            id="two-factor"
-            className={`transition-all duration-300 ${
+            id="two-factor" className={`transition-all duration-300 ${
               focusedSection === "two-factor"
                 ? "ring-2 ring-blue-500 shadow-lg"
                 : ""
@@ -1128,7 +1106,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Status</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                  <p className="text-sm text-slate-600">
                     {twoFactorEnabled ? "Enabled" : "Disabled"}
                   </p>
                 </div>
@@ -1183,14 +1161,14 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                     </Select>
                   </div>
 
-                  <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-4">
-                    <div className="flex items-center gap-2 text-green-800 dark:text-green-200">
+                  <div className="bg-green-50">
+                    <div className="flex items-center gap-2 text-green-800">
                       <CheckCircle className="h-5 w-5" />
                       <span className="font-medium">
                         2FA is now protecting your account
                       </span>
                     </div>
-                    <p className="text-sm text-green-700 dark:text-green-300 mt-1">
+                    <p className="text-sm text-green-700">
                       You'll need to enter a verification code when signing in
                       from new devices.
                     </p>
@@ -1199,12 +1177,12 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               )}
 
               {!twoFactorEnabled && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-blue-800 dark:text-blue-200">
+                <div className="bg-blue-50">
+                  <div className="flex items-center gap-2 text-blue-800">
                     <AlertCircle className="h-5 w-5" />
                     <span className="font-medium">Enhanced Security</span>
                   </div>
-                  <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                  <p className="text-sm text-blue-700">
                     Enable two-factor authentication to add an extra layer of
                     security to your account.
                   </p>
@@ -1215,8 +1193,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
           {/* Security & Validation Section */}
           <Card
-            id="security-validation"
-            className={`transition-all duration-300 ${
+            id="security-validation" className={`transition-all duration-300 ${
               focusedSection === "security-validation"
                 ? "ring-2 ring-blue-500 shadow-lg"
                 : ""
@@ -1230,28 +1207,26 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Security Score */}
-              <div className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+              <div className="bg-gradient-to-r from-blue-50 to-green-50">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-lg text-blue-900 dark:text-blue-100">
+                  <h3 className="font-semibold text-lg text-blue-900">
                     Security Score
                   </h3>
                   <Badge
-                    variant="outline"
-                    className={`${
+                    variant="outline" className={`${
                       securityScore >= 80
-                        ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-200"
+                        ? "bg-green-100 text-green-800"
                         : securityScore >= 60
-                        ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-200"
-                        : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-200"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-red-100 text-red-800"
                     }`}
                   >
                     {securityScore}/100
                   </Badge>
                 </div>
 
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-3">
-                  <div
-                    className={`h-3 rounded-full transition-all duration-500 ${
+                <div className="w-full bg-gray-200">
+                  <div className={`h-3 rounded-full transition-all duration-500 ${
                       securityScore >= 80
                         ? "bg-green-500"
                         : securityScore >= 60
@@ -1262,7 +1237,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   ></div>
                 </div>
 
-                <p className="text-sm text-blue-700 dark:text-blue-300">
+                <p className="text-sm text-blue-700">
                   {securityScore >= 80
                     ? "Excellent security! Your account is well protected."
                     : securityScore >= 60
@@ -1326,17 +1301,16 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 {/* Validation Errors Display */}
                 {validationErrors.length > 0 && (
                   <div className="space-y-2">
-                    <h4 className="font-medium text-red-600 dark:text-red-400">
+                    <h4 className="font-medium text-red-600">
                       Validation Errors
                     </h4>
                     <div className="space-y-2">
                       {validationErrors.slice(-5).map((error, index) => (
                         <div
-                          key={index}
-                          className="flex items-center gap-2 p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded"
+                          key={index} className="flex items-center gap-2 p-2 bg-red-50"
                         >
                           <XCircle className="h-4 w-4 text-red-500" />
-                          <span className="text-sm text-red-700 dark:text-red-300">
+                          <span className="text-sm text-red-700">
                             {error.field}: {error.message}
                           </span>
                         </div>
@@ -1345,8 +1319,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setValidationErrors([])}
-                      className="text-red-600 border-red-300 hover:bg-red-50 dark:text-red-400 dark:border-red-600 dark:hover:bg-red-900/20"
+                      onClick={() => setValidationErrors([])} className="text-red-600 border-red-300 hover:bg-red-50"
                     >
                       Clear Errors
                     </Button>
@@ -1360,10 +1333,10 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gray-50">
                       <div>
                         <p className="font-medium">Login Attempts</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {loginAttempts}/5 attempts
                         </p>
                       </div>
@@ -1380,10 +1353,10 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       </Badge>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gray-50">
                       <div>
                         <p className="font-medium">Account Status</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {isLocked ? "Temporarily Locked" : "Active"}
                         </p>
                       </div>
@@ -1394,10 +1367,10 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   </div>
 
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gray-50">
                       <div>
                         <p className="font-medium">2FA Status</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {twoFactorEnabled ? "Enabled" : "Disabled"}
                         </p>
                       </div>
@@ -1408,10 +1381,10 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       </Badge>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-gray-50">
                       <div>
                         <p className="font-medium">Password Age</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           Last changed: Recently
                         </p>
                       </div>
@@ -1485,7 +1458,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Email Notifications</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Receive updates via email
                     </p>
                   </div>
@@ -1503,7 +1476,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">SMS Notifications</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Receive updates via SMS
                     </p>
                   </div>
@@ -1518,7 +1491,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Push Notifications</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Receive push notifications
                     </p>
                   </div>
@@ -1536,7 +1509,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Marketing Emails</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Receive promotional content
                     </p>
                   </div>
@@ -1554,7 +1527,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">System Updates</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Receive system notifications
                     </p>
                   </div>
@@ -1572,7 +1545,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Security Alerts</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Receive security notifications
                     </p>
                   </div>
@@ -1596,8 +1569,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   } catch (error) {
                     toast.error("Failed to save preferences");
                   }
-                }}
-                className="w-full"
+                }} className="w-full"
               >
                 <Save className="h-4 w-4 mr-2" />
                 Save Notification Preferences
@@ -1646,7 +1618,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Show Email Address</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Display email in profile
                     </p>
                   </div>
@@ -1664,7 +1636,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Show Phone Number</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Display phone in profile
                     </p>
                   </div>
@@ -1682,7 +1654,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Show Age</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Display age in profile
                     </p>
                   </div>
@@ -1700,7 +1672,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Allow Messages</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Receive messages from others
                     </p>
                   </div>
@@ -1718,7 +1690,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Show Online Status</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Display when you're online
                     </p>
                   </div>
@@ -1742,8 +1714,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   } catch (error) {
                     toast.error("Failed to save privacy settings");
                   }
-                }}
-                className="w-full"
+                }} className="w-full"
               >
                 <Save className="h-4 w-4 mr-2" />
                 Save Privacy Settings
@@ -1760,7 +1731,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-slate-600">
                 Download a copy of your personal data including profile
                 information, settings, and preferences.
               </p>
@@ -1843,8 +1814,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                     setIsExportingData(false);
                   }
                 }}
-                disabled={isExportingData}
-                className="w-full"
+                disabled={isExportingData} className="w-full"
               >
                 {isExportingData ? (
                   <>
@@ -1862,20 +1832,20 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
           </Card>
 
           {/* Account Deletion Section */}
-          <Card className="border-red-200 dark:border-red-700">
+          <Card className="border-red-200">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-red-600 dark:text-red-400">
+              <CardTitle className="flex items-center gap-2 text-red-600">
                 <AlertTriangle className="h-5 w-5" />
                 Account Deletion
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg p-4">
-                <div className="flex items-center gap-2 text-red-800 dark:text-red-200">
+              <div className="bg-red-50">
+                <div className="flex items-center gap-2 text-red-800">
                   <AlertTriangle className="h-5 w-5" />
                   <span className="font-medium">Danger Zone</span>
                 </div>
-                <p className="text-sm text-red-700 dark:text-red-300 mt-1">
+                <p className="text-sm text-red-700">
                   Once you delete your account, there is no going back. Please
                   be certain.
                 </p>
@@ -1884,8 +1854,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               {!showDeleteConfirmation ? (
                 <Button
                   variant="destructive"
-                  onClick={() => setShowDeleteConfirmation(true)}
-                  className="w-full"
+                  onClick={() => setShowDeleteConfirmation(true)} className="w-full"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete My Account
@@ -1902,8 +1871,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       onChange={(e) =>
                         setDeleteConfirmationText(e.target.value)
                       }
-                      placeholder="Type DELETE to confirm"
-                      className="border-red-300 focus:border-red-500"
+                      placeholder="Type DELETE to confirm" className="border-red-300 focus:border-red-500"
                     />
                   </div>
 
@@ -1913,8 +1881,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       onClick={() => {
                         setShowDeleteConfirmation(false);
                         setDeleteConfirmationText("");
-                      }}
-                      className="flex-1"
+                      }} className="flex-1"
                     >
                       Cancel
                     </Button>
@@ -1940,8 +1907,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       }}
                       disabled={
                         deleteConfirmationText !== "DELETE" || isDeletingAccount
-                      }
-                      className="flex-1"
+                      } className="flex-1"
                     >
                       {isDeletingAccount ? (
                         <>
@@ -1971,14 +1937,13 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Current Membership Status */}
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-lg text-blue-900 dark:text-blue-100">
+                  <h3 className="font-semibold text-lg text-blue-900">
                     Current Membership
                   </h3>
                   <Badge
-                    variant="outline"
-                    className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-200"
+                    variant="outline" className="bg-green-100 text-green-800"
                   >
                     {currentMembership.status === "active"
                       ? "Active"
@@ -1988,26 +1953,26 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
-                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                    <p className="text-sm text-blue-700">
                       Plan
                     </p>
-                    <p className="font-medium text-blue-900 dark:text-blue-100">
+                    <p className="font-medium text-blue-900">
                       {currentMembership.plan}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                    <p className="text-sm text-blue-700">
                       Next Billing
                     </p>
-                    <p className="font-medium text-blue-900 dark:text-blue-100">
+                    <p className="font-medium text-blue-900">
                       {currentMembership.nextBilling}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                    <p className="text-sm text-blue-700">
                       Auto-Renew
                     </p>
-                    <p className="font-medium text-blue-900 dark:text-blue-100">
+                    <p className="font-medium text-blue-900">
                       {currentMembership.autoRenew ? "Enabled" : "Disabled"}
                     </p>
                   </div>
@@ -2017,8 +1982,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   <Button
                     onClick={() => setShowMembershipCard(true)}
                     variant="outline"
-                    size="sm"
-                    className="border-blue-300 text-blue-700 hover:bg-blue-50 dark:border-blue-600 dark:text-blue-300 dark:hover:bg-blue-900/20"
+                    size="sm" className="border-blue-300 text-blue-700 hover:bg-blue-50"
                   >
                     <QrCode className="h-4 w-4 mr-2" />
                     View Membership Card
@@ -2028,8 +1992,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       toast.success("Plan change functionality coming soon!")
                     }
                     variant="outline"
-                    size="sm"
-                    className="border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/20"
+                    size="sm" className="border-purple-300 text-purple-700 hover:bg-purple-50"
                   >
                     <ChevronRight className="h-4 w-4 mr-2" />
                     Change Plan
@@ -2056,11 +2019,10 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {membershipPlans.map((plan) => (
                     <div
-                      key={plan.id}
-                      className={`relative border rounded-lg p-4 transition-all ${
+                      key={plan.id} className={`relative border rounded-lg p-4 transition-all ${
                         plan.popular
-                          ? "border-purple-300 bg-purple-50 dark:bg-purple-900/20 dark:border-purple-600"
-                          : "border-gray-200 dark:border-gray-600"
+                          ? "border-purple-300 bg-purple-50"
+                          : "border-gray-200"
                       }`}
                     >
                       {plan.popular && (
@@ -2074,14 +2036,14 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
                       <div className="text-center space-y-3">
                         <h4 className="font-semibold text-lg">{plan.name}</h4>
-                        <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                        <div className="text-3xl font-bold text-blue-600">
                           ${plan.price}
-                          <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
+                          <span className="text-sm font-normal text-gray-600">
                             /month
                           </span>
                         </div>
 
-                        <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                        <ul className="text-sm text-gray-600">
                           {plan.features.map((feature, index) => (
                             <li key={index} className="flex items-center gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500" />
@@ -2093,8 +2055,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                         <Button
                           onClick={() =>
                             toast.success("Plan selection coming soon!")
-                          }
-                          className={`w-full ${
+                          } className={`w-full ${
                             plan.popular
                               ? "bg-purple-600 hover:bg-purple-700"
                               : "bg-blue-600 hover:bg-blue-700"
@@ -2119,8 +2080,8 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 </div>
 
                 <div className="border rounded-lg overflow-hidden">
-                  <div className="bg-gray-50 dark:bg-gray-800 px-4 py-3 border-b">
-                    <div className="grid grid-cols-5 gap-4 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <div className="bg-gray-50">
+                    <div className="grid grid-cols-5 gap-4 text-sm font-medium text-gray-700">
                       <div>Date</div>
                       <div>Description</div>
                       <div>Amount</div>
@@ -2132,20 +2093,19 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   <div className="divide-y">
                     {paymentHistory.map((payment) => (
                       <div
-                        key={payment.id}
-                        className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800"
+                        key={payment.id} className="px-4 py-3 hover:bg-gray-50"
                       >
                         <div className="grid grid-cols-5 gap-4 text-sm">
-                          <div className="text-gray-600 dark:text-gray-400">
+                          <div className="text-gray-600">
                             {new Date(payment.date).toLocaleDateString()}
                           </div>
-                          <div className="text-gray-900 dark:text-gray-100">
+                          <div className="text-gray-900">
                             {payment.description}
                           </div>
-                          <div className="font-medium text-gray-900 dark:text-gray-100">
+                          <div className="font-medium text-gray-900">
                             ${payment.amount}
                           </div>
-                          <div className="text-gray-600 dark:text-gray-400">
+                          <div className="text-gray-600">
                             {payment.method}
                           </div>
                           <div>
@@ -2154,10 +2114,9 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                                 payment.status === "completed"
                                   ? "default"
                                   : "secondary"
-                              }
-                              className={
+                              } className={
                                 payment.status === "completed"
-                                  ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-200"
+                                  ? "bg-green-100 text-green-800"
                                   : ""
                               }
                             >
@@ -2190,18 +2149,18 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Billing Address */}
                   <div className="space-y-3">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">
+                    <h4 className="font-medium text-gray-900">
                       Billing Address
                     </h4>
-                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-2">
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="bg-gray-50">
+                      <p className="text-sm text-gray-600">
                         {billingInfo.address.street}
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-sm text-gray-600">
                         {billingInfo.address.city}, {billingInfo.address.state}{" "}
                         {billingInfo.address.zipCode}
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-sm text-gray-600">
                         {billingInfo.address.country}
                       </p>
                     </div>
@@ -2209,22 +2168,21 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
                   {/* Payment Methods */}
                   <div className="space-y-3">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100">
+                    <h4 className="font-medium text-gray-900">
                       Payment Methods
                     </h4>
                     <div className="space-y-3">
                       {billingInfo.paymentMethods.map((method) => (
                         <div
-                          key={method.id}
-                          className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 rounded-lg p-4"
+                          key={method.id} className="flex items-center justify-between bg-gray-50"
                         >
                           <div className="flex items-center gap-3">
                             <CreditCard className="h-5 w-5 text-blue-600" />
                             <div>
-                              <p className="font-medium text-gray-900 dark:text-gray-100">
+                              <p className="font-medium text-gray-900">
                                 {method.brand} •••• {method.last4}
                               </p>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                              <p className="text-sm text-gray-600">
                                 Expires {method.expiry}
                               </p>
                             </div>
@@ -2263,7 +2221,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
           {/* Keyboard Shortcuts Modal */}
           {showKeyboardShortcuts && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-              <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+              <div className="bg-white">
                 <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white rounded-t-3xl">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -2280,8 +2238,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       </div>
                     </div>
                     <button
-                      onClick={() => setShowKeyboardShortcuts(false)}
-                      className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+                      onClick={() => setShowKeyboardShortcuts(false)} className="p-2 hover:bg-white/20 rounded-xl transition-colors"
                     >
                       <X className="h-5 w-5" />
                     </button>
@@ -2291,39 +2248,39 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="p-6 space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                      <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
+                      <h3 className="font-semibold text-lg text-gray-900">
                         Navigation
                       </h3>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             Search features
                           </span>
-                          <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">
+                          <kbd className="px-2 py-1 bg-gray-100">
                             Ctrl/Cmd + K
                           </kbd>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             Toggle dark mode
                           </span>
-                          <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">
+                          <kbd className="px-2 py-1 bg-gray-100">
                             Ctrl/Cmd + D
                           </kbd>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             Show shortcuts
                           </span>
-                          <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">
+                          <kbd className="px-2 py-1 bg-gray-100">
                             Ctrl/Cmd + H
                           </kbd>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             Close modal
                           </span>
-                          <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">
+                          <kbd className="px-2 py-1 bg-gray-100">
                             Esc
                           </kbd>
                         </div>
@@ -2331,39 +2288,39 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                     </div>
 
                     <div className="space-y-4">
-                      <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
+                      <h3 className="font-semibold text-lg text-gray-900">
                         Search Navigation
                       </h3>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             Move down
                           </span>
-                          <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">
+                          <kbd className="px-2 py-1 bg-gray-100">
                             ↓
                           </kbd>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             Move up
                           </span>
-                          <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">
+                          <kbd className="px-2 py-1 bg-gray-100">
                             ↑
                           </kbd>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             Select
                           </span>
-                          <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">
+                          <kbd className="px-2 py-1 bg-gray-100">
                             Enter
                           </kbd>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600">
                             Clear search
                           </span>
-                          <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm font-mono">
+                          <kbd className="px-2 py-1 bg-gray-100">
                             Esc
                           </kbd>
                         </div>
@@ -2371,12 +2328,12 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                     </div>
                   </div>
 
-                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-                    <div className="flex items-center gap-2 text-blue-800 dark:text-blue-200">
+                  <div className="bg-blue-50">
+                    <div className="flex items-center gap-2 text-blue-800">
                       <Command className="h-5 w-5" />
                       <span className="font-medium">Pro Tip</span>
                     </div>
-                    <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                    <p className="text-sm text-blue-700">
                       Use these shortcuts to navigate the profile manager more
                       efficiently. All shortcuts work globally when the modal is
                       open.
@@ -2405,7 +2362,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
           {/* Audit Logs Modal */}
           {showSecurityLogs && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-              <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-y-auto">
+              <div className="bg-white">
                 <div className="bg-gradient-to-r from-red-600 to-orange-600 p-6 text-white rounded-t-3xl">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -2422,8 +2379,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       </div>
                     </div>
                     <button
-                      onClick={() => setShowSecurityLogs(false)}
-                      className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+                      onClick={() => setShowSecurityLogs(false)} className="p-2 hover:bg-white/20 rounded-xl transition-colors"
                     >
                       <X className="h-5 w-5" />
                     </button>
@@ -2433,40 +2389,40 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 <div className="p-6 space-y-6">
                   {/* Log Statistics */}
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="text-center p-4 bg-gray-50">
                       <div className="text-2xl font-bold text-green-600">
                         {
                           auditLogs.filter((log) => log.status === "success")
                             .length
                         }
                       </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <div className="text-sm text-gray-600">
                         Successful
                       </div>
                     </div>
-                    <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="text-center p-4 bg-gray-50">
                       <div className="text-2xl font-bold text-red-600">
                         {
                           auditLogs.filter((log) => log.status === "failed")
                             .length
                         }
                       </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <div className="text-sm text-gray-600">
                         Failed
                       </div>
                     </div>
-                    <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="text-center p-4 bg-gray-50">
                       <div className="text-2xl font-bold text-yellow-600">
                         {
                           auditLogs.filter((log) => log.status === "warning")
                             .length
                         }
                       </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <div className="text-sm text-gray-600">
                         Warnings
                       </div>
                     </div>
-                    <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="text-center p-4 bg-gray-50">
                       <div className="text-2xl font-bold text-blue-600">
                         {
                           auditLogs.filter(
@@ -2476,7 +2432,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                           ).length
                         }
                       </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <div className="text-sm text-gray-600">
                         High Risk
                       </div>
                     </div>
@@ -2543,7 +2499,7 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                     <h3 className="font-semibold text-lg">Recent Activity</h3>
 
                     {auditLogs.length === 0 ? (
-                      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                      <div className="text-center py-8 text-gray-500">
                         <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
                         <p>No audit logs available</p>
                         <p className="text-sm">
@@ -2554,15 +2510,14 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                       <div className="space-y-3">
                         {auditLogs.map((log) => (
                           <div
-                            key={log.id}
-                            className={`p-4 rounded-lg border ${
+                            key={log.id} className={`p-4 rounded-lg border ${
                               log.severity === "critical"
-                                ? "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700"
+                                ? "bg-red-50"
                                 : log.severity === "high"
-                                ? "bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-700"
+                                ? "bg-orange-50"
                                 : log.severity === "medium"
-                                ? "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-700"
-                                : "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                                ? "bg-yellow-50"
+                                : "bg-gray-50"
                             }`}
                           >
                             <div className="flex items-start justify-between">
@@ -2580,29 +2535,28 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                                     {log.status}
                                   </Badge>
                                   <Badge
-                                    variant="outline"
-                                    className={
+                                    variant="outline" className={
                                       log.severity === "critical"
-                                        ? "border-red-500 text-red-700 dark:text-red-400"
+                                        ? "border-red-500 text-red-700"
                                         : log.severity === "high"
-                                        ? "border-orange-500 text-orange-700 dark:text-orange-400"
+                                        ? "border-orange-500 text-orange-700"
                                         : log.severity === "medium"
-                                        ? "border-yellow-500 text-yellow-700 dark:text-yellow-400"
-                                        : "border-gray-500 text-gray-700 dark:text-gray-400"
+                                        ? "border-yellow-500 text-yellow-700"
+                                        : "border-gray-500 text-gray-700"
                                     }
                                   >
                                     {log.severity}
                                   </Badge>
                                 </div>
 
-                                <h4 className="font-medium text-gray-900 dark:text-white">
+                                <h4 className="font-medium text-gray-900">
                                   {log.action}
                                 </h4>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                <p className="text-sm text-gray-600">
                                   {log.details}
                                 </p>
 
-                                <div className="flex items-center gap-4 mt-3 text-xs text-gray-500 dark:text-gray-400">
+                                <div className="flex items-center gap-4 mt-3 text-xs text-gray-500">
                                   <div className="flex items-center gap-1">
                                     <Clock className="h-3 w-3" />
                                     {log.timestamp.toLocaleString()}
@@ -2625,14 +2579,14 @@ const EnhancedProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   </div>
 
                   {/* Security Recommendations */}
-                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-                    <div className="flex items-center gap-2 text-blue-800 dark:text-blue-200 mb-2">
+                  <div className="bg-blue-50">
+                    <div className="flex items-center gap-2 text-blue-800">
                       <ShieldCheck className="h-5 w-5" />
                       <span className="font-medium">
                         Security Recommendations
                       </span>
                     </div>
-                    <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                    <ul className="text-sm text-blue-700">
                       <li>
                         • Monitor failed login attempts and suspicious IP
                         addresses

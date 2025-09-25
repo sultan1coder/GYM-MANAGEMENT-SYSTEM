@@ -419,8 +419,7 @@ const AdministrativeFeatures: React.FC = () => {
 
       <Tabs
         value={activeTab}
-        onValueChange={setActiveTab}
-        className="space-y-6"
+        onValueChange={setActiveTab} className="space-y-6"
       >
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="analytics" className="flex items-center gap-2">
@@ -577,8 +576,7 @@ const AdministrativeFeatures: React.FC = () => {
                 <div className="space-y-4">
                   {memberAnalytics.topMembershipPlans.map((plan, index) => (
                     <div
-                      key={index}
-                      className="flex items-center justify-between"
+                      key={index} className="flex items-center justify-between"
                     >
                       <div>
                         <p className="text-sm font-medium">{plan.name}</p>
@@ -661,8 +659,7 @@ const AdministrativeFeatures: React.FC = () => {
                   <div className="grid grid-cols-1 gap-3">
                     {reportTypes.map((type) => (
                       <div
-                        key={type.id}
-                        className="flex items-center justify-between p-3 border rounded-lg"
+                        key={type.id} className="flex items-center justify-between p-3 border rounded-lg"
                       >
                         <div>
                           <p className="font-medium">{type.label}</p>
@@ -712,8 +709,7 @@ const AdministrativeFeatures: React.FC = () => {
 
                 <Button
                   onClick={handleBackup}
-                  disabled={isBackingUp}
-                  className="w-full"
+                  disabled={isBackingUp} className="w-full"
                 >
                   {isBackingUp ? (
                     <>
@@ -759,8 +755,7 @@ const AdministrativeFeatures: React.FC = () => {
                 <Button
                   onClick={handleRestore}
                   disabled={isRestoring}
-                  variant="destructive"
-                  className="w-full"
+                  variant="destructive" className="w-full"
                 >
                   {isRestoring ? (
                     <>
@@ -879,8 +874,7 @@ const AdministrativeFeatures: React.FC = () => {
               <div className="space-y-3">
                 {systemHealth.alerts.map((alert) => (
                   <div
-                    key={alert.id}
-                    className={`flex items-center justify-between p-3 rounded-lg border ${
+                    key={alert.id} className={`flex items-center justify-between p-3 rounded-lg border ${
                       alert.type === "error"
                         ? "border-red-200 bg-red-50"
                         : alert.type === "warning"
@@ -937,8 +931,7 @@ const AdministrativeFeatures: React.FC = () => {
                       {role.permissions.slice(0, 5).map((permission) => (
                         <Badge
                           key={permission}
-                          variant="outline"
-                          className="text-xs"
+                          variant="outline" className="text-xs"
                         >
                           {permission}
                         </Badge>
@@ -989,8 +982,7 @@ const AdministrativeFeatures: React.FC = () => {
                     <div className="grid grid-cols-2 gap-2 mt-2 max-h-60 overflow-y-auto">
                       {availablePermissions.map((permission) => (
                         <div
-                          key={permission}
-                          className="flex items-center space-x-2"
+                          key={permission} className="flex items-center space-x-2"
                         >
                           <Checkbox
                             id={permission}

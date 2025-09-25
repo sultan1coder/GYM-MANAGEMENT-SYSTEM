@@ -174,16 +174,16 @@ const Register = () => {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         {/* Card */}
-        <div className="p-8 bg-white shadow-xl dark:bg-slate-800 rounded-2xl">
+        <div className="p-8 bg-white shadow-xl">
           {/* Header */}
           <div className="mb-8 text-center">
             <div className="p-3 mx-auto mb-4 text-white bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl w-fit">
               <UserPlus className="w-8 h-8" />
             </div>
-            <h1 className="mb-2 text-2xl font-bold text-slate-900 dark:text-white">
+            <h1 className="mb-2 text-2xl font-bold text-slate-900">
               Join BILKHAYR GYM
             </h1>
-            <p className="text-slate-600 dark:text-slate-300">
+            <p className="text-slate-600">
               Start your fitness journey with us today!
             </p>
           </div>
@@ -194,7 +194,7 @@ const Register = () => {
             <div className="grid gap-6 md:grid-cols-2">
               {/* Full Name */}
               <div>
-                <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="block mb-2 text-sm font-medium text-slate-700">
                   Full Name
                 </label>
                 <div className="relative">
@@ -202,11 +202,10 @@ const Register = () => {
                   <input
                     type="text"
                     name="name"
-                    placeholder="Enter your full name"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your full name" className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.name && formik.errors.name
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -214,7 +213,7 @@ const Register = () => {
                   />
                 </div>
                 {formik.touched.name && formik.errors.name && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.name}
                   </p>
                 )}
@@ -222,7 +221,7 @@ const Register = () => {
 
               {/* Email */}
               <div>
-                <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="block mb-2 text-sm font-medium text-slate-700">
                   Email Address
                 </label>
                 <div className="relative">
@@ -230,11 +229,10 @@ const Register = () => {
                   <input
                     type="email"
                     name="email"
-                    placeholder="Enter your email"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your email" className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.email && formik.errors.email
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -242,7 +240,7 @@ const Register = () => {
                   />
                 </div>
                 {formik.touched.email && formik.errors.email && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.email}
                   </p>
                 )}
@@ -250,7 +248,7 @@ const Register = () => {
 
               {/* Phone */}
               <div>
-                <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="block mb-2 text-sm font-medium text-slate-700">
                   Phone Number
                 </label>
                 <div className="relative">
@@ -258,11 +256,10 @@ const Register = () => {
                   <input
                     type="tel"
                     name="phone_number"
-                    placeholder="Enter your phone number"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your phone number" className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.phone_number && formik.errors.phone_number
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -270,7 +267,7 @@ const Register = () => {
                   />
                 </div>
                 {formik.touched.phone_number && formik.errors.phone_number && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.phone_number}
                   </p>
                 )}
@@ -278,7 +275,7 @@ const Register = () => {
 
               {/* Age */}
               <div>
-                <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="block mb-2 text-sm font-medium text-slate-700">
                   Age
                 </label>
                 <div className="relative">
@@ -288,11 +285,10 @@ const Register = () => {
                     name="age"
                     placeholder="Enter your age"
                     min="16"
-                    max="100"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    max="100" className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.age && formik.errors.age
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -300,7 +296,7 @@ const Register = () => {
                   />
                 </div>
                 {formik.touched.age && formik.errors.age && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.age}
                   </p>
                 )}
@@ -308,7 +304,7 @@ const Register = () => {
 
               {/* Password */}
               <div>
-                <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="block mb-2 text-sm font-medium text-slate-700">
                   Password
                 </label>
                 <div className="relative">
@@ -316,11 +312,10 @@ const Register = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
-                    placeholder="Create a password"
-                    className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Create a password" className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.password && formik.errors.password
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -328,8 +323,7 @@ const Register = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute transform -translate-y-1/2 right-3 top-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    onClick={() => setShowPassword(!showPassword)} className="absolute transform -translate-y-1/2 right-3 top-1/2 text-slate-400 hover:text-slate-600"
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -339,7 +333,7 @@ const Register = () => {
                   </button>
                 </div>
                 {formik.touched.password && formik.errors.password && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.password}
                   </p>
                 )}
@@ -347,7 +341,7 @@ const Register = () => {
 
               {/* Confirm Password */}
               <div>
-                <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="block mb-2 text-sm font-medium text-slate-700">
                   Confirm Password
                 </label>
                 <div className="relative">
@@ -355,12 +349,11 @@ const Register = () => {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
-                    placeholder="Confirm your password"
-                    className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Confirm your password" className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.confirmPassword &&
                       formik.errors.confirmPassword
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -368,8 +361,7 @@ const Register = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute transform -translate-y-1/2 right-3 top-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute transform -translate-y-1/2 right-3 top-1/2 text-slate-400 hover:text-slate-600"
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -380,7 +372,7 @@ const Register = () => {
                 </div>
                 {formik.touched.confirmPassword &&
                   formik.errors.confirmPassword && (
-                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                    <p className="mt-2 text-sm text-red-600">
                       {formik.errors.confirmPassword}
                     </p>
                   )}
@@ -389,15 +381,14 @@ const Register = () => {
 
             {/* Membership Type */}
             <div>
-              <label className="block mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">
+              <label className="block mb-3 text-sm font-medium text-slate-700">
                 Membership Type
               </label>
               <div className="grid gap-4 md:grid-cols-2">
-                <label
-                  className={`relative flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
+                <label className={`relative flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
                     formik.values.membershiptype === "MONTHLY"
-                      ? "border-green-500 bg-green-50 dark:bg-green-900/20"
-                      : "border-slate-300 dark:border-slate-600 hover:border-green-300"
+                      ? "border-green-500 bg-green-50"
+                      : "border-slate-300"
                   }`}
                 >
                   <input
@@ -405,16 +396,15 @@ const Register = () => {
                     name="membershiptype"
                     value="MONTHLY"
                     checked={formik.values.membershiptype === "MONTHLY"}
-                    onChange={formik.handleChange}
-                    className="sr-only"
+                    onChange={formik.handleChange} className="sr-only"
                   />
                   <div className="flex items-center gap-3">
                     <CreditCard className="w-5 h-5 text-green-600" />
                     <div>
-                      <div className="font-medium text-slate-900 dark:text-white">
+                      <div className="font-medium text-slate-900">
                         Monthly
                       </div>
-                      <div className="text-sm text-slate-600 dark:text-slate-300">
+                      <div className="text-sm text-slate-600">
                         Flexible monthly membership
                       </div>
                     </div>
@@ -424,11 +414,10 @@ const Register = () => {
                   )}
                 </label>
 
-                <label
-                  className={`relative flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
+                <label className={`relative flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
                     formik.values.membershiptype === "DAILY"
-                      ? "border-green-500 bg-green-50 dark:bg-green-900/20"
-                      : "border-slate-300 dark:border-slate-600 hover:border-green-300"
+                      ? "border-green-500 bg-green-50"
+                      : "border-slate-300"
                   }`}
                 >
                   <input
@@ -436,16 +425,15 @@ const Register = () => {
                     name="membershiptype"
                     value="DAILY"
                     checked={formik.values.membershiptype === "DAILY"}
-                    onChange={formik.handleChange}
-                    className="sr-only"
+                    onChange={formik.handleChange} className="sr-only"
                   />
                   <div className="flex items-center gap-3">
                     <Calendar className="w-5 h-5 text-green-600" />
                     <div>
-                      <div className="font-medium text-slate-900 dark:text-white">
+                      <div className="font-medium text-slate-900">
                         Daily
                       </div>
-                      <div className="text-sm text-slate-600 dark:text-slate-300">
+                      <div className="text-sm text-slate-600">
                         Pay per visit option
                       </div>
                     </div>
@@ -457,7 +445,7 @@ const Register = () => {
               </div>
               {formik.touched.membershiptype &&
                 formik.errors.membershiptype && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.membershiptype}
                   </p>
                 )}
@@ -465,33 +453,31 @@ const Register = () => {
 
             {/* Profile Picture Upload */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+              <label className="block text-sm font-medium text-slate-700">
                 Profile Picture
               </label>
               <div className="flex items-center gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-800/30 flex items-center justify-center border-2 border-dashed border-green-300 dark:border-green-600">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-100 to-emerald-100">
                     {profilePicture ? (
                       <img
                         src={profilePicture}
-                        alt="Profile"
-                        className="w-full h-full rounded-full object-cover"
+                        alt="Profile" className="w-full h-full rounded-full object-cover"
                       />
                     ) : (
-                      <Camera className="w-8 h-8 text-green-600 dark:text-green-400" />
+                      <Camera className="w-8 h-8 text-green-600" />
                     )}
                   </div>
                 </div>
                 <div className="flex-1">
                   <button
                     type="button"
-                    onClick={() => setShowProfileManager(true)}
-                    className="inline-flex items-center gap-2 px-4 py-2 border border-green-300 dark:border-green-600 text-green-700 dark:text-green-400 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition-all"
+                    onClick={() => setShowProfileManager(true)} className="inline-flex items-center gap-2 px-4 py-2 border border-green-300"
                   >
                     <Camera className="w-4 h-4" />
                     {profilePicture ? "Change Photo" : "Upload Photo"}
                   </button>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                  <p className="text-sm text-slate-600">
                     Upload a profile picture to personalize your account
                   </p>
                 </div>
@@ -500,12 +486,12 @@ const Register = () => {
 
             {/* Terms & Conditions */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+              <label className="block text-sm font-medium text-slate-700">
                 <FileText className="inline w-4 h-4 mr-2" />
                 Terms & Conditions
               </label>
-              <div className="p-4 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700">
-                <div className="text-sm text-slate-700 dark:text-slate-300 mb-4">
+              <div className="p-4 border border-slate-300">
+                <div className="text-sm text-slate-700">
                   <p className="mb-2">
                     By accepting these terms, you agree to:
                   </p>
@@ -525,16 +511,15 @@ const Register = () => {
                     checked={formik.values.terms_accepted}
                     onChange={(e) =>
                       formik.setFieldValue("terms_accepted", e.target.checked)
-                    }
-                    className="w-5 h-5 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                    } className="w-5 h-5 text-green-600 border-slate-300 rounded focus:ring-green-500"
                   />
-                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  <span className="text-sm font-medium text-slate-700">
                     I have read and agree to the terms and conditions
                   </span>
                 </label>
                 {formik.touched.terms_accepted &&
                   formik.errors.terms_accepted && (
-                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                    <p className="mt-2 text-sm text-red-600">
                       {formik.errors.terms_accepted}
                     </p>
                   )}
@@ -543,14 +528,14 @@ const Register = () => {
 
             {/* Medical Information */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+              <label className="block text-sm font-medium text-slate-700">
                 <Heart className="inline w-4 h-4 mr-2" />
                 Health & Fitness Information
               </label>
 
               {/* Fitness Goals */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700">
                   Fitness Goals (Select all that apply)
                 </label>
                 <div className="grid md:grid-cols-2 gap-3">
@@ -565,8 +550,7 @@ const Register = () => {
                     "Rehabilitation",
                   ].map((goal) => (
                     <label
-                      key={goal}
-                      className="flex items-center gap-2 cursor-pointer"
+                      key={goal} className="flex items-center gap-2 cursor-pointer"
                     >
                       <input
                         type="checkbox"
@@ -587,10 +571,9 @@ const Register = () => {
                               )
                             );
                           }
-                        }}
-                        className="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                        }} className="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
                       />
-                      <span className="text-sm text-slate-700 dark:text-slate-300">
+                      <span className="text-sm text-slate-700">
                         {goal}
                       </span>
                     </label>
@@ -598,7 +581,7 @@ const Register = () => {
                 </div>
                 {formik.touched.medical_info?.fitness_goals &&
                   formik.errors.medical_info?.fitness_goals && (
-                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                    <p className="mt-2 text-sm text-red-600">
                       {formik.errors.medical_info.fitness_goals}
                     </p>
                   )}
@@ -606,18 +589,17 @@ const Register = () => {
 
               {/* Health Conditions */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700">
                   Health Conditions (Optional)
                 </label>
                 <textarea
                   name="medical_info.health_conditions"
                   placeholder="List any health conditions, injuries, or limitations..."
-                  rows={3}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                  rows={3} className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                     formik.touched.medical_info?.health_conditions &&
                     formik.errors.medical_info?.health_conditions
-                      ? "border-red-300 dark:border-red-600"
-                      : "border-slate-300 dark:border-slate-600"
+                      ? "border-red-300"
+                      : "border-slate-300"
                   }`}
                   onChange={(e) => {
                     const conditions = e.target.value
@@ -638,18 +620,17 @@ const Register = () => {
 
               {/* Allergies */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700">
                   Allergies (Optional)
                 </label>
                 <textarea
                   name="medical_info.allergies"
                   placeholder="List any allergies..."
-                  rows={2}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                  rows={2} className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                     formik.touched.medical_info?.allergies &&
                     formik.errors.medical_info?.allergies
-                      ? "border-red-300 dark:border-red-600"
-                      : "border-slate-300 dark:border-slate-600"
+                      ? "border-red-300"
+                      : "border-slate-300"
                   }`}
                   onChange={(e) => {
                     const allergies = e.target.value
@@ -665,18 +646,17 @@ const Register = () => {
 
               {/* Emergency Notes */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700">
                   Emergency Notes (Optional)
                 </label>
                 <textarea
                   name="medical_info.emergency_notes"
                   placeholder="Any additional information for emergency situations..."
-                  rows={2}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                  rows={2} className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                     formik.touched.medical_info?.emergency_notes &&
                     formik.errors.medical_info?.emergency_notes
-                      ? "border-red-300 dark:border-red-600"
-                      : "border-slate-300 dark:border-slate-600"
+                      ? "border-red-300"
+                      : "border-slate-300"
                   }`}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -687,24 +667,23 @@ const Register = () => {
 
             {/* Emergency Contact */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+              <label className="block text-sm font-medium text-slate-700">
                 <AlertTriangle className="inline w-4 h-4 mr-2" />
                 Emergency Contact
               </label>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700">
                     Full Name
                   </label>
                   <input
                     type="text"
                     name="emergency_contact.name"
-                    placeholder="Enter emergency contact name"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter emergency contact name" className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.emergency_contact?.name &&
                       formik.errors.emergency_contact?.name
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -712,25 +691,24 @@ const Register = () => {
                   />
                   {formik.touched.emergency_contact?.name &&
                     formik.errors.emergency_contact?.name && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      <p className="mt-2 text-sm text-red-600">
                         {formik.errors.emergency_contact.name}
                       </p>
                     )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700">
                     Relationship
                   </label>
                   <input
                     type="text"
                     name="emergency_contact.relationship"
-                    placeholder="e.g., Spouse, Parent, Friend"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="e.g., Spouse, Parent, Friend" className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.emergency_contact?.relationship &&
                       formik.errors.emergency_contact?.relationship
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -738,25 +716,24 @@ const Register = () => {
                   />
                   {formik.touched.emergency_contact?.relationship &&
                     formik.errors.emergency_contact?.relationship && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      <p className="mt-2 text-sm text-red-600">
                         {formik.errors.emergency_contact.relationship}
                       </p>
                     )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700">
                     Phone Number
                   </label>
                   <input
                     type="tel"
                     name="emergency_contact.phone"
-                    placeholder="Enter emergency contact phone"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter emergency contact phone" className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.emergency_contact?.phone &&
                       formik.errors.emergency_contact?.phone
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-red-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -764,25 +741,24 @@ const Register = () => {
                   />
                   {formik.touched.emergency_contact?.phone &&
                     formik.errors.emergency_contact?.phone && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      <p className="mt-2 text-sm text-red-600">
                         {formik.errors.emergency_contact.phone}
                       </p>
                     )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700">
                     Email (Optional)
                   </label>
                   <input
                     type="email"
                     name="emergency_contact.email"
-                    placeholder="Enter emergency contact email"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter emergency contact email" className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.emergency_contact?.email &&
                       formik.errors.emergency_contact?.email
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -790,7 +766,7 @@ const Register = () => {
                   />
                   {formik.touched.emergency_contact?.email &&
                     formik.errors.emergency_contact?.email && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      <p className="mt-2 text-sm text-red-600">
                         {formik.errors.emergency_contact.email}
                       </p>
                     )}
@@ -800,24 +776,23 @@ const Register = () => {
 
             {/* Address Information */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+              <label className="block text-sm font-medium text-slate-700">
                 <MapPin className="inline w-4 h-4 mr-2" />
                 Address Information
               </label>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700">
                     Street Address
                   </label>
                   <input
                     type="text"
                     name="address.street"
-                    placeholder="Enter your street address"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your street address" className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.address?.street &&
                       formik.errors.address?.street
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -825,25 +800,24 @@ const Register = () => {
                   />
                   {formik.touched.address?.street &&
                     formik.errors.address?.street && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      <p className="mt-2 text-sm text-red-600">
                         {formik.errors.address.street}
                       </p>
                     )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700">
                     City
                   </label>
                   <input
                     type="text"
                     name="address.city"
-                    placeholder="Enter your city"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your city" className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.address?.city &&
                       formik.errors.address?.city
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -851,25 +825,24 @@ const Register = () => {
                   />
                   {formik.touched.address?.city &&
                     formik.errors.address?.city && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      <p className="mt-2 text-sm text-red-600">
                         {formik.errors.address.city}
                       </p>
                     )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700">
                     State/Province
                   </label>
                   <input
                     type="text"
                     name="address.state"
-                    placeholder="Enter your state/province"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your state/province" className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.address?.state &&
                       formik.errors.address?.state
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -877,25 +850,24 @@ const Register = () => {
                   />
                   {formik.touched.address?.state &&
                     formik.errors.address?.state && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      <p className="mt-2 text-sm text-red-600">
                         {formik.errors.address.state}
                       </p>
                     )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700">
                     ZIP/Postal Code
                   </label>
                   <input
                     type="text"
                     name="address.zipCode"
-                    placeholder="Enter your ZIP/postal code"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your ZIP/postal code" className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.address?.zipCode &&
                       formik.errors.address?.zipCode
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-red-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -903,25 +875,24 @@ const Register = () => {
                   />
                   {formik.touched.address?.zipCode &&
                     formik.errors.address?.zipCode && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      <p className="mt-2 text-sm text-red-600">
                         {formik.errors.address.zipCode}
                       </p>
                     )}
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-slate-700">
                     Country
                   </label>
                   <input
                     type="text"
                     name="address.country"
-                    placeholder="Enter your country"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your country" className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                       formik.touched.address?.country &&
                       formik.errors.address?.country
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -929,7 +900,7 @@ const Register = () => {
                   />
                   {formik.touched.address?.country &&
                     formik.errors.address?.country && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      <p className="mt-2 text-sm text-red-600">
                         {formik.errors.address.country}
                       </p>
                     )}
@@ -940,8 +911,7 @@ const Register = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={registerState.loading || !formik.isValid}
-              className="flex items-center justify-center w-full gap-2 py-3 font-medium text-white transition-all rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={registerState.loading || !formik.isValid} className="flex items-center justify-center w-full gap-2 py-3 font-medium text-white transition-all rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {registerState.loading ? (
                 <div className="flex items-center gap-2">
@@ -961,10 +931,10 @@ const Register = () => {
           {/* Divider */}
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-300 dark:border-slate-600"></div>
+              <div className="w-full border-t border-slate-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+              <span className="px-4 bg-white">
                 Already a member?
               </span>
             </div>
@@ -973,8 +943,7 @@ const Register = () => {
           {/* Login Link */}
           <div className="text-center">
             <Link
-              to="/members/login"
-              className="inline-flex items-center gap-2 px-6 py-3 transition-all border rounded-lg border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
+              to="/members/login" className="inline-flex items-center gap-2 px-6 py-3 transition-all border rounded-lg border-slate-300"
             >
               Sign In Instead
             </Link>
@@ -982,12 +951,11 @@ const Register = () => {
 
           {/* Staff Registration Link */}
           <div className="mt-6 text-center">
-            <p className="mb-2 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mb-2 text-sm text-slate-600">
               Are you a staff member?
             </p>
             <Link
-              to="/auth/register"
-              className="font-medium text-green-600 dark:text-green-400 hover:underline"
+              to="/auth/register" className="font-medium text-green-600"
             >
               Staff Registration
             </Link>

@@ -279,7 +279,7 @@ const MemberProfile = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="mx-auto space-y-6 max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -289,10 +289,10 @@ const MemberProfile = () => {
               Back
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-slate-900">
                 My Profile
               </h1>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">
+              <p className="mt-2 text-slate-600">
                 Manage your account settings and preferences
               </p>
             </div>
@@ -301,8 +301,7 @@ const MemberProfile = () => {
             {!isEditing && (
               <Button
                 onClick={() => setIsEditing(true)}
-                variant="outline"
-                className="border-gray-300 hover:bg-gray-50"
+                variant="outline" className="border-gray-300 hover:bg-gray-50"
               >
                 <Edit className="w-4 h-4 mr-2" />
                 Edit Profile
@@ -310,8 +309,7 @@ const MemberProfile = () => {
             )}
             <Button
               onClick={handleLogout}
-              variant="outline"
-              className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
+              variant="outline" className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Logout
@@ -320,25 +318,23 @@ const MemberProfile = () => {
         </div>
 
         {/* Member Navigation */}
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+        <div className="bg-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <Link
-                to="/members/dashboard"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border-b-2 border-transparent hover:border-blue-600"
+                to="/members/dashboard" className="flex items-center gap-2 px-4 py-2 text-slate-700"
               >
                 <Users className="h-4 w-4" />
                 Dashboard
               </Link>
               <Link
-                to="/members/profile"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-green-600 dark:hover:text-green-400 transition-colors border-b-2 border-green-600"
+                to="/members/profile" className="flex items-center gap-2 px-4 py-2 text-slate-700"
               >
                 <User className="h-4 w-4" />
                 My Profile
               </Link>
             </div>
-            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+            <div className="flex items-center gap-2 text-sm text-slate-600">
               <Clock className="h-4 w-4" />
               <span>Welcome back! You're logged in as a member.</span>
             </div>
@@ -346,45 +342,42 @@ const MemberProfile = () => {
         </div>
 
         {/* Profile Overview Card */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
-          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-700">
+        <Card className="bg-white border-0 shadow-lg">
+          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
+                <div className="flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-blue-200">
                   {profilePicture ? (
                     <img
                       src={profilePicture}
-                      alt={currentUser.name}
-                      className="object-cover w-20 h-20 rounded-full"
+                      alt={currentUser.name} className="object-cover w-20 h-20 rounded-full"
                     />
                   ) : (
-                    <User className="w-12 h-12 text-blue-600 dark:text-blue-400" />
+                    <User className="w-12 h-12 text-blue-600" />
                   )}
                 </div>
                 <Button
                   onClick={() => setShowProfileManager(true)}
-                  size="sm"
-                  className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full p-0 bg-blue-600 hover:bg-blue-700"
+                  size="sm" className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full p-0 bg-blue-600 hover:bg-blue-700"
                 >
                   <CameraIcon className="w-4 h-4" />
                 </Button>
               </div>
               <div>
-                <CardTitle className="text-2xl font-semibold text-gray-900 dark:text-white">
+                <CardTitle className="text-2xl font-semibold text-gray-900">
                   {currentUser.name}
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400">
+                <CardDescription className="text-gray-600">
                   {isMember ? "Gym Member" : "Staff Member"} •{" "}
                   {currentUser.email}
                 </CardDescription>
               </div>
               <div className="ml-auto">
                 <Badge
-                  variant="secondary"
-                  className={`${
+                  variant="secondary" className={`${
                     currentUser.membershiptype === "MONTHLY"
-                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                      : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-blue-100 text-blue-800"
                   }`}
                 >
                   {currentUser.membershiptype === "MONTHLY" ? (
@@ -400,34 +393,34 @@ const MemberProfile = () => {
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                <div className="text-2xl font-bold text-gray-900">
                   {currentUser.age}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   Age
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-semibold text-gray-900 dark:text-white">
+                <div className="text-lg font-semibold text-gray-900">
                   {currentUser.email}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   Email
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-semibold text-gray-900 dark:text-white">
+                <div className="text-lg font-semibold text-gray-900">
                   {currentUser.phone_number || "Not provided"}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   Phone
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-semibold text-gray-900 dark:text-white">
+                <div className="text-lg font-semibold text-gray-900">
                   {new Date(currentUser.createdAt).toLocaleDateString()}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   Member Since
                 </div>
               </div>
@@ -436,12 +429,12 @@ const MemberProfile = () => {
         </Card>
 
         {/* Profile Form */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+            <CardTitle className="text-xl font-semibold text-gray-900">
               Profile Information
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400">
+            <CardDescription className="text-gray-600">
               {isEditing
                 ? "Update your profile information"
                 : "View your profile details"}
@@ -451,7 +444,7 @@ const MemberProfile = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Basic Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-gray-900">
                   <User className="w-5 h-5" />
                   Basic Information
                 </h3>
@@ -462,8 +455,7 @@ const MemberProfile = () => {
                     id="name"
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    disabled={!isEditing}
-                    className={validationErrors.name ? "border-red-500" : ""}
+                    disabled={!isEditing} className={validationErrors.name ? "border-red-500" : ""}
                     placeholder="Enter full name"
                   />
                   {validationErrors.name && (
@@ -480,8 +472,7 @@ const MemberProfile = () => {
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
-                    disabled={!isEditing}
-                    className={validationErrors.email ? "border-red-500" : ""}
+                    disabled={!isEditing} className={validationErrors.email ? "border-red-500" : ""}
                     placeholder="Enter email address"
                   />
                   {validationErrors.email && (
@@ -499,8 +490,7 @@ const MemberProfile = () => {
                     onChange={(e) =>
                       handleInputChange("phone_number", e.target.value)
                     }
-                    disabled={!isEditing}
-                    className={
+                    disabled={!isEditing} className={
                       validationErrors.phone_number ? "border-red-500" : ""
                     }
                     placeholder="Enter phone number"
@@ -521,8 +511,7 @@ const MemberProfile = () => {
                     }
                     disabled={!isEditing}
                   >
-                    <SelectTrigger
-                      className={validationErrors.age ? "border-red-500" : ""}
+                    <SelectTrigger className={validationErrors.age ? "border-red-500" : ""}
                     >
                       <SelectValue placeholder="Select age" />
                     </SelectTrigger>
@@ -544,7 +533,7 @@ const MemberProfile = () => {
 
               {/* Membership & Security */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-gray-900">
                   <CreditCard className="w-5 h-5" />
                   Membership & Security
                 </h3>
@@ -589,8 +578,7 @@ const MemberProfile = () => {
                           value={formData.password}
                           onChange={(e) =>
                             handleInputChange("password", e.target.value)
-                          }
-                          className={
+                          } className={
                             validationErrors.password ? "border-red-500" : ""
                           }
                           placeholder="Enter new password"
@@ -598,8 +586,7 @@ const MemberProfile = () => {
                         <Button
                           type="button"
                           variant="ghost"
-                          size="sm"
-                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                           onClick={() => setShowPassword(!showPassword)}
                         >
                           {showPassword ? (
@@ -627,8 +614,7 @@ const MemberProfile = () => {
                           value={formData.confirmPassword}
                           onChange={(e) =>
                             handleInputChange("confirmPassword", e.target.value)
-                          }
-                          className={
+                          } className={
                             validationErrors.confirmPassword
                               ? "border-red-500"
                               : ""
@@ -638,8 +624,7 @@ const MemberProfile = () => {
                         <Button
                           type="button"
                           variant="ghost"
-                          size="sm"
-                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                           onClick={() =>
                             setShowConfirmPassword(!showConfirmPassword)
                           }
@@ -690,8 +675,7 @@ const MemberProfile = () => {
                   </Button>
                   <Button
                     onClick={handleUpdateProfile}
-                    disabled={isUpdating}
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    disabled={isUpdating} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                   >
                     {isUpdating ? (
                       <>
@@ -712,12 +696,12 @@ const MemberProfile = () => {
         </Card>
 
         {/* Quick Actions */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+            <CardTitle className="text-xl font-semibold text-gray-900">
               Quick Actions
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400">
+            <CardDescription className="text-gray-600">
               Common actions and shortcuts
             </CardDescription>
           </CardHeader>
@@ -725,8 +709,7 @@ const MemberProfile = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Button
                 onClick={() => navigate("/members/dashboard")}
-                variant="outline"
-                className="h-20 flex-col gap-2"
+                variant="outline" className="h-20 flex-col gap-2"
               >
                 <Activity className="w-6 h-6" />
                 <span>Members Dashboard</span>
@@ -734,8 +717,7 @@ const MemberProfile = () => {
 
               <Button
                 onClick={() => setShowProfileManager(true)}
-                variant="outline"
-                className="h-20 flex-col gap-2"
+                variant="outline" className="h-20 flex-col gap-2"
               >
                 <Camera className="w-6 h-6" />
                 <span>Change Photo</span>
@@ -743,8 +725,7 @@ const MemberProfile = () => {
 
               <Button
                 onClick={handleLogout}
-                variant="outline"
-                className="h-20 flex-col gap-2 border-red-300 text-red-600 hover:bg-red-50"
+                variant="outline" className="h-20 flex-col gap-2 border-red-300 text-red-600 hover:bg-red-50"
               >
                 <LogOut className="w-6 h-6" />
                 <span>Logout</span>
@@ -754,12 +735,12 @@ const MemberProfile = () => {
         </Card>
 
         {/* Email Verification */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+            <CardTitle className="text-xl font-semibold text-gray-900">
               Email Verification
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400">
+            <CardDescription className="text-gray-600">
               Verify your email address to access all features
             </CardDescription>
           </CardHeader>

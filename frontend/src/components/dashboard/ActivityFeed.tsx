@@ -136,8 +136,7 @@ const ActivityFeed: React.FC = () => {
             onClick={handleRefresh}
             disabled={isRefreshing}
           >
-            <RefreshCw
-              className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
             />
             Refresh
           </Button>
@@ -147,8 +146,7 @@ const ActivityFeed: React.FC = () => {
         <div className="space-y-4">
           {activities.map((activity) => (
             <div
-              key={activity.id}
-              className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+              key={activity.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
             >
               {/* Activity Icon */}
               <div className={`p-2 rounded-lg ${activity.bgColor}`}>

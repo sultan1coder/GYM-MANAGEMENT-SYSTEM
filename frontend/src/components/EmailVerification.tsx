@@ -91,21 +91,20 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
 
   if (isVerified) {
     return (
-      <Card className="border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-800">
+      <Card className="border-green-200 bg-green-50">
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-green-600" />
             <div>
-              <div className="font-medium text-green-900 dark:text-green-100">
+              <div className="font-medium text-green-900">
                 Email Verified
               </div>
-              <div className="text-sm text-green-700 dark:text-green-200">
+              <div className="text-sm text-green-700">
                 Your email address has been verified successfully
               </div>
             </div>
             <Badge
-              variant="secondary"
-              className="ml-auto bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+              variant="secondary" className="ml-auto bg-green-100 text-green-800"
             >
               Verified
             </Badge>
@@ -116,24 +115,24 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
   }
 
   return (
-    <Card className="border-orange-200 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-800">
+    <Card className="border-orange-200 bg-orange-50">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
           <Shield className="w-5 h-5 text-orange-600" />
           Email Verification Required
         </CardTitle>
-        <CardDescription className="text-orange-700 dark:text-orange-200">
+        <CardDescription className="text-orange-700">
           Please verify your email address to access all features
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex items-center gap-3 p-3 bg-white dark:bg-slate-800 rounded-lg border border-orange-200 dark:border-orange-700">
+        <div className="flex items-center gap-3 p-3 bg-white">
           <Mail className="w-5 h-5 text-orange-600" />
           <div className="flex-1">
-            <div className="font-medium text-slate-900 dark:text-slate-100">
+            <div className="font-medium text-slate-900">
               {email}
             </div>
-            <div className="text-sm text-slate-600 dark:text-slate-400">
+            <div className="text-sm text-slate-600">
               Verification email will be sent to this address
             </div>
           </div>
@@ -142,8 +141,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
         {!showVerificationInput ? (
           <Button
             onClick={handleSendVerificationEmail}
-            disabled={isLoading}
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+            disabled={isLoading} className="w-full bg-orange-600 hover:bg-orange-700 text-white"
           >
             {isLoading ? (
               <>
@@ -161,8 +159,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
           <div className="space-y-3">
             <div>
               <Label
-                htmlFor="verificationCode"
-                className="text-sm font-medium text-slate-700 dark:text-slate-300"
+                htmlFor="verificationCode" className="text-sm font-medium text-slate-700"
               >
                 Enter Verification Code
               </Label>
@@ -170,8 +167,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
                 id="verificationCode"
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
-                placeholder="Enter 6-digit code"
-                className="mt-1"
+                placeholder="Enter 6-digit code" className="mt-1"
                 maxLength={6}
               />
             </div>
@@ -179,8 +175,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
             <div className="flex gap-2">
               <Button
                 onClick={handleVerifyCode}
-                disabled={isLoading || !verificationCode.trim()}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                disabled={isLoading || !verificationCode.trim()} className="flex-1 bg-green-600 hover:bg-green-700 text-white"
               >
                 {isLoading ? (
                   <>
@@ -198,8 +193,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
               <Button
                 onClick={handleResendCode}
                 disabled={isLoading}
-                variant="outline"
-                className="border-orange-300 text-orange-700 hover:bg-orange-50 dark:border-orange-600 dark:text-orange-300 dark:hover:bg-orange-900/20"
+                variant="outline" className="border-orange-300 text-orange-700 hover:bg-orange-50"
               >
                 {isLoading ? (
                   <RefreshCw className="w-4 h-4 animate-spin" />
@@ -209,7 +203,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
               </Button>
             </div>
 
-            <div className="text-xs text-orange-700 dark:text-orange-200 text-center">
+            <div className="text-xs text-orange-700">
               <AlertCircle className="inline w-3 h-3 mr-1" />
               Check your email for the verification code
             </div>

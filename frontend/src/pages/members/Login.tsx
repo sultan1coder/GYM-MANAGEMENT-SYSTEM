@@ -79,24 +79,24 @@ const Login = () => {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8">
+        <div className="bg-white">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-3 rounded-xl w-fit mx-auto mb-4">
               <Users className="h-8 w-8" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+            <h1 className="text-2xl font-bold text-slate-900">
               Member Login
             </h1>
-            <p className="text-slate-600 dark:text-slate-300">
+            <p className="text-slate-600">
               Welcome back! Access your gym member portal
             </p>
           </div>
 
           {/* Error Display */}
           {loginState.error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <div className="flex items-center gap-2 text-red-800 dark:text-red-200">
+            <div className="mb-6 p-4 bg-red-50">
+              <div className="flex items-center gap-2 text-red-800">
                 <AlertCircle className="h-5 w-5" />
                 <span className="text-sm font-medium">{loginState.error}</span>
               </div>
@@ -107,7 +107,7 @@ const Login = () => {
           <form onSubmit={formik.handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-slate-700">
                 Email Address
               </label>
               <div className="relative">
@@ -115,11 +115,10 @@ const Login = () => {
                 <input
                   type="email"
                   name="email"
-                  placeholder="Enter your email"
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                  placeholder="Enter your email" className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                     formik.touched.email && formik.errors.email
-                      ? "border-red-300 dark:border-red-600"
-                      : "border-slate-300 dark:border-slate-600"
+                      ? "border-red-300"
+                      : "border-slate-300"
                   }`}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -128,7 +127,7 @@ const Login = () => {
                 />
               </div>
               {formik.touched.email && formik.errors.email && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                <p className="mt-2 text-sm text-red-600">
                   {formik.errors.email}
                 </p>
               )}
@@ -136,7 +135,7 @@ const Login = () => {
 
             {/* Password Field */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-slate-700">
                 Password
               </label>
               <div className="relative">
@@ -144,11 +143,10 @@ const Login = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  placeholder="Enter your password"
-                  className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                  placeholder="Enter your password" className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent${
                     formik.touched.password && formik.errors.password
-                      ? "border-red-300 dark:border-red-600"
-                      : "border-slate-300 dark:border-slate-600"
+                      ? "border-red-300"
+                      : "border-slate-300"
                   }`}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -157,8 +155,7 @@ const Login = () => {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                  onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
                   disabled={loginState.loading}
                 >
                   {showPassword ? (
@@ -169,7 +166,7 @@ const Login = () => {
                 </button>
               </div>
               {formik.touched.password && formik.errors.password && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                <p className="mt-2 text-sm text-red-600">
                   {formik.errors.password}
                 </p>
               )}
@@ -178,8 +175,7 @@ const Login = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={loginState.loading || !formik.isValid}
-              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center justify-center gap-2"
+              disabled={loginState.loading || !formik.isValid} className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center justify-center gap-2"
             >
               {loginState.loading ? (
                 <div className="flex items-center gap-2">
@@ -199,10 +195,10 @@ const Login = () => {
           {/* Divider */}
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-300 dark:border-slate-600"></div>
+              <div className="w-full border-t border-slate-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+              <span className="px-4 bg-white">
                 New member?
               </span>
             </div>
@@ -211,8 +207,7 @@ const Login = () => {
           {/* Register Link */}
           <div className="text-center">
             <Link
-              to="/members/register"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+              to="/members/register" className="inline-flex items-center gap-2 px-6 py-3 border border-slate-300"
             >
               Join as Member
             </Link>
@@ -220,12 +215,11 @@ const Login = () => {
 
           {/* Staff Login Link */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+            <p className="text-sm text-slate-600">
               Are you a staff member?
             </p>
             <Link
-              to="/auth/login"
-              className="text-green-600 dark:text-green-400 hover:underline font-medium"
+              to="/auth/login" className="text-green-600"
             >
               Staff Login
             </Link>

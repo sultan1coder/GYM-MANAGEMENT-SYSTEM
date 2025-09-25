@@ -23,10 +23,10 @@ const EnhancedProfileManagerDemo: React.FC = () => {
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-4xl font-bold text-gray-900">
           Enhanced Profile Manager Demo
         </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+        <p className="text-xl text-gray-600">
           A comprehensive profile management system with advanced security
           features, privacy controls, and data management capabilities.
         </p>
@@ -48,7 +48,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <User className="h-5 w-5 text-blue-600" />
                 <h3 className="font-semibold">Profile Picture Management</h3>
               </div>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• Drag & drop file upload</li>
                 <li>• Image preview & validation</li>
                 <li>• File size & type restrictions</li>
@@ -62,7 +62,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <Lock className="h-5 w-5 text-green-600" />
                 <h3 className="font-semibold">Password Management</h3>
               </div>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• Real-time strength indicator</li>
                 <li>• Password requirements feedback</li>
                 <li>• Secure password change</li>
@@ -76,7 +76,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <Shield className="h-5 w-5 text-purple-600" />
                 <h3 className="font-semibold">Two-Factor Authentication</h3>
               </div>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• Multiple 2FA methods</li>
                 <li>• Easy enable/disable</li>
                 <li>• Security status indicators</li>
@@ -90,7 +90,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <Bell className="h-5 w-5 text-orange-600" />
                 <h3 className="font-semibold">Notification Preferences</h3>
               </div>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• Email notifications</li>
                 <li>• SMS notifications</li>
                 <li>• Push notifications</li>
@@ -104,7 +104,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <Shield className="h-5 w-5 text-indigo-600" />
                 <h3 className="font-semibold">Privacy Settings</h3>
               </div>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• Profile visibility control</li>
                 <li>• Personal info display</li>
                 <li>• Message permissions</li>
@@ -118,7 +118,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <Download className="h-5 w-5 text-teal-600" />
                 <h3 className="font-semibold">Data Management</h3>
               </div>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• Personal data export</li>
                 <li>• Multiple export formats</li>
                 <li>• Account deletion</li>
@@ -132,7 +132,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <CreditCard className="h-5 w-5 text-indigo-600" />
                 <h3 className="font-semibold">Membership & Subscription</h3>
               </div>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• Membership renewal reminders</li>
                 <li>• Payment history tracking</li>
                 <li>• Subscription plan selection</li>
@@ -147,7 +147,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <Search className="h-5 w-5 text-purple-600" />
                 <h3 className="font-semibold">User Experience Improvements</h3>
               </div>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• Smart search with autocomplete</li>
                 <li>• Keyboard shortcuts & navigation</li>
                 <li>• Dark mode toggle</li>
@@ -163,7 +163,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 <ShieldCheck className="h-5 w-5 text-red-600" />
                 <h3 className="font-semibold">Data Validation & Security</h3>
               </div>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• Input sanitization & validation</li>
                 <li>• Rate limiting & account lockout</li>
                 <li>• Session management & security</li>
@@ -189,8 +189,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
                 value={userType}
                 onChange={(e) =>
                   setUserType(e.target.value as "staff" | "member")
-                }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                } className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="member">Member</option>
                 <option value="staff">Staff</option>
@@ -199,20 +198,19 @@ const EnhancedProfileManagerDemo: React.FC = () => {
 
             <Button
               onClick={() => setShowProfileManager(true)}
-              size="lg"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
             >
               <Settings className="h-5 w-5 mr-2" />
               Open Enhanced Profile Manager
             </Button>
           </div>
 
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-            <div className="flex items-center gap-2 text-blue-800 dark:text-blue-200">
+          <div className="bg-blue-50">
+            <div className="flex items-center gap-2 text-blue-800">
               <AlertTriangle className="h-5 w-5" />
               <span className="font-medium">Demo Mode</span>
             </div>
-            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+            <p className="text-sm text-blue-700">
               This is a demonstration of the Enhanced Profile Manager. All
               features are fully functional but use mock data and simulated API
               calls. In production, this would integrate with your backend
@@ -231,7 +229,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-semibold mb-2">Frontend Technologies</h3>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• React 18 with TypeScript</li>
                 <li>• Tailwind CSS for styling</li>
                 <li>• Shadcn/ui component library</li>
@@ -242,7 +240,7 @@ const EnhancedProfileManagerDemo: React.FC = () => {
 
             <div>
               <h3 className="font-semibold mb-2">Key Features</h3>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <ul className="text-sm text-gray-600">
                 <li>• Responsive design</li>
                 <li>• Dark mode support</li>
                 <li>• Accessibility compliant</li>
@@ -252,9 +250,9 @@ const EnhancedProfileManagerDemo: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+          <div className="bg-gray-50">
             <h3 className="font-semibold mb-2">State Management</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600">
               The component uses React hooks for local state management, with
               Redux integration for user data. All form states, UI states, and
               user preferences are managed locally for optimal performance.

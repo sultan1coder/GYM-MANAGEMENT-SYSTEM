@@ -269,35 +269,32 @@ export default function ProfilePictureManager({
 
         <div className="space-y-6">
           {/* Tab Navigation */}
-          <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+          <div className="flex space-x-1 bg-gray-100">
             <button
-              onClick={() => setActiveTab("upload")}
-              className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              onClick={() => setActiveTab("upload")} className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 activeTab === "upload"
-                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  ? "bg-white"
+                  : "text-gray-600"
               }`}
             >
               <Upload className="w-4 h-4 mr-2 inline" />
               Upload Image
             </button>
             <button
-              onClick={() => setActiveTab("defaults")}
-              className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              onClick={() => setActiveTab("defaults")} className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 activeTab === "defaults"
-                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  ? "bg-white"
+                  : "text-gray-600"
               }`}
             >
               <User className="w-4 h-4 mr-2 inline" />
               Default Avatars
             </button>
             <button
-              onClick={() => setActiveTab("url")}
-              className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              onClick={() => setActiveTab("url")} className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 activeTab === "url"
-                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  ? "bg-white"
+                  : "text-gray-600"
               }`}
             >
               <ImageIcon className="w-4 h-4 mr-2 inline" />
@@ -313,15 +310,14 @@ export default function ProfilePictureManager({
             <CardContent>
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 flex items-center justify-center overflow-hidden">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-blue-200">
                     {currentPicture ? (
                       <img
                         src={currentPicture}
-                        alt="Current profile"
-                        className="w-full h-full object-cover"
+                        alt="Current profile" className="w-full h-full object-cover"
                       />
                     ) : (
-                      <User className="w-12 h-12 text-blue-600 dark:text-blue-400" />
+                      <User className="w-12 h-12 text-blue-600" />
                     )}
                   </div>
                   {!currentPicture && (
@@ -331,15 +327,14 @@ export default function ProfilePictureManager({
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600">
                     {currentPicture ? "Current profile picture" : "No profile picture set"}
                   </p>
                   {currentPicture && (
                     <Button
                       onClick={handleRemove}
                       variant="outline"
-                      size="sm"
-                      className="mt-2 text-red-600 hover:text-red-700"
+                      size="sm" className="mt-2 text-red-600 hover:text-red-700"
                     >
                       <Trash2 className="w-4 h-4 mr-2" />
                       Remove Picture
@@ -360,23 +355,22 @@ export default function ProfilePictureManager({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+                <div className="border-2 border-dashed border-gray-300">
                   <input
                     ref={fileInputRef}
                     type="file"
                     accept={ALLOWED_FILE_TYPES.join(",")}
-                    onChange={handleFileSelect}
-                    className="hidden"
+                    onChange={handleFileSelect} className="hidden"
                   />
                   <div className="space-y-4">
-                    <div className="mx-auto w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                      <Upload className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                    <div className="mx-auto w-16 h-16 bg-blue-100">
+                      <Upload className="w-8 h-8 text-blue-600" />
                     </div>
                     <div>
-                      <p className="text-lg font-medium text-gray-900 dark:text-white">
+                      <p className="text-lg font-medium text-gray-900">
                         Click to upload or drag and drop
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      <p className="text-sm text-gray-600">
                         PNG, JPG, JPEG, WEBP up to 5MB
                       </p>
                     </div>
@@ -410,8 +404,7 @@ export default function ProfilePictureManager({
                             <img
                               ref={imageRef}
                               src={imagePreview}
-                              alt="Preview"
-                              className="max-w-full max-h-64 rounded-lg border"
+                              alt="Preview" className="max-w-full max-h-64 rounded-lg border"
                               style={{
                                 transform: `rotate(${rotation}deg) scale(${zoom})`,
                                 transition: 'transform 0.2s ease-in-out'
@@ -485,24 +478,22 @@ export default function ProfilePictureManager({
                 <div className="space-y-4">
                   {["Professional", "Casual", "Fitness"].map((category) => (
                     <div key={category}>
-                      <h4 className="font-medium text-gray-900 dark:text-white mb-3">
+                      <h4 className="font-medium text-gray-900">
                         {category} Avatars
                       </h4>
                       <div className="grid grid-cols-3 gap-3">
                         {DEFAULT_AVATARS.filter(avatar => avatar.category === category).map((avatar) => (
                           <div
-                            key={avatar.id}
-                            className={`relative cursor-pointer rounded-lg border-2 transition-all hover:scale-105 ${
+                            key={avatar.id} className={`relative cursor-pointer rounded-lg border-2 transition-all hover:scale-105 ${
                               selectedDefaultAvatar === avatar.id
-                                ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                                ? "border-blue-500 bg-blue-50"
+                                : "border-gray-200"
                             }`}
                             onClick={() => handleDefaultAvatarSelect(avatar.id)}
                           >
                             <img
                               src={avatar.url}
-                              alt={avatar.name}
-                              className="w-full h-24 object-cover rounded-lg"
+                              alt={avatar.name} className="w-full h-24 object-cover rounded-lg"
                             />
                             {selectedDefaultAvatar === avatar.id && (
                               <div className="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
@@ -510,7 +501,7 @@ export default function ProfilePictureManager({
                               </div>
                             )}
                             <div className="p-2 text-center">
-                              <p className="text-xs font-medium text-gray-900 dark:text-white">
+                              <p className="text-xs font-medium text-gray-900">
                                 {avatar.name}
                               </p>
                             </div>
@@ -550,8 +541,7 @@ export default function ProfilePictureManager({
                     <div className="text-center">
                       <img
                         src={imageUrl}
-                        alt="URL preview"
-                        className="max-w-full max-h-48 rounded-lg border mx-auto"
+                        alt="URL preview" className="max-w-full max-h-48 rounded-lg border mx-auto"
                         onError={() => setValidationErrors(["Failed to load image from URL"])}
                       />
                     </div>
@@ -563,15 +553,15 @@ export default function ProfilePictureManager({
 
           {/* Validation Errors */}
           {validationErrors.length > 0 && (
-            <Card className="border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
+            <Card className="border-red-200">
               <CardContent className="pt-4">
                 <div className="flex items-start gap-2">
                   <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
                   <div className="space-y-1">
-                    <p className="text-sm font-medium text-red-800 dark:text-red-200">
+                    <p className="text-sm font-medium text-red-800">
                       Please fix the following issues:
                     </p>
-                    <ul className="text-sm text-red-700 dark:text-red-300 space-y-1">
+                    <ul className="text-sm text-red-700">
                       {validationErrors.map((error, index) => (
                         <li key={index} className="flex items-start gap-2">
                           <span className="w-1.5 h-1.5 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
@@ -586,15 +576,15 @@ export default function ProfilePictureManager({
           )}
 
           {/* File Requirements */}
-          <Card className="bg-gray-50 dark:bg-gray-800/50">
+          <Card className="bg-gray-50">
             <CardHeader>
               <CardTitle className="text-lg">File Requirements</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <h5 className="font-medium text-gray-900 dark:text-white mb-2">Supported Formats</h5>
-                  <div className="space-y-1 text-gray-600 dark:text-gray-400">
+                  <h5 className="font-medium text-gray-900">Supported Formats</h5>
+                  <div className="space-y-1 text-gray-600">
                     {ALLOWED_FILE_TYPES.map(type => (
                       <div key={type} className="flex items-center gap-2">
                         <Check className="w-4 h-4 text-green-600" />
@@ -604,8 +594,8 @@ export default function ProfilePictureManager({
                   </div>
                 </div>
                 <div>
-                  <h5 className="font-medium text-gray-900 dark:text-white mb-2">Size & Dimensions</h5>
-                  <div className="space-y-1 text-gray-600 dark:text-gray-400">
+                  <h5 className="font-medium text-gray-900">Size & Dimensions</h5>
+                  <div className="space-y-1 text-gray-600">
                     <div className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
                       Max file size: 5MB
@@ -631,8 +621,7 @@ export default function ProfilePictureManager({
           </Button>
           <Button
             onClick={handleSave}
-            disabled={isUploading || validationErrors.length > 0 || !imageUrl.trim()}
-            className="min-w-[120px]"
+            disabled={isUploading || validationErrors.length > 0 || !imageUrl.trim()} className="min-w-[120px]"
           >
             {isUploading ? (
               <>

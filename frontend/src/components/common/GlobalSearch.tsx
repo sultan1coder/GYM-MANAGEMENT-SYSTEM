@@ -236,15 +236,15 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({
   const getResultTypeColor = (type: string) => {
     switch (type) {
       case "member":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+        return "bg-green-100 text-green-800";
       case "payment":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+        return "bg-blue-100 text-blue-800";
       case "equipment":
-        return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
+        return "bg-purple-100 text-purple-800";
       case "attendance":
-        return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+        return "bg-orange-100 text-orange-800";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -260,15 +260,13 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={handleFocus}
-          onKeyDown={handleKeyDown}
-          className="pl-10 pr-10 w-full"
+          onKeyDown={handleKeyDown} className="pl-10 pr-10 w-full"
         />
         {query && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={clearSearch}
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+            onClick={clearSearch} className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
           >
             <X className="w-4 h-4" />
           </Button>
@@ -290,20 +288,18 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({
                   {results.map((result, index) => (
                     <div
                       key={`${result.type}-${result.id}`}
-                      onClick={() => handleResultClick(result)}
-                      className="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
+                      onClick={() => handleResultClick(result)} className="flex items-center gap-3 p-3 hover:bg-gray-50"
                     >
                       <div className="flex-shrink-0 text-gray-500">
                         {result.icon}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <p className="font-medium text-gray-900 dark:text-white truncate">
+                          <p className="font-medium text-gray-900">
                             {result.title}
                           </p>
                           <Badge
-                            variant="secondary"
-                            className={cn(
+                            variant="secondary" className={cn(
                               "text-xs",
                               getResultTypeColor(result.type)
                             )}
@@ -311,11 +307,11 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({
                             {result.type}
                           </Badge>
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                        <p className="text-sm text-gray-600">
                           {result.subtitle}
                         </p>
                         {result.description && (
-                          <p className="text-xs text-gray-500 dark:text-gray-500 truncate">
+                          <p className="text-xs text-gray-500">
                             {result.description}
                           </p>
                         )}
@@ -333,8 +329,8 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({
             ) : (
               <div className="py-2">
                 {recentSearches.length > 0 && (
-                  <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+                  <div className="px-3 py-2 border-b border-gray-200">
+                    <p className="text-xs font-medium text-gray-500">
                       Recent Searches
                     </p>
                     {recentSearches.map((search, index) => (
@@ -343,11 +339,10 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({
                         onClick={() => {
                           setQuery(search);
                           performSearch(search);
-                        }}
-                        className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer rounded text-sm"
+                        }} className="flex items-center gap-2 p-2 hover:bg-gray-50"
                       >
                         <Clock className="w-3 h-3 text-gray-400" />
-                        <span className="text-gray-700 dark:text-gray-300">
+                        <span className="text-gray-700">
                           {search}
                         </span>
                       </div>
@@ -355,10 +350,10 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({
                   </div>
                 )}
                 <div className="px-3 py-2">
-                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+                  <p className="text-xs font-medium text-gray-500">
                     Search Tips
                   </p>
-                  <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                  <div className="space-y-1 text-xs text-gray-600">
                     <p>• Search by member name, email, or phone</p>
                     <p>• Find payments by amount or method</p>
                     <p>• Look up equipment by name or type</p>

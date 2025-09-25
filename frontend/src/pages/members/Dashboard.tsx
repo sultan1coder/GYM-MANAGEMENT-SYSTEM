@@ -410,11 +410,9 @@ function MemberDashboard() {
             <p className="text-gray-600 mb-4">{error}</p>
             <Button
               onClick={handleRefresh}
-              disabled={isRefreshing}
-              className="w-full"
+              disabled={isRefreshing} className="w-full"
             >
-              <RefreshCw
-                className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+              <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
               />
               {isRefreshing ? "Retrying..." : "Try Again"}
             </Button>
@@ -425,15 +423,15 @@ function MemberDashboard() {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="mx-auto space-y-6 max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-slate-900">
               Members Management
             </h1>
-            <p className="mt-2 text-slate-600 dark:text-slate-400">
+            <p className="mt-2 text-slate-600">
               View and manage all gym members in your system
             </p>
           </div>
@@ -441,12 +439,10 @@ function MemberDashboard() {
             <Button
               onClick={handleRefresh}
               disabled={isRefreshing}
-              variant="outline"
-              className="border-gray-300 hover:bg-gray-50"
+              variant="outline" className="border-gray-300 hover:bg-gray-50"
               title="Refresh member data (Ctrl+R or F5)"
             >
-              <RefreshCw
-                className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+              <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
               />
               {isRefreshing ? "Refreshing..." : "Refresh"}
             </Button>
@@ -460,25 +456,23 @@ function MemberDashboard() {
         </div>
 
         {/* Member Navigation */}
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+        <div className="bg-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <Link
-                to="/members/dashboard"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border-b-2 border-blue-600"
+                to="/members/dashboard" className="flex items-center gap-2 px-4 py-2 text-slate-700"
               >
                 <Users className="h-4 w-4" />
                 Dashboard
               </Link>
               <Link
-                to="/members/profile"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-green-600 dark:hover:text-green-400 transition-colors border-b-2 border-transparent hover:border-green-600"
+                to="/members/profile" className="flex items-center gap-2 px-4 py-2 text-slate-700"
               >
                 <User className="h-4 w-4" />
                 My Profile
               </Link>
             </div>
-            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+            <div className="flex items-center gap-2 text-sm text-slate-600">
               <Clock className="h-4 w-4" />
               <span>Welcome back! You're logged in as a member.</span>
             </div>
@@ -486,7 +480,7 @@ function MemberDashboard() {
         </div>
 
         {/* Last Updated Info */}
-        <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400">
+        <div className="flex items-center justify-between text-sm text-slate-600">
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4" />
             <span>Last updated: {lastRefreshed.toLocaleTimeString()}</span>
@@ -610,12 +604,12 @@ function MemberDashboard() {
         </div>
 
         {/* Age Distribution */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+            <CardTitle className="text-lg font-semibold text-gray-900">
               Age Distribution
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400">
+            <CardDescription className="text-gray-600">
               Member age groups breakdown
             </CardDescription>
           </CardHeader>
@@ -623,10 +617,10 @@ function MemberDashboard() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {Object.entries(ageGroups).map(([range, count]) => (
                 <div key={range} className="text-center">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                  <div className="text-2xl font-bold text-blue-600">
                     {count}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-gray-600">
                     {range} years
                   </div>
                   <div className="text-xs text-gray-500">
@@ -642,7 +636,7 @@ function MemberDashboard() {
         </Card>
 
         {/* Filters and Search */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardContent className="p-6">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex-1">
@@ -651,8 +645,7 @@ function MemberDashboard() {
                   <Input
                     placeholder="Search members by name, email, or phone..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600"
+                    onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-gray-50"
                   />
                 </div>
               </div>
@@ -660,7 +653,7 @@ function MemberDashboard() {
                 value={membershipFilter}
                 onValueChange={(value: string) => setMembershipFilter(value)}
               >
-                <SelectTrigger className="w-48 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600">
+                <SelectTrigger className="w-48 border-0 bg-gray-50">
                   <SelectValue placeholder="All Memberships" />
                 </SelectTrigger>
                 <SelectContent>
@@ -673,7 +666,7 @@ function MemberDashboard() {
                 value={ageFilter}
                 onValueChange={(value: string) => setAgeFilter(value)}
               >
-                <SelectTrigger className="w-48 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600">
+                <SelectTrigger className="w-48 border-0 bg-gray-50">
                   <SelectValue placeholder="All Ages" />
                 </SelectTrigger>
                 <SelectContent>
@@ -688,11 +681,9 @@ function MemberDashboard() {
                 onClick={handleRefresh}
                 disabled={isRefreshing}
                 variant="outline"
-                size="sm"
-                className="border-gray-300 hover:bg-gray-50"
+                size="sm" className="border-gray-300 hover:bg-gray-50"
               >
-                <RefreshCw
-                  className={`w-4 h-4 mr-2 ${
+                <RefreshCw className={`w-4 h-4 mr-2 ${
                     isRefreshing ? "animate-spin" : ""
                   }`}
                 />
@@ -703,14 +694,14 @@ function MemberDashboard() {
         </Card>
 
         {/* Members Table */}
-        <Card className="overflow-hidden bg-white border-0 shadow-lg dark:bg-gray-800">
-          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-700">
+        <Card className="overflow-hidden bg-white border-0 shadow-lg">
+          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+                <CardTitle className="text-xl font-semibold text-gray-900">
                   Members List
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400">
+                <CardDescription className="text-gray-600">
                   {filteredTotal} members found • Showing {startIndex + 1}-{Math.min(endIndex, filteredTotal)} of {filteredTotal}
                 </CardDescription>
               </div>
@@ -774,11 +765,9 @@ function MemberDashboard() {
                   onClick={handleRefresh}
                   disabled={isRefreshing}
                   variant="outline"
-                  size="sm"
-                  className="border-gray-300 hover:bg-gray-50"
+                  size="sm" className="border-gray-300 hover:bg-gray-50"
                 >
-                  <RefreshCw
-                    className={`w-4 h-4 mr-2 ${
+                  <RefreshCw className={`w-4 h-4 mr-2 ${
                       isRefreshing ? "animate-spin" : ""
                     }`}
                   />
@@ -790,46 +779,44 @@ function MemberDashboard() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                <TableRow className="bg-gray-50">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <Checkbox
                       checked={selectedMembers.length === paginatedMembers.length && paginatedMembers.length > 0}
-                      onCheckedChange={handleSelectAll}
-                      className="data-[state=checked]:bg-blue-600"
+                      onCheckedChange={handleSelectAll} className="data-[state=checked]:bg-blue-600"
                     />
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4 text-gray-500" />
                       Member
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Mail className="w-4 h-4 text-gray-500" />
                       Contact
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-500" />
                       Membership
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4 text-gray-500" />
                       Age
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-500" />
                       Joined
                     </div>
                   </TableHead>
-                  <TableHead 
-                    className="px-6 py-4 font-semibold text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900"
                     onClick={() => handleSort("createdAt")}
                   >
                     <div className="flex items-center gap-2">
@@ -838,8 +825,7 @@ function MemberDashboard() {
                       {getSortIcon("createdAt")}
                     </div>
                   </TableHead>
-                  <TableHead 
-                    className="px-6 py-4 font-semibold text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900"
                     onClick={() => handleSort("createdAt")}
                   >
                     <div className="flex items-center gap-2">
@@ -848,7 +834,7 @@ function MemberDashboard() {
                       {getSortIcon("createdAt")}
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-right text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-right text-gray-900">
                     Actions
                   </TableHead>
                 </TableRow>
@@ -856,39 +842,35 @@ function MemberDashboard() {
               <TableBody>
                 {paginatedMembers.map((member) => (
                   <TableRow
-                    key={member.id}
-                    className="transition-colors border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 dark:border-gray-700"
+                    key={member.id} className="transition-colors border-b border-gray-100 hover:bg-gray-50"
                   >
                     <TableCell className="px-6 py-4">
                       <Checkbox
                         checked={selectedMembers.includes(member.id)}
-                        onCheckedChange={() => handleSelectMember(member.id)}
-                        className="data-[state=checked]:bg-blue-600"
+                        onCheckedChange={() => handleSelectMember(member.id)} className="data-[state=checked]:bg-blue-600"
                       />
                     </TableCell>
                     <TableCell className="px-6 py-4">
                       <div className="flex items-center space-x-4">
-                        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
+                        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200">
                           {member.profile_picture ? (
                             <img
                               src={member.profile_picture}
-                              alt={member.name}
-                              className="object-cover w-10 h-10 rounded-md"
+                              alt={member.name} className="object-cover w-10 h-10 rounded-md"
                             />
                           ) : (
-                            <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                            <User className="w-6 h-6 text-blue-600" />
                           )}
                         </div>
                         <div>
-                          <div className="font-semibold text-gray-900 dark:text-white">
+                          <div className="font-semibold text-gray-900">
                             <Link
-                              to={`/members/single/${member.id}`}
-                              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                              to={`/members/single/${member.id}`} className="hover:text-blue-600"
                             >
                               {member.name}
                             </Link>
                           </div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                          <div className="text-sm text-gray-600">
                             ID: {member.id}
                           </div>
                         </div>
@@ -898,14 +880,14 @@ function MemberDashboard() {
                       <div className="space-y-1">
                         <div className="flex items-center gap-2 text-sm">
                           <Mail className="w-4 h-4 text-gray-500" />
-                          <span className="text-gray-900 dark:text-white">
+                          <span className="text-gray-900">
                             {member.email}
                           </span>
                         </div>
                         {member.phone_number && (
                           <div className="flex items-center gap-2 text-sm">
                             <Phone className="w-4 h-4 text-gray-500" />
-                            <span className="text-gray-600 dark:text-gray-400">
+                            <span className="text-gray-600">
                               {member.phone_number}
                             </span>
                           </div>
@@ -913,11 +895,10 @@ function MemberDashboard() {
                       </div>
                     </TableCell>
                     <TableCell className="px-6 py-4">
-                      <Badge
-                        className={`${
+                      <Badge className={`${
                           member.membershiptype === "MONTHLY"
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-800"
-                            : "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 border-blue-200 dark:border-blue-800"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-blue-100 text-blue-800"
                         } px-3 py-1 text-xs font-medium`}
                       >
                         {member.membershiptype === "MONTHLY" ? (
@@ -929,23 +910,22 @@ function MemberDashboard() {
                       </Badge>
                     </TableCell>
                     <TableCell className="px-6 py-4">
-                      <div className="text-sm text-gray-900 dark:text-white">
+                      <div className="text-sm text-gray-900">
                         {member.age} years old
                       </div>
                     </TableCell>
                     <TableCell className="px-6 py-4">
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <div className="text-sm text-gray-600">
                         {new Date(member.createdAt).toLocaleDateString()}
                       </div>
                     </TableCell>
                     <TableCell className="px-6 py-4">
-                      <Badge
-                        className={`${
+                      <Badge className={`${
                           getMemberStatus(member) === "active"
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-800"
+                            ? "bg-green-100 text-green-800"
                             : getMemberStatus(member) === "expiring"
-                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800"
-                            : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 border-red-200 dark:border-red-800"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
                         } px-3 py-1 text-xs font-medium`}
                       >
                         {getMemberStatus(member) === "active" ? (
@@ -959,7 +939,7 @@ function MemberDashboard() {
                       </Badge>
                     </TableCell>
                     <TableCell className="px-6 py-4">
-                      <div className="text-sm text-gray-900 dark:text-white">
+                      <div className="text-sm text-gray-900">
                         {getDaysUntilExpiry(member) > 0 ? (
                           <span className="flex items-center gap-1">
                             <Clock3 className="w-3 h-3 text-blue-600" />
@@ -978,8 +958,7 @@ function MemberDashboard() {
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
-                            size="sm"
-                            className="w-8 h-8 p-0 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            size="sm" className="w-8 h-8 p-0 hover:bg-gray-100"
                           >
                             <MoreVertical className="w-4 h-4" />
                           </Button>
@@ -991,8 +970,7 @@ function MemberDashboard() {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem asChild>
                             <Link
-                              to={`/members/single/${member.id}`}
-                              className="cursor-pointer"
+                              to={`/members/single/${member.id}`} className="cursor-pointer"
                             >
                               <Eye className="w-4 h-4 mr-2 text-blue-600" />
                               View Details
@@ -1000,8 +978,7 @@ function MemberDashboard() {
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
                             <Link
-                              to={`/members/update/${member.id}`}
-                              className="cursor-pointer"
+                              to={`/members/update/${member.id}`} className="cursor-pointer"
                             >
                               <Edit className="w-4 h-4 mr-2 text-green-600" />
                               Edit Member
@@ -1009,8 +986,7 @@ function MemberDashboard() {
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
-                            onClick={() => handleDelete(member.id, member.name)}
-                            className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-900/20"
+                            onClick={() => handleDelete(member.id, member.name)} className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50"
                           >
                             <Trash2 className="w-4 h-4 mr-2" />
                             Delete Member
@@ -1026,8 +1002,8 @@ function MemberDashboard() {
           
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
                 <span>
                   Showing {startIndex + 1} to {Math.min(endIndex, filteredTotal)} of {filteredTotal} results
                 </span>
@@ -1068,8 +1044,7 @@ function MemberDashboard() {
                         key={pageNum}
                         variant={currentPage === pageNum ? "default" : "outline"}
                         size="sm"
-                        onClick={() => setCurrentPage(pageNum)}
-                        className="w-8 h-8 p-0"
+                        onClick={() => setCurrentPage(pageNum)} className="w-8 h-8 p-0"
                       >
                         {pageNum}
                       </Button>
@@ -1141,15 +1116,15 @@ function MemberDashboard() {
 
         {/* Empty State */}
         {filteredMembers.length === 0 && (
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100">
             <CardContent className="p-16 text-center">
-              <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
-                <Users className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-blue-200">
+                <Users className="w-10 h-10 text-blue-600" />
               </div>
-              <h3 className="mb-3 text-2xl font-bold text-gray-900 dark:text-white">
+              <h3 className="mb-3 text-2xl font-bold text-gray-900">
                 No members found
               </h3>
-              <p className="max-w-md mx-auto mb-6 text-lg text-gray-600 dark:text-gray-400">
+              <p className="max-w-md mx-auto mb-6 text-lg text-gray-600">
                 {searchTerm || membershipFilter !== "all" || ageFilter !== "all"
                   ? "Try adjusting your filters or search terms to find what you're looking for."
                   : "No members have been added to your system yet."}
@@ -1158,11 +1133,9 @@ function MemberDashboard() {
                 <Button
                   onClick={handleRefresh}
                   disabled={isRefreshing}
-                  variant="outline"
-                  className="px-6 py-3 text-lg font-semibold border-gray-300 hover:bg-gray-50"
+                  variant="outline" className="px-6 py-3 text-lg font-semibold border-gray-300 hover:bg-gray-50"
                 >
-                  <RefreshCw
-                    className={`w-5 h-5 mr-2 ${
+                  <RefreshCw className={`w-5 h-5 mr-2 ${
                       isRefreshing ? "animate-spin" : ""
                     }`}
                   />

@@ -143,8 +143,7 @@ const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
                   }}
                 />
                 <Label
-                  htmlFor={`${option.key}-${opt.value}`}
-                  className="text-sm"
+                  htmlFor={`${option.key}-${opt.value}`} className="text-sm"
                 >
                   {opt.label}
                 </Label>
@@ -158,8 +157,7 @@ const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                variant="outline"
-                className="w-full justify-start text-left font-normal"
+                variant="outline" className="w-full justify-start text-left font-normal"
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {value
@@ -186,8 +184,7 @@ const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
+                  variant="outline" className="w-full justify-start text-left font-normal"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {value?.start
@@ -212,8 +209,7 @@ const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
+                  variant="outline" className="w-full justify-start text-left font-normal"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {value?.end
@@ -272,16 +268,14 @@ const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
           <Input
             placeholder={placeholder}
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            onChange={(e) => setSearchQuery(e.target.value)} className="pl-10"
           />
         </div>
 
         {showAdvancedFilters && filterOptions.length > 0 && (
           <Button
             variant="outline"
-            onClick={() => setShowFilters(!showFilters)}
-            className={showFilters ? "bg-primary text-primary-foreground" : ""}
+            onClick={() => setShowFilters(!showFilters)} className={showFilters ? "bg-primary text-primary-foreground" : ""}
           >
             <SlidersHorizontal className="h-4 w-4 mr-2" />
             Filters
@@ -322,12 +316,10 @@ const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
             return (
               <Badge
                 key={key}
-                variant="secondary"
-                className="flex items-center gap-1"
+                variant="secondary" className="flex items-center gap-1"
               >
                 {option?.label}: {displayValue}
-                <X
-                  className="h-3 w-3 cursor-pointer"
+                <X className="h-3 w-3 cursor-pointer"
                   onClick={() => clearFilter(key)}
                 />
               </Badge>
@@ -338,7 +330,7 @@ const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
 
       {/* Advanced Filters */}
       {showFilters && filterOptions.length > 0 && (
-        <div className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
+        <div className="border rounded-lg p-4 bg-gray-50">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filterOptions.map((option) => (
               <div key={option.key} className="space-y-2">

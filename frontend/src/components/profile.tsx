@@ -60,12 +60,11 @@ const Profile = () => {
             {user.profile_picture ? (
               <img
                 src={user.profile_picture}
-                alt="Profile"
-                className="w-[42px] h-[42px] rounded-full object-cover border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                alt="Profile" className="w-[42px] h-[42px] rounded-full object-cover border-2 border-slate-200"
               />
             ) : (
-              <div className="w-[42px] h-[42px] flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
-                <User className="h-5 w-5 text-slate-400 dark:text-slate-500" />
+              <div className="w-[42px] h-[42px] flex items-center justify-center rounded-full bg-slate-100">
+                <User className="h-5 w-5 text-slate-400" />
               </div>
             )}
             
@@ -83,28 +82,27 @@ const Profile = () => {
               {user.profile_picture ? (
                 <img
                   src={user.profile_picture}
-                  alt="Profile"
-                  className="w-16 h-16 rounded-full object-cover border-2 border-slate-200 dark:border-slate-600"
+                  alt="Profile" className="w-16 h-16 rounded-full object-cover border-2 border-slate-200"
                 />
               ) : (
-                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600">
-                  <User className="h-6 w-6 text-slate-400 dark:text-slate-500" />
+                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-slate-100">
+                  <User className="h-6 w-6 text-slate-400" />
                 </div>
               )}
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-slate-900">
                   {user.name}
                 </h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-sm text-slate-600">
                   {user.email}
                 </p>
                 {isStaffUser && (
-                  <p className="text-xs text-slate-500 dark:text-slate-500 capitalize">
+                  <p className="text-xs text-slate-500">
                     {isStaffUser && 'role' in user ? user.role : ""}
                   </p>
                 )}
                 {isMemberUser && (
-                  <p className="text-xs text-slate-500 dark:text-slate-500">
+                  <p className="text-xs text-slate-500">
                     Member
                   </p>
                 )}
@@ -114,8 +112,7 @@ const Profile = () => {
             {/* Actions */}
             <div className="space-y-2">
               <Button
-                variant="outline"
-                className="w-full justify-start"
+                variant="outline" className="w-full justify-start"
                 onClick={() => openProfileManager(userType)}
               >
                 <Camera className="h-4 w-4 mr-2" />
@@ -123,8 +120,7 @@ const Profile = () => {
               </Button>
               
               <Button
-                variant="outline"
-                className="w-full justify-start"
+                variant="outline" className="w-full justify-start"
                 onClick={navigateToProfileSettings}
               >
                 <Settings className="h-4 w-4 mr-2" />
@@ -133,12 +129,11 @@ const Profile = () => {
             </div>
 
             {/* Divider */}
-            <div className="border-t border-slate-200 dark:border-slate-700 my-4" />
+            <div className="border-t border-slate-200" />
 
             {/* Logout */}
             <Button
-              variant="destructive"
-              className="w-full justify-start"
+              variant="destructive" className="w-full justify-start"
               onClick={logoutHandler}
             >
               <LogOut className="h-4 w-4 mr-2" />

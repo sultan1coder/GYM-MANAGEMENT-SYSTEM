@@ -41,7 +41,8 @@ import {
 } from "lucide-react";
 
 interface PaymentAnalyticsProps {
-  payments: Payment[];
+  payments?: Payment[];
+  isLoading?: boolean;
 }
 
 interface ChartData {
@@ -58,13 +59,19 @@ interface PaymentMethodData {
   percentage: number;
 }
 
-const PaymentAnalytics = ({ payments }: PaymentAnalyticsProps) => {
+const PaymentAnalytics = ({
+  payments = [],
+  isLoading = false,
+}: PaymentAnalyticsProps) => {
   const [timeRange, setTimeRange] = useState("6months");
   const [chartType, setChartType] = useState("revenue");
-  const [isLoading, setIsLoading] = useState(false);
 
   // Calculate analytics data
   const calculateMonthlyData = (): ChartData[] => {
+    if (!payments || payments.length === 0) {
+      return [];
+    }
+
     const months = [];
     const currentDate = new Date();
 
@@ -100,6 +107,10 @@ const PaymentAnalytics = ({ payments }: PaymentAnalyticsProps) => {
   };
 
   const calculatePaymentMethodData = (): PaymentMethodData[] => {
+    if (!payments || payments.length === 0) {
+      return [];
+    }
+
     const methodMap = new Map<string, { count: number; total: number }>();
 
     payments.forEach((payment) => {
@@ -149,11 +160,38 @@ const PaymentAnalytics = ({ payments }: PaymentAnalyticsProps) => {
   const methodData = calculatePaymentMethodData();
   const growthRates = calculateGrowthRate();
 
-  const totalRevenue = payments.reduce((sum, p) => sum + p.amount, 0);
-  const totalPayments = payments.length;
+  const totalRevenue = payments?.reduce((sum, p) => sum + p.amount, 0) || 0;
+  const totalPayments = payments?.length || 0;
   const avgPaymentAmount = totalPayments > 0 ? totalRevenue / totalPayments : 0;
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
+
+  // Show loading state if payments are not loaded yet
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
+          <p className="text-gray-600">Loading payment analytics...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state if no payments data
+  if (!payments || payments.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <div className="text-gray-500 mb-4">
+          <BarChart className="h-12 w-12 mx-auto mb-2" />
+          <p>No payment data available</p>
+          <p className="text-sm">
+            Payment analytics will appear here once data is available
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const exportAnalytics = (format: "csv" | "json") => {
     // Implement export functionality
@@ -165,12 +203,10 @@ const PaymentAnalytics = ({ payments }: PaymentAnalyticsProps) => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-2xl font-bold text-gray-900">
             Payment Analytics
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
-            Financial insights and payment trends
-          </p>
+          <p className="text-gray-600">Financial insights and payment trends</p>
         </div>
         <div className="flex items-center gap-3">
           <Select value={timeRange} onValueChange={setTimeRange}>

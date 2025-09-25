@@ -232,14 +232,14 @@ function SingleMember() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
         <Card className="max-w-md text-center">
           <CardContent className="p-8">
             <Loader2 className="w-12 h-12 mx-auto mb-4 text-blue-600 animate-spin" />
-            <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">
               Loading Member Details
             </h3>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-gray-600">
               Please wait while we fetch the member information...
             </p>
           </CardContent>
@@ -250,16 +250,16 @@ function SingleMember() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
         <Card className="max-w-md text-center">
           <CardContent className="p-8">
             <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full">
               <AlertCircle className="w-8 h-8 text-red-600" />
             </div>
-            <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">
               Error Loading Member
             </h3>
-            <p className="mb-6 text-gray-600 dark:text-gray-400">{error}</p>
+            <p className="mb-6 text-gray-600">{error}</p>
             <div className="flex justify-center gap-3">
               <Button onClick={handleRefresh} variant="outline">
                 <RefreshCw className="w-4 h-4 mr-2" />
@@ -277,16 +277,16 @@ function SingleMember() {
 
   if (!member) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
         <Card className="max-w-md text-center">
           <CardContent className="p-8">
             <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-yellow-100 rounded-full">
               <User className="w-8 h-8 text-yellow-600" />
             </div>
-            <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">
               Member Not Found
             </h3>
-            <p className="mb-6 text-gray-600 dark:text-gray-400">
+            <p className="mb-6 text-gray-600">
               The member you're looking for doesn't exist or has been removed.
             </p>
             <Button onClick={() => navigate("/members/dashboard")}>
@@ -299,7 +299,7 @@ function SingleMember() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="p-6 mx-auto space-y-6 max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -311,10 +311,10 @@ function SingleMember() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-slate-900">
                 Member Profile
               </h1>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">
+              <p className="mt-2 text-slate-600">
                 View and manage member information
               </p>
             </div>
@@ -323,11 +323,9 @@ function SingleMember() {
             <Button
               onClick={handleRefresh}
               disabled={isRefreshing}
-              variant="outline"
-              className="border-gray-300 hover:bg-gray-50"
+              variant="outline" className="border-gray-300 hover:bg-gray-50"
             >
-              <RefreshCw
-                className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
+              <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`}
               />
               {isRefreshing ? "Refreshing..." : "Refresh"}
             </Button>
@@ -363,8 +361,7 @@ function SingleMember() {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={() => setShowDeleteDialog(true)}
-                  className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-900/20"
+                  onClick={() => setShowDeleteDialog(true)} className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50"
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Delete Member
@@ -375,29 +372,27 @@ function SingleMember() {
         </div>
 
         {/* Profile Overview Card */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
-          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-700">
+        <Card className="bg-white border-0 shadow-lg">
+          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
             <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
               {/* Profile Picture */}
               <div className="relative">
-                <div className="flex items-center justify-center w-32 h-32 border-4 border-white rounded-full shadow-lg bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 dark:border-gray-700">
+                <div className="flex items-center justify-center w-32 h-32 border-4 border-white rounded-full shadow-lg bg-gradient-to-br from-blue-100 to-blue-200">
                   {member.profile_picture ? (
                     <img
                       src={member.profile_picture}
-                      alt={member.name}
-                      className="object-cover rounded-full w-28 h-28"
+                      alt={member.name} className="object-cover rounded-full w-28 h-28"
                     />
                   ) : (
-                    <User className="w-16 h-16 text-blue-600 dark:text-blue-400" />
+                    <User className="w-16 h-16 text-blue-600" />
                   )}
                 </div>
-                <div className="absolute flex items-center justify-center w-8 h-8 bg-green-500 border-2 border-white rounded-full -bottom-2 -right-2 dark:border-gray-700">
+                <div className="absolute flex items-center justify-center w-8 h-8 bg-green-500 border-2 border-white rounded-full -bottom-2 -right-2">
                   <CheckCircle className="w-4 h-4 text-white" />
                 </div>
                 <Button
                   onClick={() => setShowProfileManager(true)}
-                  size="sm"
-                  className="absolute w-8 h-8 p-0 bg-blue-600 border-2 border-white rounded-full -bottom-2 -left-2 hover:bg-blue-700 dark:border-gray-700"
+                  size="sm" className="absolute w-8 h-8 p-0 bg-blue-600 border-2 border-white rounded-full -bottom-2 -left-2 hover:bg-blue-700"
                 >
                   <Camera className="w-4 h-4" />
                 </Button>
@@ -406,18 +401,17 @@ function SingleMember() {
               {/* Member Info */}
               <div className="flex-1 space-y-3">
                 <div>
-                  <CardTitle className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
+                  <CardTitle className="mb-2 text-3xl font-bold text-gray-900">
                     {member.name}
                   </CardTitle>
-                  <CardDescription className="text-lg text-gray-600 dark:text-gray-400">
+                  <CardDescription className="text-lg text-gray-600">
                     Member ID: {member.id}
                   </CardDescription>
                 </div>
 
                 <div className="flex flex-wrap gap-4">
                   <Badge
-                    variant="secondary"
-                    className={`${getMembershipStatusColor(
+                    variant="secondary" className={`${getMembershipStatusColor(
                       member.membershiptype
                     )} px-3 py-1 text-sm font-medium`}
                   >
@@ -437,27 +431,27 @@ function SingleMember() {
 
               {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="p-3 bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl font-bold text-blue-600">
                     {activityStats?.totalVisits || "N/A"}
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">
+                  <div className="text-xs text-gray-600">
                     Total Visits
                   </div>
                 </div>
-                <div className="p-3 bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                <div className="p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl font-bold text-green-600">
                     {activityStats?.thisMonth || "N/A"}
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">
+                  <div className="text-xs text-gray-600">
                     This Month
                   </div>
                 </div>
-                <div className="p-3 bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                <div className="p-3 bg-white rounded-lg shadow-sm">
+                  <div className="text-2xl font-bold text-purple-600">
                     {subscriptionData?.status === "Active" ? "✓" : "✗"}
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">
+                  <div className="text-xs text-gray-600">
                     Status
                   </div>
                 </div>
@@ -467,20 +461,19 @@ function SingleMember() {
           <CardContent className="p-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
               <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 bg-blue-100 rounded-full dark:bg-blue-900/30">
-                  <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 bg-blue-100 rounded-full">
+                  <Mail className="w-6 h-6 text-blue-600" />
                 </div>
-                <div className="mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                <div className="mb-1 text-sm font-medium text-gray-900">
                   Email
                 </div>
-                <div className="text-sm text-gray-600 break-all dark:text-gray-400">
+                <div className="text-sm text-gray-600 break-all">
                   {member.email}
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => copyToClipboard(member.email)}
-                  className="h-6 px-2 mt-2 text-xs"
+                  onClick={() => copyToClipboard(member.email)} className="h-6 px-2 mt-2 text-xs"
                 >
                   <Copy className="w-3 h-3 mr-1" />
                   Copy
@@ -488,21 +481,20 @@ function SingleMember() {
               </div>
 
               <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 bg-green-100 rounded-full dark:bg-green-900/30">
-                  <Phone className="w-6 h-6 text-green-600 dark:text-green-400" />
+                <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 bg-green-100 rounded-full">
+                  <Phone className="w-6 h-6 text-green-600" />
                 </div>
-                <div className="mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                <div className="mb-1 text-sm font-medium text-gray-900">
                   Phone
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   {member.phone_number || "Not provided"}
                 </div>
                 {member.phone_number && (
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => copyToClipboard(member.phone_number!)}
-                    className="h-6 px-2 mt-2 text-xs"
+                    onClick={() => copyToClipboard(member.phone_number!)} className="h-6 px-2 mt-2 text-xs"
                   >
                     <Copy className="w-3 h-3 mr-1" />
                     Copy
@@ -511,13 +503,13 @@ function SingleMember() {
               </div>
 
               <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 bg-purple-100 rounded-full dark:bg-purple-900/30">
-                  <Calendar className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 bg-purple-100 rounded-full">
+                  <Calendar className="w-6 h-6 text-purple-600" />
                 </div>
-                <div className="mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                <div className="mb-1 text-sm font-medium text-gray-900">
                   Member Since
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   {new Date(member.createdAt).toLocaleDateString()}
                 </div>
                 <div className="mt-1 text-xs text-gray-500">
@@ -530,13 +522,13 @@ function SingleMember() {
               </div>
 
               <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 bg-orange-100 rounded-full dark:bg-orange-900/30">
-                  <Activity className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 bg-orange-100 rounded-full">
+                  <Activity className="w-6 h-6 text-orange-600" />
                 </div>
-                <div className="mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                <div className="mb-1 text-sm font-medium text-gray-900">
                   Last Updated
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   {new Date(member.updatedAt).toLocaleDateString()}
                 </div>
                 <div className="mt-1 text-xs text-gray-500">
@@ -554,35 +546,34 @@ function SingleMember() {
         {/* Membership & Subscription Details */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Current Subscription */}
-          <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+          <Card className="bg-white border-0 shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-white">
+              <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-900">
                 <CreditCard className="w-5 h-5 text-green-600" />
                 Current Subscription
               </CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400">
+              <CardDescription className="text-gray-600">
                 Active membership plan and billing information
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <div className="text-sm font-medium text-gray-500">
                     Plan Name
                   </div>
-                  <div className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <div className="text-lg font-semibold text-gray-900">
                     {subscriptionData?.plan || "N/A"}
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <div className="text-sm font-medium text-gray-500">
                     Status
                   </div>
-                  <Badge
-                    className={`${
+                  <Badge className={`${
                       subscriptionData?.status === "Active"
-                        ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
-                        : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800"
                     }`}
                   >
                     {subscriptionData?.status === "Active" ? (
@@ -594,34 +585,34 @@ function SingleMember() {
                   </Badge>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <div className="text-sm font-medium text-gray-500">
                     Start Date
                   </div>
-                  <div className="text-sm text-gray-900 dark:text-white">
+                  <div className="text-sm text-gray-900">
                     {subscriptionData?.startDate || "N/A"}
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <div className="text-sm font-medium text-gray-500">
                     End Date
                   </div>
-                  <div className="text-sm text-gray-900 dark:text-white">
+                  <div className="text-sm text-gray-900">
                     {subscriptionData?.endDate || "N/A"}
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <div className="text-sm font-medium text-gray-500">
                     Next Payment
                   </div>
-                  <div className="text-sm text-gray-900 dark:text-white">
+                  <div className="text-sm text-gray-900">
                     {subscriptionData?.nextPayment || "N/A"}
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <div className="text-sm font-medium text-gray-500">
                     Amount
                   </div>
-                  <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                  <div className="text-lg font-bold text-green-600">
                     ${subscriptionData?.amount || "N/A"}
                   </div>
                 </div>
@@ -641,66 +632,66 @@ function SingleMember() {
           </Card>
 
           {/* Activity Statistics */}
-          <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+          <Card className="bg-white border-0 shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-white">
+              <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-900">
                 <BarChart3 className="w-5 h-5 text-blue-600" />
                 Activity Statistics
               </CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400">
+              <CardDescription className="text-gray-600">
                 Gym visit patterns and engagement metrics
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <div className="p-4 text-center rounded-lg bg-blue-50 dark:bg-blue-900/20">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="p-4 text-center rounded-lg bg-blue-50">
+                  <div className="text-2xl font-bold text-blue-600">
                     {isLoadingAdditionalData ? (
                       <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
                     ) : (
                       activityStats?.totalVisits || "N/A"
                     )}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-gray-600">
                     Total Visits
                   </div>
                 </div>
 
-                <div className="p-4 text-center rounded-lg bg-green-50 dark:bg-green-900/20">
-                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                <div className="p-4 text-center rounded-lg bg-green-50">
+                  <div className="text-2xl font-bold text-green-600">
                     {isLoadingAdditionalData ? (
                       <div className="w-8 h-8 border-2 border-green-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
                     ) : (
                       activityStats?.thisMonth || "N/A"
                     )}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-gray-600">
                     This Month
                   </div>
                 </div>
 
-                <div className="p-4 text-center rounded-lg bg-purple-50 dark:bg-purple-900/20">
-                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                <div className="p-4 text-center rounded-lg bg-purple-50">
+                  <div className="text-2xl font-bold text-purple-600">
                     {isLoadingAdditionalData ? (
                       <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
                     ) : (
                       activityStats?.averagePerWeek || "N/A"
                     )}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-gray-600">
                     Avg/Week
                   </div>
                 </div>
 
-                <div className="p-4 text-center rounded-lg bg-orange-50 dark:bg-orange-900/20">
-                  <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                <div className="p-4 text-center rounded-lg bg-orange-50">
+                  <div className="text-2xl font-bold text-orange-600">
                     {isLoadingAdditionalData ? (
                       <div className="w-8 h-8 border-2 border-orange-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
                     ) : (
                       activityStats?.favoriteTime || "N/A"
                     )}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-gray-600">
                     Favorite Time
                   </div>
                 </div>
@@ -708,18 +699,18 @@ function SingleMember() {
               <Separator />
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-gray-600">
                     Favorite Day:
                   </span>
-                  <span className="font-medium text-gray-900 dark:text-white">
+                  <span className="font-medium text-gray-900">
                     {activityStats?.favoriteDay || "N/A"}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-gray-600">
                     Last Month Visits:
                   </span>
-                  <span className="font-medium text-gray-900 dark:text-white">
+                  <span className="font-medium text-gray-900">
                     {activityStats?.lastMonth || "N/A"}
                   </span>
                 </div>
@@ -729,12 +720,12 @@ function SingleMember() {
         </div>
 
         {/* Payment History */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+            <CardTitle className="text-lg font-semibold text-gray-900">
               Payment History
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400">
+            <CardDescription className="text-gray-600">
               Recent payment transactions
             </CardDescription>
           </CardHeader>
@@ -742,7 +733,7 @@ function SingleMember() {
             {isLoadingAdditionalData ? (
               <div className="flex items-center justify-center py-8">
                 <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                <span className="ml-2 text-gray-600 dark:text-gray-400">
+                <span className="ml-2 text-gray-600">
                   Loading payment history...
                 </span>
               </div>
@@ -750,37 +741,36 @@ function SingleMember() {
               <div className="space-y-4">
                 {paymentHistory.map((payment) => (
                   <div
-                    key={payment.id}
-                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                    key={payment.id} className="flex items-center justify-between p-4 bg-gray-50"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                        <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      <div className="p-2 bg-green-100">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-gray-900">
                           Payment #{payment.id.slice(-8)}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {payment.method} •{" "}
                           {new Date(payment.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-lg font-bold text-green-600 dark:text-green-400">
+                      <p className="text-lg font-bold text-green-600">
                         ${payment.amount}
                       </p>
-                      <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                      <Badge className="bg-green-100 text-green-800">
                         {payment.status || "Paid"}
                       </Badge>
                     </div>
                   </div>
                 ))}
-                <div className="p-4 text-center rounded-lg bg-blue-50 dark:bg-blue-900/20">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="p-4 text-center rounded-lg bg-blue-50">
+                  <p className="text-sm text-gray-600">
                     Total Paid:{" "}
-                    <span className="font-semibold text-gray-900 dark:text-white">
+                    <span className="font-semibold text-gray-900">
                       $
                       {paymentHistory
                         .reduce((sum, payment) => sum + payment.amount, 0)
@@ -791,13 +781,13 @@ function SingleMember() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100">
                   <CreditCard className="w-8 h-8 text-gray-400" />
                 </div>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600">
                   No payment history found
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+                <p className="text-sm text-gray-500">
                   Payment records will appear here once transactions are made
                 </p>
               </div>
@@ -806,13 +796,13 @@ function SingleMember() {
         </Card>
 
         {/* Quick Actions */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-white">
+            <CardTitle className="flex items-center gap-2 text-xl font-semibold text-gray-900">
               <Zap className="w-5 h-5 text-yellow-600" />
               Quick Actions
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400">
+            <CardDescription className="text-gray-600">
               Common actions and shortcuts for this member
             </CardDescription>
           </CardHeader>
@@ -820,8 +810,7 @@ function SingleMember() {
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               <Button
                 onClick={() => navigate(`/members/update/${member.id}`)}
-                variant="outline"
-                className="flex-col h-20 gap-2"
+                variant="outline" className="flex-col h-20 gap-2"
               >
                 <Edit className="w-6 h-6" />
                 <span>Edit Member</span>
@@ -829,8 +818,7 @@ function SingleMember() {
 
               <Button
                 onClick={() => navigate(`/members/profile/${member.id}`)}
-                variant="outline"
-                className="flex-col h-20 gap-2"
+                variant="outline" className="flex-col h-20 gap-2"
               >
                 <User className="w-6 h-6" />
                 <span>View Profile</span>
@@ -853,23 +841,23 @@ function SingleMember() {
       {/* Delete Confirmation Dialog */}
       {showDeleteDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-md mx-4 bg-white rounded-lg shadow-xl dark:bg-gray-800">
+          <div className="w-full max-w-md mx-4 bg-white rounded-lg shadow-xl">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full">
                   <AlertCircle className="w-6 h-6 text-red-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-gray-900">
                     Delete Member
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600">
                     This action cannot be undone
                   </p>
                 </div>
               </div>
 
-              <p className="mb-6 text-gray-700 dark:text-gray-300">
+              <p className="mb-6 text-gray-700">
                 Are you sure you want to delete <strong>{member.name}</strong>?
                 This will permanently remove their account and all associated
                 data.

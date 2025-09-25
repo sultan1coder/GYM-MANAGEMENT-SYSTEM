@@ -20,14 +20,14 @@ const Profile = () => {
   return (
     <Popover>
       <PopoverTrigger>
-        <div className="border w-[42px] h-[42px] flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700">
-          <User className="h-5 w-5 text-slate-400 dark:text-slate-500" />
+        <div className="border w-[42px] h-[42px] flex items-center justify-center rounded-full bg-slate-100">
+          <User className="h-5 w-5 text-slate-400" />
         </div>
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex items-center gap-4">
-          <div className="border w-[42px] h-[42px] flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700">
-            <User className="h-6 w-6 text-slate-400 dark:text-slate-500" />
+          <div className="border w-[42px] h-[42px] flex items-center justify-center rounded-full bg-slate-100">
+            <User className="h-6 w-6 text-slate-400" />
           </div>
           <div className="gap-6">
             <h1 className="text-xl font-bold">
@@ -40,8 +40,7 @@ const Profile = () => {
         </div>
         <div className="p-3 mt-4">
           <Button
-            variant={"destructive"}
-            className="w-full"
+            variant={"destructive"} className="w-full"
             onClick={logoutHandler}
           >
             Logout

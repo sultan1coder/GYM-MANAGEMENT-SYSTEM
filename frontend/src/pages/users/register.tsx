@@ -87,16 +87,16 @@ const Register = () => {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         {/* Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8">
+        <div className="bg-white">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-xl w-fit mx-auto mb-4">
               <UserPlus className="h-8 w-8" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+            <h1 className="text-2xl font-bold text-slate-900">
               Create Staff Account
             </h1>
-            <p className="text-slate-600 dark:text-slate-300">
+            <p className="text-slate-600">
               Join our team! Fill in your details to get started
             </p>
           </div>
@@ -107,7 +107,7 @@ const Register = () => {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Full Name */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700">
                   Full Name
                 </label>
                 <div className="relative">
@@ -115,11 +115,10 @@ const Register = () => {
                   <input
                     type="text"
                     name="name"
-                    placeholder="Enter your full name"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your full name" className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent${
                       formik.touched.name && formik.errors.name
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -127,7 +126,7 @@ const Register = () => {
                   />
                 </div>
                 {formik.touched.name && formik.errors.name && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.name}
                   </p>
                 )}
@@ -135,7 +134,7 @@ const Register = () => {
 
               {/* Username */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700">
                   Username
                 </label>
                 <div className="relative">
@@ -143,11 +142,10 @@ const Register = () => {
                   <input
                     type="text"
                     name="username"
-                    placeholder="Choose a username"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Choose a username" className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent${
                       formik.touched.username && formik.errors.username
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -155,7 +153,7 @@ const Register = () => {
                   />
                 </div>
                 {formik.touched.username && formik.errors.username && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.username}
                   </p>
                 )}
@@ -163,7 +161,7 @@ const Register = () => {
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700">
                   Email Address
                 </label>
                 <div className="relative">
@@ -171,11 +169,10 @@ const Register = () => {
                   <input
                     type="email"
                     name="email"
-                    placeholder="Enter your email"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your email" className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent${
                       formik.touched.email && formik.errors.email
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -183,7 +180,7 @@ const Register = () => {
                   />
                 </div>
                 {formik.touched.email && formik.errors.email && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.email}
                   </p>
                 )}
@@ -191,7 +188,7 @@ const Register = () => {
 
               {/* Phone */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700">
                   Phone Number
                 </label>
                 <div className="relative">
@@ -199,11 +196,10 @@ const Register = () => {
                   <input
                     type="tel"
                     name="phone_number"
-                    placeholder="Enter your phone number"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Enter your phone number" className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent${
                       formik.touched.phone_number && formik.errors.phone_number
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -211,7 +207,7 @@ const Register = () => {
                   />
                 </div>
                 {formik.touched.phone_number && formik.errors.phone_number && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.phone_number}
                   </p>
                 )}
@@ -219,7 +215,7 @@ const Register = () => {
 
               {/* Password */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700">
                   Password
                 </label>
                 <div className="relative">
@@ -227,11 +223,10 @@ const Register = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
-                    placeholder="Create a password"
-                    className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Create a password" className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent${
                       formik.touched.password && formik.errors.password
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -239,8 +234,7 @@ const Register = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -250,7 +244,7 @@ const Register = () => {
                   </button>
                 </div>
                 {formik.touched.password && formik.errors.password && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  <p className="mt-2 text-sm text-red-600">
                     {formik.errors.password}
                   </p>
                 )}
@@ -258,7 +252,7 @@ const Register = () => {
 
               {/* Confirm Password */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700">
                   Confirm Password
                 </label>
                 <div className="relative">
@@ -266,12 +260,11 @@ const Register = () => {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
-                    placeholder="Confirm your password"
-                    className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all ${
+                    placeholder="Confirm your password" className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent${
                       formik.touched.confirmPassword &&
                       formik.errors.confirmPassword
-                        ? "border-red-300 dark:border-red-600"
-                        : "border-slate-300 dark:border-slate-600"
+                        ? "border-red-300"
+                        : "border-slate-300"
                     }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -279,8 +272,7 @@ const Register = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -291,7 +283,7 @@ const Register = () => {
                 </div>
                 {formik.touched.confirmPassword &&
                   formik.errors.confirmPassword && (
-                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                    <p className="mt-2 text-sm text-red-600">
                       {formik.errors.confirmPassword}
                     </p>
                   )}
@@ -301,8 +293,7 @@ const Register = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={registerState.loading || !formik.isValid}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center justify-center gap-2"
+              disabled={registerState.loading || !formik.isValid} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center justify-center gap-2"
             >
               {registerState.loading ? (
                 <div className="flex items-center gap-2">
@@ -322,10 +313,10 @@ const Register = () => {
           {/* Divider */}
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-300 dark:border-slate-600"></div>
+              <div className="w-full border-t border-slate-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+              <span className="px-4 bg-white">
                 Already have an account?
               </span>
             </div>
@@ -334,8 +325,7 @@ const Register = () => {
           {/* Login Link */}
           <div className="text-center">
             <Link
-              to="/auth/login"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+              to="/auth/login" className="inline-flex items-center gap-2 px-6 py-3 border border-slate-300"
             >
               Sign In Instead
             </Link>
@@ -343,12 +333,11 @@ const Register = () => {
 
           {/* Member Registration Link */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+            <p className="text-sm text-slate-600">
               Want to become a gym member?
             </p>
             <Link
-              to="/members/register"
-              className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+              to="/members/register" className="text-blue-600"
             >
               Member Registration
             </Link>

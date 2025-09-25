@@ -68,8 +68,7 @@ const Contact: React.FC = () => {
             </Link>
             <nav className="hidden md:flex items-center gap-6">
               <Link
-                to="/"
-                className="font-medium text-gray-600 transition-colors hover:text-blue-600"
+                to="/" className="font-medium text-gray-600 transition-colors hover:text-blue-600"
               >
                 Home
               </Link>
@@ -77,14 +76,12 @@ const Contact: React.FC = () => {
                 Contact
               </Link>
               <Link
-                to="/login"
-                className="font-medium text-gray-600 transition-colors hover:text-blue-600"
+                to="/login" className="font-medium text-gray-600 transition-colors hover:text-blue-600"
               >
                 Login
               </Link>
               <Link
-                to="/member/register"
-                className="px-4 py-2 font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
+                to="/member/register" className="px-4 py-2 font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
               >
                 Get Started
               </Link>
@@ -98,8 +95,7 @@ const Contact: React.FC = () => {
           {/* Back to Home */}
           <div className="mb-8">
             <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
+              to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Home
@@ -276,8 +272,7 @@ const Contact: React.FC = () => {
 
                     <Button
                       type="submit"
-                      disabled={isSubmitting}
-                      className="w-full"
+                      disabled={isSubmitting} className="w-full"
                     >
                       {isSubmitting ? (
                         <>
@@ -324,14 +319,12 @@ const Contact: React.FC = () => {
             </h3>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
-                to="/member/register"
-                className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                to="/member/register" className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Become a Member
               </Link>
               <Link
-                to="/login"
-                className="inline-flex items-center justify-center px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                to="/login" className="inline-flex items-center justify-center px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
               >
                 Staff Login
               </Link>

@@ -137,15 +137,15 @@ function GetSingle() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "OPERATIONAL":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-800";
+        return "bg-green-100 text-green-800";
       case "MAINTENANCE":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800";
+        return "bg-yellow-100 text-yellow-800";
       case "OUT_OF_SERVICE":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 border-red-200 dark:border-red-800";
+        return "bg-red-100 text-red-800";
       case "RETIRED":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400 border-gray-200 dark:border-gray-800";
+        return "bg-gray-100 text-gray-800";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400 border-gray-200 dark:border-gray-800";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -280,7 +280,7 @@ function GetSingle() {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="mx-auto space-y-6 max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -298,10 +298,10 @@ function GetSingle() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-slate-900">
                 Equipment Details
               </h1>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">
+              <p className="mt-2 text-slate-600">
                 View and manage equipment information
               </p>
             </div>
@@ -320,23 +320,20 @@ function GetSingle() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => openEditDialog(equipment)}
-                className="cursor-pointer"
+                onClick={() => openEditDialog(equipment)} className="cursor-pointer"
               >
                 <Edit className="w-4 h-4 mr-2 text-blue-600" />
                 Edit Equipment
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => setShowMaintenanceDialog(true)}
-                className="cursor-pointer"
+                onClick={() => setShowMaintenanceDialog(true)} className="cursor-pointer"
               >
                 <Wrench className="w-4 h-4 mr-2 text-yellow-600" />
                 Add Maintenance
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => setShowDeleteDialog(true)}
-                className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-900/20"
+                onClick={() => setShowDeleteDialog(true)} className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete Equipment
@@ -409,26 +406,25 @@ function GetSingle() {
           <div className="space-y-6 lg:col-span-2">
             {/* Equipment Image and Basic Info */}
             <Card className="shadow-lg">
-              <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-700">
+              <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
                 <div className="flex items-start gap-6">
                   <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center w-24 h-24 overflow-hidden rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
+                    <div className="flex items-center justify-center w-24 h-24 overflow-hidden rounded-xl bg-gradient-to-br from-blue-100 to-blue-200">
                       {equipment.imageUrl ? (
                         <img
                           src={equipment.imageUrl}
-                          alt={equipment.name}
-                          className="object-cover w-full h-full"
+                          alt={equipment.name} className="object-cover w-full h-full"
                         />
                       ) : (
-                        <Dumbbell className="w-12 h-12 text-blue-600 dark:text-blue-400" />
+                        <Dumbbell className="w-12 h-12 text-blue-600" />
                       )}
                     </div>
                   </div>
                   <div className="flex-1">
-                    <CardTitle className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+                    <CardTitle className="mb-2 text-2xl font-bold text-gray-900">
                       {equipment.name}
                     </CardTitle>
-                    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex items-center gap-4 text-sm text-gray-600">
                       {equipment.brand && (
                         <span className="flex items-center gap-1">
                           <Package className="w-4 h-4" />
@@ -455,34 +451,34 @@ function GetSingle() {
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Equipment Type
                       </Label>
-                      <p className="mt-1 text-gray-900 dark:text-white">
+                      <p className="mt-1 text-gray-900">
                         {equipment.type}
                       </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Category
                       </Label>
-                      <p className="mt-1 text-gray-900 dark:text-white">
+                      <p className="mt-1 text-gray-900">
                         {equipment.category}
                       </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Serial Number
                       </Label>
-                      <p className="mt-1 text-gray-900 dark:text-white">
+                      <p className="mt-1 text-gray-900">
                         {equipment.serialNumber || "Not specified"}
                       </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Location
                       </Label>
-                      <div className="flex items-center gap-2 mt-1 text-gray-900 dark:text-white">
+                      <div className="flex items-center gap-2 mt-1 text-gray-900">
                         <MapPin className="w-4 h-4 text-gray-500" />
                         {equipment.location || "Not specified"}
                       </div>
@@ -490,18 +486,18 @@ function GetSingle() {
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Quantity
                       </Label>
-                      <p className="mt-1 text-gray-900 dark:text-white">
+                      <p className="mt-1 text-gray-900">
                         {equipment.quantity}
                       </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Purchase Date
                       </Label>
-                      <div className="flex items-center gap-2 mt-1 text-gray-900 dark:text-white">
+                      <div className="flex items-center gap-2 mt-1 text-gray-900">
                         <Calendar className="w-4 h-4 text-gray-500" />
                         {equipment.purchaseDate
                           ? new Date(
@@ -511,10 +507,10 @@ function GetSingle() {
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Warranty Expiry
                       </Label>
-                      <div className="flex items-center gap-2 mt-1 text-gray-900 dark:text-white">
+                      <div className="flex items-center gap-2 mt-1 text-gray-900">
                         <Calendar className="w-4 h-4 text-gray-500" />
                         {equipment.warrantyExpiry
                           ? new Date(
@@ -524,10 +520,10 @@ function GetSingle() {
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Purchase Cost
                       </Label>
-                      <div className="flex items-center gap-2 mt-1 text-gray-900 dark:text-white">
+                      <div className="flex items-center gap-2 mt-1 text-gray-900">
                         <DollarSign className="w-4 h-4 text-gray-500" />
                         {equipment.cost
                           ? `$${equipment.cost.toLocaleString()}`
@@ -539,10 +535,10 @@ function GetSingle() {
 
                 {equipment.description && (
                   <div className="mt-6">
-                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <Label className="text-sm font-medium text-gray-500">
                       Description
                     </Label>
-                    <p className="mt-2 text-gray-900 dark:text-white">
+                    <p className="mt-2 text-gray-900">
                       {equipment.description}
                     </p>
                   </div>
@@ -561,12 +557,11 @@ function GetSingle() {
               <CardContent className="p-6">
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <Label className="text-sm font-medium text-gray-500">
                       Current Status
                     </Label>
                     <div className="mt-2">
-                      <Badge
-                        className={`${getStatusColor(
+                      <Badge className={`${getStatusColor(
                           equipment.status
                         )} px-3 py-1 text-sm font-medium`}
                       >
@@ -578,12 +573,11 @@ function GetSingle() {
                     </div>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <Label className="text-sm font-medium text-gray-500">
                       Maintenance Required
                     </Label>
                     <div className="mt-2">
-                      <Badge
-                        className={
+                      <Badge className={
                           equipment.maintenance
                             ? "bg-yellow-100 text-yellow-800 border-yellow-200"
                             : "bg-green-100 text-green-800 border-green-200"
@@ -595,10 +589,10 @@ function GetSingle() {
                   </div>
                   {equipment.lastMaintenance && (
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Last Maintenance
                       </Label>
-                      <div className="flex items-center gap-2 mt-1 text-gray-900 dark:text-white">
+                      <div className="flex items-center gap-2 mt-1 text-gray-900">
                         <Calendar className="w-4 h-4 text-gray-500" />
                         {new Date(
                           equipment.lastMaintenance
@@ -608,10 +602,10 @@ function GetSingle() {
                   )}
                   {equipment.nextMaintenance && (
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Next Maintenance Due
                       </Label>
-                      <div className="flex items-center gap-2 mt-1 text-gray-900 dark:text-white">
+                      <div className="flex items-center gap-2 mt-1 text-gray-900">
                         <Calendar className="w-4 h-4 text-gray-500" />
                         {new Date(
                           equipment.nextMaintenance
@@ -660,13 +654,12 @@ function GetSingle() {
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Current Availability
                       </Label>
                       <div className="flex items-center gap-2 mt-2">
                         <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                          <div
-                            className="h-2 transition-all duration-300 bg-green-500 rounded-full"
+                          <div className="h-2 transition-all duration-300 bg-green-500 rounded-full"
                             style={{
                               width: `${
                                 (equipment.available / equipment.quantity) * 100
@@ -674,19 +667,18 @@ function GetSingle() {
                             }}
                           ></div>
                         </div>
-                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        <span className="text-sm font-medium text-gray-900">
                           {equipment.available}/{equipment.quantity}
                         </span>
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Utilization Rate
                       </Label>
                       <div className="flex items-center gap-2 mt-2">
                         <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                          <div
-                            className="h-2 transition-all duration-300 bg-blue-500 rounded-full"
+                          <div className="h-2 transition-all duration-300 bg-blue-500 rounded-full"
                             style={{
                               width: `${
                                 (equipment.inUse / equipment.quantity) * 100
@@ -694,7 +686,7 @@ function GetSingle() {
                             }}
                           ></div>
                         </div>
-                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        <span className="text-sm font-medium text-gray-900">
                           {Math.round(
                             (equipment.inUse / equipment.quantity) * 100
                           )}
@@ -705,10 +697,10 @@ function GetSingle() {
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Equipment Age
                       </Label>
-                      <p className="mt-1 text-gray-900 dark:text-white">
+                      <p className="mt-1 text-gray-900">
                         {equipment.purchaseDate
                           ? `${Math.floor(
                               (new Date().getTime() -
@@ -719,7 +711,7 @@ function GetSingle() {
                       </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Warranty Status
                       </Label>
                       <div className="mt-2">
@@ -763,19 +755,19 @@ function GetSingle() {
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Purchase Cost
                       </Label>
-                      <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
+                      <p className="mt-1 text-2xl font-bold text-gray-900">
                         $
                         {equipment.cost ? equipment.cost.toLocaleString() : "0"}
                       </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Cost per Unit
                       </Label>
-                      <p className="mt-1 text-lg text-gray-900 dark:text-white">
+                      <p className="mt-1 text-lg text-gray-900">
                         $
                         {equipment.cost && equipment.quantity
                           ? (equipment.cost / equipment.quantity).toFixed(2)
@@ -785,10 +777,10 @@ function GetSingle() {
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Annual Depreciation
                       </Label>
-                      <p className="mt-1 text-lg text-gray-900 dark:text-white">
+                      <p className="mt-1 text-lg text-gray-900">
                         $
                         {equipment.cost && equipment.purchaseDate
                           ? (equipment.cost / 10).toFixed(2)
@@ -799,7 +791,7 @@ function GetSingle() {
                       </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         ROI Indicator
                       </Label>
                       <div className="mt-2">
@@ -841,10 +833,10 @@ function GetSingle() {
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Equipment Age
                       </Label>
-                      <p className="mt-1 text-lg text-gray-900 dark:text-white">
+                      <p className="mt-1 text-lg text-gray-900">
                         {equipment.purchaseDate
                           ? `${Math.floor(
                               (new Date().getTime() -
@@ -855,10 +847,10 @@ function GetSingle() {
                       </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Expected Lifespan
                       </Label>
-                      <p className="mt-1 text-lg text-gray-900 dark:text-white">
+                      <p className="mt-1 text-lg text-gray-900">
                         10 years
                       </p>
                       <p className="text-xs text-gray-500">Industry standard</p>
@@ -866,7 +858,7 @@ function GetSingle() {
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Replacement Timeline
                       </Label>
                       <div className="mt-2">
@@ -910,10 +902,10 @@ function GetSingle() {
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Maintenance Frequency
                       </Label>
-                      <p className="mt-1 text-lg text-gray-900 dark:text-white">
+                      <p className="mt-1 text-lg text-gray-900">
                         {equipment.maintenance ? "High" : "Low"}
                       </p>
                       <p className="text-xs text-gray-500">
@@ -941,12 +933,12 @@ function GetSingle() {
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <Label className="text-sm font-medium text-gray-500">
                       Equipment Description
                     </Label>
                     <div className="p-3 mt-2 rounded-lg bg-gray-50">
                       {equipment.description ? (
-                        <p className="text-gray-900 dark:text-white">
+                        <p className="text-gray-900">
                           {equipment.description}
                         </p>
                       ) : (
@@ -957,7 +949,7 @@ function GetSingle() {
                     </div>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <Label className="text-sm font-medium text-gray-500">
                       Technical Specifications
                     </Label>
                     <div className="mt-2 space-y-2">
@@ -990,7 +982,7 @@ function GetSingle() {
                     </div>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <Label className="text-sm font-medium text-gray-500">
                       Additional Notes
                     </Label>
                     <div className="p-3 mt-2 border border-blue-200 rounded-lg bg-blue-50">
@@ -1020,18 +1012,18 @@ function GetSingle() {
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <Label className="text-sm font-medium text-gray-500">
                       Current Location
                     </Label>
                     <div className="flex items-center gap-2 p-3 mt-2 rounded-lg bg-gray-50">
                       <MapPin className="w-4 h-4 text-gray-500" />
-                      <span className="text-gray-900 dark:text-white">
+                      <span className="text-gray-900">
                         {equipment.location || "Location not specified"}
                       </span>
                     </div>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <Label className="text-sm font-medium text-gray-500">
                       Facility Zone
                     </Label>
                     <div className="mt-2">
@@ -1041,7 +1033,7 @@ function GetSingle() {
                     </div>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <Label className="text-sm font-medium text-gray-500">
                       Accessibility
                     </Label>
                     <div className="mt-2 space-y-2">
@@ -1084,14 +1076,13 @@ function GetSingle() {
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Availability Rate
                       </Label>
                       <div className="mt-2">
                         <div className="flex items-center gap-2">
                           <div className="flex-1 h-3 bg-gray-200 rounded-full">
-                            <div
-                              className="h-3 transition-all duration-300 bg-green-500 rounded-full"
+                            <div className="h-3 transition-all duration-300 bg-green-500 rounded-full"
                               style={{
                                 width: `${
                                   (equipment.available / equipment.quantity) *
@@ -1100,7 +1091,7 @@ function GetSingle() {
                               }}
                             ></div>
                           </div>
-                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          <span className="text-sm font-medium text-gray-900">
                             {Math.round(
                               (equipment.available / equipment.quantity) * 100
                             )}
@@ -1110,7 +1101,7 @@ function GetSingle() {
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Efficiency Score
                       </Label>
                       <div className="mt-2">
@@ -1158,7 +1149,7 @@ function GetSingle() {
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Reliability Index
                       </Label>
                       <div className="mt-2">
@@ -1199,7 +1190,7 @@ function GetSingle() {
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Performance Trend
                       </Label>
                       <div className="mt-2">
@@ -1232,7 +1223,7 @@ function GetSingle() {
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Efficiency Score
                       </Label>
                       <div className="mt-2">
@@ -1262,8 +1253,7 @@ function GetSingle() {
                           }
 
                           return (
-                            <Badge
-                              className={`${color} px-3 py-1 text-sm font-medium`}
+                            <Badge className={`${color} px-3 py-1 text-sm font-medium`}
                             >
                               {icon}
                               <span className="ml-1.5">
@@ -1275,13 +1265,12 @@ function GetSingle() {
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Availability Rate
                       </Label>
                       <div className="flex items-center gap-2 mt-2">
                         <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                          <div
-                            className="h-2 transition-all duration-300 bg-blue-500 rounded-full"
+                          <div className="h-2 transition-all duration-300 bg-blue-500 rounded-full"
                             style={{
                               width: `${
                                 (equipment.available / equipment.quantity) * 100
@@ -1289,7 +1278,7 @@ function GetSingle() {
                             }}
                           ></div>
                         </div>
-                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        <span className="text-sm font-medium text-gray-900">
                           {Math.round(
                             (equipment.available / equipment.quantity) * 100
                           )}
@@ -1300,7 +1289,7 @@ function GetSingle() {
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Performance Rating
                       </Label>
                       <div className="flex items-center gap-1 mt-2">
@@ -1332,7 +1321,7 @@ function GetSingle() {
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Label className="text-sm font-medium text-gray-500">
                         Reliability Index
                       </Label>
                       <div className="mt-2">
@@ -1350,8 +1339,7 @@ function GetSingle() {
                           );
 
                           return (
-                            <Badge
-                              className={`${color} px-3 py-1 text-sm font-medium`}
+                            <Badge className={`${color} px-3 py-1 text-sm font-medium`}
                             >
                               {icon}
                               <span className="ml-1.5">{reliability}</span>
@@ -1426,23 +1414,20 @@ function GetSingle() {
                     )}
 
                     {equipment.warrantyExpiry && (
-                      <div
-                        className={`flex items-center gap-3 p-3 border rounded-lg ${
+                      <div className={`flex items-center gap-3 p-3 border rounded-lg ${
                           new Date(equipment.warrantyExpiry) < new Date()
                             ? "bg-red-50 border-red-200"
                             : "bg-orange-50 border-orange-200"
                         }`}
                       >
-                        <div
-                          className={`w-2 h-2 rounded-full ${
+                        <div className={`w-2 h-2 rounded-full ${
                             new Date(equipment.warrantyExpiry) < new Date()
                               ? "bg-red-500"
                               : "bg-orange-500"
                           }`}
                         ></div>
                         <div className="flex-1">
-                          <p
-                            className={`text-sm font-medium ${
+                          <p className={`text-sm font-medium ${
                               new Date(equipment.warrantyExpiry) < new Date()
                                 ? "text-red-900"
                                 : "text-orange-900"
@@ -1452,8 +1437,7 @@ function GetSingle() {
                               ? "Warranty Expired"
                               : "Warranty Expiring"}
                           </p>
-                          <p
-                            className={`text-xs ${
+                          <p className={`text-xs ${
                               new Date(equipment.warrantyExpiry) < new Date()
                                 ? "text-red-700"
                                 : "text-orange-700"
@@ -1658,8 +1642,7 @@ function GetSingle() {
               <CardContent className="p-6">
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   <Button
-                    variant="outline"
-                    className="flex flex-col items-center h-auto gap-2 p-4"
+                    variant="outline" className="flex flex-col items-center h-auto gap-2 p-4"
                   >
                     <FileText className="w-6 h-6 text-blue-600" />
                     <div className="text-center">
@@ -1671,8 +1654,7 @@ function GetSingle() {
                   </Button>
 
                   <Button
-                    variant="outline"
-                    className="flex flex-col items-center h-auto gap-2 p-4"
+                    variant="outline" className="flex flex-col items-center h-auto gap-2 p-4"
                   >
                     <Activity className="w-6 h-6 text-green-600" />
                     <div className="text-center">
@@ -1684,8 +1666,7 @@ function GetSingle() {
                   </Button>
 
                   <Button
-                    variant="outline"
-                    className="flex flex-col items-center h-auto gap-2 p-4"
+                    variant="outline" className="flex flex-col items-center h-auto gap-2 p-4"
                   >
                     <Wrench className="w-6 h-6 text-orange-600" />
                     <div className="text-center">
@@ -1851,8 +1832,7 @@ function GetSingle() {
                   {/* Support Actions */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Wrench className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -1863,8 +1843,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -1873,8 +1852,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Users className="w-5 h-5 text-purple-600" />
                       <div className="text-center">
@@ -1974,8 +1952,7 @@ function GetSingle() {
                               : 0}
                             %
                           </span>
-                          <div
-                            className={`w-2 h-2 rounded-full ${
+                          <div className={`w-2 h-2 rounded-full ${
                               equipment.quantity > 0 &&
                               (equipment.available + equipment.inUse) /
                                 equipment.quantity >
@@ -1997,8 +1974,7 @@ function GetSingle() {
                               ? "High"
                               : "Medium"}
                           </span>
-                          <div
-                            className={`w-2 h-2 rounded-full ${
+                          <div className={`w-2 h-2 rounded-full ${
                               equipment.cost && equipment.inUse > 0
                                 ? "bg-green-500"
                                 : "bg-yellow-500"
@@ -2015,8 +1991,7 @@ function GetSingle() {
                           <span className="text-sm font-medium text-gray-900">
                             {equipment.maintenance ? "Needs Attention" : "Good"}
                           </span>
-                          <div
-                            className={`w-2 h-2 rounded-full ${
+                          <div className={`w-2 h-2 rounded-full ${
                               equipment.maintenance
                                 ? "bg-red-500"
                                 : "bg-green-500"
@@ -2159,8 +2134,7 @@ function GetSingle() {
                   {/* Safety Actions */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <CheckCircle className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -2169,8 +2143,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -2179,8 +2152,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <AlertTriangle className="w-5 h-5 text-orange-600" />
                       <div className="text-center">
@@ -2277,8 +2249,7 @@ function GetSingle() {
                   {/* Training Actions */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -2287,8 +2258,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Users className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -2299,8 +2269,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <CheckCircle className="w-5 h-5 text-purple-600" />
                       <div className="text-center">
@@ -2398,8 +2367,7 @@ function GetSingle() {
                   {/* Integration Actions */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Settings className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -2408,8 +2376,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Activity className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -2420,8 +2387,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-purple-600" />
                       <div className="text-center">
@@ -2518,8 +2484,7 @@ function GetSingle() {
                   {/* Backup Actions */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -2528,8 +2493,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Activity className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -2538,8 +2502,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Settings className="w-5 h-5 text-purple-600" />
                       <div className="text-center">
@@ -2625,8 +2588,7 @@ function GetSingle() {
                         <div className="flex items-center gap-2">
                           <span className="w-8 text-sm text-gray-600">5★</span>
                           <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                            <div
-                              className="h-2 bg-green-500 rounded-full"
+                            <div className="h-2 bg-green-500 rounded-full"
                               style={{ width: "65%" }}
                             ></div>
                           </div>
@@ -2635,8 +2597,7 @@ function GetSingle() {
                         <div className="flex items-center gap-2">
                           <span className="w-8 text-sm text-gray-600">4★</span>
                           <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                            <div
-                              className="h-2 bg-blue-500 rounded-full"
+                            <div className="h-2 bg-blue-500 rounded-full"
                               style={{ width: "20%" }}
                             ></div>
                           </div>
@@ -2645,8 +2606,7 @@ function GetSingle() {
                         <div className="flex items-center gap-2">
                           <span className="w-8 text-sm text-gray-600">3★</span>
                           <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                            <div
-                              className="h-2 bg-yellow-500 rounded-full"
+                            <div className="h-2 bg-yellow-500 rounded-full"
                               style={{ width: "10%" }}
                             ></div>
                           </div>
@@ -2655,8 +2615,7 @@ function GetSingle() {
                         <div className="flex items-center gap-2">
                           <span className="w-8 text-sm text-gray-600">2★</span>
                           <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                            <div
-                              className="h-2 bg-orange-500 rounded-full"
+                            <div className="h-2 bg-orange-500 rounded-full"
                               style={{ width: "3%" }}
                             ></div>
                           </div>
@@ -2665,8 +2624,7 @@ function GetSingle() {
                         <div className="flex items-center gap-2">
                           <span className="w-8 text-sm text-gray-600">1★</span>
                           <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                            <div
-                              className="h-2 bg-red-500 rounded-full"
+                            <div className="h-2 bg-red-500 rounded-full"
                               style={{ width: "2%" }}
                             ></div>
                           </div>
@@ -2712,8 +2670,7 @@ function GetSingle() {
                   {/* Feedback Actions */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Users className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -2724,8 +2681,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -2939,8 +2895,7 @@ function GetSingle() {
                   {/* Planning Actions */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Calendar className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -2949,8 +2904,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <DollarSign className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -2961,8 +2915,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-purple-600" />
                       <div className="text-center">
@@ -3053,8 +3006,7 @@ function GetSingle() {
                   {/* Support Actions */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Users className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -3063,8 +3015,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -3073,8 +3024,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Users className="w-5 h-5 text-purple-600" />
                       <div className="text-center">
@@ -3222,8 +3172,7 @@ function GetSingle() {
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Edit className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -3232,8 +3181,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Wrench className="w-5 h-5 text-yellow-600" />
                       <div className="text-center">
@@ -3242,8 +3190,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Eye className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -3252,8 +3199,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-purple-600" />
                       <div className="text-center">
@@ -3264,8 +3210,7 @@ function GetSingle() {
 
                   <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Users className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -3274,8 +3219,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Settings className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -3284,8 +3228,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Activity className="w-5 h-5 text-orange-600" />
                       <div className="text-center">
@@ -3294,8 +3237,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <CheckCircle className="w-5 h-5 text-purple-600" />
                       <div className="text-center">
@@ -3406,8 +3348,7 @@ function GetSingle() {
                   {/* Help Actions */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -3416,8 +3357,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Eye className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -3426,8 +3366,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Users className="w-5 h-5 text-purple-600" />
                       <div className="text-center">
@@ -3550,8 +3489,7 @@ function GetSingle() {
                   {/* System Actions */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Activity className="w-5 h-5 text-blue-600" />
                       <div className="text-center">
@@ -3560,8 +3498,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <Settings className="w-5 h-5 text-green-600" />
                       <div className="text-center">
@@ -3570,8 +3507,7 @@ function GetSingle() {
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="flex flex-col items-center h-auto gap-2 p-3"
+                      variant="outline" className="flex flex-col items-center h-auto gap-2 p-3"
                     >
                       <FileText className="w-5 h-5 text-purple-600" />
                       <div className="text-center">
@@ -3732,24 +3668,21 @@ function GetSingle() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button
-                  onClick={() => openEditDialog(equipment)}
-                  className="justify-start w-full"
+                  onClick={() => openEditDialog(equipment)} className="justify-start w-full"
                   variant="outline"
                 >
                   <Edit className="w-4 h-4 mr-2" />
                   Edit Equipment
                 </Button>
                 <Button
-                  onClick={() => setShowMaintenanceDialog(true)}
-                  className="justify-start w-full"
+                  onClick={() => setShowMaintenanceDialog(true)} className="justify-start w-full"
                   variant="outline"
                 >
                   <Wrench className="w-4 h-4 mr-2" />
                   Add Maintenance
                 </Button>
                 <Button
-                  onClick={() => setShowDeleteDialog(true)}
-                  className="justify-start w-full text-red-600 border-red-200 hover:bg-red-50"
+                  onClick={() => setShowDeleteDialog(true)} className="justify-start w-full text-red-600 border-red-200 hover:bg-red-50"
                   variant="outline"
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
@@ -3765,35 +3698,35 @@ function GetSingle() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-gray-600">
                     Total Quantity
                   </span>
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  <span className="font-semibold text-gray-900">
                     {equipment.quantity}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-gray-600">
                     Available
                   </span>
-                  <span className="font-semibold text-green-600 dark:text-green-400">
+                  <span className="font-semibold text-green-600">
                     {equipment.available}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-gray-600">
                     In Use
                   </span>
-                  <span className="font-semibold text-orange-600 dark:text-orange-400">
+                  <span className="font-semibold text-orange-600">
                     {equipment.inUse}
                   </span>
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-gray-600">
                     Utilization Rate
                   </span>
-                  <span className="font-semibold text-blue-600 dark:text-blue-400">
+                  <span className="font-semibold text-blue-600">
                     {equipment.quantity > 0
                       ? Math.round((equipment.inUse / equipment.quantity) * 100)
                       : 0}

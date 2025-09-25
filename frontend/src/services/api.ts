@@ -102,7 +102,18 @@ export const userAPI = {
 
   // Equipment Management (for staff/admin users)
   getEquipment: () =>
-    api.get<ApiResponse<Equipment[]>>(`${BASE_API_URL}/equipments/list`),
+    api.get<{
+      isSuccess: boolean;
+      message: string;
+      equipment: Equipment[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        pages: number;
+      };
+      stats: any;
+    }>(`${BASE_API_URL}/equipments/list`),
 
   addEquipment: (data: Omit<Equipment, "id" | "createdAt" | "updatedAt">) =>
     api.post<ApiResponse<Equipment>>(`${BASE_API_URL}/equipments/add`, data),
@@ -685,7 +696,18 @@ export const bulkImportMembers = async (file: File) => {
 // Equipment Management API
 export const equipmentAPI = {
   getAllEquipment: () =>
-    api.get<ApiResponse<Equipment[]>>(`${BASE_API_URL}/equipments/list`),
+    api.get<{
+      isSuccess: boolean;
+      message: string;
+      equipment: Equipment[];
+      pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        pages: number;
+      };
+      stats: any;
+    }>(`${BASE_API_URL}/equipments/list`),
 
   getSingleEquipment: (id: string) =>
     api.get<ApiResponse<Equipment>>(`${BASE_API_URL}/equipments/single/${id}`),

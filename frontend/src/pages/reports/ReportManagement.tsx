@@ -1,5 +1,10 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { BarChart3, Download, FileText, TrendingUp } from "lucide-react";
 
@@ -9,8 +14,12 @@ const ReportManagement: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Report Management</h1>
-          <p className="text-gray-600 mt-2">Generate and view gym analytics and reports</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Report Management
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Generate and view gym analytics and reports
+          </p>
         </div>
         <Button>
           <Download className="h-4 w-4 mr-2" />
@@ -27,13 +36,17 @@ const ReportManagement: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
-            <p className="text-xs text-muted-foreground">Generated this month</p>
+            <p className="text-xs text-muted-foreground">
+              Generated this month
+            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Revenue Growth</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Revenue Growth
+            </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -63,7 +76,9 @@ const ReportManagement: React.FC = () => {
           <div className="text-center py-8 text-gray-500">
             <BarChart3 className="mx-auto h-12 w-12 mb-4" />
             <p>No reports available yet</p>
-            <p className="text-sm">Generate your first report to see data here</p>
+            <p className="text-sm">
+              Generate your first report to see data here
+            </p>
           </div>
         </CardContent>
       </Card>

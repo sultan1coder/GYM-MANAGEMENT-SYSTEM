@@ -233,10 +233,10 @@ const ProfileSettings = () => {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="mb-2 text-2xl font-bold text-slate-900 dark:text-white">
+          <h2 className="mb-2 text-2xl font-bold text-slate-900">
             Please log in to view profile settings
           </h2>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-slate-600">
             You need to be logged in to access this page.
           </p>
         </div>
@@ -249,10 +249,10 @@ const ProfileSettings = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center">
-          <h1 className="mb-2 text-3xl font-bold text-slate-900 dark:text-white">
+          <h1 className="mb-2 text-3xl font-bold text-slate-900">
             Profile Settings
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-slate-600">
             Manage your account information and preferences
           </p>
         </div>
@@ -273,20 +273,18 @@ const ProfileSettings = () => {
                   {user.profile_picture ? (
                     <img
                       src={user.profile_picture}
-                      alt="Profile"
-                      className="object-cover w-32 h-32 border-4 rounded-full border-slate-200 dark:border-slate-600"
+                      alt="Profile" className="object-cover w-32 h-32 border-4 rounded-full border-slate-200"
                     />
                   ) : (
-                    <div className="flex items-center justify-center w-32 h-32 border-4 rounded-full bg-slate-100 dark:bg-slate-700 border-slate-200 dark:border-slate-600">
-                      <User className="w-12 h-12 text-slate-400 dark:text-slate-500" />
+                    <div className="flex items-center justify-center w-32 h-32 border-4 rounded-full bg-slate-100">
+                      <User className="w-12 h-12 text-slate-400" />
                     </div>
                   )}
                 </div>
 
                 <Button
                   onClick={() => openProfileManager(userType)}
-                  variant="outline"
-                  className="w-full"
+                  variant="outline" className="w-full"
                 >
                   <Camera className="w-4 h-4 mr-2" />
                   Change Picture
@@ -330,8 +328,7 @@ const ProfileSettings = () => {
                       onChange={(e) =>
                         handleInputChange("name", e.target.value)
                       }
-                      disabled={!isEditing}
-                      className={`disabled:opacity-50 ${
+                      disabled={!isEditing} className={`disabled:opacity-50 ${
                         validationErrors.name ? "border-red-500" : ""
                       }`}
                     />
@@ -354,8 +351,7 @@ const ProfileSettings = () => {
                       onChange={(e) =>
                         handleInputChange("email", e.target.value)
                       }
-                      disabled={!isEditing}
-                      className={`disabled:opacity-50 ${
+                      disabled={!isEditing} className={`disabled:opacity-50 ${
                         validationErrors.email ? "border-red-500" : ""
                       }`}
                     />
@@ -377,8 +373,7 @@ const ProfileSettings = () => {
                       onChange={(e) =>
                         handleInputChange("phone_number", e.target.value)
                       }
-                      disabled={!isEditing}
-                      className={`disabled:opacity-50 ${
+                      disabled={!isEditing} className={`disabled:opacity-50 ${
                         validationErrors.phone_number ? "border-red-500" : ""
                       }`}
                     />
@@ -405,8 +400,7 @@ const ProfileSettings = () => {
                             parseInt(e.target.value) || 18
                           )
                         }
-                        disabled={!isEditing}
-                        className={`disabled:opacity-50 ${
+                        disabled={!isEditing} className={`disabled:opacity-50 ${
                           validationErrors.age ? "border-red-500" : ""
                         }`}
                       />
@@ -427,8 +421,7 @@ const ProfileSettings = () => {
                       <Input
                         id="role"
                         value={formData.role}
-                        disabled
-                        className="disabled:opacity-50"
+                        disabled className="disabled:opacity-50"
                       />
                     </div>
                   )}
@@ -436,8 +429,7 @@ const ProfileSettings = () => {
                   {isMemberUser && (
                     <div className="space-y-2">
                       <Label
-                        htmlFor="membership"
-                        className="flex items-center gap-2"
+                        htmlFor="membership" className="flex items-center gap-2"
                       >
                         <Users className="w-4 h-4" />
                         Membership Type
@@ -445,8 +437,7 @@ const ProfileSettings = () => {
                       <Input
                         id="membership"
                         value={formData.membershiptype}
-                        disabled
-                        className="disabled:opacity-50"
+                        disabled className="disabled:opacity-50"
                       />
                     </div>
                   )}
@@ -456,8 +447,7 @@ const ProfileSettings = () => {
                   <div className="flex gap-2 pt-4">
                     <Button
                       onClick={handleSaveChanges}
-                      disabled={isUpdating}
-                      className="flex-1"
+                      disabled={isUpdating} className="flex-1"
                     >
                       {isUpdating ? (
                         <>
@@ -471,8 +461,7 @@ const ProfileSettings = () => {
                     <Button
                       variant="outline"
                       onClick={() => setIsEditing(false)}
-                      disabled={isUpdating}
-                      className="flex-1"
+                      disabled={isUpdating} className="flex-1"
                     >
                       Cancel
                     </Button>
@@ -496,7 +485,7 @@ const ProfileSettings = () => {
                 <div className="flex items-center justify-between p-4 border rounded-lg">
                   <div>
                     <h4 className="font-medium">Change Password</h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Update your account password
                     </p>
                   </div>
@@ -512,7 +501,7 @@ const ProfileSettings = () => {
                 <div className="flex items-center justify-between p-4 border rounded-lg">
                   <div>
                     <h4 className="font-medium">Two-Factor Authentication</h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       Add an extra layer of security
                     </p>
                   </div>
@@ -545,14 +534,13 @@ const ProfileSettings = () => {
       {/* Password Change Modal */}
       {showPasswordChange && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6">
+          <div className="bg-white">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+              <h3 className="text-xl font-bold text-slate-900">
                 Change Password
               </h3>
               <button
-                onClick={() => setShowPasswordChange(false)}
-                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                onClick={() => setShowPasswordChange(false)} className="p-2 hover:bg-slate-100"
               >
                 <X className="h-5 w-5 text-slate-500" />
               </button>
@@ -610,8 +598,7 @@ const ProfileSettings = () => {
               <div className="flex gap-3 pt-4">
                 <Button
                   onClick={handlePasswordChange}
-                  disabled={isChangingPassword}
-                  className="flex-1"
+                  disabled={isChangingPassword} className="flex-1"
                 >
                   {isChangingPassword ? (
                     <>
@@ -625,8 +612,7 @@ const ProfileSettings = () => {
                 <Button
                   variant="outline"
                   onClick={() => setShowPasswordChange(false)}
-                  disabled={isChangingPassword}
-                  className="flex-1"
+                  disabled={isChangingPassword} className="flex-1"
                 >
                   Cancel
                 </Button>

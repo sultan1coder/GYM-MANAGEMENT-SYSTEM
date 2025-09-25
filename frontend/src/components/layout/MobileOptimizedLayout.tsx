@@ -31,8 +31,7 @@ const MobileOptimizedLayout: React.FC<MobileOptimizedLayoutProps> = ({
             <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
               <SheetTrigger asChild>
                 <Button
-                  variant="ghost"
-                  className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
+                  variant="ghost" className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
                 >
                   <Menu className="h-6 w-6" />
                   <span className="sr-only">Toggle Menu</span>
@@ -57,7 +56,7 @@ const MobileOptimizedLayout: React.FC<MobileOptimizedLayoutProps> = ({
       <div className="flex">
         {/* Desktop Sidebar */}
         {showSidebar && sidebar && (
-          <aside className="hidden lg:block w-64 border-r bg-gray-50/40 dark:bg-gray-900/40">
+          <aside className="hidden lg:block w-64 border-r bg-gray-50/40">
             <ScrollArea className="h-screen">
               <div className="p-6">{sidebar}</div>
             </ScrollArea>

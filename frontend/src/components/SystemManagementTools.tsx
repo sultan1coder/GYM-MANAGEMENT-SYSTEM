@@ -65,8 +65,7 @@ const SystemManagementTools: React.FC = () => {
 
       <Tabs
         value={activeTab}
-        onValueChange={setActiveTab}
-        className="space-y-6"
+        onValueChange={setActiveTab} className="space-y-6"
       >
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="settings" className="flex items-center gap-2">

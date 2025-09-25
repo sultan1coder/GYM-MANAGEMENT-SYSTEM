@@ -34,26 +34,22 @@ const Homepage = () => {
             </div>
             <nav className="hidden md:flex items-center gap-6">
               <Link
-                to="/"
-                className="font-medium text-gray-600 transition-colors hover:text-blue-600"
+                to="/" className="font-medium text-gray-600 transition-colors hover:text-blue-600"
               >
                 Home
               </Link>
               <Link
-                to="/contact"
-                className="font-medium text-gray-600 transition-colors hover:text-blue-600"
+                to="/contact" className="font-medium text-gray-600 transition-colors hover:text-blue-600"
               >
                 Contact
               </Link>
               <Link
-                to="/login"
-                className="font-medium text-gray-600 transition-colors hover:text-blue-600"
+                to="/login" className="font-medium text-gray-600 transition-colors hover:text-blue-600"
               >
                 Login
               </Link>
               <Link
-                to="/member/register"
-                className="px-4 py-2 font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
+                to="/member/register" className="px-4 py-2 font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
               >
                 Get Started
               </Link>
@@ -61,8 +57,7 @@ const Homepage = () => {
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
-              <button
-                className="p-2 text-gray-600 hover:text-blue-600"
+              <button className="p-2 text-gray-600 hover:text-blue-600"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? (
@@ -79,29 +74,25 @@ const Homepage = () => {
             <div className="md:hidden border-t border-gray-200 bg-white">
               <div className="px-4 py-4 space-y-3">
                 <Link
-                  to="/"
-                  className="block font-medium text-gray-600 transition-colors hover:text-blue-600"
+                  to="/" className="block font-medium text-gray-600 transition-colors hover:text-blue-600"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Home
                 </Link>
                 <Link
-                  to="/contact"
-                  className="block font-medium text-gray-600 transition-colors hover:text-blue-600"
+                  to="/contact" className="block font-medium text-gray-600 transition-colors hover:text-blue-600"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Contact
                 </Link>
                 <Link
-                  to="/login"
-                  className="block font-medium text-gray-600 transition-colors hover:text-blue-600"
+                  to="/login" className="block font-medium text-gray-600 transition-colors hover:text-blue-600"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Login
                 </Link>
                 <Link
-                  to="/member/register"
-                  className="block w-full px-4 py-2 font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                  to="/member/register" className="block w-full px-4 py-2 font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Get Started
@@ -116,8 +107,7 @@ const Homepage = () => {
       <section className="relative pt-20 pb-32 overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20"></div>
-        <div
-          className="absolute inset-0 bg-center bg-no-repeat bg-cover"
+        <div className="absolute inset-0 bg-center bg-no-repeat bg-cover"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjR8fGJvZHlidWlsZGluZ3xlbnwwfHwwfHx8MA%3D%3D')`,
             filter: "brightness(0.7)",
@@ -137,15 +127,13 @@ const Homepage = () => {
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Link
-                to="/member/register"
-                className="flex items-center justify-center gap-2 px-8 py-4 text-white transition-all transform shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:from-blue-700 hover:to-purple-700 hover:scale-105"
+                to="/member/register" className="flex items-center justify-center gap-2 px-8 py-4 text-white transition-all transform shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:from-blue-700 hover:to-purple-700 hover:scale-105"
               >
                 Get Started
                 <ChevronRight className="w-5 h-5" />
               </Link>
               <Link
-                to="/contact"
-                className="flex items-center justify-center gap-2 px-8 py-4 text-white transition-all border-2 border-white rounded-xl hover:bg-white hover:text-blue-600"
+                to="/contact" className="flex items-center justify-center gap-2 px-8 py-4 text-white transition-all border-2 border-white rounded-xl hover:bg-white hover:text-blue-600"
               >
                 Contact Us
                 <ChevronRight className="w-5 h-5" />
@@ -159,10 +147,10 @@ const Homepage = () => {
       <section className="py-20">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="mb-16 space-y-4 text-center">
-            <h2 className="text-4xl font-bold md:text-5xl text-slate-900 dark:text-white">
+            <h2 className="text-4xl font-bold md:text-5xl text-slate-900">
               Experience Our World-Class Facility
             </h2>
-            <p className="max-w-3xl mx-auto text-xl text-slate-600 dark:text-slate-300">
+            <p className="max-w-3xl mx-auto text-xl text-slate-600">
               Take a virtual tour of our state-of-the-art gym and see what makes
               us different
             </p>
@@ -173,8 +161,7 @@ const Homepage = () => {
             <div className="relative overflow-hidden transition-all duration-500 shadow-lg group rounded-2xl hover:shadow-2xl hover:-translate-y-2">
               <img
                 src="https://images.unsplash.com/photo-1639496908204-6f949b0f46e1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNhcmRpbyUyMHpvbmUlMjBleGVyY2lzZXxlbnwwfHwwfHx8MA%3D%3D"
-                alt="Cardio Zone"
-                className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
+                alt="Cardio Zone" className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -189,8 +176,7 @@ const Homepage = () => {
             <div className="relative overflow-hidden transition-all duration-500 shadow-lg group rounded-2xl hover:shadow-2xl hover:-translate-y-2">
               <img
                 src="https://images.unsplash.com/photo-1611672585731-fa10603fb9e0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGJvZHlidWlsZGluZ3xlbnwwfHwwfHx8MA%3D%3D"
-                alt="Strength Training"
-                className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
+                alt="Strength Training" className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -205,8 +191,7 @@ const Homepage = () => {
             <div className="relative overflow-hidden transition-all duration-500 shadow-lg group rounded-2xl hover:shadow-2xl hover:-translate-y-2">
               <img
                 src="https://images.unsplash.com/photo-1632781297772-1d68f375d878?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJvZHlidWlsZGluZ3xlbnwwfHwwfHx8MA%3D%3D"
-                alt="Functional Training"
-                className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
+                alt="Functional Training" className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -221,8 +206,7 @@ const Homepage = () => {
             <div className="relative overflow-hidden transition-all duration-500 shadow-lg group rounded-2xl hover:shadow-2xl hover:-translate-y-2">
               <img
                 src="https://images.unsplash.com/photo-1549995546-87cb41aa98a4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fHlvZ2ElMjBhbmQlMjBzdHJldGNoaW5nJTIwZXhlcmNpc2V8ZW58MHx8MHx8fDA%3D"
-                alt="Yoga & Stretching"
-                className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
+                alt="Yoga & Stretching" className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -237,8 +221,7 @@ const Homepage = () => {
             <div className="relative overflow-hidden transition-all duration-500 shadow-lg group rounded-2xl hover:shadow-2xl hover:-translate-y-2">
               <img
                 src="https://images.unsplash.com/photo-1723117417879-2effcca63cda?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fGdyb3VwJTIwY2xhc3NlcyUyMGV4ZXJjaXNlJTIwaW4lMjBneW18ZW58MHx8MHx8fDA%3D"
-                alt="Group Classes"
-                className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
+                alt="Group Classes" className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -253,8 +236,7 @@ const Homepage = () => {
             <div className="relative overflow-hidden transition-all duration-500 shadow-lg group rounded-2xl hover:shadow-2xl hover:-translate-y-2">
               <img
                 src="https://images.unsplash.com/photo-1669323149885-6bda5714e85b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fGJvZHlidWlsZGluZ3xlbnwwfHwwfHx8MA%3D%3D"
-                alt="Recovery Zone"
-                className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
+                alt="Recovery Zone" className="object-cover w-full h-64 transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -272,10 +254,10 @@ const Homepage = () => {
       <section className="py-20">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="mb-16 space-y-4 text-center">
-            <h2 className="text-4xl font-bold md:text-5xl text-slate-900 dark:text-white">
+            <h2 className="text-4xl font-bold md:text-5xl text-slate-900">
               Why Choose BILKHAYR GYM?
             </h2>
-            <p className="max-w-3xl mx-auto text-xl text-slate-600 dark:text-slate-300">
+            <p className="max-w-3xl mx-auto text-xl text-slate-600">
               We provide everything you need for a complete fitness experience
             </p>
           </div>
@@ -308,16 +290,15 @@ const Homepage = () => {
               },
             ].map((feature, index) => (
               <div
-                key={index}
-                className="p-8 transition-all bg-white shadow-lg group dark:bg-slate-800 rounded-2xl hover:shadow-xl hover:-translate-y-1"
+                key={index} className="p-8 transition-all bg-white shadow-lg group"
               >
                 <div className="p-3 mb-4 text-white transition-transform bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl w-fit group-hover:scale-110">
                   {feature.icon}
                 </div>
-                <h3 className="mb-2 text-xl font-semibold text-slate-900 dark:text-white">
+                <h3 className="mb-2 text-xl font-semibold text-slate-900">
                   {feature.title}
                 </h3>
-                <p className="text-slate-600 dark:text-slate-300">
+                <p className="text-slate-600">
                   {feature.description}
                 </p>
               </div>
@@ -328,8 +309,7 @@ const Homepage = () => {
 
       {/* Stats Section with Background Image */}
       <section className="relative py-20 overflow-hidden">
-        <div
-          className="absolute inset-0 bg-center bg-no-repeat bg-cover"
+        <div className="absolute inset-0 bg-center bg-no-repeat bg-cover"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1641785041080-54b0413a2aa9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTI4fHxib2R5YnVpbGRpbmclMjBjYXJkaW98ZW58MHx8MHx8fDA%3D')`,
             filter: "brightness(0.3)",
@@ -359,10 +339,10 @@ const Homepage = () => {
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="space-y-6">
-              <h2 className="text-4xl font-bold md:text-5xl text-slate-900 dark:text-white">
+              <h2 className="text-4xl font-bold md:text-5xl text-slate-900">
                 Your Fitness Journey Starts Here
               </h2>
-              <p className="text-xl text-slate-600 dark:text-slate-300">
+              <p className="text-xl text-slate-600">
                 Join a community of fitness enthusiasts who are committed to
                 helping you achieve your goals. Our expert trainers and
                 state-of-the-art facilities provide the perfect environment for
@@ -371,25 +351,25 @@ const Homepage = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-3">
                   <Heart className="w-6 h-6 text-red-500" />
-                  <span className="text-slate-700 dark:text-slate-300">
+                  <span className="text-slate-700">
                     Health First
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Target className="w-6 h-6 text-blue-500" />
-                  <span className="text-slate-700 dark:text-slate-300">
+                  <span className="text-slate-700">
                     Goal Oriented
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Zap className="w-6 h-6 text-yellow-500" />
-                  <span className="text-slate-700 dark:text-slate-300">
+                  <span className="text-slate-700">
                     High Energy
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Users className="w-6 h-6 text-green-500" />
-                  <span className="text-slate-700 dark:text-slate-300">
+                  <span className="text-slate-700">
                     Community
                   </span>
                 </div>
@@ -398,13 +378,12 @@ const Homepage = () => {
             <div className="relative">
               <img
                 src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                alt="Fitness Motivation"
-                className="shadow-2xl rounded-2xl"
+                alt="Fitness Motivation" className="shadow-2xl rounded-2xl"
               />
-              <div className="absolute p-4 bg-white shadow-lg -bottom-6 -left-6 dark:bg-slate-800 rounded-xl">
+              <div className="absolute p-4 bg-white shadow-lg -bottom-6 -left-6">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">5000+</div>
-                  <div className="text-sm text-slate-600 dark:text-slate-400">
+                  <div className="text-sm text-slate-600">
                     Active Members
                   </div>
                 </div>
@@ -418,10 +397,10 @@ const Homepage = () => {
       <section className="py-20">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="mb-16 space-y-4 text-center">
-            <h2 className="text-4xl font-bold md:text-5xl text-slate-900 dark:text-white">
+            <h2 className="text-4xl font-bold md:text-5xl text-slate-900">
               What Our Members Say
             </h2>
-            <p className="text-xl text-slate-600 dark:text-slate-300">
+            <p className="text-xl text-slate-600">
               Real stories from real people
             </p>
           </div>
@@ -457,20 +436,18 @@ const Homepage = () => {
               },
             ].map((testimonial, index) => (
               <div
-                key={index}
-                className="p-8 transition-all bg-white shadow-lg dark:bg-slate-800 rounded-2xl hover:shadow-xl hover:-translate-y-1"
+                key={index} className="p-8 transition-all bg-white shadow-lg"
               >
                 <div className="flex items-center gap-4 mb-6">
                   <img
                     src={testimonial.image}
-                    alt={testimonial.name}
-                    className="object-cover w-16 h-16 rounded-full"
+                    alt={testimonial.name} className="object-cover w-16 h-16 rounded-full"
                   />
                   <div>
-                    <div className="font-semibold text-slate-900 dark:text-white">
+                    <div className="font-semibold text-slate-900">
                       {testimonial.name}
                     </div>
-                    <div className="text-slate-500 dark:text-slate-400">
+                    <div className="text-slate-500">
                       {testimonial.role}
                     </div>
                   </div>
@@ -478,12 +455,11 @@ const Homepage = () => {
                 <div className="flex gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star
-                      key={i}
-                      className="w-5 h-5 text-yellow-400 fill-current"
+                      key={i} className="w-5 h-5 text-yellow-400 fill-current"
                     />
                   ))}
                 </div>
-                <p className="italic text-slate-600 dark:text-slate-300">
+                <p className="italic text-slate-600">
                   "{testimonial.content}"
                 </p>
               </div>
@@ -507,14 +483,12 @@ const Homepage = () => {
               </p>
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
                 <Link
-                  to="/member/register"
-                  className="px-8 py-4 font-semibold text-blue-600 transition-all bg-white rounded-xl hover:bg-gray-100"
+                  to="/member/register" className="px-8 py-4 font-semibold text-blue-600 transition-all bg-white rounded-xl hover:bg-gray-100"
                 >
                   Get Started
                 </Link>
                 <Link
-                  to="/contact"
-                  className="px-8 py-4 text-white transition-all border-2 border-white rounded-xl hover:bg-white hover:text-blue-600"
+                  to="/contact" className="px-8 py-4 text-white transition-all border-2 border-white rounded-xl hover:bg-white hover:text-blue-600"
                 >
                   Contact Us
                 </Link>

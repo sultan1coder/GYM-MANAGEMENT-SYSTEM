@@ -529,8 +529,7 @@ const AdvancedAnalyticsDashboard: React.FC = () => {
 
       <Tabs
         value={activeTab}
-        onValueChange={setActiveTab}
-        className="space-y-6"
+        onValueChange={setActiveTab} className="space-y-6"
       >
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="revenue" className="flex items-center gap-2">
@@ -632,8 +631,7 @@ const AdvancedAnalyticsDashboard: React.FC = () => {
                 <div className="space-y-4">
                   {revenueData.topRevenueSources.map((source, index) => (
                     <div
-                      key={index}
-                      className="flex items-center justify-between"
+                      key={index} className="flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
                         {getTrendIcon(source.trend)}
@@ -791,8 +789,7 @@ const AdvancedAnalyticsDashboard: React.FC = () => {
                 <div className="space-y-4">
                   {memberGrowthData.demographicTrends.map((demo, index) => (
                     <div
-                      key={index}
-                      className="flex items-center justify-between"
+                      key={index} className="flex items-center justify-between"
                     >
                       <div>
                         <p className="font-medium">{demo.ageGroup}</p>
@@ -892,8 +889,7 @@ const AdvancedAnalyticsDashboard: React.FC = () => {
                           <span className="font-medium">
                             {category.category}
                           </span>
-                          <Badge
-                            className={getStatusColor(
+                          <Badge className={getStatusColor(
                               category.maintenanceStatus
                             )}
                           >
@@ -921,8 +917,7 @@ const AdvancedAnalyticsDashboard: React.FC = () => {
                   {equipmentUtilizationData.maintenanceSchedule.map(
                     (item, index) => (
                       <div
-                        key={index}
-                        className="flex items-center justify-between p-3 border rounded-lg"
+                        key={index} className="flex items-center justify-between p-3 border rounded-lg"
                       >
                         <div>
                           <p className="font-medium">{item.equipment}</p>
@@ -1016,8 +1011,7 @@ const AdvancedAnalyticsDashboard: React.FC = () => {
                   {staffPerformanceData.topPerformers.map(
                     (performer, index) => (
                       <div
-                        key={index}
-                        className="flex items-center justify-between p-3 border rounded-lg"
+                        key={index} className="flex items-center justify-between p-3 border rounded-lg"
                       >
                         <div>
                           <p className="font-medium">{performer.name}</p>

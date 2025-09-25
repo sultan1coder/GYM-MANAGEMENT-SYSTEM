@@ -196,8 +196,7 @@ const StaffLogin: React.FC = () => {
             <div className="flex items-center gap-4">
               {getConnectionStatusBadge()}
               <Link
-                to="/"
-                className="inline-flex items-center gap-2 text-blue-300 hover:text-white transition-colors"
+                to="/" className="inline-flex items-center gap-2 text-blue-300 hover:text-white transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Home
@@ -243,8 +242,7 @@ const StaffLogin: React.FC = () => {
                 {/* Email Field */}
                 <div className="space-y-2">
                   <Label
-                    htmlFor="email"
-                    className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                    htmlFor="email" className="text-sm font-semibold text-gray-700 flex items-center gap-2"
                   >
                     <Mail className="w-4 h-4" />
                     Professional Email
@@ -256,8 +254,7 @@ const StaffLogin: React.FC = () => {
                       value={formData.email}
                       onChange={(e) =>
                         handleInputChange("email", e.target.value)
-                      }
-                      className={`h-12 pl-4 pr-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                      } className={`h-12 pl-4 pr-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
                         formErrors.email
                           ? "border-red-500 focus:border-red-500 focus:ring-red-100"
                           : "border-gray-200"
@@ -280,8 +277,7 @@ const StaffLogin: React.FC = () => {
                 {/* Password Field */}
                 <div className="space-y-2">
                   <Label
-                    htmlFor="password"
-                    className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                    htmlFor="password" className="text-sm font-semibold text-gray-700 flex items-center gap-2"
                   >
                     <Lock className="w-4 h-4" />
                     Secure Password
@@ -293,8 +289,7 @@ const StaffLogin: React.FC = () => {
                       value={formData.password}
                       onChange={(e) =>
                         handleInputChange("password", e.target.value)
-                      }
-                      className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                      } className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
                         formErrors.password
                           ? "border-red-500 focus:border-red-500 focus:ring-red-100"
                           : "border-gray-200"
@@ -303,8 +298,7 @@ const StaffLogin: React.FC = () => {
                       disabled={isLoading}
                     />
                     <button
-                      type="button"
-                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-blue-600 transition-colors"
+                      type="button" className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-blue-600 transition-colors"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -330,19 +324,16 @@ const StaffLogin: React.FC = () => {
                       checked={rememberMe}
                       onCheckedChange={(checked) =>
                         setRememberMe(checked as boolean)
-                      }
-                      className="border-2 border-gray-300 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                      } className="border-2 border-gray-300 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
                     />
                     <Label
-                      htmlFor="remember"
-                      className="text-sm text-gray-700 font-medium"
+                      htmlFor="remember" className="text-sm text-gray-700 font-medium"
                     >
                       Keep me signed in
                     </Label>
                   </div>
                   <Link
-                    to="/auth/forgot-password"
-                    className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                    to="/auth/forgot-password" className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
                   >
                     Forgot password?
                   </Link>
@@ -350,8 +341,7 @@ const StaffLogin: React.FC = () => {
 
                 {/* Professional Login Button */}
                 <Button
-                  type="submit"
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 text-white font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300"
+                  type="submit" className="w-full h-12 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 text-white font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300"
                   disabled={isLoading || connectionStatus === "error"}
                 >
                   {isLoading ? (
@@ -423,30 +413,26 @@ const StaffLogin: React.FC = () => {
                 <p className="text-sm text-gray-600">
                   Need a staff account?{" "}
                   <Link
-                    to="/staff/register"
-                    className="text-blue-600 hover:text-blue-800 font-semibold transition-colors"
+                    to="/staff/register" className="text-blue-600 hover:text-blue-800 font-semibold transition-colors"
                   >
                     Request Access
                   </Link>
                 </p>
                 <div className="flex items-center justify-center gap-6 text-xs text-gray-500">
                   <Link
-                    to="/member/login"
-                    className="hover:text-blue-600 transition-colors font-medium"
+                    to="/member/login" className="hover:text-blue-600 transition-colors font-medium"
                   >
                     Member Portal
                   </Link>
                   <span>•</span>
                   <Link
-                    to="/contact"
-                    className="hover:text-blue-600 transition-colors font-medium"
+                    to="/contact" className="hover:text-blue-600 transition-colors font-medium"
                   >
                     Support Center
                   </Link>
                   <span>•</span>
                   <Link
-                    to="/privacy"
-                    className="hover:text-blue-600 transition-colors font-medium"
+                    to="/privacy" className="hover:text-blue-600 transition-colors font-medium"
                   >
                     Privacy Policy
                   </Link>

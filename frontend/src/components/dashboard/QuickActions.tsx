@@ -30,8 +30,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({ actions }) => {
       <CardContent className="space-y-3">
         {actions.slice(0, 6).map((action) => (
           <div
-            key={action.id}
-            className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+            key={action.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors"
           >
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
@@ -53,8 +52,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({ actions }) => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => toggleFavorite(action.id)}
-                className="p-1 h-8 w-8"
+                onClick={() => toggleFavorite(action.id)} className="p-1 h-8 w-8"
               >
                 {action.isFavorite ? (
                   <Heart className="h-4 w-4 text-red-500 fill-current" />
@@ -64,8 +62,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({ actions }) => {
               </Button>
               <Button
                 size="sm"
-                onClick={() => handleActionClick(action)}
-                className="text-xs"
+                onClick={() => handleActionClick(action)} className="text-xs"
               >
                 Action
               </Button>

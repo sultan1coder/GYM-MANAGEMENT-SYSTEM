@@ -5,8 +5,8 @@ const EquipmentManagement: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redirect to the existing equipment management page
-    navigate("/equipments/manage");
+    // Redirect to the equipment management page
+    navigate("/admin/equipments");
   }, [navigate]);
 
   return (

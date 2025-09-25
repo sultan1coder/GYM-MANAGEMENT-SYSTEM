@@ -75,7 +75,7 @@ const DigitalMembershipCard: React.FC<DigitalMembershipCardProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white rounded-t-3xl">
           <div className="flex items-center justify-between">
@@ -89,8 +89,7 @@ const DigitalMembershipCard: React.FC<DigitalMembershipCardProps> = ({
               </div>
             </div>
             <button
-              onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+              onClick={onClose} className="p-2 hover:bg-white/20 rounded-xl transition-colors"
             >
               <X className="h-5 w-5" />
             </button>
@@ -99,44 +98,42 @@ const DigitalMembershipCard: React.FC<DigitalMembershipCardProps> = ({
 
         <div className="p-6 space-y-6">
           {/* Membership Card */}
-          <Card className="border-2 border-blue-200 dark:border-blue-700 shadow-lg">
+          <Card className="border-2 border-blue-200">
             <CardContent className="p-6">
               {/* Gym Logo/Header */}
               <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                <h3 className="text-2xl font-bold text-blue-600">
                   {gymInfo.name}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-600">
                   Premium Fitness & Wellness
                 </p>
               </div>
 
               {/* Member Photo and Info */}
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-slate-100">
                   {member.profilePicture ? (
                     <img
                       src={member.profilePicture}
-                      alt={member.name}
-                      className="w-16 h-16 rounded-full object-cover"
+                      alt={member.name} className="w-16 h-16 rounded-full object-cover"
                     />
                   ) : (
-                    <User className="h-8 w-8 text-slate-400 dark:text-slate-500" />
+                    <User className="h-8 w-8 text-slate-400" />
                   )}
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h4 className="text-lg font-semibold text-gray-900">
                     {member.name}
                   </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600">
                     Member ID: {member.id}
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600">
                     {member.plan}
                   </p>
                 </div>
-                <div
-                  className={`w-3 h-3 rounded-full ${getStatusColor(
+                <div className={`w-3 h-3 rounded-full ${getStatusColor(
                     member.status
                   )}`}
                 ></div>
@@ -147,11 +144,10 @@ const DigitalMembershipCard: React.FC<DigitalMembershipCardProps> = ({
                 <div className="inline-block p-4 bg-white rounded-lg border-2 border-gray-200">
                   <img
                     src={generateQRCode()}
-                    alt="QR Code"
-                    className="w-32 h-32"
+                    alt="QR Code" className="w-32 h-32"
                   />
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                <p className="text-xs text-gray-500">
                   Scan to verify membership
                 </p>
               </div>
@@ -160,19 +156,19 @@ const DigitalMembershipCard: React.FC<DigitalMembershipCardProps> = ({
               <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3 text-sm">
                   <Calendar className="h-4 w-4 text-blue-600" />
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-gray-600">
                     Valid from:
                   </span>
-                  <span className="font-medium text-gray-900 dark:text-white">
+                  <span className="font-medium text-gray-900">
                     {formatDate(member.startDate)}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Clock className="h-4 w-4 text-blue-600" />
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-gray-600">
                     Valid until:
                   </span>
-                  <span className="font-medium text-gray-900 dark:text-white">
+                  <span className="font-medium text-gray-900">
                     {formatDate(member.endDate)}
                   </span>
                 </div>
@@ -182,19 +178,19 @@ const DigitalMembershipCard: React.FC<DigitalMembershipCardProps> = ({
               <div className="border-t pt-4 space-y-2">
                 <div className="flex items-center gap-3 text-sm">
                   <MapPin className="h-4 w-4 text-blue-600" />
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-gray-600">
                     {gymInfo.address}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Phone className="h-4 w-4 text-blue-600" />
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-gray-600">
                     {gymInfo.phone}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Mail className="h-4 w-4 text-blue-600" />
-                  <span className="text-gray-600 dark:text-gray-400">
+                  <span className="text-gray-600">
                     {gymInfo.email}
                   </span>
                 </div>
@@ -208,8 +204,7 @@ const DigitalMembershipCard: React.FC<DigitalMembershipCardProps> = ({
               onClick={() => {
                 // In a real app, this would download the card as an image
                 window.print();
-              }}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              }} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
             >
               <Download className="h-4 w-4 mr-2" />
               Download Card
@@ -220,11 +215,11 @@ const DigitalMembershipCard: React.FC<DigitalMembershipCardProps> = ({
           </div>
 
           {/* Instructions */}
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-            <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">
+          <div className="bg-blue-50">
+            <h4 className="font-medium text-blue-800">
               How to use your digital membership card:
             </h4>
-            <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+            <ul className="text-sm text-blue-700">
               <li>• Present this card at the gym entrance</li>
               <li>• Staff can scan the QR code to verify membership</li>
               <li>• Keep this card accessible on your device</li>

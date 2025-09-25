@@ -386,17 +386,17 @@ const PaymentManagement = () => {
   const getPaymentStatusColor = (status: string) => {
     switch (status) {
       case "COMPLETED":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
+        return "bg-green-100 text-green-800";
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
+        return "bg-yellow-100 text-yellow-800";
       case "FAILED":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
+        return "bg-red-100 text-red-800";
       case "CANCELLED":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
+        return "bg-gray-100 text-gray-800";
       case "REFUNDED":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400";
+        return "bg-blue-100 text-blue-800";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -449,10 +449,10 @@ const PaymentManagement = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-gray-900">
             Payment Management
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600">
             Comprehensive payment management and financial analytics
           </p>
         </div>
@@ -599,24 +599,24 @@ const PaymentManagement = () => {
                 {filteredPayments.slice(0, 5).map((payment) => (
                   <div
                     key={payment.id}
-                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                    className="flex items-center justify-between p-4 bg-gray-50"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                        <DollarSign className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      <div className="p-2 bg-green-100">
+                        <DollarSign className="w-5 h-5 text-green-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-gray-900">
                           {getMemberName(payment.memberId)}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {payment.method} •{" "}
                           {new Date(payment.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-lg font-bold text-green-600 dark:text-green-400">
+                      <p className="text-lg font-bold text-green-600">
                         ${payment.amount.toFixed(2)}
                       </p>
                       <Badge className={getPaymentStatusColor(payment.status)}>
@@ -632,7 +632,7 @@ const PaymentManagement = () => {
 
         {/* Analytics Tab */}
         <TabsContent value="analytics" className="space-y-6">
-          <PaymentAnalytics payments={payments} />
+          <PaymentAnalytics payments={payments} isLoading={isLoading} />
         </TabsContent>
 
         {/* Records Tab */}
@@ -748,12 +748,12 @@ const PaymentManagement = () => {
               </div>
 
               {/* Quick Actions Bar */}
-              <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-4 mb-4">
+              <div className="bg-white">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
                       <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="text-sm text-gray-600">
                         {
                           filteredPayments.filter(
                             (p) => p.status === "COMPLETED"
@@ -764,7 +764,7 @@ const PaymentManagement = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="text-sm text-gray-600">
                         {
                           filteredPayments.filter((p) => p.status === "PENDING")
                             .length
@@ -774,7 +774,7 @@ const PaymentManagement = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="text-sm text-gray-600">
                         {
                           filteredPayments.filter((p) => p.status === "FAILED")
                             .length
@@ -816,10 +816,10 @@ const PaymentManagement = () => {
               </div>
 
               {/* Redesigned Payments Table */}
-              <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
+              <div className="bg-white">
                 {/* Table Header - Fixed at top */}
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-700 rounded-t-xl">
-                  <div className="grid grid-cols-12 gap-4 items-center text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50">
+                  <div className="grid grid-cols-12 gap-4 items-center text-sm font-semibold text-gray-700">
                     <div className="col-span-2">Payment Details</div>
                     <div className="col-span-2">Member</div>
                     <div className="col-span-2">Amount & Currency</div>
@@ -835,17 +835,17 @@ const PaymentManagement = () => {
                   onScroll={handleTableScroll}
                   onKeyDown={handleKeyDown}
                   tabIndex={0}
-                  className="h-[500px] overflow-y-auto divide-y divide-gray-100 dark:divide-gray-800 custom-scrollbar focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 relative"
+                  className="h-[500px] overflow-y-auto divide-y divide-gray-100"
                 >
                   {filteredPayments.length === 0 ? (
                     <div className="px-6 py-12 text-center">
-                      <div className="mx-auto w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+                      <div className="mx-auto w-24 h-24 bg-gray-100">
                         <Receipt className="w-12 h-12 text-gray-400" />
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                      <h3 className="text-lg font-medium text-gray-900">
                         No payments found
                       </h3>
-                      <p className="text-gray-500 dark:text-gray-400 mb-4">
+                      <p className="text-gray-500">
                         Try adjusting your search or filter criteria
                       </p>
                       <Button
@@ -860,8 +860,8 @@ const PaymentManagement = () => {
                     <>
                       {/* Scroll Position Indicator */}
                       {scrollPosition > 50 && (
-                        <div className="sticky top-0 z-20 bg-blue-100 dark:bg-blue-900/30 border-b border-blue-200 dark:border-blue-700 px-4 py-2">
-                          <div className="flex items-center justify-between text-xs text-blue-700 dark:text-blue-300 font-medium">
+                        <div className="sticky top-0 z-20 bg-blue-100">
+                          <div className="flex items-center justify-between text-xs text-blue-700">
                             <span>
                               📍 Scrolled {Math.round(scrollPosition)}px
                             </span>
@@ -870,7 +870,7 @@ const PaymentManagement = () => {
                             </span>
                           </div>
                           {/* Scroll Progress Bar */}
-                          <div className="mt-2 w-full bg-blue-200 dark:bg-blue-800 rounded-full h-1">
+                          <div className="mt-2 w-full bg-blue-200">
                             <div
                               className="bg-blue-600 h-1 rounded-full transition-all duration-300"
                               style={{
@@ -888,8 +888,8 @@ const PaymentManagement = () => {
 
                       {/* Scroll Indicator */}
                       {filteredPayments.length > 8 && (
-                        <div className="px-6 py-2 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800">
-                          <div className="flex items-center justify-center text-xs text-blue-600 dark:text-blue-400">
+                        <div className="px-6 py-2 bg-blue-50">
+                          <div className="flex items-center justify-center text-xs text-blue-600">
                             <span className="mr-2">📜</span>
                             Scroll down to see more payments (
                             {filteredPayments.length} total)
@@ -900,7 +900,7 @@ const PaymentManagement = () => {
                       {filteredPayments.map((payment) => (
                         <div
                           key={payment.id}
-                          className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-200"
+                          className="px-6 py-4 hover:bg-gray-50"
                         >
                           <div className="grid grid-cols-12 gap-4 items-center">
                             {/* Payment Details Column */}
@@ -910,10 +910,10 @@ const PaymentManagement = () => {
                                   <DollarSign className="w-5 h-5 text-white" />
                                 </div>
                                 <div>
-                                  <div className="font-mono text-sm font-medium text-gray-900 dark:text-white">
+                                  <div className="font-mono text-sm font-medium text-gray-900">
                                     #{payment.id.slice(-8)}
                                   </div>
-                                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  <div className="text-xs text-gray-500">
                                     {payment.reference || "No reference"}
                                   </div>
                                 </div>
@@ -931,10 +931,10 @@ const PaymentManagement = () => {
                                   </span>
                                 </div>
                                 <div>
-                                  <div className="font-medium text-gray-900 dark:text-white">
+                                  <div className="font-medium text-gray-900">
                                     {getMemberName(payment.memberId)}
                                   </div>
-                                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  <div className="text-xs text-gray-500">
                                     {payment.memberId.slice(-6)}
                                   </div>
                                 </div>
@@ -944,13 +944,13 @@ const PaymentManagement = () => {
                             {/* Amount & Currency Column */}
                             <div className="col-span-2">
                               <div className="space-y-1">
-                                <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                                <div className="text-lg font-bold text-green-600">
                                   ${payment.amount.toFixed(2)}
                                 </div>
                                 <div className="flex items-center space-x-2">
                                   <Badge
                                     variant="outline"
-                                    className="text-xs px-2 py-1 border-blue-200 text-blue-700 dark:border-blue-800 dark:text-blue-300"
+                                    className="text-xs px-2 py-1 border-blue-200 text-blue-700"
                                   >
                                     {payment.currency || "USD"}
                                   </Badge>
@@ -985,7 +985,7 @@ const PaymentManagement = () => {
                             {/* Date & Status Column */}
                             <div className="col-span-2">
                               <div className="space-y-2">
-                                <div className="text-sm text-gray-900 dark:text-white">
+                                <div className="text-sm text-gray-900">
                                   {new Date(
                                     payment.createdAt
                                   ).toLocaleDateString("en-US", {
@@ -1014,7 +1014,7 @@ const PaymentManagement = () => {
                                     setSelectedPayment(payment);
                                     setShowPaymentDetails(true);
                                   }}
-                                  className="h-8 w-8 p-0 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                  className="h-8 w-8 p-0 hover:bg-blue-50"
                                 >
                                   <Eye className="w-4 h-4 text-blue-600" />
                                 </Button>
@@ -1025,7 +1025,7 @@ const PaymentManagement = () => {
                                     setEditingPayment(payment);
                                     setShowEditPayment(true);
                                   }}
-                                  className="h-8 w-8 p-0 hover:bg-green-50 dark:hover:bg-green-900/20"
+                                  className="h-8 w-8 p-0 hover:bg-green-50"
                                 >
                                   <Edit className="w-4 h-4 text-green-600" />
                                 </Button>
@@ -1035,7 +1035,7 @@ const PaymentManagement = () => {
                                   onClick={() =>
                                     handleDeletePayment(payment.id)
                                   }
-                                  className="h-8 w-8 p-0 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                  className="h-8 w-8 p-0 hover:bg-red-50"
                                 >
                                   <Trash2 className="w-4 h-4 text-red-600" />
                                 </Button>
@@ -1049,16 +1049,16 @@ const PaymentManagement = () => {
 
                   {/* Summary Row */}
                   {filteredPayments.length > 0 && (
-                    <div className="bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-700 px-6 py-4 border-t-2 border-blue-200 dark:border-blue-800">
+                    <div className="bg-gradient-to-r from-gray-50 to-blue-50">
                       <div className="grid grid-cols-12 gap-4 items-center">
                         <div className="col-span-2">
                           <div className="flex items-center space-x-2">
-                            <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                              <span className="text-xs font-bold text-blue-600 dark:text-blue-400">
+                            <div className="w-6 h-6 bg-blue-100">
+                              <span className="text-xs font-bold text-blue-600">
                                 {filteredPayments.length}
                               </span>
                             </div>
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <span className="text-sm font-medium text-gray-700">
                               Total Payments
                             </span>
                           </div>
@@ -1066,7 +1066,7 @@ const PaymentManagement = () => {
                         <div className="col-span-2"></div>
                         <div className="col-span-2">
                           <div className="text-right">
-                            <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                            <div className="text-lg font-bold text-green-600">
                               $
                               {filteredPayments
                                 .reduce((sum, p) => sum + p.amount, 0)
@@ -1079,7 +1079,7 @@ const PaymentManagement = () => {
                         </div>
                         <div className="col-span-2">
                           <div className="text-center">
-                            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <div className="text-sm font-medium text-gray-700">
                               {
                                 filteredPayments.filter(
                                   (p) => p.status === "COMPLETED"
@@ -1099,7 +1099,7 @@ const PaymentManagement = () => {
                         </div>
                         <div className="col-span-2">
                           <div className="text-center">
-                            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <div className="text-sm font-medium text-gray-700">
                               {new Date().toLocaleDateString("en-US", {
                                 month: "short",
                                 year: "numeric",
@@ -1117,8 +1117,8 @@ const PaymentManagement = () => {
 
                   {/* Scroll Progress Indicator */}
                   {filteredPayments.length > 8 && (
-                    <div className="px-6 py-3 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-                      <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
+                    <div className="px-6 py-3 bg-gray-50">
+                      <div className="flex items-center justify-between text-xs text-gray-600">
                         <span>
                           📊 Showing {filteredPayments.length} payments
                         </span>
@@ -1138,7 +1138,7 @@ const PaymentManagement = () => {
 
               {/* Table Info Bar */}
               {filteredPayments.length > 0 && (
-                <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center justify-between px-4 py-2 bg-gray-50">
                   <div className="flex items-center space-x-4">
                     <span>📊 {filteredPayments.length} payments</span>
                     <span>
@@ -1168,7 +1168,7 @@ const PaymentManagement = () => {
               )}
 
               {/* Keyboard Navigation Hint */}
-              <div className="text-center text-xs text-gray-500 dark:text-gray-400 py-2">
+              <div className="text-center text-xs text-gray-500">
                 💡 <strong>Tip:</strong> Use mouse wheel, arrow keys, or Page
                 Up/Down to scroll through payments
               </div>
@@ -1188,8 +1188,8 @@ const PaymentManagement = () => {
           </DialogHeader>
           <div className="grid gap-4 py-4 overflow-y-auto flex-1 pr-2 custom-scrollbar">
             {/* Scroll Indicator */}
-            <div className="sticky top-0 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-2">
-              <div className="flex items-center justify-center text-xs text-blue-700 dark:text-blue-300">
+            <div className="sticky top-0 bg-blue-50">
+              <div className="flex items-center justify-center text-xs text-blue-700">
                 <span className="mr-2">📜</span>
                 <span className="font-medium">
                   Scroll down to see all payment fields
@@ -1479,8 +1479,8 @@ const PaymentManagement = () => {
           {editingPayment && (
             <div className="grid gap-4 py-4 overflow-y-auto flex-1 pr-2 custom-scrollbar">
               {/* Scroll Indicator */}
-              <div className="sticky top-0 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-2">
-                <div className="flex items-center justify-center text-xs text-green-700 dark:text-green-300">
+              <div className="sticky top-0 bg-green-50">
+                <div className="flex items-center justify-center text-xs text-green-700">
                   <span className="mr-2">📝</span>
                   <span className="font-medium">
                     Scroll down to see all editable fields

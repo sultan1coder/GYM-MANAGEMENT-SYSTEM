@@ -5,27 +5,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Search, Edit, Trash2, Eye } from "lucide-react";
+import Header from "../../components/Header";
+import { useSidebar } from "../../contexts/SidebarContext";
 
 const UsersPage: React.FC = () => {
   const navigate = useNavigate();
+  const { isOpen, toggleSidebar } = useSidebar();
 
   const handleAddNewUser = () => {
     navigate("/staff/register");
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              User Management
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Manage admin and staff accounts
-            </p>
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header with Menu Toggle */}
+      <Header
+        title="User Management"
+        subtitle="Manage admin and staff accounts"
+        onMenuToggle={toggleSidebar}
+        isMenuOpen={isOpen}
+        showSearch={true}
+        showBreadcrumbs={true}
+      />
+
+      <div
+        className={`max-w-7xl mx-auto space-y-6 transition-all duration-300 ${
+          isOpen ? "p-6" : "p-6"
+        }`}
+      >
+        {/* Quick Actions */}
+        <div className="flex items-center justify-end">
           <Button onClick={handleAddNewUser}>
             <Plus className="h-4 w-4 mr-2" />
             Add New User
@@ -68,6 +77,29 @@ const UsersPage: React.FC = () => {
                     <td className="p-3">admin@gym.com</td>
                     <td className="p-3">
                       <Badge variant="default">Admin</Badge>
+                    </td>
+                    <td className="p-3">
+                      <Badge variant="default">Active</Badge>
+                    </td>
+                    <td className="p-3">
+                      <div className="flex items-center gap-2">
+                        <Button variant="ghost" size="sm">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr className="border-b hover:bg-gray-50">
+                    <td className="p-3">Staff Member</td>
+                    <td className="p-3">staff@gym.com</td>
+                    <td className="p-3">
+                      <Badge variant="secondary">Staff</Badge>
                     </td>
                     <td className="p-3">
                       <Badge variant="default">Active</Badge>

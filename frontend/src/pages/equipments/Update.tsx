@@ -425,16 +425,14 @@ const UpdateEquipment = () => {
           <div className="flex items-center gap-4">
             <Button
               variant="outline"
-              onClick={() => navigate("/equipments/all")}
-              className="border-gray-300 hover:bg-gray-50"
+              onClick={() => navigate("/equipments/all")} className="border-gray-300 hover:bg-gray-50"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Equipment List
             </Button>
             <Button
               variant="outline"
-              onClick={() => navigate("/equipments/dashboard")}
-              className="border-blue-300 hover:bg-blue-50"
+              onClick={() => navigate("/equipments/dashboard")} className="border-blue-300 hover:bg-blue-50"
             >
               <BarChart3 className="w-4 h-4 mr-2" />
               Equipment Dashboard
@@ -452,16 +450,14 @@ const UpdateEquipment = () => {
           <div className="flex gap-3">
             <Button
               variant="outline"
-              onClick={() => setShowMaintenanceDialog(true)}
-              className="border-yellow-300 hover:bg-yellow-50"
+              onClick={() => setShowMaintenanceDialog(true)} className="border-yellow-300 hover:bg-yellow-50"
             >
               <Wrench className="w-4 h-4 mr-2" />
               Add Maintenance
             </Button>
             <Button
               variant="outline"
-              onClick={() => setShowDeleteDialog(true)}
-              className="text-red-700 border-red-300 hover:bg-red-50"
+              onClick={() => setShowDeleteDialog(true)} className="text-red-700 border-red-300 hover:bg-red-50"
             >
               <Trash2 className="w-4 h-4 mr-2" />
               Delete Equipment
@@ -478,8 +474,7 @@ const UpdateEquipment = () => {
                   {equipment.imageUrl ? (
                     <img
                       src={equipment.imageUrl}
-                      alt={equipment.name}
-                      className="object-cover w-full h-full"
+                      alt={equipment.name} className="object-cover w-full h-full"
                     />
                   ) : (
                     <Package className="w-12 h-12 text-blue-600" />
@@ -567,8 +562,7 @@ const UpdateEquipment = () => {
                       onChange={(e) =>
                         handleInputChange("name", e.target.value)
                       }
-                      placeholder="Enter equipment name"
-                      className="mt-1"
+                      placeholder="Enter equipment name" className="mt-1"
                     />
                   </div>
                   <div>
@@ -619,8 +613,7 @@ const UpdateEquipment = () => {
                       onChange={(e) =>
                         handleInputChange("brand", e.target.value)
                       }
-                      placeholder="Enter brand name"
-                      className="mt-1"
+                      placeholder="Enter brand name" className="mt-1"
                     />
                   </div>
                   <div>
@@ -631,8 +624,7 @@ const UpdateEquipment = () => {
                       onChange={(e) =>
                         handleInputChange("model", e.target.value)
                       }
-                      placeholder="Enter model name"
-                      className="mt-1"
+                      placeholder="Enter model name" className="mt-1"
                     />
                   </div>
                   <div>
@@ -643,8 +635,7 @@ const UpdateEquipment = () => {
                       onChange={(e) =>
                         handleInputChange("serialNumber", e.target.value)
                       }
-                      placeholder="Enter serial number"
-                      className="mt-1"
+                      placeholder="Enter serial number" className="mt-1"
                     />
                   </div>
                 </div>
@@ -668,8 +659,7 @@ const UpdateEquipment = () => {
                       value={formData.quantity}
                       onChange={(e) =>
                         handleInputChange("quantity", e.target.value)
-                      }
-                      className="mt-1"
+                      } className="mt-1"
                     />
                   </div>
                   <div>
@@ -681,8 +671,7 @@ const UpdateEquipment = () => {
                       value={formData.available}
                       onChange={(e) =>
                         handleInputChange("available", e.target.value)
-                      }
-                      className="mt-1"
+                      } className="mt-1"
                     />
                   </div>
                   <div>
@@ -694,8 +683,7 @@ const UpdateEquipment = () => {
                       value={formData.inUse}
                       onChange={(e) =>
                         handleInputChange("inUse", e.target.value)
-                      }
-                      className="mt-1"
+                      } className="mt-1"
                     />
                   </div>
                   <div>
@@ -738,8 +726,7 @@ const UpdateEquipment = () => {
                       onChange={(e) =>
                         handleInputChange("location", e.target.value)
                       }
-                      placeholder="Enter equipment location"
-                      className="mt-1"
+                      placeholder="Enter equipment location" className="mt-1"
                     />
                   </div>
                   <div>
@@ -750,8 +737,7 @@ const UpdateEquipment = () => {
                       onChange={(e) =>
                         handleInputChange("imageUrl", e.target.value)
                       }
-                      placeholder="Enter image URL"
-                      className="mt-1"
+                      placeholder="Enter image URL" className="mt-1"
                     />
                   </div>
                   <div className="md:col-span-2">
@@ -762,8 +748,7 @@ const UpdateEquipment = () => {
                       onChange={(e) =>
                         handleInputChange("description", e.target.value)
                       }
-                      placeholder="Enter equipment description"
-                      className="mt-1"
+                      placeholder="Enter equipment description" className="mt-1"
                       rows={3}
                     />
                   </div>
@@ -790,8 +775,7 @@ const UpdateEquipment = () => {
                       onChange={(e) =>
                         handleInputChange("cost", e.target.value)
                       }
-                      placeholder="Enter purchase cost"
-                      className="mt-1"
+                      placeholder="Enter purchase cost" className="mt-1"
                     />
                   </div>
                   <div>
@@ -802,8 +786,7 @@ const UpdateEquipment = () => {
                       value={formData.purchaseDate}
                       onChange={(e) =>
                         handleInputChange("purchaseDate", e.target.value)
-                      }
-                      className="mt-1"
+                      } className="mt-1"
                     />
                   </div>
                   <div>
@@ -814,8 +797,7 @@ const UpdateEquipment = () => {
                       value={formData.warrantyExpiry}
                       onChange={(e) =>
                         handleInputChange("warrantyExpiry", e.target.value)
-                      }
-                      className="mt-1"
+                      } className="mt-1"
                     />
                   </div>
                 </div>
@@ -837,8 +819,7 @@ const UpdateEquipment = () => {
                       checked={formData.maintenance}
                       onChange={(e) =>
                         handleInputChange("maintenance", e.target.checked)
-                      }
-                      className="border-gray-300 rounded"
+                      } className="border-gray-300 rounded"
                     />
                     <Label htmlFor="maintenance">Maintenance Required</Label>
                   </div>
@@ -850,8 +831,7 @@ const UpdateEquipment = () => {
                       value={formData.lastMaintenance}
                       onChange={(e) =>
                         handleInputChange("lastMaintenance", e.target.value)
-                      }
-                      className="mt-1"
+                      } className="mt-1"
                     />
                   </div>
                   <div>
@@ -862,8 +842,7 @@ const UpdateEquipment = () => {
                       value={formData.nextMaintenance}
                       onChange={(e) =>
                         handleInputChange("nextMaintenance", e.target.value)
-                      }
-                      className="mt-1"
+                      } className="mt-1"
                     />
                   </div>
                 </div>
@@ -882,8 +861,7 @@ const UpdateEquipment = () => {
                     !formData.name ||
                     !formData.type ||
                     !formData.category
-                  }
-                  className="bg-blue-600 hover:bg-blue-700"
+                  } className="bg-blue-600 hover:bg-blue-700"
                 >
                   <Save className="w-4 h-4 mr-2" />
                   {isUpdating ? "Updating..." : "Update Equipment"}
@@ -918,8 +896,7 @@ const UpdateEquipment = () => {
                 </Button>
                 <Button
                   variant="destructive"
-                  onClick={handleDeleteEquipment}
-                  className="bg-red-600 hover:bg-red-700"
+                  onClick={handleDeleteEquipment} className="bg-red-600 hover:bg-red-700"
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Delete Equipment
@@ -947,8 +924,7 @@ const UpdateEquipment = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setShowMaintenanceDialog(false)}
-                  className="w-8 h-8 p-0"
+                  onClick={() => setShowMaintenanceDialog(false)} className="w-8 h-8 p-0"
                 >
                   <X className="w-4 h-4" />
                 </Button>
@@ -993,8 +969,7 @@ const UpdateEquipment = () => {
                           cost: parseFloat(e.target.value) || 0,
                         }))
                       }
-                      placeholder="Enter maintenance cost"
-                      className="mt-1"
+                      placeholder="Enter maintenance cost" className="mt-1"
                     />
                   </div>
                 </div>
@@ -1010,8 +985,7 @@ const UpdateEquipment = () => {
                         description: e.target.value,
                       }))
                     }
-                    placeholder="Describe the maintenance performed"
-                    className="mt-1"
+                    placeholder="Describe the maintenance performed" className="mt-1"
                     rows={3}
                   />
                 </div>
@@ -1028,8 +1002,7 @@ const UpdateEquipment = () => {
                           performedBy: e.target.value,
                         }))
                       }
-                      placeholder="Enter staff member name"
-                      className="mt-1"
+                      placeholder="Enter staff member name" className="mt-1"
                     />
                   </div>
                   <div>
@@ -1043,8 +1016,7 @@ const UpdateEquipment = () => {
                           ...prev,
                           nextDue: e.target.value,
                         }))
-                      }
-                      className="mt-1"
+                      } className="mt-1"
                     />
                   </div>
                 </div>
@@ -1059,8 +1031,7 @@ const UpdateEquipment = () => {
                 </Button>
                 <Button
                   onClick={handleAddMaintenance}
-                  disabled={!maintenanceData.description}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  disabled={!maintenanceData.description} className="bg-blue-600 hover:bg-blue-700"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add Maintenance Log

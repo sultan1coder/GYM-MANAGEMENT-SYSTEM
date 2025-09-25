@@ -53,8 +53,7 @@ const Login: React.FC = () => {
           </p>
           <div className="mt-6">
             <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 hover:underline"
+              to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 hover:underline"
             >
               ← Back to Homepage
             </Link>
@@ -64,8 +63,7 @@ const Login: React.FC = () => {
         {/* Portal Selection Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {/* Staff & Admin Portal */}
-          <Card
-            className="shadow-2xl border-0 bg-white/90 backdrop-blur-md transform hover:scale-105 transition-all duration-500 hover:shadow-3xl group cursor-pointer"
+          <Card className="shadow-2xl border-0 bg-white/90 backdrop-blur-md transform hover:scale-105 transition-all duration-500 hover:shadow-3xl group cursor-pointer"
             onClick={() => handlePortalSelection("staff")}
           >
             <CardHeader className="text-center pb-6">
@@ -109,8 +107,7 @@ const Login: React.FC = () => {
           </Card>
 
           {/* Member Portal */}
-          <Card
-            className="shadow-2xl border-0 bg-white/90 backdrop-blur-md transform hover:scale-105 transition-all duration-500 hover:shadow-3xl group cursor-pointer"
+          <Card className="shadow-2xl border-0 bg-white/90 backdrop-blur-md transform hover:scale-105 transition-all duration-500 hover:shadow-3xl group cursor-pointer"
             onClick={() => handlePortalSelection("member")}
           >
             <CardHeader className="text-center pb-6">
@@ -158,16 +155,14 @@ const Login: React.FC = () => {
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center gap-8">
             <Link
-              to="/staff/register"
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-lg transition-colors duration-200 hover:underline group"
+              to="/staff/register" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-lg transition-colors duration-200 hover:underline group"
             >
               <Building2 className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
               Create Staff Account
             </Link>
             <span className="text-gray-400 text-xl">|</span>
             <Link
-              to="/member/register"
-              className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold text-lg transition-colors duration-200 hover:underline group"
+              to="/member/register" className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold text-lg transition-colors duration-200 hover:underline group"
             >
               <Users className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
               Join as Member

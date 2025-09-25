@@ -266,8 +266,7 @@ const MemberList: React.FC<MemberListProps> = ({
               <Input
                 placeholder="Search members..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                onChange={(e) => setSearchTerm(e.target.value)} className="pl-10"
               />
             </div>
 
@@ -356,8 +355,7 @@ const MemberList: React.FC<MemberListProps> = ({
             <div className="space-y-4">
               {paginatedMembers.map((member) => (
                 <div
-                  key={member.id}
-                  className={`p-4 border rounded-lg hover:bg-gray-50 transition-colors ${
+                  key={member.id} className={`p-4 border rounded-lg hover:bg-gray-50 transition-colors ${
                     selectedMembers.has(member.id)
                       ? "bg-blue-50 border-blue-200"
                       : ""
@@ -369,8 +367,7 @@ const MemberList: React.FC<MemberListProps> = ({
                         <input
                           type="checkbox"
                           checked={selectedMembers.has(member.id)}
-                          onChange={() => toggleMemberSelection(member.id)}
-                          className="h-4 w-4 text-blue-600"
+                          onChange={() => toggleMemberSelection(member.id)} className="h-4 w-4 text-blue-600"
                         />
                       )}
 

@@ -205,8 +205,7 @@ const MemberLogin: React.FC = () => {
             <div className="flex items-center gap-4">
               {getConnectionStatusBadge()}
               <Link
-                to="/"
-                className="inline-flex items-center gap-2 text-emerald-300 hover:text-white transition-colors"
+                to="/" className="inline-flex items-center gap-2 text-emerald-300 hover:text-white transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Home
@@ -252,8 +251,7 @@ const MemberLogin: React.FC = () => {
                 {/* Email Field */}
                 <div className="space-y-2">
                   <Label
-                    htmlFor="email"
-                    className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                    htmlFor="email" className="text-sm font-semibold text-gray-700 flex items-center gap-2"
                   >
                     <Mail className="w-4 h-4" />
                     Member Email
@@ -265,8 +263,7 @@ const MemberLogin: React.FC = () => {
                       value={formData.email}
                       onChange={(e) =>
                         handleInputChange("email", e.target.value)
-                      }
-                      className={`h-12 pl-4 pr-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
+                      } className={`h-12 pl-4 pr-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
                         formErrors.email
                           ? "border-red-500 focus:border-red-500 focus:ring-red-100"
                           : "border-gray-200"
@@ -289,8 +286,7 @@ const MemberLogin: React.FC = () => {
                 {/* Password Field */}
                 <div className="space-y-2">
                   <Label
-                    htmlFor="password"
-                    className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                    htmlFor="password" className="text-sm font-semibold text-gray-700 flex items-center gap-2"
                   >
                     <Lock className="w-4 h-4" />
                     Password
@@ -302,8 +298,7 @@ const MemberLogin: React.FC = () => {
                       value={formData.password}
                       onChange={(e) =>
                         handleInputChange("password", e.target.value)
-                      }
-                      className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
+                      } className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
                         formErrors.password
                           ? "border-red-500 focus:border-red-500 focus:ring-red-100"
                           : "border-gray-200"
@@ -312,8 +307,7 @@ const MemberLogin: React.FC = () => {
                       disabled={isLoading}
                     />
                     <button
-                      type="button"
-                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-emerald-600 transition-colors"
+                      type="button" className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-emerald-600 transition-colors"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -339,19 +333,16 @@ const MemberLogin: React.FC = () => {
                       checked={rememberMe}
                       onCheckedChange={(checked) =>
                         setRememberMe(checked as boolean)
-                      }
-                      className="border-2 border-gray-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
+                      } className="border-2 border-gray-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
                     />
                     <Label
-                      htmlFor="remember"
-                      className="text-sm text-gray-700 font-medium"
+                      htmlFor="remember" className="text-sm text-gray-700 font-medium"
                     >
                       Keep me signed in
                     </Label>
                   </div>
                   <Link
-                    to="/members/forgot-password"
-                    className="text-sm text-emerald-600 hover:text-emerald-800 font-medium transition-colors"
+                    to="/members/forgot-password" className="text-sm text-emerald-600 hover:text-emerald-800 font-medium transition-colors"
                   >
                     Forgot password?
                   </Link>
@@ -359,8 +350,7 @@ const MemberLogin: React.FC = () => {
 
                 {/* Professional Login Button */}
                 <Button
-                  type="submit"
-                  className="w-full h-12 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 text-white font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300"
+                  type="submit" className="w-full h-12 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 text-white font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300"
                   disabled={isLoading || connectionStatus === "error"}
                 >
                   {isLoading ? (
@@ -453,30 +443,26 @@ const MemberLogin: React.FC = () => {
                 <p className="text-sm text-gray-600">
                   New to BILKHAYR Premium?{" "}
                   <Link
-                    to="/member/register"
-                    className="text-emerald-600 hover:text-emerald-800 font-semibold transition-colors"
+                    to="/member/register" className="text-emerald-600 hover:text-emerald-800 font-semibold transition-colors"
                   >
                     Start Your Journey
                   </Link>
                 </p>
                 <div className="flex items-center justify-center gap-6 text-xs text-gray-500">
                   <Link
-                    to="/staff/login"
-                    className="hover:text-emerald-600 transition-colors font-medium"
+                    to="/staff/login" className="hover:text-emerald-600 transition-colors font-medium"
                   >
                     Staff Portal
                   </Link>
                   <span>•</span>
                   <Link
-                    to="/contact"
-                    className="hover:text-emerald-600 transition-colors font-medium"
+                    to="/contact" className="hover:text-emerald-600 transition-colors font-medium"
                   >
                     Support
                   </Link>
                   <span>•</span>
                   <Link
-                    to="/virtual-classes"
-                    className="hover:text-emerald-600 transition-colors font-medium"
+                    to="/virtual-classes" className="hover:text-emerald-600 transition-colors font-medium"
                   >
                     Online Classes
                   </Link>

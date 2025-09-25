@@ -118,8 +118,7 @@ const NavigationHub: React.FC = () => {
           <Input
             placeholder="Search navigation items..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            onChange={(e) => setSearchQuery(e.target.value)} className="pl-10"
           />
         </div>
       </CardHeader>
@@ -127,14 +126,12 @@ const NavigationHub: React.FC = () => {
         <div className="space-y-3">
           {displayItems.map((item) => (
             <div
-              key={item.path}
-              className="group p-3 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+              key={item.path} className="group p-3 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
               onClick={() => handleNavigation(item.path, item.title)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div
-                    className={`p-2 rounded-lg transition-colors ${
+                  <div className={`p-2 rounded-lg transition-colors ${
                       item.isImplemented
                         ? "bg-blue-100 group-hover:bg-blue-200"
                         : "bg-gray-100 group-hover:bg-gray-200"
@@ -148,8 +145,7 @@ const NavigationHub: React.FC = () => {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4
-                        className={`font-medium text-sm transition-colors ${
+                      <h4 className={`font-medium text-sm transition-colors ${
                           item.isImplemented
                             ? "group-hover:text-blue-600"
                             : "text-gray-500"
@@ -174,16 +170,14 @@ const NavigationHub: React.FC = () => {
                         </Badge>
                       )}
                       <Badge
-                        variant={item.isImplemented ? "default" : "destructive"}
-                        className="text-xs"
+                        variant={item.isImplemented ? "default" : "destructive"} className="text-xs"
                       >
                         {item.isImplemented ? "Ready" : "Coming Soon"}
                       </Badge>
                     </div>
                   </div>
                 </div>
-                <ArrowRight
-                  className={`h-4 w-4 transition-colors ${
+                <ArrowRight className={`h-4 w-4 transition-colors ${
                     item.isImplemented
                       ? "text-gray-400 group-hover:text-blue-600"
                       : "text-gray-300"

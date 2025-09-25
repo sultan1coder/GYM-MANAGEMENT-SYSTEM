@@ -364,8 +364,7 @@ const MemberRegistration: React.FC = () => {
             <div className="flex items-center gap-4">
               {getConnectionStatusBadge()}
               <Link
-                to="/"
-                className="inline-flex items-center gap-2 text-emerald-300 hover:text-white transition-colors"
+                to="/" className="inline-flex items-center gap-2 text-emerald-300 hover:text-white transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Home
@@ -424,8 +423,7 @@ const MemberRegistration: React.FC = () => {
                     <label className="absolute bottom-0 right-0 bg-emerald-600 hover:bg-emerald-700 text-white p-2 rounded-full cursor-pointer transition-colors shadow-lg">
                       <Camera className="w-4 h-4" />
                       <input
-                        type="file"
-                        className="hidden"
+                        type="file" className="hidden"
                         accept="image/*"
                         onChange={handleProfilePictureChange}
                         disabled={isLoading}
@@ -452,8 +450,7 @@ const MemberRegistration: React.FC = () => {
                   {/* Full Name */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="name"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="name" className="text-sm font-semibold text-gray-700"
                     >
                       Full Name *
                     </Label>
@@ -463,8 +460,7 @@ const MemberRegistration: React.FC = () => {
                         value={formData.name}
                         onChange={(e) =>
                           handleInputChange("name", e.target.value)
-                        }
-                        className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
+                        } className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
                           formErrors.name ? "border-red-500" : "border-gray-200"
                         }`}
                         placeholder="Enter your full name"
@@ -482,8 +478,7 @@ const MemberRegistration: React.FC = () => {
                   {/* Email */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="email"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="email" className="text-sm font-semibold text-gray-700"
                     >
                       Email Address *
                     </Label>
@@ -494,8 +489,7 @@ const MemberRegistration: React.FC = () => {
                         value={formData.email}
                         onChange={(e) =>
                           handleInputChange("email", e.target.value)
-                        }
-                        className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
+                        } className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
                           formErrors.email
                             ? "border-red-500"
                             : "border-gray-200"
@@ -519,8 +513,7 @@ const MemberRegistration: React.FC = () => {
                     {/* Phone Number */}
                     <div className="space-y-2">
                       <Label
-                        htmlFor="phone_number"
-                        className="text-sm font-semibold text-gray-700"
+                        htmlFor="phone_number" className="text-sm font-semibold text-gray-700"
                       >
                         Phone Number
                       </Label>
@@ -530,8 +523,7 @@ const MemberRegistration: React.FC = () => {
                           value={formData.phone_number}
                           onChange={(e) =>
                             handleInputChange("phone_number", e.target.value)
-                          }
-                          className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
+                          } className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
                             formErrors.phone_number
                               ? "border-red-500"
                               : "border-gray-200"
@@ -554,8 +546,7 @@ const MemberRegistration: React.FC = () => {
                     {/* Age */}
                     <div className="space-y-2">
                       <Label
-                        htmlFor="age"
-                        className="text-sm font-semibold text-gray-700"
+                        htmlFor="age" className="text-sm font-semibold text-gray-700"
                       >
                         Age *
                       </Label>
@@ -566,8 +557,7 @@ const MemberRegistration: React.FC = () => {
                           value={formData.age}
                           onChange={(e) =>
                             handleInputChange("age", e.target.value)
-                          }
-                          className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
+                          } className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
                             formErrors.age
                               ? "border-red-500"
                               : "border-gray-200"
@@ -605,8 +595,7 @@ const MemberRegistration: React.FC = () => {
 
                     <div className="grid gap-3">
                       {/* Monthly Premium */}
-                      <div
-                        className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+                      <div className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
                           formData.membershiptype === "MONTHLY"
                             ? "border-emerald-500 bg-emerald-50"
                             : "border-gray-200 hover:border-emerald-300 hover:bg-emerald-25"
@@ -647,8 +636,7 @@ const MemberRegistration: React.FC = () => {
                       </div>
 
                       {/* Daily Pass */}
-                      <div
-                        className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+                      <div className={`relative p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
                           formData.membershiptype === "DAILY"
                             ? "border-cyan-500 bg-cyan-50"
                             : "border-gray-200 hover:border-cyan-300 hover:bg-cyan-25"
@@ -701,8 +689,7 @@ const MemberRegistration: React.FC = () => {
                   {/* Password */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="password"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="password" className="text-sm font-semibold text-gray-700"
                     >
                       Secure Password *
                     </Label>
@@ -713,8 +700,7 @@ const MemberRegistration: React.FC = () => {
                         value={formData.password}
                         onChange={(e) =>
                           handleInputChange("password", e.target.value)
-                        }
-                        className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
+                        } className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
                           formErrors.password
                             ? "border-red-500"
                             : "border-gray-200"
@@ -723,8 +709,7 @@ const MemberRegistration: React.FC = () => {
                         disabled={isLoading}
                       />
                       <button
-                        type="button"
-                        className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-emerald-600 transition-colors"
+                        type="button" className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-emerald-600 transition-colors"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (
@@ -749,8 +734,7 @@ const MemberRegistration: React.FC = () => {
                                 : passwordStrength < 75
                                 ? "secondary"
                                 : "default"
-                            }
-                            className={
+                            } className={
                               passwordStrength >= 75
                                 ? "bg-emerald-100 text-emerald-800"
                                 : ""
@@ -761,15 +745,13 @@ const MemberRegistration: React.FC = () => {
                           </Badge>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-3">
-                          <div
-                            className={`h-3 rounded-full transition-all duration-500 ${getPasswordStrengthColor()}`}
+                          <div className={`h-3 rounded-full transition-all duration-500 ${getPasswordStrengthColor()}`}
                             style={{ width: `${passwordStrength}%` }}
                           ></div>
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div className="flex items-center gap-1">
-                            <Check
-                              className={`w-3 h-3 ${
+                            <Check className={`w-3 h-3 ${
                                 formData.password.length >= 8
                                   ? "text-emerald-500"
                                   : "text-gray-300"
@@ -778,8 +760,7 @@ const MemberRegistration: React.FC = () => {
                             <span>8+ characters</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check
-                              className={`w-3 h-3 ${
+                            <Check className={`w-3 h-3 ${
                                 /[A-Z]/.test(formData.password)
                                   ? "text-emerald-500"
                                   : "text-gray-300"
@@ -788,8 +769,7 @@ const MemberRegistration: React.FC = () => {
                             <span>Uppercase</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check
-                              className={`w-3 h-3 ${
+                            <Check className={`w-3 h-3 ${
                                 /[0-9]/.test(formData.password)
                                   ? "text-emerald-500"
                                   : "text-gray-300"
@@ -798,8 +778,7 @@ const MemberRegistration: React.FC = () => {
                             <span>Number</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check
-                              className={`w-3 h-3 ${
+                            <Check className={`w-3 h-3 ${
                                 /[^A-Za-z0-9]/.test(formData.password)
                                   ? "text-emerald-500"
                                   : "text-gray-300"
@@ -822,8 +801,7 @@ const MemberRegistration: React.FC = () => {
                   {/* Confirm Password */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="confirmPassword"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700"
                     >
                       Confirm Password *
                     </Label>
@@ -834,8 +812,7 @@ const MemberRegistration: React.FC = () => {
                         value={formData.confirmPassword}
                         onChange={(e) =>
                           handleInputChange("confirmPassword", e.target.value)
-                        }
-                        className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
+                        } className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 ${
                           formErrors.confirmPassword
                             ? "border-red-500"
                             : "border-gray-200"
@@ -844,8 +821,7 @@ const MemberRegistration: React.FC = () => {
                         disabled={isLoading}
                       />
                       <button
-                        type="button"
-                        className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-emerald-600 transition-colors"
+                        type="button" className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-emerald-600 transition-colors"
                         onClick={() =>
                           setShowConfirmPassword(!showConfirmPassword)
                         }
@@ -874,24 +850,20 @@ const MemberRegistration: React.FC = () => {
                       checked={acceptTerms}
                       onCheckedChange={(checked) =>
                         setAcceptTerms(checked as boolean)
-                      }
-                      className="mt-1 border-2 border-gray-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
+                      } className="mt-1 border-2 border-gray-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
                     />
                     <Label
-                      htmlFor="terms"
-                      className="text-sm text-gray-700 leading-6"
+                      htmlFor="terms" className="text-sm text-gray-700 leading-6"
                     >
                       I agree to the{" "}
                       <Link
-                        to="/terms"
-                        className="text-emerald-600 hover:text-emerald-800 font-bold"
+                        to="/terms" className="text-emerald-600 hover:text-emerald-800 font-bold"
                       >
                         Premium Membership Terms
                       </Link>{" "}
                       and{" "}
                       <Link
-                        to="/privacy"
-                        className="text-emerald-600 hover:text-emerald-800 font-bold"
+                        to="/privacy" className="text-emerald-600 hover:text-emerald-800 font-bold"
                       >
                         Privacy Policy
                       </Link>
@@ -901,8 +873,7 @@ const MemberRegistration: React.FC = () => {
 
                 {/* Premium Registration Button */}
                 <Button
-                  type="submit"
-                  className="w-full h-14 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 text-white font-bold text-base shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300"
+                  type="submit" className="w-full h-14 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 text-white font-bold text-base shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300"
                   disabled={
                     isLoading || connectionStatus === "error" || !acceptTerms
                   }
@@ -926,23 +897,20 @@ const MemberRegistration: React.FC = () => {
                 <p className="text-sm text-gray-600">
                   Already a premium member?{" "}
                   <Link
-                    to="/member/login"
-                    className="text-emerald-600 hover:text-emerald-800 font-bold transition-colors"
+                    to="/member/login" className="text-emerald-600 hover:text-emerald-800 font-bold transition-colors"
                   >
                     Access Your Dashboard
                   </Link>
                 </p>
                 <div className="flex items-center justify-center gap-6 text-xs text-gray-500">
                   <Link
-                    to="/staff/register"
-                    className="hover:text-emerald-600 transition-colors font-medium"
+                    to="/staff/register" className="hover:text-emerald-600 transition-colors font-medium"
                   >
                     Staff Careers
                   </Link>
                   <span>•</span>
                   <Link
-                    to="/contact"
-                    className="hover:text-emerald-600 transition-colors font-medium"
+                    to="/contact" className="hover:text-emerald-600 transition-colors font-medium"
                   >
                     Premium Support
                   </Link>

@@ -347,8 +347,7 @@ const AdminProfileManagement: React.FC = () => {
 
       <Tabs
         value={activeTab}
-        onValueChange={setActiveTab}
-        className="space-y-6"
+        onValueChange={setActiveTab} className="space-y-6"
       >
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="profile" className="flex items-center gap-2">
@@ -391,8 +390,7 @@ const AdminProfileManagement: React.FC = () => {
                     <label className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-lg cursor-pointer hover:bg-gray-50">
                       <Camera className="w-4 h-4 text-gray-600" />
                       <input
-                        type="file"
-                        className="hidden"
+                        type="file" className="hidden"
                         accept="image/*"
                         onChange={handleAvatarUpload}
                         disabled={isLoading}
@@ -408,8 +406,7 @@ const AdminProfileManagement: React.FC = () => {
                 <CardContent className="space-y-4">
                   <div className="text-center">
                     <Button
-                      onClick={() => setIsEditing(true)}
-                      className="w-full"
+                      onClick={() => setIsEditing(true)} className="w-full"
                       disabled={isLoading}
                     >
                       <Edit className="w-4 h-4 mr-2" />
@@ -611,8 +608,7 @@ const AdminProfileManagement: React.FC = () => {
                   <Button
                     type="button"
                     variant="ghost"
-                    size="sm"
-                    className="absolute top-0 right-0 h-full px-3"
+                    size="sm" className="absolute top-0 right-0 h-full px-3"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
@@ -654,8 +650,7 @@ const AdminProfileManagement: React.FC = () => {
                 />
               </div>
               <Button
-                onClick={handlePasswordChange}
-                className="w-full"
+                onClick={handlePasswordChange} className="w-full"
                 disabled={isLoading}
               >
                 {isLoading ? (

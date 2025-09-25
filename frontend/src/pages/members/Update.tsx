@@ -394,7 +394,7 @@ const MemberUpdate = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="mx-auto space-y-6 max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -406,10 +406,10 @@ const MemberUpdate = () => {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-slate-900">
                 Update Member
               </h1>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">
+              <p className="mt-2 text-slate-600">
                 Edit member information and membership details
               </p>
             </div>
@@ -417,8 +417,7 @@ const MemberUpdate = () => {
           <div className="flex gap-3">
             <Button
               onClick={() => setShowDeleteDialog(true)}
-              variant="outline"
-              className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
+              variant="outline" className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
             >
               <Trash2 className="w-4 h-4 mr-2" />
               Delete Member
@@ -433,36 +432,34 @@ const MemberUpdate = () => {
         </div>
 
         {/* Member Overview Card */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
-          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-700">
+        <Card className="bg-white border-0 shadow-lg">
+          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
             <div className="flex items-center gap-4">
-              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
+              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-100 to-blue-200">
                 {member.profile_picture ? (
                   <img
                     src={member.profile_picture}
-                    alt={member.name}
-                    className="object-cover w-14 h-14 rounded-full"
+                    alt={member.name} className="object-cover w-14 h-14 rounded-full"
                   />
                 ) : (
-                  <User className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                  <User className="w-8 h-8 text-blue-600" />
                 )}
               </div>
               <div>
-                <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+                <CardTitle className="text-xl font-semibold text-gray-900">
                   {member.name}
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400">
+                <CardDescription className="text-gray-600">
                   Member ID: {member.id} • Joined:{" "}
                   {new Date(member.createdAt).toLocaleDateString()}
                 </CardDescription>
               </div>
               <div className="ml-auto">
                 <Badge
-                  variant="secondary"
-                  className={`${
+                  variant="secondary" className={`${
                     member.membershiptype === "MONTHLY"
-                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                      : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-blue-100 text-blue-800"
                   }`}
                 >
                   {member.membershiptype === "MONTHLY" ? (
@@ -478,26 +475,26 @@ const MemberUpdate = () => {
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                <div className="text-2xl font-bold text-gray-900">
                   {member.age}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   Age
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                <div className="text-2xl font-bold text-gray-900">
                   {member.email}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   Email
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                <div className="text-2xl font-bold text-gray-900">
                   {member.phone_number || "Not provided"}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   Phone
                 </div>
               </div>
@@ -506,12 +503,12 @@ const MemberUpdate = () => {
         </Card>
 
         {/* Update Form */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+            <CardTitle className="text-xl font-semibold text-gray-900">
               Member Information
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400">
+            <CardDescription className="text-gray-600">
               Update member details and membership information
             </CardDescription>
           </CardHeader>
@@ -519,7 +516,7 @@ const MemberUpdate = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Basic Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-gray-900">
                   <User className="w-5 h-5" />
                   Basic Information
                 </h3>
@@ -529,8 +526,7 @@ const MemberUpdate = () => {
                   <Input
                     id="name"
                     value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    className={validationErrors.name ? "border-red-500" : ""}
+                    onChange={(e) => handleInputChange("name", e.target.value)} className={validationErrors.name ? "border-red-500" : ""}
                     placeholder="Enter full name"
                   />
                   {validationErrors.name && (
@@ -546,8 +542,7 @@ const MemberUpdate = () => {
                     id="email"
                     type="email"
                     value={formData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    className={validationErrors.email ? "border-red-500" : ""}
+                    onChange={(e) => handleInputChange("email", e.target.value)} className={validationErrors.email ? "border-red-500" : ""}
                     placeholder="Enter email address"
                   />
                   {validationErrors.email && (
@@ -564,8 +559,7 @@ const MemberUpdate = () => {
                     value={formData.phone_number}
                     onChange={(e) =>
                       handleInputChange("phone_number", e.target.value)
-                    }
-                    className={
+                    } className={
                       validationErrors.phone_number ? "border-red-500" : ""
                     }
                     placeholder="Enter phone number"
@@ -585,8 +579,7 @@ const MemberUpdate = () => {
                       handleInputChange("age", parseInt(value))
                     }
                   >
-                    <SelectTrigger
-                      className={validationErrors.age ? "border-red-500" : ""}
+                    <SelectTrigger className={validationErrors.age ? "border-red-500" : ""}
                     >
                       <SelectValue placeholder="Select age" />
                     </SelectTrigger>
@@ -608,7 +601,7 @@ const MemberUpdate = () => {
 
               {/* Membership & Security */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-gray-900">
                   <CreditCard className="w-5 h-5" />
                   Membership & Security
                 </h3>
@@ -650,8 +643,7 @@ const MemberUpdate = () => {
                       value={formData.password}
                       onChange={(e) =>
                         handleInputChange("password", e.target.value)
-                      }
-                      className={
+                      } className={
                         validationErrors.password ? "border-red-500" : ""
                       }
                       placeholder="Enter new password"
@@ -659,8 +651,7 @@ const MemberUpdate = () => {
                     <Button
                       type="button"
                       variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -686,8 +677,7 @@ const MemberUpdate = () => {
                       value={formData.confirmPassword}
                       onChange={(e) =>
                         handleInputChange("confirmPassword", e.target.value)
-                      }
-                      className={
+                      } className={
                         validationErrors.confirmPassword ? "border-red-500" : ""
                       }
                       placeholder="Confirm new password"
@@ -695,8 +685,7 @@ const MemberUpdate = () => {
                     <Button
                       type="button"
                       variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
@@ -743,7 +732,7 @@ const MemberUpdate = () => {
 
             {/* Address Information */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-gray-900">
                 <MapPin className="w-5 h-5" />
                 Address Information
               </h3>
@@ -814,7 +803,7 @@ const MemberUpdate = () => {
 
             {/* Emergency Contact */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-gray-900">
                 <AlertTriangle className="w-5 h-5" />
                 Emergency Contact
               </h3>
@@ -890,7 +879,7 @@ const MemberUpdate = () => {
 
             {/* Medical Information */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-gray-900">
                 <Heart className="w-5 h-5" />
                 Health & Fitness Information
               </h3>
@@ -910,8 +899,7 @@ const MemberUpdate = () => {
                     "Rehabilitation",
                   ].map((goal) => (
                     <label
-                      key={goal}
-                      className="flex items-center gap-2 cursor-pointer"
+                      key={goal} className="flex items-center gap-2 cursor-pointer"
                     >
                       <input
                         type="checkbox"
@@ -938,10 +926,9 @@ const MemberUpdate = () => {
                               newGoals
                             );
                           }
-                        }}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        }} className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <span className="text-sm text-gray-700">
                         {goal}
                       </span>
                     </label>
@@ -967,8 +954,7 @@ const MemberUpdate = () => {
                       conditions
                     );
                   }}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                  rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="List any health conditions, injuries, or limitations..."
                 />
               </div>
@@ -988,8 +974,7 @@ const MemberUpdate = () => {
                       .filter((a) => a);
                     handleInputChange("medical_info.allergies", allergies);
                   }}
-                  rows={2}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                  rows={2} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="List any allergies..."
                 />
               </div>
@@ -1008,8 +993,7 @@ const MemberUpdate = () => {
                       e.target.value
                     )
                   }
-                  rows={2}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                  rows={2} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Any additional information for emergency situations..."
                 />
               </div>
@@ -1028,8 +1012,7 @@ const MemberUpdate = () => {
               </Button>
               <Button
                 onClick={handleUpdateMember}
-                disabled={isUpdating}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                disabled={isUpdating} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
               >
                 {isUpdating ? (
                   <>
@@ -1051,23 +1034,23 @@ const MemberUpdate = () => {
       {/* Delete Confirmation Dialog */}
       {showDeleteDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4">
+          <div className="bg-white">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
                   <AlertCircle className="w-6 h-6 text-red-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-gray-900">
                     Delete Member
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600">
                     This action cannot be undone
                   </p>
                 </div>
               </div>
 
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
+              <p className="text-gray-700">
                 Are you sure you want to delete <strong>{member.name}</strong>?
                 This will permanently remove their account and all associated
                 data.

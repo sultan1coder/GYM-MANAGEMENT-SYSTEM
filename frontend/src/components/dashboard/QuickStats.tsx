@@ -65,8 +65,7 @@ const QuickStats: React.FC<QuickStatsProps> = ({ stats, memberStats }) => {
             +{memberStats?.growthRate || "0"}% from last month
           </p>
           <Progress
-            value={parseFloat(memberStats?.growthRate || "0")}
-            className="mt-2"
+            value={parseFloat(memberStats?.growthRate || "0")} className="mt-2"
           />
         </CardContent>
       </Card>
@@ -87,8 +86,7 @@ const QuickStats: React.FC<QuickStatsProps> = ({ stats, memberStats }) => {
               stats.totalMembers > 0
                 ? (stats.activeMembers / stats.totalMembers) * 100
                 : 0
-            }
-            className="mt-2"
+            } className="mt-2"
           />
         </CardContent>
       </Card>
@@ -109,8 +107,7 @@ const QuickStats: React.FC<QuickStatsProps> = ({ stats, memberStats }) => {
               stats.totalMembers > 0
                 ? (stats.newMembers / stats.totalMembers) * 100
                 : 0
-            }
-            className="mt-2"
+            } className="mt-2"
           />
         </CardContent>
       </Card>

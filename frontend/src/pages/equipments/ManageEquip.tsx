@@ -61,7 +61,6 @@ import {
   Dumbbell,
   MoreVertical,
   Eye,
-
   FileText,
   DollarSign,
   Package,
@@ -77,6 +76,7 @@ import { Link } from "react-router-dom";
 const EquipmentManager: React.FC = () => {
   const [equipmentList, setEquipmentList] = useState<Equipment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -156,269 +156,20 @@ const EquipmentManager: React.FC = () => {
   const fetchEquipment = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await userAPI.getEquipment();
       if (response.data.isSuccess) {
-        const data = response.data.data || [];
-        if (data.length === 0) {
-          // If no equipment in database, show sample data for demonstration
-          setEquipmentList([
-            {
-              id: "demo-1",
-              name: "Commercial Treadmill",
-              type: "Treadmill",
-              category: "Cardio",
-              brand: "Life Fitness",
-              model: "95T Discover SE",
-              serialNumber: "LF-2024-001",
-              quantity: 3,
-              available: 2,
-              inUse: 1,
-              status: "OPERATIONAL",
-              location: "Cardio Room A",
-              description:
-                "High-end commercial treadmill with touchscreen display",
-              imageUrl: "",
-              purchaseDate: "2024-01-15",
-              warrantyExpiry: "2027-01-15",
-              cost: 8500,
-              maintenance: false,
-              lastMaintenance: undefined,
-              nextMaintenance: undefined,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-            {
-              id: "demo-2",
-              name: "Elliptical Machine",
-              type: "Elliptical",
-              category: "Cardio",
-              brand: "Precor",
-              model: "EFX 835",
-              serialNumber: "PC-2024-002",
-              quantity: 2,
-              available: 1,
-              inUse: 1,
-              status: "MAINTENANCE",
-              location: "Cardio Room B",
-              description: "Premium elliptical with adjustable stride length",
-              imageUrl: "",
-              purchaseDate: "2024-02-01",
-              warrantyExpiry: "2027-02-01",
-              cost: 6500,
-              maintenance: true,
-              lastMaintenance: new Date().toISOString(),
-              nextMaintenance: new Date(
-                Date.now() + 30 * 24 * 60 * 60 * 1000
-              ).toISOString(),
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-            {
-              id: "demo-3",
-              name: "Weight Bench",
-              type: "Bench",
-              category: "Strength Training",
-              brand: "Rogue Fitness",
-              model: "Flat Utility Bench 2.0",
-              serialNumber: "RG-2024-003",
-              quantity: 5,
-              available: 4,
-              inUse: 1,
-              status: "OPERATIONAL",
-              location: "Weight Room",
-              description: "Heavy-duty weight bench for strength training",
-              imageUrl: "",
-              purchaseDate: "2024-01-20",
-              warrantyExpiry: "2026-01-20",
-              cost: 800,
-              maintenance: false,
-              lastMaintenance: undefined,
-              nextMaintenance: undefined,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-            {
-              id: "demo-4",
-              name: "Cable Machine",
-              type: "Machine",
-              category: "Functional Training",
-              brand: "Cybex",
-              model: "Cable Column",
-              serialNumber: "CY-2024-004",
-              quantity: 2,
-              available: 0,
-              inUse: 2,
-              status: "OPERATIONAL",
-              location: "Functional Training Area",
-              description:
-                "Multi-functional cable machine for various exercises",
-              imageUrl: "",
-              purchaseDate: "2024-03-01",
-              warrantyExpiry: "2027-03-01",
-              cost: 12000,
-              maintenance: false,
-              lastMaintenance: undefined,
-              nextMaintenance: undefined,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-            {
-              id: "demo-5",
-              name: "Recovery Station",
-              type: "Recovery",
-              category: "Recovery",
-              brand: "NormaTec",
-              model: "Recovery Pro",
-              serialNumber: "NM-2024-005",
-              quantity: 1,
-              available: 1,
-              inUse: 0,
-              status: "OUT_OF_SERVICE",
-              location: "Recovery Room",
-              description: "Advanced recovery system for muscle therapy",
-              imageUrl: "",
-              purchaseDate: "2024-01-10",
-              warrantyExpiry: "2026-01-10",
-              cost: 15000,
-              maintenance: false,
-              lastMaintenance: undefined,
-              nextMaintenance: undefined,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          ]);
-        } else {
-          setEquipmentList(data);
-        }
+        const data = response.data.equipment || [];
+        setEquipmentList(data);
+      } else {
+        setError("Failed to fetch equipment data");
+        toast.error("Failed to fetch equipment");
       }
     } catch (error) {
       console.error("Error fetching equipment:", error);
+      setError("Failed to connect to server");
       toast.error("Failed to fetch equipment");
-      // Add sample data for demonstration when API fails
-      setEquipmentList([
-        {
-          id: "demo-1",
-          name: "Commercial Treadmill",
-          type: "Treadmill",
-          category: "Cardio",
-          brand: "Life Fitness",
-          model: "95T Discover SE",
-          serialNumber: "LF-2024-001",
-          quantity: 3,
-          available: 2,
-          inUse: 1,
-          status: "OPERATIONAL",
-          location: "Cardio Room A",
-          description: "High-end commercial treadmill with touchscreen display",
-          imageUrl: "",
-          purchaseDate: "2024-01-15",
-          warrantyExpiry: "2027-01-15",
-          cost: 8500,
-          maintenance: false,
-          lastMaintenance: undefined,
-          nextMaintenance: undefined,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "demo-2",
-          name: "Elliptical Machine",
-          type: "Elliptical",
-          category: "Cardio",
-          brand: "Precor",
-          model: "EFX 835",
-          serialNumber: "PC-2024-002",
-          quantity: 2,
-          available: 1,
-          inUse: 1,
-          status: "MAINTENANCE",
-          location: "Cardio Room B",
-          description: "Premium elliptical with adjustable stride length",
-          imageUrl: "",
-          purchaseDate: "2024-02-01",
-          warrantyExpiry: "2027-02-01",
-          cost: 6500,
-          maintenance: true,
-          lastMaintenance: new Date().toISOString(),
-          nextMaintenance: new Date(
-            Date.now() + 30 * 24 * 60 * 60 * 1000
-          ).toISOString(),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "demo-3",
-          name: "Weight Bench",
-          type: "Bench",
-          category: "Strength Training",
-          brand: "Rogue Fitness",
-          model: "Flat Utility Bench 2.0",
-          serialNumber: "RG-2024-003",
-          quantity: 5,
-          available: 4,
-          inUse: 1,
-          status: "OPERATIONAL",
-          location: "Weight Room",
-          description: "Heavy-duty weight bench for strength training",
-          imageUrl: "",
-          purchaseDate: "2024-01-20",
-          warrantyExpiry: "2026-01-20",
-          cost: 800,
-          maintenance: false,
-          lastMaintenance: undefined,
-          nextMaintenance: undefined,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "demo-4",
-          name: "Cable Machine",
-          type: "Machine",
-          category: "Functional Training",
-          brand: "Cybex",
-          model: "Cable Column",
-          serialNumber: "CY-2024-004",
-          quantity: 2,
-          available: 0,
-          inUse: 2,
-          status: "OPERATIONAL",
-          location: "Functional Training Area",
-          description: "Multi-functional cable machine for various exercises",
-          imageUrl: "",
-          purchaseDate: "2024-03-01",
-          warrantyExpiry: "2027-03-01",
-          cost: 12000,
-          maintenance: false,
-          lastMaintenance: undefined,
-          nextMaintenance: undefined,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "demo-5",
-          name: "Recovery Station",
-          type: "Recovery",
-          category: "Recovery",
-          brand: "NormaTec",
-          model: "Recovery Pro",
-          serialNumber: "NM-2024-005",
-          quantity: 1,
-          available: 1,
-          inUse: 0,
-          status: "OUT_OF_SERVICE",
-          location: "Recovery Room",
-          description: "Advanced recovery system for muscle therapy",
-          imageUrl: "",
-          purchaseDate: "2024-01-10",
-          warrantyExpiry: "2026-01-10",
-          cost: 15000,
-          maintenance: false,
-          lastMaintenance: undefined,
-          nextMaintenance: undefined,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ]);
+      setEquipmentList([]);
     } finally {
       setLoading(false);
     }
@@ -500,8 +251,6 @@ const EquipmentManager: React.FC = () => {
     }
   };
 
-
-
   const resetForm = () => {
     setFormData({
       name: "",
@@ -556,15 +305,15 @@ const EquipmentManager: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "OPERATIONAL":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-800";
+        return "bg-green-100 text-green-800";
       case "MAINTENANCE":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800";
+        return "bg-yellow-100 text-yellow-800";
       case "OUT_OF_SERVICE":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 border-red-200 dark:border-red-800";
+        return "bg-red-100 text-red-800";
       case "RETIRED":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400 border-gray-200 dark:border-gray-800";
+        return "bg-gray-100 text-gray-800";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400 border-gray-200 dark:border-gray-800";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -609,46 +358,37 @@ const EquipmentManager: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="mx-auto space-y-6 max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-slate-900">
               Equipment Management
             </h1>
-            <p className="mt-2 text-slate-600 dark:text-slate-400">
+            <p className="mt-2 text-slate-600">
               Manage gym equipment, track maintenance, and monitor usage
             </p>
-            {equipmentList.length > 0 &&
-              equipmentList[0]?.id?.startsWith("demo-") && (
-                <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                  <p className="text-sm text-blue-700 dark:text-blue-300">
-                    📋 <strong>Demo Mode:</strong> Showing sample equipment
-                    data. Add your own equipment to see real data.
-                  </p>
-                </div>
-              )}
           </div>
-                      <div className="flex gap-3">
-              <Link to="/equipments/dashboard">
-                <Button
-                  variant="outline"
-                  className="border-gray-300 hover:bg-gray-50 shadow-md"
-                >
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  Equipment Dashboard
-                </Button>
-              </Link>
-              <Link to="/equipments/all">
-                <Button
-                  variant="outline"
-                  className="border-gray-300 hover:bg-gray-50 shadow-md"
-                >
-                  <Eye className="w-4 h-4 mr-2" />
-                  View All Equipment
-                </Button>
-              </Link>
+          <div className="flex gap-3">
+            <Link to="/equipments/dashboard">
+              <Button
+                variant="outline"
+                className="border-gray-300 hover:bg-gray-50 shadow-md"
+              >
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Equipment Dashboard
+              </Button>
+            </Link>
+            <Link to="/equipments/all">
+              <Button
+                variant="outline"
+                className="border-gray-300 hover:bg-gray-50 shadow-md"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                View All Equipment
+              </Button>
+            </Link>
             <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
               <DialogTrigger asChild>
                 <Button className="shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
@@ -870,6 +610,31 @@ const EquipmentManager: React.FC = () => {
           </div>
         </div>
 
+        {/* Error Display */}
+        {error && (
+          <Card className="border-red-200 bg-red-50">
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-3">
+                <XCircle className="w-5 h-5 text-red-600" />
+                <div>
+                  <p className="font-medium text-red-800">
+                    Error Loading Equipment
+                  </p>
+                  <p className="text-sm text-red-600">{error}</p>
+                </div>
+                <Button
+                  onClick={fetchEquipment}
+                  variant="outline"
+                  size="sm"
+                  className="ml-auto border-red-300 text-red-700 hover:bg-red-100"
+                >
+                  Retry
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Equipment Stats Summary */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card className="text-white border-0 shadow-lg bg-gradient-to-r from-blue-500 to-blue-600">
@@ -947,7 +712,7 @@ const EquipmentManager: React.FC = () => {
         </div>
 
         {/* Filters and Search */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardContent className="p-6">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="flex-1">
@@ -957,7 +722,7 @@ const EquipmentManager: React.FC = () => {
                     placeholder="Search equipment by name, brand, or model..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600"
+                    className="pl-10 border-0 bg-gray-50"
                   />
                 </div>
               </div>
@@ -965,7 +730,7 @@ const EquipmentManager: React.FC = () => {
                 value={categoryFilter}
                 onValueChange={(value: string) => setCategoryFilter(value)}
               >
-                <SelectTrigger className="w-48 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600">
+                <SelectTrigger className="w-48 border-0 bg-gray-50">
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
@@ -981,7 +746,7 @@ const EquipmentManager: React.FC = () => {
                 value={statusFilter}
                 onValueChange={(value: string) => setStatusFilter(value)}
               >
-                <SelectTrigger className="w-48 border-0 bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600">
+                <SelectTrigger className="w-48 border-0 bg-gray-50">
                   <SelectValue placeholder="All Statuses" />
                 </SelectTrigger>
                 <SelectContent>
@@ -997,241 +762,256 @@ const EquipmentManager: React.FC = () => {
         </Card>
 
         {/* Equipment Table */}
-        <Card className="overflow-hidden bg-white border-0 shadow-lg dark:bg-gray-800">
-          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-700">
-            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+        <Card className="overflow-hidden bg-white border-0 shadow-lg">
+          <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
+            <CardTitle className="text-xl font-semibold text-gray-900">
               Equipment Inventory
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400">
+            <CardDescription className="text-gray-600">
               {filteredEquipment.length} equipment items found
-              {equipmentList.length > 0 &&
-                equipmentList[0]?.id?.startsWith("demo-") && (
-                  <span className="ml-2 text-blue-600 dark:text-blue-400">
-                    (Demo Mode)
-                  </span>
-                )}
             </CardDescription>
           </CardHeader>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                <TableRow className="bg-gray-50">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Package className="w-4 h-4 text-gray-500" />
                       Equipment
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Activity className="w-4 h-4 text-gray-500" />
                       Status
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4 text-gray-500" />
                       Quantity
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-gray-500" />
                       Location
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <DollarSign className="w-4 h-4 text-gray-500" />
                       Cost
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-gray-900">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-500" />
                       Purchase Date
                     </div>
                   </TableHead>
-                  <TableHead className="px-6 py-4 font-semibold text-right text-gray-900 dark:text-white">
+                  <TableHead className="px-6 py-4 font-semibold text-right text-gray-900">
                     Actions
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredEquipment.map((equipment) => (
-                  <TableRow
-                    key={equipment.id}
-                    className="transition-colors border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 dark:border-gray-700"
-                  >
-                    <TableCell className="px-6 py-4">
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
-                          {equipment.imageUrl ? (
-                            <img
-                              src={equipment.imageUrl}
-                              alt={equipment.name}
-                              className="object-cover w-10 h-10 rounded-md"
-                            />
-                          ) : (
-                            <Dumbbell className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                          )}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-gray-900 dark:text-white">
-                            {equipment.name}
-                          </div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
-                            {equipment.brand}{" "}
-                            {equipment.model && `• ${equipment.model}`}
-                          </div>
-                          <div className="mt-1 text-xs text-gray-500 dark:text-gray-500">
-                            {equipment.category} • {equipment.type}
-                          </div>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <Badge
-                        className={`${getStatusColor(
-                          equipment.status
-                        )} px-3 py-1 text-xs font-medium`}
-                      >
-                        {getStatusIcon(equipment.status)}
-                        <span className="ml-1.5">
-                          {equipment.status.replace("_", " ")}
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="px-6 py-12 text-center">
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-gray-600">
+                          Loading equipment...
                         </span>
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-sm">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Total:
-                          </span>
-                          <span className="font-medium text-gray-900 dark:text-white">
-                            {equipment.quantity}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Available:
-                          </span>
-                          <span className="font-medium text-green-600 dark:text-green-400">
-                            {equipment.available}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            In Use:
-                          </span>
-                          <span className="font-medium text-orange-600 dark:text-orange-400">
-                            {equipment.inUse}
-                          </span>
-                        </div>
                       </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                        <MapPin className="w-4 h-4" />
-                        <span>{equipment.location || "No location"}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      {equipment.cost && equipment.cost > 0 ? (
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-green-600 dark:text-green-400">
-                            ${equipment.cost.toLocaleString()}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-gray-400 dark:text-gray-500">
-                          -
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      {equipment.purchaseDate ? (
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                          {new Date(
-                            equipment.purchaseDate
-                          ).toLocaleDateString()}
-                        </div>
-                      ) : (
-                        <span className="text-gray-400 dark:text-gray-500">
-                          -
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="w-8 h-8 p-0 hover:bg-gray-100 dark:hover:bg-gray-700"
-                          >
-                            <MoreVertical className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuLabel className="font-semibold">
-                            Equipment Actions
-                          </DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            onClick={() => openEditDialog(equipment)}
-                            className="cursor-pointer"
-                          >
-                            <Edit className="w-4 h-4 mr-2 text-blue-600" />
-                            Edit Equipment
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => openMaintenanceDialog(equipment)}
-                            className="cursor-pointer"
-                          >
-                            <Wrench className="w-4 h-4 mr-2 text-yellow-600" />
-                            Add Maintenance
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() =>
-                              window.open(
-                                `/equipments/single/${equipment.id}`,
-                                "_blank"
-                              )
-                            }
-                            className="cursor-pointer"
-                          >
-                            <FileText className="w-4 h-4 mr-2 text-purple-600" />
-                            View Details
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            onClick={() => handleDeleteEquipment(equipment.id)}
-                            className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-900/20"
-                          >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Delete Equipment
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : filteredEquipment.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="px-6 py-12 text-center">
+                      <div className="flex flex-col items-center space-y-3">
+                        <Dumbbell className="w-12 h-12 text-gray-400" />
+                        <p className="text-gray-500">No equipment found</p>
+                        <p className="text-sm text-gray-400">
+                          {searchTerm ||
+                          categoryFilter !== "all" ||
+                          statusFilter !== "all"
+                            ? "Try adjusting your filters"
+                            : "Add your first equipment to get started"}
+                        </p>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredEquipment.map((equipment) => (
+                    <TableRow
+                      key={equipment.id}
+                      className="transition-colors border-b border-gray-100 hover:bg-gray-50"
+                    >
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200">
+                            {equipment.imageUrl ? (
+                              <img
+                                src={equipment.imageUrl}
+                                alt={equipment.name}
+                                className="object-cover w-10 h-10 rounded-md"
+                              />
+                            ) : (
+                              <Dumbbell className="w-6 h-6 text-blue-600" />
+                            )}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-900">
+                              {equipment.name}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              {equipment.brand}{" "}
+                              {equipment.model && `• ${equipment.model}`}
+                            </div>
+                            <div className="mt-1 text-xs text-gray-500">
+                              {equipment.category} • {equipment.type}
+                            </div>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <Badge
+                          className={`${getStatusColor(
+                            equipment.status
+                          )} px-3 py-1 text-xs font-medium`}
+                        >
+                          {getStatusIcon(equipment.status)}
+                          <span className="ml-1.5">
+                            {equipment.status.replace("_", " ")}
+                          </span>
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className="text-gray-600">Total:</span>
+                            <span className="font-medium text-gray-900">
+                              {equipment.quantity}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className="text-gray-600">Available:</span>
+                            <span className="font-medium text-green-600">
+                              {equipment.available}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className="text-gray-600">In Use:</span>
+                            <span className="font-medium text-orange-600">
+                              {equipment.inUse}
+                            </span>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <MapPin className="w-4 h-4" />
+                          <span>{equipment.location || "No location"}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        {equipment.cost && equipment.cost > 0 ? (
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-green-600">
+                              ${equipment.cost.toLocaleString()}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        {equipment.purchaseDate ? (
+                          <div className="text-sm text-gray-600">
+                            {new Date(
+                              equipment.purchaseDate
+                            ).toLocaleDateString()}
+                          </div>
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="px-6 py-4 text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-8 h-8 p-0 hover:bg-gray-100"
+                            >
+                              <MoreVertical className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuLabel className="font-semibold">
+                              Equipment Actions
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => openEditDialog(equipment)}
+                              className="cursor-pointer"
+                            >
+                              <Edit className="w-4 h-4 mr-2 text-blue-600" />
+                              Edit Equipment
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => openMaintenanceDialog(equipment)}
+                              className="cursor-pointer"
+                            >
+                              <Wrench className="w-4 h-4 mr-2 text-yellow-600" />
+                              Add Maintenance
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                window.open(
+                                  `/equipments/single/${equipment.id}`,
+                                  "_blank"
+                                )
+                              }
+                              className="cursor-pointer"
+                            >
+                              <FileText className="w-4 h-4 mr-2 text-purple-600" />
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleDeleteEquipment(equipment.id)
+                              }
+                              className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50"
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Delete Equipment
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>
         </Card>
 
         {filteredEquipment.length === 0 && (
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100">
             <CardContent className="p-16 text-center">
-              <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
-                <Dumbbell className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-blue-200">
+                <Dumbbell className="w-10 h-10 text-blue-600" />
               </div>
-              <h3 className="mb-3 text-2xl font-bold text-gray-900 dark:text-white">
+              <h3 className="mb-3 text-2xl font-bold text-gray-900">
                 No equipment found
               </h3>
-              <p className="max-w-md mx-auto mb-6 text-lg text-gray-600 dark:text-gray-400">
+              <p className="max-w-md mx-auto mb-6 text-lg text-gray-600">
                 {searchTerm ||
                 categoryFilter !== "all" ||
                 statusFilter !== "all"
@@ -1257,14 +1037,14 @@ const EquipmentManager: React.FC = () => {
       {/* Edit Equipment Modal */}
       {showEditDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl max-h-[90vh] overflow-y-auto w-full mx-4">
+          <div className="bg-white">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h2 className="text-xl font-semibold text-gray-900">
                     Edit Equipment
                   </h2>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600">
                     Update the equipment details.
                   </p>
                 </div>

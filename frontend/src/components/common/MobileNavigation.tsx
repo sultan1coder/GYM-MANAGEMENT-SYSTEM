@@ -106,8 +106,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ className }) => {
               return (
                 <Button
                   key={item.name}
-                  variant={isActive(item.href) ? "secondary" : "ghost"}
-                  className={cn(
+                  variant={isActive(item.href) ? "secondary" : "ghost"} className={cn(
                     "w-full justify-start h-12",
                     isActive(item.href) && "bg-primary/10 text-primary"
                   )}
@@ -129,8 +128,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ className }) => {
           <div className="mt-8 pt-6 border-t">
             <div className="space-y-2">
               <Button
-                variant="outline"
-                className="w-full justify-start"
+                variant="outline" className="w-full justify-start"
                 onClick={() => {
                   navigate("/admin/members/register");
                   setIsOpen(false);
@@ -140,8 +138,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ className }) => {
                 Add Member
               </Button>
               <Button
-                variant="outline"
-                className="w-full justify-start"
+                variant="outline" className="w-full justify-start"
                 onClick={() => {
                   navigate("/admin/equipments");
                   setIsOpen(false);

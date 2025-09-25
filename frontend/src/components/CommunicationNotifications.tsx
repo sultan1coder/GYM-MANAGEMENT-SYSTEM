@@ -48,20 +48,17 @@ const CommunicationNotifications: React.FC = () => {
 
       <Tabs
         value={activeTab}
-        onValueChange={setActiveTab}
-        className="space-y-6"
+        onValueChange={setActiveTab} className="space-y-6"
       >
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger
-            value="communications"
-            className="flex items-center gap-2"
+            value="communications" className="flex items-center gap-2"
           >
             <MessageSquare className="h-4 w-4" />
             Communications
           </TabsTrigger>
           <TabsTrigger
-            value="notifications"
-            className="flex items-center gap-2"
+            value="notifications" className="flex items-center gap-2"
           >
             <Bell className="h-4 w-4" />
             Notifications

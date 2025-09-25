@@ -85,13 +85,13 @@ const MemberDashboard = () => {
   const getMembershipStatusColor = (status: string) => {
     switch (status) {
       case "Active":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+        return "bg-green-100 text-green-800";
       case "Expiring Soon":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+        return "bg-yellow-100 text-yellow-800";
       case "Expired":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+        return "bg-red-100 text-red-800";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -119,23 +119,22 @@ const MemberDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="mx-auto space-y-6 max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-slate-900">
               Welcome back, {currentUser.name}! 👋
             </h1>
-            <p className="mt-2 text-slate-600 dark:text-slate-400">
+            <p className="mt-2 text-slate-600">
               Your personal gym dashboard and membership overview
             </p>
           </div>
           <div className="flex gap-3">
             <Button
               onClick={handleLogout}
-              variant="outline"
-              className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
+              variant="outline" className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Logout
@@ -144,25 +143,23 @@ const MemberDashboard = () => {
         </div>
 
         {/* Member Navigation */}
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+        <div className="bg-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <Link
-                to="/members/dashboard"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border-b-2 border-blue-600"
+                to="/members/dashboard" className="flex items-center gap-2 px-4 py-2 text-slate-700"
               >
                 <Users className="h-4 w-4" />
                 Dashboard
               </Link>
               <Link
-                to="/members/profile"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-green-600 dark:hover:text-green-400 transition-colors border-b-2 border-transparent hover:border-green-600"
+                to="/members/profile" className="flex items-center gap-2 px-4 py-2 text-slate-700"
               >
                 <User className="h-4 w-4" />
                 My Profile
               </Link>
             </div>
-            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+            <div className="flex items-center gap-2 text-sm text-slate-600">
               <Clock className="h-4 w-4" />
               <span>Welcome back! You're logged in as a member.</span>
             </div>
@@ -244,35 +241,33 @@ const MemberDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Profile Overview */}
           <div className="lg:col-span-2">
-            <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
-              <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-700">
+            <Card className="bg-white border-0 shadow-lg">
+              <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
                 <div className="flex items-center gap-4">
                   <div className="relative">
-                    <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30">
+                    <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-blue-100 to-blue-200">
                       {currentUser.profile_picture ? (
                         <img
                           src={currentUser.profile_picture}
-                          alt={currentUser.name}
-                          className="object-cover w-16 h-16 rounded-full"
+                          alt={currentUser.name} className="object-cover w-16 h-16 rounded-full"
                         />
                       ) : (
-                        <User className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+                        <User className="w-10 h-10 text-blue-600" />
                       )}
                     </div>
                   </div>
                   <div>
-                    <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+                    <CardTitle className="text-xl font-semibold text-gray-900">
                       {currentUser.name}
                     </CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-400">
+                    <CardDescription className="text-gray-600">
                       {isMember ? "Gym Member" : "Staff Member"} •{" "}
                       {currentUser.email}
                     </CardDescription>
                   </div>
                   <div className="ml-auto">
                     <Badge
-                      variant="secondary"
-                      className={getMembershipStatusColor(
+                      variant="secondary" className={getMembershipStatusColor(
                         getMembershipStatus()
                       )}
                     >
@@ -287,10 +282,10 @@ const MemberDashboard = () => {
                     <div className="flex items-center gap-3">
                       <Mail className="w-5 h-5 text-gray-500" />
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-gray-900">
                           Email
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {currentUser.email}
                         </p>
                       </div>
@@ -298,10 +293,10 @@ const MemberDashboard = () => {
                     <div className="flex items-center gap-3">
                       <Phone className="w-5 h-5 text-gray-500" />
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-gray-900">
                           Phone
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {currentUser.phone_number || "Not provided"}
                         </p>
                       </div>
@@ -311,10 +306,10 @@ const MemberDashboard = () => {
                     <div className="flex items-center gap-3">
                       <Calendar className="w-5 h-5 text-gray-500" />
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-gray-900">
                           Age
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {currentUser.age} years
                         </p>
                       </div>
@@ -322,10 +317,10 @@ const MemberDashboard = () => {
                     <div className="flex items-center gap-3">
                       <Clock className="w-5 h-5 text-gray-500" />
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-gray-900">
                           Member Since
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {new Date(currentUser.createdAt).toLocaleDateString()}
                         </p>
                       </div>
@@ -338,12 +333,12 @@ const MemberDashboard = () => {
 
           {/* Quick Actions */}
           <div className="space-y-6">
-            <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+            <Card className="bg-white border-0 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+                <CardTitle className="text-lg font-semibold text-gray-900">
                   Quick Actions
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400">
+                <CardDescription className="text-gray-600">
                   Common actions and shortcuts
                 </CardDescription>
               </CardHeader>
@@ -351,8 +346,7 @@ const MemberDashboard = () => {
                 <div className="space-y-3">
                   <Link to="/members/profile">
                     <Button
-                      variant="outline"
-                      className="w-full h-12 flex-col gap-2"
+                      variant="outline" className="w-full h-12 flex-col gap-2"
                     >
                       <User className="w-5 h-5" />
                       <span>Edit Profile</span>
@@ -360,8 +354,7 @@ const MemberDashboard = () => {
                   </Link>
 
                   <Button
-                    variant="outline"
-                    className="w-full h-12 flex-col gap-2"
+                    variant="outline" className="w-full h-12 flex-col gap-2"
                     onClick={() => toast.success("Feature coming soon!")}
                   >
                     <Camera className="w-5 h-5" />
@@ -369,8 +362,7 @@ const MemberDashboard = () => {
                   </Button>
 
                   <Button
-                    variant="outline"
-                    className="w-full h-12 flex-col gap-2"
+                    variant="outline" className="w-full h-12 flex-col gap-2"
                     onClick={() => toast.success("Feature coming soon!")}
                   >
                     <Settings className="w-5 h-5" />
@@ -381,19 +373,19 @@ const MemberDashboard = () => {
             </Card>
 
             {/* Membership Info */}
-            <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+            <Card className="bg-white border-0 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+                <CardTitle className="text-lg font-semibold text-gray-900">
                   Membership Details
                 </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400">
+                <CardDescription className="text-gray-600">
                   Your current membership information
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-sm text-gray-600">
                       Type
                     </span>
                     <Badge variant="outline">
@@ -401,11 +393,10 @@ const MemberDashboard = () => {
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-sm text-gray-600">
                       Status
                     </span>
-                    <Badge
-                      className={getMembershipStatusColor(
+                    <Badge className={getMembershipStatusColor(
                         getMembershipStatus()
                       )}
                     >
@@ -413,18 +404,17 @@ const MemberDashboard = () => {
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-sm text-gray-600">
                       Expires In
                     </span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    <span className="text-sm font-medium text-gray-900">
                       {getDaysUntilExpiry()} days
                     </span>
                   </div>
                   <Separator />
                   <div className="text-center">
                     <Button
-                      variant="outline"
-                      className="w-full"
+                      variant="outline" className="w-full"
                       onClick={() =>
                         toast.success("Renewal feature coming soon!")
                       }
@@ -440,64 +430,64 @@ const MemberDashboard = () => {
         </div>
 
         {/* Recent Activity */}
-        <Card className="bg-white border-0 shadow-lg dark:bg-gray-800">
+        <Card className="bg-white border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+            <CardTitle className="text-lg font-semibold text-gray-900">
               Recent Activity
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-400">
+            <CardDescription className="text-gray-600">
               Your latest gym activities and updates
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6">
             <div className="space-y-4">
-              <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                  <Activity className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center gap-4 p-4 bg-gray-50">
+                <div className="p-2 bg-blue-100">
+                  <Activity className="w-5 h-5 text-blue-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900 dark:text-white">
+                  <p className="font-medium text-gray-900">
                     Profile Updated
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600">
                     Your profile information was recently updated
                   </p>
                 </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
+                <span className="text-xs text-gray-500">
                   {new Date().toLocaleDateString()}
                 </span>
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                  <Dumbbell className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <div className="flex items-center gap-4 p-4 bg-gray-50">
+                <div className="p-2 bg-green-100">
+                  <Dumbbell className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900 dark:text-white">
+                  <p className="font-medium text-gray-900">
                     Membership Active
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600">
                     Your membership is currently active and valid
                   </p>
                 </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
+                <span className="text-xs text-gray-500">
                   {new Date().toLocaleDateString()}
                 </span>
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
-                  <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <div className="flex items-center gap-4 p-4 bg-gray-50">
+                <div className="p-2 bg-purple-100">
+                  <Target className="w-5 h-5 text-purple-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900 dark:text-white">
+                  <p className="font-medium text-gray-900">
                     Welcome to the Gym
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600">
                     You've successfully joined our gym community
                   </p>
                 </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
+                <span className="text-xs text-gray-500">
                   {new Date(currentUser.createdAt).toLocaleDateString()}
                 </span>
               </div>

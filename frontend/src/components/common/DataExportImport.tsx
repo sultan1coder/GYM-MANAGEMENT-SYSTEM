@@ -347,8 +347,7 @@ const DataExportImport: React.FC<ExportImportProps> = ({
                 key={format.id}
                 variant="outline"
                 onClick={() => handleExport(format.id)}
-                disabled={isExporting}
-                className="flex items-center gap-2 h-auto p-4"
+                disabled={isExporting} className="flex items-center gap-2 h-auto p-4"
               >
                 {format.icon}
                 <div className="text-left">
@@ -373,13 +372,11 @@ const DataExportImport: React.FC<ExportImportProps> = ({
               type="file"
               accept=".csv,.json,.xlsx"
               onChange={handleImport}
-              disabled={isImporting}
-              className="hidden"
+              disabled={isImporting} className="hidden"
               id="file-import"
             />
             <label
-              htmlFor="file-import"
-              className="cursor-pointer flex flex-col items-center gap-2"
+              htmlFor="file-import" className="cursor-pointer flex flex-col items-center gap-2"
             >
               <Upload className="w-8 h-8 text-gray-400" />
               <div>
@@ -404,14 +401,14 @@ const DataExportImport: React.FC<ExportImportProps> = ({
         </div>
 
         {/* Import Guidelines */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+        <div className="bg-blue-50">
           <div className="flex items-start gap-2">
             <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5" />
             <div className="text-sm">
-              <p className="font-medium text-blue-900 dark:text-blue-100">
+              <p className="font-medium text-blue-900">
                 Import Guidelines
               </p>
-              <ul className="mt-1 text-blue-800 dark:text-blue-200 space-y-1">
+              <ul className="mt-1 text-blue-800">
                 <li>
                   • Ensure your file has proper headers matching the data
                   structure

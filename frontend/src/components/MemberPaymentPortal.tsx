@@ -217,17 +217,17 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
   const getPaymentStatusColor = (status: string) => {
     switch (status) {
       case "COMPLETED":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
+        return "bg-green-100 text-green-800";
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
+        return "bg-yellow-100 text-yellow-800";
       case "FAILED":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
+        return "bg-red-100 text-red-800";
       case "CANCELLED":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
+        return "bg-gray-100 text-gray-800";
       case "REFUNDED":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400";
+        return "bg-blue-100 text-blue-800";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -274,10 +274,10 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-gray-900">
             Payment Portal
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600">
             Manage your payments and billing information
           </p>
         </div>
@@ -298,8 +298,7 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
 
       <Tabs
         value={activeTab}
-        onValueChange={setActiveTab}
-        className="space-y-4"
+        onValueChange={setActiveTab} className="space-y-4"
       >
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -375,11 +374,10 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
                 <div className="space-y-3">
                   {payments.slice(0, 5).map((payment) => (
                     <div
-                      key={payment.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+                      key={payment.id} className="flex items-center justify-between p-3 bg-gray-50"
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-full">
+                        <div className="p-2 bg-blue-100">
                           <DollarSign className="w-4 h-4 text-blue-600" />
                         </div>
                         <div>
@@ -411,11 +409,10 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
                     .filter((r) => r.status === "active")
                     .map((recurring) => (
                       <div
-                        key={recurring.id}
-                        className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg"
+                        key={recurring.id} className="flex items-center justify-between p-3 bg-green-50"
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-full">
+                          <div className="p-2 bg-green-100">
                             <Repeat className="w-4 h-4 text-green-600" />
                           </div>
                           <div>
@@ -434,7 +431,7 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
                               recurring.nextPaymentDate
                             ).toLocaleDateString()}
                           </p>
-                          <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                          <Badge className="bg-green-100 text-green-800">
                             Active
                           </Badge>
                         </div>
@@ -495,8 +492,7 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
                         {payment.description || "No description"}
                       </TableCell>
                       <TableCell>
-                        <Badge
-                          className={getPaymentStatusColor(payment.status)}
+                        <Badge className={getPaymentStatusColor(payment.status)}
                         >
                           {payment.status}
                         </Badge>
@@ -524,11 +520,10 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
               <div className="space-y-4">
                 {recurringPayments.map((recurring) => (
                   <div
-                    key={recurring.id}
-                    className="flex items-center justify-between p-4 border rounded-lg"
+                    key={recurring.id} className="flex items-center justify-between p-4 border rounded-lg"
                   >
                     <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full">
+                      <div className="p-3 bg-blue-100">
                         <Repeat className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
@@ -545,8 +540,7 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Badge
-                        className={getPaymentStatusColor(recurring.status)}
+                      <Badge className={getPaymentStatusColor(recurring.status)}
                       >
                         {recurring.status}
                       </Badge>
@@ -572,11 +566,10 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
               <div className="space-y-4">
                 {paymentMethods.map((method) => (
                   <div
-                    key={method.id}
-                    className="flex items-center justify-between p-4 border rounded-lg"
+                    key={method.id} className="flex items-center justify-between p-4 border rounded-lg"
                   >
                     <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-full">
+                      <div className="p-3 bg-gray-100">
                         {getPaymentMethodIcon(method.type)}
                       </div>
                       <div>
@@ -590,7 +583,7 @@ const MemberPaymentPortal = ({ memberId }: { memberId: string }) => {
                     </div>
                     <div className="flex items-center space-x-2">
                       {method.isDefault && (
-                        <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                        <Badge className="bg-green-100 text-green-800">
                           Default
                         </Badge>
                       )}

@@ -37,16 +37,16 @@ export default function ForgotPassword() {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8">
+        <div className="bg-white">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-xl w-fit mx-auto mb-4">
               <Mail className="h-8 w-8" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+            <h1 className="text-2xl font-bold text-slate-900">
               Forgot Password?
             </h1>
-            <p className="text-slate-600 dark:text-slate-300">
+            <p className="text-slate-600">
               Enter your email address and we'll send you a reset link
             </p>
           </div>
@@ -54,13 +54,12 @@ export default function ForgotPassword() {
           {/* Form */}
           <form onSubmit={onSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-slate-700">
                 Email Address
               </label>
               <input
                 type="email"
-                required
-                className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all"
+                required className="w-full px-4 py-3 border border-slate-300"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -69,8 +68,7 @@ export default function ForgotPassword() {
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              disabled={loading} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -85,11 +83,10 @@ export default function ForgotPassword() {
 
           {/* Message */}
           {message && (
-            <div
-              className={`mt-6 p-4 rounded-lg flex items-start gap-3 ${
+            <div className={`mt-6 p-4 rounded-lg flex items-start gap-3 ${
                 isSuccess
-                  ? "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300"
-                  : "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300"
+                  ? "bg-green-50"
+                  : "bg-red-50"
               }`}
             >
               {isSuccess ? (
@@ -100,7 +97,7 @@ export default function ForgotPassword() {
               <div>
                 <p className="font-medium">{message}</p>
                 {token && (
-                  <div className="mt-2 p-2 bg-white dark:bg-slate-800 rounded border text-xs break-all">
+                  <div className="mt-2 p-2 bg-white">
                     <span className="font-medium">Dev Token:</span> {token}
                   </div>
                 )}
@@ -111,8 +108,7 @@ export default function ForgotPassword() {
           {/* Back to Login */}
           <div className="mt-8 text-center">
             <Link
-              to="/auth/login"
-              className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              to="/auth/login" className="inline-flex items-center gap-2 text-slate-600"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Login

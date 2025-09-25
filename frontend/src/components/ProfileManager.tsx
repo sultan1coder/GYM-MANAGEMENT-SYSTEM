@@ -169,7 +169,7 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden">
+      <div className="bg-white">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
           <div className="flex items-center justify-between">
@@ -185,8 +185,7 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               </div>
             </div>
             <button
-              onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+              onClick={onClose} className="p-2 hover:bg-white/20 rounded-xl transition-colors"
             >
               <X className="h-5 w-5" />
             </button>
@@ -200,12 +199,11 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               {user?.profile_picture ? (
                 <img
                   src={user.profile_picture}
-                  alt="Current Profile"
-                  className="w-28 h-28 rounded-full object-cover border-4 border-slate-200 dark:border-slate-600 shadow-lg"
+                  alt="Current Profile" className="w-28 h-28 rounded-full object-cover border-4 border-slate-200"
                 />
               ) : (
-                <div className="w-28 h-28 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center border-4 border-slate-200 dark:border-slate-600 shadow-lg">
-                  <User className="h-12 w-12 text-slate-400 dark:text-slate-500" />
+                <div className="w-28 h-28 rounded-full bg-slate-100">
+                  <User className="h-12 w-12 text-slate-400" />
                 </div>
               )}
               {user?.profile_picture && (
@@ -214,10 +212,10 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                 </div>
               )}
             </div>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white mt-3">
+            <p className="text-lg font-semibold text-slate-900">
               {user?.name}
             </p>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+            <p className="text-sm text-slate-600">
               {user?.profile_picture
                 ? "Current Profile Picture"
                 : "No Profile Picture Set"}
@@ -230,16 +228,14 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
               ref={fileInputRef}
               type="file"
               accept="image/*"
-              onChange={handleFileSelect}
-              className="hidden"
+              onChange={handleFileSelect} className="hidden"
             />
 
             {/* Drag & Drop Zone */}
-            <div
-              className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200 ${
+            <div className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200 ${
                 isDragOver
-                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                  : "border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500"
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-slate-300"
               }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -247,35 +243,32 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
             >
               {!selectedFile ? (
                 <div className="space-y-4">
-                  <div
-                    className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
+                  <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
                       isDragOver
-                        ? "bg-blue-100 dark:bg-blue-800"
-                        : "bg-slate-100 dark:bg-slate-700"
+                        ? "bg-blue-100"
+                        : "bg-slate-100"
                     }`}
                   >
-                    <Image
-                      className={`h-8 w-8 transition-colors ${
+                    <Image className={`h-8 w-8 transition-colors ${
                         isDragOver ? "text-blue-600" : "text-slate-500"
                       }`}
                     />
                   </div>
 
                   <div>
-                    <p className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                    <p className="text-lg font-semibold text-slate-900">
                       {isDragOver
                         ? "Drop your image here"
                         : "Upload New Picture"}
                     </p>
-                    <p className="text-slate-600 dark:text-slate-400 mb-4">
+                    <p className="text-slate-600">
                       Drag and drop an image here, or click to browse
                     </p>
 
                     <Button
                       onClick={openFileDialog}
                       variant="outline"
-                      size="lg"
-                      className="bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600"
+                      size="lg" className="bg-white"
                     >
                       <Upload className="h-4 w-4 mr-2" />
                       Choose Image
@@ -287,8 +280,7 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   <div className="relative inline-block">
                     <img
                       src={previewUrl!}
-                      alt="Preview"
-                      className="w-24 h-24 rounded-full object-cover mx-auto border-4 border-blue-200 dark:border-blue-700 shadow-lg"
+                      alt="Preview" className="w-24 h-24 rounded-full object-cover mx-auto border-4 border-blue-200"
                     />
                     <div className="absolute -top-2 -right-2 bg-blue-500 text-white p-1 rounded-full border-2 border-white">
                       <Image className="h-3 w-3" />
@@ -296,10 +288,10 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                   </div>
 
                   <div className="space-y-2">
-                    <p className="font-medium text-slate-900 dark:text-white">
+                    <p className="font-medium text-slate-900">
                       {selectedFile.name}
                     </p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm text-slate-600">
                       {formatFileSize(selectedFile.size)} •{" "}
                       {selectedFile.type.split("/")[1].toUpperCase()}
                     </p>
@@ -309,8 +301,7 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                     <Button
                       onClick={handleRemovePicture}
                       variant="outline"
-                      size="sm"
-                      className="flex-1 border-red-200 text-red-600 hover:bg-red-50 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/20"
+                      size="sm" className="flex-1 border-red-200 text-red-600 hover:bg-red-50"
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
                       Remove
@@ -318,8 +309,7 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
                     <Button
                       onClick={handleUpload}
                       disabled={isUploading}
-                      size="sm"
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg"
+                      size="sm" className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg"
                     >
                       {isUploading ? (
                         <>
@@ -340,16 +330,16 @@ const ProfileManager = ({ onClose, userType }: ProfileManagerProps) => {
           </div>
 
           {/* Tips Section */}
-          <div className="bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-700 dark:to-blue-900/20 rounded-2xl p-4">
+          <div className="bg-gradient-to-r from-slate-50 to-blue-50">
             <div className="flex items-start gap-3">
-              <div className="p-2 bg-blue-100 dark:bg-blue-800 rounded-lg">
-                <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              <div className="p-2 bg-blue-100">
+                <AlertCircle className="h-5 w-5 text-blue-600" />
               </div>
               <div className="flex-1">
-                <h4 className="text-sm font-semibold text-slate-900 dark:text-white mb-2">
+                <h4 className="text-sm font-semibold text-slate-900">
                   Tips for best results:
                 </h4>
-                <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400">
+                <div className="grid grid-cols-2 gap-2 text-xs text-slate-600">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     <span>Square images (1:1 ratio)</span>

@@ -324,15 +324,15 @@ const EquipmentDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="mx-auto space-y-6 max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-gray-900">
               Equipment Dashboard
             </h1>
-            <p className="mt-1 text-gray-600 dark:text-gray-400">
+            <p className="mt-1 text-gray-600">
               Comprehensive overview of gym equipment statistics and analytics
             </p>
           </div>
@@ -535,16 +535,15 @@ const EquipmentDashboard: React.FC = () => {
               <div className="space-y-3">
                 {dashboardData.maintenanceDue.slice(0, 5).map((equipment) => (
                   <div
-                    key={equipment.id}
-                    className="flex items-center justify-between p-3 border border-yellow-200 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800"
+                    key={equipment.id} className="flex items-center justify-between p-3 border border-yellow-200 rounded-lg bg-yellow-50"
                   >
                     <div className="flex items-center gap-3">
                       <Wrench className="w-5 h-5 text-yellow-600" />
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-gray-900">
                           {equipment.name}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           Due:{" "}
                           {equipment.nextMaintenance
                             ? new Date(
@@ -555,8 +554,7 @@ const EquipmentDashboard: React.FC = () => {
                       </div>
                     </div>
                     <Badge
-                      variant="secondary"
-                      className="text-yellow-800 bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-200"
+                      variant="secondary" className="text-yellow-800 bg-yellow-100"
                     >
                       Maintenance Due
                     </Badge>
@@ -596,24 +594,23 @@ const EquipmentDashboard: React.FC = () => {
               <div className="space-y-3">
                 {dashboardData.mostUsed.map((equipment, index) => (
                   <div
-                    key={equipment.id}
-                    className="flex items-center justify-between p-3 rounded-lg bg-green-50 dark:bg-green-900/20"
+                    key={equipment.id} className="flex items-center justify-between p-3 rounded-lg bg-green-50"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-green-600 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-400">
+                      <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-green-600 bg-green-100 rounded-full">
                         {index + 1}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-gray-900">
                           {equipment.name}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {equipment.category} • {equipment.type}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-green-600 dark:text-green-400">
+                      <p className="font-semibold text-green-600">
                         {equipment.quantity > 0
                           ? Math.round(
                               (equipment.inUse / equipment.quantity) * 100
@@ -646,24 +643,23 @@ const EquipmentDashboard: React.FC = () => {
               <div className="space-y-3">
                 {dashboardData.leastUsed.map((equipment, index) => (
                   <div
-                    key={equipment.id}
-                    className="flex items-center justify-between p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20"
+                    key={equipment.id} className="flex items-center justify-between p-3 rounded-lg bg-orange-50"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-orange-600 bg-orange-100 rounded-full dark:bg-orange-900 dark:text-orange-400">
+                      <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-orange-600 bg-orange-100 rounded-full">
                         {index + 1}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-gray-900">
                           {equipment.name}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {equipment.category} • {equipment.type}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-orange-600 dark:text-orange-400">
+                      <p className="font-semibold text-orange-600">
                         {equipment.quantity > 0
                           ? Math.round(
                               (equipment.inUse / equipment.quantity) * 100
@@ -697,20 +693,20 @@ const EquipmentDashboard: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200 dark:border-gray-700">
-                    <th className="px-4 py-3 font-medium text-left text-gray-900 dark:text-white">
+                  <tr className="border-b border-gray-200">
+                    <th className="px-4 py-3 font-medium text-left text-gray-900">
                       Category
                     </th>
-                    <th className="px-4 py-3 font-medium text-left text-gray-900 dark:text-white">
+                    <th className="px-4 py-3 font-medium text-left text-gray-900">
                       Count
                     </th>
-                    <th className="px-4 py-3 font-medium text-left text-gray-900 dark:text-white">
+                    <th className="px-4 py-3 font-medium text-left text-gray-900">
                       Total Value
                     </th>
-                    <th className="px-4 py-3 font-medium text-left text-gray-900 dark:text-white">
+                    <th className="px-4 py-3 font-medium text-left text-gray-900">
                       Avg. Value
                     </th>
-                    <th className="px-4 py-3 font-medium text-left text-gray-900 dark:text-white">
+                    <th className="px-4 py-3 font-medium text-left text-gray-900">
                       % of Total
                     </th>
                   </tr>
@@ -718,24 +714,23 @@ const EquipmentDashboard: React.FC = () => {
                 <tbody>
                   {dashboardData.categoryDistribution.map((category) => (
                     <tr
-                      key={category.category}
-                      className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                      key={category.category} className="border-b border-gray-100"
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           <Package className="w-4 h-4 text-blue-500" />
-                          <span className="font-medium text-gray-900 dark:text-white">
+                          <span className="font-medium text-gray-900">
                             {category.category}
                           </span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
+                      <td className="px-4 py-3 text-gray-600">
                         {category.count}
                       </td>
-                      <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                      <td className="px-4 py-3 font-medium text-gray-900">
                         ${category.value.toLocaleString()}
                       </td>
-                      <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
+                      <td className="px-4 py-3 text-gray-600">
                         $
                         {category.count > 0
                           ? (category.value / category.count).toLocaleString(
@@ -746,8 +741,7 @@ const EquipmentDashboard: React.FC = () => {
                       </td>
                       <td className="px-4 py-3">
                         <Badge
-                          variant="outline"
-                          className="text-blue-700 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-300"
+                          variant="outline" className="text-blue-700 bg-blue-50"
                         >
                           {dashboardData.stats.totalValue > 0
                             ? Math.round(
@@ -782,29 +776,29 @@ const EquipmentDashboard: React.FC = () => {
             {dashboardData.recentMaintenance && dashboardData.recentMaintenance.length > 0 ? (
               <div className="space-y-3">
                 {dashboardData.recentMaintenance.slice(0, 5).map((log: any) => (
-                  <div key={log.id} className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <div key={log.id} className="flex items-center justify-between p-3 bg-blue-50">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/40">
-                        <Wrench className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      <div className="p-2 rounded-lg bg-blue-100">
+                        <Wrench className="w-4 h-4 text-blue-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
+                        <p className="font-medium text-gray-900">
                           {log.equipment?.name || 'Unknown Equipment'}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600">
                           {log.type} • {log.description}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        <p className="text-xs text-gray-500">
                           Performed by: {log.performedBy || 'Unknown'} • {new Date(log.performedAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                      <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                         {log.type}
                       </Badge>
                       {log.cost && (
-                        <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                        <p className="text-sm font-medium text-gray-900">
                           ${parseFloat(log.cost).toLocaleString()}
                         </p>
                       )}
@@ -841,8 +835,7 @@ const EquipmentDashboard: React.FC = () => {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
               <Link to="/equipments/manage">
                 <Button
-                  variant="outline"
-                  className="flex-col w-full h-20 gap-2"
+                  variant="outline" className="flex-col w-full h-20 gap-2"
                 >
                   <Plus className="w-6 h-6" />
                   <span>Add Equipment</span>
@@ -850,8 +843,7 @@ const EquipmentDashboard: React.FC = () => {
               </Link>
               <Link to="/equipments/all">
                 <Button
-                  variant="outline"
-                  className="flex-col w-full h-20 gap-2"
+                  variant="outline" className="flex-col w-full h-20 gap-2"
                 >
                   <Eye className="w-6 h-6" />
                   <span>View All Equipment</span>

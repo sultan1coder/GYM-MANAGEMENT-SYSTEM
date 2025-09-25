@@ -132,8 +132,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({
               filter.placeholder || `Enter ${filter.label.toLowerCase()}`
             }
             value={value}
-            onChange={(e) => handleFilterChange(filter.id, e.target.value)}
-            className="w-full"
+            onChange={(e) => handleFilterChange(filter.id, e.target.value)} className="w-full"
           />
         );
 
@@ -165,8 +164,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                variant="outline"
-                className={cn(
+                variant="outline" className={cn(
                   "w-full justify-start text-left font-normal",
                   !value && "text-muted-foreground"
                 )}
@@ -194,8 +192,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  variant="outline"
-                  className={cn(
+                  variant="outline" className={cn(
                     "flex-1 justify-start text-left font-normal",
                     !value?.from && "text-muted-foreground"
                   )}
@@ -223,8 +220,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  variant="outline"
-                  className={cn(
+                  variant="outline" className={cn(
                     "flex-1 justify-start text-left font-normal",
                     !value?.to && "text-muted-foreground"
                   )}
@@ -258,8 +254,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({
               filter.placeholder || `Enter ${filter.label.toLowerCase()}`
             }
             value={value}
-            onChange={(e) => handleFilterChange(filter.id, e.target.value)}
-            className="w-full"
+            onChange={(e) => handleFilterChange(filter.id, e.target.value)} className="w-full"
           />
         );
 
@@ -300,8 +295,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({
             <Input
               placeholder={searchPlaceholder}
               value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="pl-10"
+              onChange={(e) => handleSearch(e.target.value)} className="pl-10"
             />
           </div>
         )}
@@ -327,8 +321,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={handleClear}
-                      className="text-red-600 hover:text-red-700"
+                      onClick={handleClear} className="text-red-600 hover:text-red-700"
                     >
                       Clear All
                     </Button>
@@ -378,8 +371,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({
             return (
               <Badge
                 key={key}
-                variant="secondary"
-                className="flex items-center gap-1"
+                variant="secondary" className="flex items-center gap-1"
               >
                 {filter.icon}
                 <span className="font-medium">{filter.label}:</span>
@@ -387,8 +379,7 @@ const AdvancedFilter: React.FC<AdvancedFilterProps> = ({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleFilterChange(key, "")}
-                  className="h-auto p-0 ml-1 hover:bg-transparent"
+                  onClick={() => handleFilterChange(key, "")} className="h-auto p-0 ml-1 hover:bg-transparent"
                 >
                   <X className="w-3 h-3" />
                 </Button>

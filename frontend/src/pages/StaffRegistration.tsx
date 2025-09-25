@@ -350,8 +350,7 @@ const StaffRegistration: React.FC = () => {
             <div className="flex items-center gap-4">
               {getConnectionStatusBadge()}
               <Link
-                to="/staff/login"
-                className="inline-flex items-center gap-2 text-blue-300 hover:text-white transition-colors"
+                to="/staff/login" className="inline-flex items-center gap-2 text-blue-300 hover:text-white transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Login
@@ -410,8 +409,7 @@ const StaffRegistration: React.FC = () => {
                     <label className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full cursor-pointer transition-colors shadow-lg">
                       <Camera className="w-4 h-4" />
                       <input
-                        type="file"
-                        className="hidden"
+                        type="file" className="hidden"
                         accept="image/*"
                         onChange={handleProfilePictureChange}
                         disabled={isLoading}
@@ -438,8 +436,7 @@ const StaffRegistration: React.FC = () => {
                   {/* Full Name */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="name"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="name" className="text-sm font-semibold text-gray-700"
                     >
                       Full Professional Name *
                     </Label>
@@ -449,8 +446,7 @@ const StaffRegistration: React.FC = () => {
                         value={formData.name}
                         onChange={(e) =>
                           handleInputChange("name", e.target.value)
-                        }
-                        className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                        } className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
                           formErrors.name ? "border-red-500" : "border-gray-200"
                         }`}
                         placeholder="Enter your full professional name"
@@ -468,8 +464,7 @@ const StaffRegistration: React.FC = () => {
                   {/* Username */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="username"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="username" className="text-sm font-semibold text-gray-700"
                     >
                       Professional Username *
                     </Label>
@@ -479,8 +474,7 @@ const StaffRegistration: React.FC = () => {
                         value={formData.username}
                         onChange={(e) =>
                           handleInputChange("username", e.target.value)
-                        }
-                        className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                        } className={`h-12 pl-4 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
                           formErrors.username
                             ? "border-red-500"
                             : "border-gray-200"
@@ -500,8 +494,7 @@ const StaffRegistration: React.FC = () => {
                   {/* Email */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="email"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="email" className="text-sm font-semibold text-gray-700"
                     >
                       Professional Email Address *
                     </Label>
@@ -512,8 +505,7 @@ const StaffRegistration: React.FC = () => {
                         value={formData.email}
                         onChange={(e) =>
                           handleInputChange("email", e.target.value)
-                        }
-                        className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                        } className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
                           formErrors.email
                             ? "border-red-500"
                             : "border-gray-200"
@@ -536,8 +528,7 @@ const StaffRegistration: React.FC = () => {
                   {/* Phone Number */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="phone_number"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="phone_number" className="text-sm font-semibold text-gray-700"
                     >
                       Professional Contact Number
                     </Label>
@@ -547,8 +538,7 @@ const StaffRegistration: React.FC = () => {
                         value={formData.phone_number}
                         onChange={(e) =>
                           handleInputChange("phone_number", e.target.value)
-                        }
-                        className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                        } className={`h-12 pl-4 pr-10 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
                           formErrors.phone_number
                             ? "border-red-500"
                             : "border-gray-200"
@@ -571,8 +561,7 @@ const StaffRegistration: React.FC = () => {
                   {/* Professional Role */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="role"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="role" className="text-sm font-semibold text-gray-700"
                     >
                       Professional Role *
                     </Label>
@@ -650,8 +639,7 @@ const StaffRegistration: React.FC = () => {
                   {/* Password */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="password"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="password" className="text-sm font-semibold text-gray-700"
                     >
                       Secure Password *
                     </Label>
@@ -662,8 +650,7 @@ const StaffRegistration: React.FC = () => {
                         value={formData.password}
                         onChange={(e) =>
                           handleInputChange("password", e.target.value)
-                        }
-                        className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                        } className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
                           formErrors.password
                             ? "border-red-500"
                             : "border-gray-200"
@@ -672,8 +659,7 @@ const StaffRegistration: React.FC = () => {
                         disabled={isLoading}
                       />
                       <button
-                        type="button"
-                        className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-blue-600 transition-colors"
+                        type="button" className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-blue-600 transition-colors"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (
@@ -698,8 +684,7 @@ const StaffRegistration: React.FC = () => {
                                 : passwordStrength < 75
                                 ? "secondary"
                                 : "default"
-                            }
-                            className={
+                            } className={
                               passwordStrength >= 75
                                 ? "bg-emerald-100 text-emerald-800"
                                 : ""
@@ -709,15 +694,13 @@ const StaffRegistration: React.FC = () => {
                           </Badge>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className={`h-2 rounded-full transition-all duration-500 ${getPasswordStrengthColor()}`}
+                          <div className={`h-2 rounded-full transition-all duration-500 ${getPasswordStrengthColor()}`}
                             style={{ width: `${passwordStrength}%` }}
                           ></div>
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div className="flex items-center gap-1">
-                            <Check
-                              className={`w-3 h-3 ${
+                            <Check className={`w-3 h-3 ${
                                 formData.password.length >= 8
                                   ? "text-emerald-500"
                                   : "text-gray-300"
@@ -726,8 +709,7 @@ const StaffRegistration: React.FC = () => {
                             <span>8+ characters</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check
-                              className={`w-3 h-3 ${
+                            <Check className={`w-3 h-3 ${
                                 /[A-Z]/.test(formData.password)
                                   ? "text-emerald-500"
                                   : "text-gray-300"
@@ -736,8 +718,7 @@ const StaffRegistration: React.FC = () => {
                             <span>Uppercase letter</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check
-                              className={`w-3 h-3 ${
+                            <Check className={`w-3 h-3 ${
                                 /[0-9]/.test(formData.password)
                                   ? "text-emerald-500"
                                   : "text-gray-300"
@@ -746,8 +727,7 @@ const StaffRegistration: React.FC = () => {
                             <span>Number</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Check
-                              className={`w-3 h-3 ${
+                            <Check className={`w-3 h-3 ${
                                 /[^A-Za-z0-9]/.test(formData.password)
                                   ? "text-emerald-500"
                                   : "text-gray-300"
@@ -770,8 +750,7 @@ const StaffRegistration: React.FC = () => {
                   {/* Confirm Password */}
                   <div className="space-y-2">
                     <Label
-                      htmlFor="confirmPassword"
-                      className="text-sm font-semibold text-gray-700"
+                      htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700"
                     >
                       Confirm Secure Password *
                     </Label>
@@ -782,8 +761,7 @@ const StaffRegistration: React.FC = () => {
                         value={formData.confirmPassword}
                         onChange={(e) =>
                           handleInputChange("confirmPassword", e.target.value)
-                        }
-                        className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
+                        } className={`h-12 pl-4 pr-12 bg-gray-50 border-2 transition-all duration-300 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 ${
                           formErrors.confirmPassword
                             ? "border-red-500"
                             : "border-gray-200"
@@ -792,8 +770,7 @@ const StaffRegistration: React.FC = () => {
                         disabled={isLoading}
                       />
                       <button
-                        type="button"
-                        className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-blue-600 transition-colors"
+                        type="button" className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-blue-600 transition-colors"
                         onClick={() =>
                           setShowConfirmPassword(!showConfirmPassword)
                         }
@@ -822,31 +799,26 @@ const StaffRegistration: React.FC = () => {
                       checked={acceptTerms}
                       onCheckedChange={(checked) =>
                         setAcceptTerms(checked as boolean)
-                      }
-                      className="mt-1 border-2 border-gray-300 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                      } className="mt-1 border-2 border-gray-300 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
                     />
                     <Label
-                      htmlFor="terms"
-                      className="text-sm text-gray-700 leading-6"
+                      htmlFor="terms" className="text-sm text-gray-700 leading-6"
                     >
                       I agree to the{" "}
                       <Link
-                        to="/terms"
-                        className="text-blue-600 hover:text-blue-800 font-semibold"
+                        to="/terms" className="text-blue-600 hover:text-blue-800 font-semibold"
                       >
                         Professional Terms of Service
                       </Link>
                       ,{" "}
                       <Link
-                        to="/privacy"
-                        className="text-blue-600 hover:text-blue-800 font-semibold"
+                        to="/privacy" className="text-blue-600 hover:text-blue-800 font-semibold"
                       >
                         Privacy Policy
                       </Link>
                       , and{" "}
                       <Link
-                        to="/code-of-conduct"
-                        className="text-blue-600 hover:text-blue-800 font-semibold"
+                        to="/code-of-conduct" className="text-blue-600 hover:text-blue-800 font-semibold"
                       >
                         Staff Code of Conduct
                       </Link>
@@ -856,8 +828,7 @@ const StaffRegistration: React.FC = () => {
 
                 {/* Professional Registration Button */}
                 <Button
-                  type="submit"
-                  className="w-full h-14 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white font-bold text-base shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300"
+                  type="submit" className="w-full h-14 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white font-bold text-base shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300"
                   disabled={
                     isLoading || connectionStatus === "error" || !acceptTerms
                   }
@@ -881,23 +852,20 @@ const StaffRegistration: React.FC = () => {
                 <p className="text-sm text-gray-600">
                   Already have a professional account?{" "}
                   <Link
-                    to="/staff/login"
-                    className="text-blue-600 hover:text-blue-800 font-semibold transition-colors"
+                    to="/staff/login" className="text-blue-600 hover:text-blue-800 font-semibold transition-colors"
                   >
                     Sign In Here
                   </Link>
                 </p>
                 <div className="flex items-center justify-center gap-6 text-xs text-gray-500">
                   <Link
-                    to="/member/register"
-                    className="hover:text-blue-600 transition-colors font-medium"
+                    to="/member/register" className="hover:text-blue-600 transition-colors font-medium"
                   >
                     Member Registration
                   </Link>
                   <span>•</span>
                   <Link
-                    to="/contact"
-                    className="hover:text-blue-600 transition-colors font-medium"
+                    to="/contact" className="hover:text-blue-600 transition-colors font-medium"
                   >
                     HR Support
                   </Link>

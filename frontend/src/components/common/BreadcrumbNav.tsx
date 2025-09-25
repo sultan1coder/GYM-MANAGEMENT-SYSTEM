@@ -120,9 +120,8 @@ const BreadcrumbNav: React.FC<BreadcrumbNavProps> = ({
   const breadcrumbs = generateBreadcrumbs();
 
   return (
-    <nav
-      className={cn(
-        "flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-400",
+    <nav className={cn(
+        "flex items-center space-x-1 text-sm text-gray-600",
         className
       )}
       aria-label="Breadcrumb"
@@ -132,19 +131,18 @@ const BreadcrumbNav: React.FC<BreadcrumbNavProps> = ({
           {index > 0 && <ChevronRight className="w-4 h-4 text-gray-400 mx-1" />}
           <div className="flex items-center space-x-1">
             {item.icon && (
-              <span className="text-gray-500 dark:text-gray-400">
+              <span className="text-gray-500">
                 {item.icon}
               </span>
             )}
             {item.href ? (
               <Link
-                to={item.href}
-                className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium"
+                to={item.href} className="hover:text-blue-600"
               >
                 {item.label}
               </Link>
             ) : (
-              <span className="text-gray-900 dark:text-white font-semibold">
+              <span className="text-gray-900">
                 {item.label}
               </span>
             )}
