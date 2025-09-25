@@ -40,6 +40,8 @@ import {
   MapPin,
   Calendar,
   User,
+  Eye,
+  MoreHorizontal,
 } from "lucide-react";
 import MemberList from "../../components/MemberList";
 import SimpleMemberDisplay from "../../components/SimpleMemberDisplay";
@@ -48,6 +50,18 @@ import { useMemberRemove } from "../../hooks/member";
 import { searchMembers, bulkImportMembers } from "../../services/api";
 import { useMemberStats } from "../../components/providers/MemberStatsProvider";
 import toast from "react-hot-toast";
+import AdvancedFilter, {
+  FilterOption,
+} from "../../components/common/AdvancedFilter";
+import DataExportImport from "../../components/common/DataExportImport";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
 
 const MemberManagement: React.FC = () => {
   const navigate = useNavigate();
@@ -79,6 +93,62 @@ const MemberManagement: React.FC = () => {
     city: "",
     state: "",
   });
+
+  // Advanced filter configuration
+  const filterOptions: FilterOption[] = [
+    {
+      id: "searchTerm",
+      label: "Search",
+      type: "text",
+      placeholder: "Name, email, or phone...",
+      icon: <Search className="w-4 h-4" />,
+    },
+    {
+      id: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "all", label: "All Statuses" },
+        { value: "active", label: "Active" },
+        { value: "inactive", label: "Inactive" },
+      ],
+      icon: <CheckCircle className="w-4 h-4" />,
+    },
+    {
+      id: "membershipType",
+      label: "Membership Type",
+      type: "select",
+      options: [
+        { value: "all", label: "All Types" },
+        { value: "MONTHLY", label: "Monthly" },
+        { value: "DAILY", label: "Daily" },
+      ],
+      icon: <User className="w-4 h-4" />,
+    },
+    {
+      id: "ageRange",
+      label: "Age Range",
+      type: "dateRange",
+      icon: <Calendar className="w-4 h-4" />,
+    },
+    {
+      id: "city",
+      label: "City",
+      type: "text",
+      placeholder: "Enter city...",
+      icon: <MapPin className="w-4 h-4" />,
+    },
+    {
+      id: "state",
+      label: "State",
+      type: "text",
+      placeholder: "Enter state...",
+      icon: <MapPin className="w-4 h-4" />,
+    },
+  ];
+
+  // Filter values state
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
 
   // Handle member selection (view details)
   const handleMemberSelect = (member: Member) => {
@@ -190,6 +260,26 @@ const MemberManagement: React.FC = () => {
       city: "",
       state: "",
     });
+    setFilterValues({});
+  };
+
+  // Handle advanced filter changes
+  const handleFilterChange = (values: Record<string, any>) => {
+    setFilterValues(values);
+    // Apply filters to search
+    handleAdvancedSearch();
+  };
+
+  // Handle filter clear
+  const handleFilterClear = () => {
+    setFilterValues({});
+    clearFilters();
+  };
+
+  // Handle search query
+  const handleSearch = (query: string) => {
+    setSearchFilters((prev) => ({ ...prev, searchTerm: query }));
+    handleAdvancedSearch();
   };
 
   // Download CSV template
@@ -235,43 +325,64 @@ const MemberManagement: React.FC = () => {
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Page Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Member Management
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
             Manage all gym members, view statistics, and perform bulk operations
           </p>
         </div>
-        <div className="flex gap-3">
-          <Button onClick={() => navigate("/members/register")}>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            onClick={() => navigate("/members/register")}
+            className="flex-1 sm:flex-none"
+          >
             <Plus className="h-4 w-4 mr-2" />
-            Add New Member
+            <span className="hidden sm:inline">Add New Member</span>
+            <span className="sm:hidden">Add</span>
           </Button>
           <Button
             variant="outline"
             onClick={() => setShowBulkImportDialog(true)}
+            className="flex-1 sm:flex-none"
           >
             <Upload className="h-4 w-4 mr-2" />
-            Bulk Import
+            <span className="hidden sm:inline">Bulk Import</span>
+            <span className="sm:hidden">Import</span>
           </Button>
           <Button
             variant="outline"
             onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+            className="flex-1 sm:flex-none"
           >
             <Search className="h-4 w-4 mr-2" />
-            Advanced Search
+            <span className="hidden sm:inline">Advanced Search</span>
+            <span className="sm:hidden">Search</span>
           </Button>
           <Button
             variant="outline"
             onClick={() => navigate("/members/dashboard")}
+            className="flex-1 sm:flex-none"
           >
             <BarChart3 className="h-4 w-4 mr-2" />
-            Dashboard
+            <span className="hidden sm:inline">Dashboard</span>
+            <span className="sm:hidden">Stats</span>
           </Button>
         </div>
       </div>
+
+      {/* Advanced Filter Component */}
+      <AdvancedFilter
+        filters={filterOptions}
+        values={filterValues}
+        onChange={handleFilterChange}
+        onClear={handleFilterClear}
+        onSearch={handleSearch}
+        searchPlaceholder="Search members..."
+        className="mb-6"
+      />
 
       {/* Advanced Search Panel */}
       {showAdvancedSearch && (
@@ -437,17 +548,62 @@ const MemberManagement: React.FC = () => {
         </Card>
       )}
 
+      {/* Data Export/Import Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DataExportImport
+          dataType="members"
+          onDataImported={(data) => {
+            toast.success(`Successfully imported ${data.length} members`);
+            refetchStats();
+          }}
+        />
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              Quick Actions
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button
+              variant="outline"
+              onClick={downloadTemplate}
+              className="w-full justify-start"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download CSV Template
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => navigate("/members/register")}
+              className="w-full justify-start"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Single Member
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => navigate("/members/dashboard")}
+              className="w-full justify-start"
+            >
+              <BarChart3 className="h-4 w-4 mr-2" />
+              View Analytics
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Real-time Statistics Cards - Using Consolidated Provider */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardContent className="pt-6">
             <div className="flex items-center space-x-2">
               <Users className="h-8 w-8 text-blue-600" />
               <div>
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Total Members
                 </p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {statsLoading ? "Loading..." : stats?.totalMembers || 0}
                 </p>
               </div>
@@ -455,15 +611,15 @@ const MemberManagement: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardContent className="pt-6">
             <div className="flex items-center space-x-2">
               <CheckCircle className="h-8 w-8 text-green-600" />
               <div>
-                <p className="text-sm font-medium text-gray-600">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Active Members
                 </p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {statsLoading ? "Loading..." : stats?.activeMembers || 0}
                 </p>
               </div>
@@ -471,15 +627,15 @@ const MemberManagement: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
               Pending Verification
             </CardTitle>
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
               {statsLoading ? "Loading..." : stats?.inactiveMembers || 0}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -488,15 +644,15 @@ const MemberManagement: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
               Membership Growth
             </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
               {statsLoading ? "Loading..." : `${stats?.growthRate || "0"}%`}
             </div>
             <p className="text-xs text-muted-foreground">Monthly growth rate</p>
